@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
-import Nav from '../nav-bar/navEvaluator';
 
 //dummy data
 var criteriaOne = {
@@ -52,75 +50,74 @@ function generateGradeScale()
     );
 }
 
-var gradeScale = generateGradeScale();
+const gradeScale = generateGradeScale();
 
-function displayCriteriaDescriptions(criteria)
+function CriteriaGradeInput(props)
 {
-    return criteria.scores.map(function(currentScore, i)
+    return (
+        <select className="form-control" id={props.currentCriteria.description}>
+            <option defaultValue value> -- select an option -- </option>
+            {gradeScale}
+        </select>
+    )
+}
+
+function CriteriaDescription(props)
+{
+    return props.criteria.scores.map(function(currentScore, i)
     {
         return <td key={i}>{currentScore}</td>
     });
 }
 
-function displayCriteriaGrade(currentCriteria)
+function TopRowGradeScale(props)
 {
-        return (
-            <select className="form-control" id={currentCriteria.description}>
-                <option disabled selected value> -- select an option -- </option>
-                {gradeScale}
-            </select>
-        )
+    return Rubric.scale.map(function(currentScore, i)
+        {
+            return <th scope="col" key={i}>{currentScore}</th>
+        });
 }
 
-export default class RubricList extends Component 
+function CriteriaRow(props)
+{
+    return Rubric.criteria.map(function(currentCriteria, i)
+    {
+        return (
+            <tr key={i}>
+                <th scope="row">{currentCriteria.description}</th>
+                <CriteriaDescription criteria={currentCriteria} />
+                {props.gradeMode?  <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : null}
+            </tr>
+            );
+    });
+}
+
+export default class ViewRubric extends Component
 {
 
     constructor(props)
     {
         super(props);
         this.state = {
+            //gradeMode: this.props.gradeMode
             gradeMode: true
-        }
-    }
-
-    displayScale()
-    {
-        return Rubric.scale.map(function(currentScore, i)
-        {
-            return <th scope="col" key={i}>{currentScore}</th>
-        });
-    }
-
-    displayCriteria()
-    {
-        let gradeMode = this.state.gradeMode;
-
-        return Rubric.criteria.map(function(currentCriteria, i)
-        {
-            return (
-                <tr>
-                    <th scope="row" key={i}>{currentCriteria.description}</th>
-                    {displayCriteriaDescriptions(currentCriteria)}
-                    {gradeMode ? displayCriteriaGrade(currentCriteria): ""}
-                </tr>
-            );
-        });
-    }
-
-    displayGradeColumn()
-    {
-        if(this.state.gradeMode)
-        {
-            return <th scope="col">Score</th>
         }
     }
 
     handleSaveGradeClick()
     {
-        Rubric.criteria.map(function(currentCriteria)
+        let scores = Rubric.criteria.map(function(currentCriteria)
         {
-            return document.getElementById(currentCriteria.description).value;
+            console.log(document.getElementById(currentCriteria.description).value);
+            return {description: currentCriteria.description,
+                    value: document.getElementById(currentCriteria.description).value};
+
         })
+
+        let subject = "dummy_subjectID";
+
+        let subjectScore = {subjectID: subject,
+                            scores: scores};
     }
 
     render()
@@ -133,20 +130,19 @@ export default class RubricList extends Component
 
         return (
             <div>
-                <Nav />
                 <h1>Rubric</h1>
-                <h2>{Rubric.title}</h2>
+                <h2>{this.state.gradeMode ? "Grade" : null}{Rubric.title}</h2>
 
                 <table className="table table-bordered">
                     <thead>
                         <tr>
                             <th scope="col" className="outcome-width">Criteria</th>
-                            {this.displayScale()}
-                            {this.displayGradeColumn()}
+                            <TopRowGradeScale />
+                            {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
                         </tr>
                     </thead>
                     <tbody>
-                        {this.displayCriteria()}
+                        <CriteriaRow gradeMode={this.state.gradeMode} />
                     </tbody>
                 </table>
                 {saveGradeButton}
