@@ -101,8 +101,22 @@ export default class ViewRubric extends Component
     {
         super(props);
         this.state = {
-            //gradeMode: this.props.gradeMode
-            gradeMode: true
+            gradeMode: false
+        }
+    }
+
+    componentDidMount()
+    {
+        this.setView();
+    }
+
+    setView()
+    {
+        if (window.location.pathname==='/gradeRubric')
+        {
+            this.setState({
+                gradeMode: true
+            })
         }
     }
 

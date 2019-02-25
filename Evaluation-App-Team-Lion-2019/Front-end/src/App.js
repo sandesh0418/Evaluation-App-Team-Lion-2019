@@ -16,13 +16,14 @@ class App extends Component{
         return(
           <Router>
           <div className="container">
-          {console.log("inside div: " + sessionStorage.getItem("userType"))}
 
             <Route path="/" exact component={LogIn} />
             <Route path="/register" component={Register} />
             <Route path="/view-summary" component={ViewSummary}/>
-            <Route path="/rubric" component={Rubric}/>
+            <Route path="/viewRubric" component={Rubric}/>
+            <Route path="/gradeRubric" component={Rubric}/>
             <Route path="/rubric-list" component={RubricList}/>
+            <Route path="/" />
           </div>
         </Router>
         );
