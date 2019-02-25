@@ -3,8 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import Nav from "./components/nav-bar/loginNav";
 
-
-import { Link } from 'react-router-dom';
 class Register extends Component{
 
 

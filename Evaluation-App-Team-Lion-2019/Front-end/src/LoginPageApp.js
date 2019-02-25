@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
-import view from './components/rubric-list/rubric-list.component';
-import { Link } from 'react-router-dom';
-import Register from './Register';
+//import view from './components/rubric-list/rubric-list.component';
+//import { Link } from 'react-router-dom';
+//import Register from './Register';
 
 import Nav from "./components/nav-bar/loginNav";
 
@@ -57,10 +57,12 @@ class LoginPageApp extends Component
                  if(res.data === "Administrator"){
                         console.log("Logged in as Administrator")
                         window.location.assign('/view-summary');
+                        sessionStorage.setItem('userType', 'Administrator');
                  }
                  else if (res.data === "Evaluator"){
                     console.log("Logged in as Evaluator")
                     window.location.assign('/rubric');
+                    sessionStorage.setItem('userType', 'Evaluator');
                  }
                  else{
                      alert("Please enter valid password")

@@ -9,9 +9,9 @@ class NavBar extends Component
     {
         return (
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <a className="navbar-brand" href="#" target="_blank">
-                  <img src={logo} width="50" height="50" alt="Picture not available" />
-                </a>
+                <button className="navbar-brand" href="#" target="_blank">
+                  <img src={logo} width="50" height="50" alt="Not available" />
+                </button>
                 <Link to="/" className="navbar-brand">Evaluation Application</Link>
                  <div className="collpase nav-collapse">
                   <ul className="navbar-nav mr-auto">

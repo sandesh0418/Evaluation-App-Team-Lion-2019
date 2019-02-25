@@ -7,9 +7,9 @@ class NavEvaluator extends Component{
     render(){
         return(
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#" target="_blank">
-                  <img src={logo} width="50" height="50" alt="Picture not available" />
-                </a>
+        <button className="navbar-brand" target="_blank">
+                  <img src={logo} width="50" height="50" alt="Not available" />
+                </button>
                 <div className="navbar-brand">Evaluator</div>
                  <div className="collpase nav-collapse">
                   <ul className="navbar-nav mr-auto">

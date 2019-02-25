@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import AdminNavBar from "../nav-bar/nav-bar.component";
+import EvalNavBar from "../nav-bar/navEvaluator";
 
 //dummy data
 var criteriaOne = {
@@ -130,8 +132,10 @@ export default class ViewRubric extends Component
 
         return (
             <div>
+                {sessionStorage.getItem("userType")==="Administrator" ? <AdminNavBar /> : null}
+                {sessionStorage.getItem("userType")==="Evaluator" ? <EvalNavBar /> : null}
                 <h1>Rubric</h1>
-                <h2>{this.state.gradeMode ? "Grade" : null}{Rubric.title}</h2>
+                <h2>{this.state.gradeMode ? "Grade" : null} {Rubric.title}</h2>
 
                 <table className="table table-bordered">
                     <thead>

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import './view-summary.css';
+import AdminNavBar from "../nav-bar/nav-bar.component";
+import EvalNavBar from "../nav-bar/navEvaluator";
 //import axios from 'axios';
 
 //Dummy data
@@ -70,7 +72,9 @@ export default class ViewSummary extends Component
         }
 
         return (
-            <div className="container">
+            <div>
+                {sessionStorage.getItem("userType")==="Administrator" ? <AdminNavBar /> : null}
+                {sessionStorage.getItem("userType")==="Evaluator" ? <EvalNavBar /> : null}
                 <h1>{programSummary.title}</h1>
             
                 <table className="table table-bordered">
