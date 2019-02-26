@@ -8,6 +8,8 @@ import ViewSummary from "./components/view-summary/view-summary.component";
 import Rubric from "./components/view-rubric/view-rubric.component";
 import RubricList from "./components/rubric-list/rubric-list.component";
 
+require('bootstrap');
+
 
 class App extends Component{
 
@@ -20,10 +22,10 @@ class App extends Component{
             <Route path="/" exact component={LogIn} />
             <Route path="/register" component={Register} />
             <Route path="/view-summary" component={ViewSummary}/>
+            <Route path="/summary-report" component={ViewSummary} />
             <Route path="/viewRubric" component={Rubric}/>
             <Route path="/gradeRubric" component={Rubric}/>
             <Route path="/rubric-list" component={RubricList}/>
-            <Route path="/" />
           </div>
         </Router>
         );

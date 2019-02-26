@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import AdminNavBar from "../nav-bar/nav-bar.component";
-import EvalNavBar from "../nav-bar/navEvaluator";
+import PickNavBar from '../nav-bar/pick-nav-bar';
 
 //dummy data
 var rubrics = ["Rubric 1", "Rubric 2", "Rubric 3"];
@@ -20,8 +19,7 @@ export default class RubricList extends Component
     {
         return(
             <div>
-                {sessionStorage.getItem("userType")==="Administrator" ? <AdminNavBar /> : null}
-                {sessionStorage.getItem("userType")==="Evaluator" ? <EvalNavBar /> : null}
+                <PickNavBar />
                 <h1>Rubric List</h1>
                 <ListDisplay rubrics={rubrics} />
             </div>

@@ -24,7 +24,7 @@ module.exports.authenticate=function(req,res){
             
   
                     if(response === true){
-                        res.send(results[0].role)
+                        res.json(results[0])
                        
                     }else{
                       res.send("Email and password does not match");

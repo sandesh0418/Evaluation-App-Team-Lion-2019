@@ -32,7 +32,7 @@ module.exports.register=function(req,res){
       if (error) {
         res.json({
             status:false,
-            message:'there are some error with query'
+            message:'there is some error with query'
         })
       }else{
           res.json({
@@ -41,7 +41,8 @@ module.exports.register=function(req,res){
             message:'user registered sucessfully'
         })
       }
-    });}
+    });
+  }
 	else{
     res.json({
       status:false,

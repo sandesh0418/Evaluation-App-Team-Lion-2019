@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import AdminNavBar from "../nav-bar/nav-bar.component";
-import EvalNavBar from "../nav-bar/navEvaluator";
+import PickNavBar from "../nav-bar/pick-nav-bar";
+import axios from "axios";
 
 //dummy data
 var criteriaOne = {
@@ -38,7 +38,8 @@ var criteriaThree = {
 
 var Rubric = {
     title: "Oral Presentation",
-    scale: ["1 Limited", "2 Developing", "3 Capable", "4 Strong", "5 Excellent"],
+    measureId: 1,
+    scale: [ [1, "1 - Limited"], [2, "2 - Developing"], [3, "3 - Capable"], [4, "4 - Strong"], [5, "5 - Excellent"]],
     criteria: [criteriaOne, criteriaTwo, criteriaThree]
 }
 
@@ -47,7 +48,7 @@ function generateGradeScale()
     return (
         Rubric.scale.map(function(currentScore, i)
         {
-            return <option key={i} value={currentScore}>{currentScore}</option>
+            return <option key={i} value={currentScore[0]}>{currentScore[1]}</option>
         })
     );
 }
@@ -58,7 +59,7 @@ function CriteriaGradeInput(props)
 {
     return (
         <select className="form-control" id={props.currentCriteria.description}>
-            <option defaultValue value> -- select an option -- </option>
+            <option disabled value> -- select an option -- </option>
             {gradeScale}
         </select>
     )
@@ -76,7 +77,7 @@ function TopRowGradeScale(props)
 {
     return Rubric.scale.map(function(currentScore, i)
         {
-            return <th scope="col" key={i}>{currentScore}</th>
+            return <th scope="col" key={i}>{currentScore[1]}</th>
         });
 }
 
@@ -94,14 +95,18 @@ function CriteriaRow(props)
     });
 }
 
+
 export default class ViewRubric extends Component
 {
 
     constructor(props)
     {
         super(props);
+        this.onChangeSubjectId = this.onChangeSubjectId.bind(this);
+        this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
         this.state = {
-            gradeMode: false
+            gradeMode: false,
+            subjectID: ''
         }
     }
 
@@ -124,33 +129,54 @@ export default class ViewRubric extends Component
     {
         let scores = Rubric.criteria.map(function(currentCriteria)
         {
-            console.log(document.getElementById(currentCriteria.description).value);
             return {description: currentCriteria.description,
                     value: document.getElementById(currentCriteria.description).value};
-
         })
 
-        let subject = "dummy_subjectID";
-
-        let subjectScore = {subjectID: subject,
+        let subjectScore = {measureId: 1,
+                            userCWID: sessionStorage.getItem('userCWID'),
+                            subjectId: this.state.subjectId,
                             scores: scores};
+
+        axios.post('http://localhost:8000/subjectScore', subjectScore)
+        .then(res =>{
+            console.log(res.data);
+        });
+    }
+
+    onChangeSubjectId(e)
+    {
+        this.setState({
+            subjectId: e.target.value
+        });
     }
 
     render()
     {
         let saveGradeButton;
+        let SubjectIdTextbox;
+
         if (this.state.gradeMode)
         {
             saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
+            SubjectIdTextbox = <>
+            <label className="mr-2">Subject ID:</label>
+            <input type="text" 
+                    placeholder="subject Id as integer" 
+                    value={this.state.value}
+                    onChange={this.onChangeSubjectId}/>
+            </>
         }
 
         return (
             <div>
-                {sessionStorage.getItem("userType")==="Administrator" ? <AdminNavBar /> : null}
-                {sessionStorage.getItem("userType")==="Evaluator" ? <EvalNavBar /> : null}
+                <PickNavBar />
                 <h1>Rubric</h1>
-                <h2>{this.state.gradeMode ? "Grade" : null} {Rubric.title}</h2>
-
+                <div>
+                    <span className="mr-4">{this.state.gradeMode ? "Grade" : null} {Rubric.title}</span>
+                    {SubjectIdTextbox}
+                </div>
+                
                 <table className="table table-bordered">
                     <thead>
                         <tr>

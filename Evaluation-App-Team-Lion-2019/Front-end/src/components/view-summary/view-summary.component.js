@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './view-summary.css';
-import AdminNavBar from "../nav-bar/nav-bar.component";
-import EvalNavBar from "../nav-bar/navEvaluator";
+import PickNavBar from "../nav-bar/pick-nav-bar";
 //import axios from 'axios';
 
 //Dummy data
@@ -25,26 +24,35 @@ var programSummary = {
     outcomes: [outcome1, outcome2, outcome3]
 };
 
-
-function measureDisplay(outcome)
+const ProgramSummaryBody = props =>
 {
-    return outcome.measures.map(function(currentMeasure, i){
-        return <p key={i}>{currentMeasure}</p>
+    return programSummary.outcomes.map(function(currentOutcome, i){
+        return <Outcome outcome={currentOutcome} reportMode={props.reportMode} key={i} />;
     });
 }
 
 const Outcome = props => (
     <tr>
         <th scope="row">{props.outcome.description}</th>
-        <td>{measureDisplay(props.outcome)}</td>
+        <td><Measures outcome={props.outcome} reportMode={props.reportMode}  /></td>
     </tr>
 )
 
-const ProgramSummaryBody = props =>
+function Measures(props)
 {
-    return programSummary.outcomes.map(function(currentOutcome, i){
-        return <Outcome outcome={currentOutcome} key={i} />;
+    return props.outcome.measures.map(function(currentMeasure, i){
+        return (
+            <div>
+                <p key={i}>{currentMeasure}</p>
+                {props.reportMode ? <Statistics /> : null}
+            </div>
+        )
     });
+}
+
+function Statistics(props)
+{
+    return <p>Measure statistics.</p>
 }
 
 export default class ViewSummary extends Component 
@@ -53,7 +61,24 @@ export default class ViewSummary extends Component
     constructor(props){
         super(props);
         this.handleEditModeClick = this.handleEditModeClick.bind(this);
-        this.state = {editMode: false};
+        this.state = {editMode: false,
+                      reportMode: false};
+    }
+
+    componentDidMount()
+    {
+        this.setView();
+    }
+
+    setView()
+    {
+        if (window.location.pathname==="/summary-report")
+        {
+            this.setState({
+                editMode: false,
+                reportMode: true
+            })
+        }
     }
 
     handleEditModeClick()
@@ -73,8 +98,7 @@ export default class ViewSummary extends Component
 
         return (
             <div>
-                {sessionStorage.getItem("userType")==="Administrator" ? <AdminNavBar /> : null}
-                {sessionStorage.getItem("userType")==="Evaluator" ? <EvalNavBar /> : null}
+                <PickNavBar />
                 <h1>{programSummary.title}</h1>
             
                 <table className="table table-bordered">
@@ -85,7 +109,7 @@ export default class ViewSummary extends Component
                         </tr>
                     </thead>
                     <tbody>
-                        <ProgramSummaryBody />
+                        <ProgramSummaryBody reportMode={this.state.reportMode} />
                     </tbody>
                 </table>
                 {addOutcomeButton}

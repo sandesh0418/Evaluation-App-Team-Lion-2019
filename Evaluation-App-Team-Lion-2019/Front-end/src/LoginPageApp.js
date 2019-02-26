@@ -43,6 +43,11 @@ class LoginPageApp extends Component
     }
 
    
+    setSession(resData)
+    {
+        sessionStorage.setItem('userRole', resData.role);
+        sessionStorage.setItem('userCWID', resData.CWID);
+    }
 
     onSubmit(e){
         e.preventDefault();
@@ -54,15 +59,15 @@ class LoginPageApp extends Component
         
         axios.post('http://localhost:8000/', obj)
              .then(res =>{
-                 if(res.data === "Administrator"){
+                 if(res.data.role === "Administrator"){
                         console.log("Logged in as Administrator")
+                        this.setSession(res.data);
                         window.location.assign('/view-summary');
-                        sessionStorage.setItem('userType', 'Administrator');
                  }
                  else if (res.data === "Evaluator"){
                     console.log("Logged in as Evaluator")
+                    this.setSession(res.data);
                     window.location.assign('/gradeRubric');
-                    sessionStorage.setItem('userType', 'Evaluator');
                  }
                  else{
                      alert("Please enter valid password")
