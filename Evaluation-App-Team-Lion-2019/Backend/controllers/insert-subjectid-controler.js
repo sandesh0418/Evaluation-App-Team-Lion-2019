@@ -37,6 +37,5 @@ module.exports.insertSubjectId = function(req,res)
         console.log(currentScore.description);
 
         connection.query('INSERT INTO subject_scores SET ?', subjectScores, function (error, results, fields) {});
-        return null;
     });
 }

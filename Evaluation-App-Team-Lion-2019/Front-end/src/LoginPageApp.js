@@ -64,7 +64,7 @@ class LoginPageApp extends Component
                         this.setSession(res.data);
                         window.location.assign('/view-summary');
                  }
-                 else if (res.data === "Evaluator"){
+                 else if (res.data.role === "Evaluator"){
                     console.log("Logged in as Evaluator")
                     this.setSession(res.data);
                     window.location.assign('/gradeRubric');
