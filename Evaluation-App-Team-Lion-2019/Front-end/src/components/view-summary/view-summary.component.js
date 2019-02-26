@@ -38,14 +38,14 @@ var programSummary = {
 const ProgramSummaryBody = props =>
 {
     return programSummary.outcomes.map(function(currentOutcome, i){
-        return <Outcome outcome={currentOutcome} reportMode={props.reportMode} key={i} />;
+        return <Outcome outcome={currentOutcome} reportMode={props.reportMode} state={props.state} key={i} />;
     });
 }
 
 const Outcome = props => (
     <tr>
         <th scope="row">{props.outcome.description}</th>
-        <td><Measures outcome={props.outcome} reportMode={props.reportMode}  /></td>
+        <td><Measures outcome={props.outcome} reportMode={props.reportMode} state={props.state}  /></td>
     </tr>
 )
 
@@ -55,7 +55,7 @@ function Measures(props)
         return (
             <div>
                 <p key={i}>{currentMeasure}</p>
-                {props.reportMode ? <Statistics /> : null}
+                {props.reportMode ? <Statistics state={props.state} /> : null}
             </div>
         )
     });
@@ -63,7 +63,10 @@ function Measures(props)
 
 function Statistics(props)
 {
-    return <p>Measure statistics.</p>
+    return <p>
+            Measure statistics: {((props.state.metTarget /props.state.total) * 100).toFixed(2)}% of 
+            evaluations have met the target score. {props.state.total} subjects have been evaluated.
+            </p>
 }
 
 export default class ViewSummary extends Component 
@@ -137,7 +140,7 @@ export default class ViewSummary extends Component
                         </tr>
                     </thead>
                     <tbody>
-                        <ProgramSummaryBody reportMode={this.state.reportMode} />
+                        <ProgramSummaryBody reportMode={this.state.reportMode} state={this.state} />
                     </tbody>
                 </table>
                 {addOutcomeButton}

@@ -142,6 +142,7 @@ export default class ViewRubric extends Component
         .then(res =>{
             console.log(res.data);
         });
+        alert("The score has been saved.");
     }
 
     onChangeSubjectId(e)
