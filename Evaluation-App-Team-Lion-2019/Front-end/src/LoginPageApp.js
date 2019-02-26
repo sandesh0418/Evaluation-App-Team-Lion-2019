@@ -54,6 +54,7 @@ class LoginPageApp extends Component
         
         axios.post('http://localhost:8000/', obj)
              .then(res =>{
+                 console.log(res.data);
                  if(res.data === "Administrator"){
                         console.log("Logged in as Administrator")
                         window.location.assign('/view-summary');

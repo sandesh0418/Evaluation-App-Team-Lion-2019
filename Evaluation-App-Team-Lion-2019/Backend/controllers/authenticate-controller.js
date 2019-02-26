@@ -20,14 +20,17 @@ module.exports.authenticate=function(req,res){
       }else{
        
         if(results.length >0){
-          bcrypt.compare(req.body.password, results[0].password, function(err, response) {
-            
-  
+          bcrypt.compare(password, results[0].password).then(function(response) {
+            //console.log(password);
+           // console.log(response);
+           // console.log(bcrypt.compareSync(password, results[0].password)); 
                     if(response === true){
                         res.send(results[0].role)
-                       
+                        //console.log(password);
+                      //  console.log(results[0].password);
                     }else{
-                      res.send("Email and password does not match");
+                      //console.log("dsf");
+                      res.send("Email and password do not match");
                     
                     }
                   });
@@ -36,7 +39,7 @@ module.exports.authenticate=function(req,res){
         else{
           res.json({
               status:false,    
-            message:"Email does not exits"
+            message:"Email does not exist"
           });
         }
       }

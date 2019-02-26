@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AdminNavBar from "../nav-bar/nav-bar.component";
 import EvalNavBar from "../nav-bar/navEvaluator";
+import Axios from 'axios';
 
 //dummy data
 var criteriaOne = {
@@ -39,6 +40,7 @@ var criteriaThree = {
 var Rubric = {
     title: "Oral Presentation",
     scale: ["1 Limited", "2 Developing", "3 Capable", "4 Strong", "5 Excellent"],
+    //scale: [1,2,3,4,5],
     criteria: [criteriaOne, criteriaTwo, criteriaThree]
 }
 
@@ -72,6 +74,7 @@ function CriteriaDescription(props)
     });
 }
 
+
 function TopRowGradeScale(props)
 {
     return Rubric.scale.map(function(currentScore, i)
@@ -88,9 +91,17 @@ function CriteriaRow(props)
             <tr key={i}>
                 <th scope="row">{currentCriteria.description}</th>
                 <CriteriaDescription criteria={currentCriteria} />
-                {props.gradeMode?  <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : null}
+                {props.gradeMode ? <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : <span><AverageScore currentCriteria= {currentCriteria}/></span>}
             </tr>
             );
+    });
+}
+
+function AverageScore(props)
+{
+    return props.averageScores.map(function(currentScore, i)
+    {
+        return <td key={i}>{currentScore}</td>
     });
 }
 
@@ -101,8 +112,40 @@ export default class ViewRubric extends Component
     {
         super(props);
         this.state = {
-            gradeMode: false
+            gradeMode: false,
+            score1:0,
+            score2:0,
+            score3:0,
+            averageScores:[]
+
         }
+            var averageScores = [];
+            Axios.get('http://localhost:8000/viewRubric')
+            .then(res =>{
+                //console.log("cool beans");
+                console.log(res.data.length);
+                var averageScores= [res.data.length];
+                var total = res.data.length;
+                averageScores[0]=0;
+                averageScores[1]=0;
+                averageScores[2]=0;
+                for (var i =0; i<res.data.length; i++){
+                    averageScores[0] += res.data[i].score1;
+                    //console.log(averageScores[0]);
+                    averageScores[1] += res.data[i].score2;
+                    averageScores[2] += res.data[i].score3;
+                }
+                //console.log(averageScores);
+                console.log(averageScores[0]);
+                console.log(total);
+                averageScores[0] /= total;
+                console.log(averageScores[0]);
+                averageScores[1] /= total;
+                averageScores[2] /= total;
+
+            }
+            )
+        
     }
 
     componentDidMount()
@@ -117,23 +160,81 @@ export default class ViewRubric extends Component
             this.setState({
                 gradeMode: true
             })
+            console.log("grade rubric");
         }
+
+        if (window.location.pathname==='/viewRubric') {
+            this.setState({
+                gradeMode:false
+            })
+            console.log("view rubric");
+           /* var averageScores = [];
+            Axios.get('http://localhost:8000/viewRubric')
+            .then(res =>{
+                //console.log("cool beans");
+                console.log(res.data.length);
+                var averageScores= [res.data.length];
+                var total = res.data.length;
+                averageScores[0]=0;
+                averageScores[1]=0;
+                averageScores[2]=0;
+                for (var i =0; i<res.data.length; i++){
+                    averageScores[0] += res.data[i].score1;
+                    //console.log(averageScores[0]);
+                    averageScores[1] += res.data[i].score2;
+                    averageScores[2] += res.data[i].score3;
+                }
+                //console.log(averageScores);
+                console.log(averageScores[0]);
+                console.log(total);
+                averageScores[0] /= total;
+                console.log(averageScores[0]);
+                averageScores[1] /= total;
+                averageScores[2] /= total;
+
+            }
+            )*/
+            
+         }
     }
 
     handleSaveGradeClick()
     {
+    
         let scores = Rubric.criteria.map(function(currentCriteria)
         {
-            console.log(document.getElementById(currentCriteria.description).value);
-            return {description: currentCriteria.description,
-                    value: document.getElementById(currentCriteria.description).value};
+        
+          //  console.log(document.getElementById(currentCriteria.description).value);
+           
+            
+           // return {description: currentCriteria.description,
+                    //value: document.getElementById(currentCriteria.description).value};
 
+            return document.getElementById(currentCriteria.description).value;
+            
         })
+        
 
-        let subject = "dummy_subjectID";
+        const obj={
+            score1: parseInt(scores[0]),
+            score2: parseInt(scores[1]),
+            score3: parseInt(scores[2])
+        }
+       // console.log(obj);
+        Axios.post('http://localhost:8000/gradeRubric', obj)
+            .then(res=> {console.log(res);
+            })
+
+           //
+
+            //this.props.history.push('/');
+        /*let subject = "dummy_subjectID";
 
         let subjectScore = {subjectID: subject,
                             scores: scores};
+                            //console.log(scores);
+            */
+        window.location.assign('/gradeRubric');
     }
 
     render()
@@ -156,7 +257,7 @@ export default class ViewRubric extends Component
                         <tr>
                             <th scope="col" className="outcome-width">Criteria</th>
                             <TopRowGradeScale />
-                            {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
+                            {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : <th scope="col" width="150px">Average Score</th>}
                         </tr>
                     </thead>
                     <tbody>
