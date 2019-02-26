@@ -91,7 +91,7 @@ function CriteriaRow(props)
             <tr key={i}>
                 <th scope="row">{currentCriteria.description}</th>
                 <CriteriaDescription criteria={currentCriteria} />
-                {props.gradeMode ? <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : <span><AverageScore currentCriteria= {currentCriteria}/></span>}
+                {props.gradeMode ? <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : null}
             </tr>
             );
     });
