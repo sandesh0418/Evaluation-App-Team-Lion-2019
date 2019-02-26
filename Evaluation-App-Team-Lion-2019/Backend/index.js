@@ -8,6 +8,7 @@ var PORT = process.env.PORT || 8000;
 var authenticateController=require('./controllers/authenticate-controller');
 var registerController=require('./controllers/register-controller');
 var insertSubjectId = require('./controllers/insert-subjectid-controler');
+var measureStatistics = require('./controllers/measure-statistics');
  app.use(cors());
 
 app.use(bodyParser.json());
@@ -18,7 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /* route to handle login and registration */
 app.post('/register',registerController.register);
 app.post('/',authenticateController.authenticate);
+
 app.post('/subjectScore', insertSubjectId.insertSubjectId);
+app.get('/measureStatistics', measureStatistics.calculate);
  
 
 app.listen(PORT, function(){

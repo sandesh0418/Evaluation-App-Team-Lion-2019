@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import './view-summary.css';
 import PickNavBar from "../nav-bar/pick-nav-bar";
-//import axios from 'axios';
+import axios from 'axios';
 
-//Dummy data
+/*
 var outcome1 = {
     description: "Outcome 1 ",
     measures: ["1.1 Measure 1", "1.2 Measure 2"]
@@ -22,6 +22,17 @@ var outcome3 = {
 var programSummary = { 
     title: "Assessment 2019",
     outcomes: [outcome1, outcome2, outcome3]
+};
+*/
+
+var outcome1 = {
+    description: "Communicate effectively in a variety of professional contexts.",
+    measures: ["75% or more of students evaluated on oral presentation skills will have an average BUSN 3005 rubric score of 3 or better."]
+};
+
+var programSummary = {
+    title: "Assessment 2019",
+    outcomes: [outcome1]
 };
 
 const ProgramSummaryBody = props =>
@@ -61,8 +72,13 @@ export default class ViewSummary extends Component
     constructor(props){
         super(props);
         this.handleEditModeClick = this.handleEditModeClick.bind(this);
-        this.state = {editMode: false,
-                      reportMode: false};
+        this.setView = this.setView.bind(this);
+        this.state = {
+            editMode: false,
+            reportMode: false,
+            total: 0,
+            metTarget: 0
+        };
     }
 
     componentDidMount()
@@ -74,11 +90,23 @@ export default class ViewSummary extends Component
     {
         if (window.location.pathname==="/summary-report")
         {
+            this.getStatistics();
             this.setState({
-                editMode: false,
                 reportMode: true
-            })
+            });
         }
+    }
+
+    getStatistics()
+    {
+        axios.get('http://localhost:8000/measureStatistics')
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    total: res.data.total,
+                    metTarget: res.data.metTarget
+                })
+            })
     }
 
     handleEditModeClick()
