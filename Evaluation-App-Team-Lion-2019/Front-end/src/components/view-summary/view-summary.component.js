@@ -65,7 +65,7 @@ function Statistics(props)
 {
     return <p>
             Measure statistics: {((props.state.metTarget /props.state.total) * 100).toFixed(2)}% of 
-            evaluations have met the target score. {props.state.total} subjects have been evaluated.
+            evaluations have met the target score of 3. {props.state.total} subjects have been evaluated.
             </p>
 }
 
