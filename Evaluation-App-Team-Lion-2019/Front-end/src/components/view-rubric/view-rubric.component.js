@@ -104,9 +104,12 @@ export default class ViewRubric extends Component
         super(props);
         this.onChangeSubjectId = this.onChangeSubjectId.bind(this);
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
+        this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
         this.state = {
             gradeMode: false,
-            subjectID: ''
+            subjectID: '',
+            averageScore: 1,
+            calcAverage: 2,
         }
     }
 
@@ -145,6 +148,26 @@ export default class ViewRubric extends Component
         alert("The score has been saved.");
     }
 
+    handleAverageScoreClick(e)
+    {
+        this.setState({
+            calcAverage: e.target.value 
+        })
+        let totalScore = 0;
+        let numberOfCriteria = 0;
+        Rubric.criteria.map(function(currentCriteria)
+        {
+                totalScore = totalScore + parseInt(document.getElementById(currentCriteria.description).value);
+                numberOfCriteria++;
+        });
+        console.log(totalScore);
+        let average = (totalScore / numberOfCriteria).toFixed(e.target.value);
+
+        this.setState({
+            averageScore: average
+        })
+    }
+
     onChangeSubjectId(e)
     {
         this.setState({
@@ -156,17 +179,28 @@ export default class ViewRubric extends Component
     {
         let saveGradeButton;
         let SubjectIdTextbox;
+        let rubricAverage;
 
         if (this.state.gradeMode)
         {
             saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
             SubjectIdTextbox = <>
-            <label className="mr-2">Subject ID:</label>
-            <input type="text" 
-                    placeholder="subject Id as integer" 
-                    value={this.state.value}
-                    onChange={this.onChangeSubjectId}/>
-            </>
+                                <label className="mr-2">Subject ID:</label>
+                                <input type="text" 
+                                        placeholder="subject Id as integer" 
+                                        value={this.state.value}
+                                        onChange={this.onChangeSubjectId}/>
+                               </>
+            rubricAverage = <div>
+                <label>Calculate Average</label>
+                <select type="button" className="btn btn-primary" onClick={this.handleAverageScoreClick}>
+                <option value="0">No Decimal</option>
+                <option value="1">One Decimal</option>
+                <option value="2">Two Decimals</option>
+                <option value="3">Three Decimals</option>
+                </select>
+                <p>The average score is: {this.state.averageScore}</p>
+            </div>
         }
 
         return (
@@ -190,6 +224,7 @@ export default class ViewRubric extends Component
                         <CriteriaRow gradeMode={this.state.gradeMode} />
                     </tbody>
                 </table>
+                {rubricAverage}
                 {saveGradeButton}
             </div>
         );
