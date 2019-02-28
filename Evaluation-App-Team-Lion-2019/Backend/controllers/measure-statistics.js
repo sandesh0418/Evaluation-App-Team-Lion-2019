@@ -1,6 +1,6 @@
 var connection = require('../config');
 
-module.exports.calculate = function(req,res)
+module.exports.calculateAverageOfEachStudent = function(req,res)
 {
 
     /*

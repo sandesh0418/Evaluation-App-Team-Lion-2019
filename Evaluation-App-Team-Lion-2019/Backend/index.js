@@ -21,7 +21,7 @@ app.post('/register',registerController.register);
 app.post('/',authenticateController.authenticate);
 
 app.post('/subjectScore', insertSubjectId.insertSubjectId);
-app.get('/measureStatistics', measureStatistics.calculate);
+app.get('/measureStatistics', measureStatistics.calculateAverageOfEachStudent);
  
 
 app.listen(PORT, function(){

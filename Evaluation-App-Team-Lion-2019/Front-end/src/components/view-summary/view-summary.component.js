@@ -53,8 +53,8 @@ function Measures(props)
 {
     return props.outcome.measures.map(function(currentMeasure, i){
         return (
-            <div>
-                <p key={i}>{currentMeasure}</p>
+            <div key={i}>
+                <p>{currentMeasure}</p>
                 {props.reportMode ? <Statistics state={props.state} /> : null}
             </div>
         )
@@ -91,7 +91,7 @@ export default class ViewSummary extends Component
 
     setView()
     {
-        if (window.location.pathname==="/summary-report")
+        if (window.location.pathname==="/summaryReport")
         {
             this.getStatistics();
             this.setState({

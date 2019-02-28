@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
-//import view from './components/rubric-list/rubric-list.component';
-//import { Link } from 'react-router-dom';
-//import Register from './Register';
 
 import Nav from "./components/nav-bar/loginNav";
 
@@ -62,7 +59,7 @@ class LoginPageApp extends Component
                  if(res.data.role === "Administrator"){
                         console.log("Logged in as Administrator")
                         this.setSession(res.data);
-                        window.location.assign('/view-summary');
+                        window.location.assign('/viewSummary');
                  }
                  else if (res.data.role === "Evaluator"){
                     console.log("Logged in as Evaluator")

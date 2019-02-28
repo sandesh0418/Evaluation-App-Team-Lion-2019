@@ -43,14 +43,26 @@ var Rubric = {
     criteria: [criteriaOne, criteriaTwo, criteriaThree]
 }
 
-function generateGradeScale()
+function TopRowGradeScale(props)
 {
-    return (
-        Rubric.scale.map(function(currentScore, i)
+    return Rubric.scale.map(function(currentScore, i)
         {
-            return <option key={i} value={currentScore[0]}>{currentScore[1]}</option>
-        })
-    );
+            return <th scope="col" key={i}>{currentScore[1]}</th>
+        });
+}
+
+function CriteriaRow(props)
+{
+    return Rubric.criteria.map(function(currentCriteria, i)
+    {
+        return (
+            <tr key={i}>
+                <th scope="row">{currentCriteria.description}</th>
+                <CriteriaDescription criteria={currentCriteria} />
+                {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} /></td> : null}
+            </tr>
+            );
+    });
 }
 
 const gradeScale = generateGradeScale();
@@ -73,28 +85,15 @@ function CriteriaDescription(props)
     });
 }
 
-function TopRowGradeScale(props)
+function generateGradeScale()
 {
-    return Rubric.scale.map(function(currentScore, i)
+    return (
+        Rubric.scale.map(function(currentScore, i)
         {
-            return <th scope="col" key={i}>{currentScore[1]}</th>
-        });
+            return <option key={i} value={currentScore[0]}>{currentScore[1]}</option>
+        })
+    );
 }
-
-function CriteriaRow(props)
-{
-    return Rubric.criteria.map(function(currentCriteria, i)
-    {
-        return (
-            <tr key={i}>
-                <th scope="row">{currentCriteria.description}</th>
-                <CriteriaDescription criteria={currentCriteria} />
-                {props.gradeMode?  <span><CriteriaGradeInput currentCriteria={currentCriteria} /></span> : null}
-            </tr>
-            );
-    });
-}
-
 
 export default class ViewRubric extends Component
 {
@@ -155,7 +154,7 @@ export default class ViewRubric extends Component
         })
         let totalScore = 0;
         let numberOfCriteria = 0;
-        Rubric.criteria.map(function(currentCriteria)
+        Rubric.criteria.forEach(function(currentCriteria)
         {
                 totalScore = totalScore + parseInt(document.getElementById(currentCriteria.description).value);
                 numberOfCriteria++;

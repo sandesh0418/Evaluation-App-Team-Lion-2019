@@ -21,11 +21,11 @@ class App extends Component{
 
             <Route path="/" exact component={LogIn} />
             <Route path="/register" component={Register} />
-            <Route path="/view-summary" component={ViewSummary}/>
-            <Route path="/summary-report" component={ViewSummary} />
+            <Route path="/viewSummary" component={ViewSummary}/>
+            <Route path="/summaryReport" component={ViewSummary} />
             <Route path="/viewRubric" component={Rubric}/>
             <Route path="/gradeRubric" component={Rubric}/>
-            <Route path="/rubric-list" component={RubricList}/>
+            <Route path="/rubricList" component={RubricList}/>
           </div>
         </Router>
         );

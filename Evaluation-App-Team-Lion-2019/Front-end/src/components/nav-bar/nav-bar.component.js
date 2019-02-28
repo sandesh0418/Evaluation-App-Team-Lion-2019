@@ -13,32 +13,32 @@ class NavBar extends Component
                 <button className="navbar-brand" target="_blank">
                   <img src={logo} width="50" height="50" alt="Not available" />
                 </button>
-                <Link to="/view-summary" className="navbar-brand">Department Evaluation</Link>
+                <Link to="/viewSummary" className="navbar-brand">Department Evaluation</Link>
                 <div className="collpase nav-collapse">
                 <ul className="navbar-nav mr-auto">
                     <li className="navbar-item">
-                        <Link to="/view-summary" className="nav-link">View Summary</Link>
+                        <Link to="/viewSummary" className="nav-link">View Summary</Link>
                     </li>
                     <li className="navbar-item">
                         <div className="dropdown">
-                            <a className="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button className="dropdown-toggle btn btn-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Evaluations
-                            </a>
+                            </button>
 
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <Link to="/gradeRubric" className="nav-link">My Assignments</Link>
-                                <Link to="/rubric-list" className="nav-link">Make Assignments</Link>
+                                <Link to="/rubricList" className="nav-link">Make Assignments</Link>
                             </div>
                         </div>
                     </li>
                     <li className="navbar-item">
-                        <Link to="/rubric-list" className="nav-link">Rubrics</Link>
+                        <Link to="/rubricList" className="nav-link">Rubrics</Link>
                     </li>
                     <li className="navbar-item">
-                        <Link to="/summary-report" className="nav-link">Report</Link>
+                        <Link to="/summaryReport" className="nav-link">Report</Link>
                     </li>
                     <li className="navbar-item">
-                        <Link to="/view-summary" className="nav-link">Past Assessments</Link>
+                        <Link to="/viewSSummary" className="nav-link">Past Assessments</Link>
                     </li>
                     <li className="navbar-item">
                         <Link to="/" className="nav-link">Log Out</Link>

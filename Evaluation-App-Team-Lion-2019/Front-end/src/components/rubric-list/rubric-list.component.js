@@ -9,7 +9,7 @@ var rubrics = ["Rubric 1", "Rubric 2", "Rubric 3"];
 function ListDisplay(props)
 {
     return props.rubrics.map(function(rubric, i){
-        return <div><Link to="/viewRubric" key={i}>{rubric}</Link></div>;
+        return <div key={i}><Link to="/viewRubric">{rubric}</Link></div>;
     });
 }
 
