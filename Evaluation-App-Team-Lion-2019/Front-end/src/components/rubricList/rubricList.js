@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import PickNavBar from '../nav-bar/pick-nav-bar';
 
 //dummy data
 var rubrics = ["Rubric 1", "Rubric 2", "Rubric 3"];
@@ -19,7 +18,6 @@ export default class RubricList extends Component
     {
         return(
             <div>
-                <PickNavBar />
                 <h1>Rubric List</h1>
                 <ListDisplay rubrics={rubrics} />
             </div>

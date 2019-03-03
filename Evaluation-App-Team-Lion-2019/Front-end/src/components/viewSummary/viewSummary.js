@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import './view-summary.css';
-import PickNavBar from "../nav-bar/pick-nav-bar";
+import './viewSummary.css';
 import axios from 'axios';
 
 /*
@@ -74,7 +73,7 @@ export default class ViewSummary extends Component
     
     constructor(props){
         super(props);
-        this.handleEditModeClick = this.handleEditModeClick.bind(this);
+        this.handleEditModeClick = this.handleEditClick.bind(this);
         this.setView = this.setView.bind(this);
         this.state = {
             editMode: false,
@@ -112,7 +111,7 @@ export default class ViewSummary extends Component
             })
     }
 
-    handleEditModeClick()
+    handleEditClick()
     {
         this.setState({editMode: true});
     }
@@ -129,7 +128,6 @@ export default class ViewSummary extends Component
 
         return (
             <div>
-                <PickNavBar />
                 <h1>{programSummary.title}</h1>
             
                 <table className="table table-bordered">
@@ -144,7 +142,7 @@ export default class ViewSummary extends Component
                     </tbody>
                 </table>
                 {addOutcomeButton}
-                <button type="button" className="btn btn-primary" onClick={this.handleEditModeClick}>Edit Program Summary</button>
+                <button type="button" className="btn btn-primary" onClick={this.handleEditClick}>Edit Program Summary</button>
             </div>
         );
     }

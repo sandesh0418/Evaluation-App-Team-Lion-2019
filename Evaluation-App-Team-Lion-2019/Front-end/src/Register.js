@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
-import Nav from "./components/nav-bar/loginNav";
 
 class Register extends Component{
 
@@ -104,8 +103,6 @@ render(){
 
     return(
         <form onSubmit = {this.onSubmit}>
-    
-    <Nav />
 
     <div className="form-group" style={{marginTop:50}}>
       <label>CWID</label>

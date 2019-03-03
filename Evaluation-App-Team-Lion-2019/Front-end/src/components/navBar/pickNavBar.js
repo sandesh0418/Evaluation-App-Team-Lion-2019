@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import AdminNavBar from './nav-bar.component';
+
+import AdminNavBar from './navAdmin';
 import EvalNavBar from './navEvaluator';
+import LoginNav from './loginNav.js';
 
 const user = sessionStorage.getItem('userRole');
 
@@ -12,6 +14,7 @@ export default class PickNavBar extends Component
             <div>
                 {user==="Administrator" ? <AdminNavBar /> : null}
                 {user==="Evaluator" ? <EvalNavBar /> : null}
+                {user===undefined ? <LoginNav /> : null}
             </div>
         )
     }

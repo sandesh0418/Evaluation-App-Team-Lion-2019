@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PickNavBar from "../nav-bar/pick-nav-bar";
 import axios from "axios";
 
 //dummy data
@@ -191,20 +190,19 @@ export default class ViewRubric extends Component
                                         onChange={this.onChangeSubjectId}/>
                                </>
             rubricAverage = <div>
-                <label>Calculate Average</label>
-                <select type="button" className="btn btn-primary" onClick={this.handleAverageScoreClick}>
-                <option value="0">No Decimal</option>
-                <option value="1">One Decimal</option>
-                <option value="2">Two Decimals</option>
-                <option value="3">Three Decimals</option>
+                <label className="pr-1">Calculate Average</label>
+                <select type="button" className="btn btn-secondary btn-sm" onClick={this.handleAverageScoreClick}>
+                    <option value="0">No Decimal</option>
+                    <option value="1">One Decimal</option>
+                    <option value="2">Two Decimals</option>
+                    <option value="3">Three Decimals</option>
                 </select>
-                <p>The average score is: {this.state.averageScore}</p>
+                <span className="pl-1">The average score is: {this.state.averageScore}</span>
             </div>
         }
 
         return (
             <div>
-                <PickNavBar />
                 <h1>Rubric</h1>
                 <div>
                     <span className="mr-4">{this.state.gradeMode ? "Grade" : null} {Rubric.title}</span>

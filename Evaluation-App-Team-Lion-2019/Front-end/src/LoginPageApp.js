@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 
-import Nav from "./components/nav-bar/loginNav";
-
 
 class LoginPageApp extends Component 
 {
@@ -86,53 +84,54 @@ class LoginPageApp extends Component
     render() 
     {
         return (
-            <form onSubmit= {this.onSubmit}>
-            
-                    <Nav />
-                
-                    <div className="from-group" style={{marginTop:100}}>
-                        <label>Email:</label>
-                        <input 
-                        className="form-control" 
-                        type="text" 
-                        name="email" 
-                        placeholder="Please enter your email"
-                       value = {this.state.value}
-                        onChange={this.onChangeEmail}
-                        required
-                        />
-                        
-                    </div>
+            <div>
+                <h1>Sign In</h1>
+                <form onSubmit= {this.onSubmit}>
+                    
+                        <div className="from-group">
+                            <label>Email:</label>
+                            <input 
+                            className="form-control" 
+                            type="text" 
+                            name="email" 
+                            placeholder="Please enter your email"
+                            value = {this.state.value}
+                            onChange={this.onChangeEmail}
+                            required
+                            />
+                            
+                        </div>
 
-                    <div className="form-group">
-                        <label>Password:</label>
-                        <input className="form-control" 
-                                type="password" 
-                                name="password" 
-                                placeholder="Please enter your password"
-                                value={this.state.value}
-                                onChange={this.onChangePassword}
-                                required
-                                />
-                    </div>
+                        <div className="form-group">
+                            <label>Password:</label>
+                            <input className="form-control" 
+                                    type="password" 
+                                    name="password" 
+                                    placeholder="Please enter your password"
+                                    value={this.state.value}
+                                    onChange={this.onChangePassword}
+                                    required
+                                    />
+                        </div>
 
-                    <div className="form-group">
+                        <div className="form-group">
+                            <input className="btn btn-primary" 
+                                    type="submit" 
+                                    value="Sign In" 
+                                    />  
+                        </div>
+                        <div className="form-group">
                         <input className="btn btn-primary" 
-                                type="submit" 
-                                value="Sign In" 
-                                />  
+                                    id = "register" 
+                                    type="button" 
+                                    value="Register"
+                                    onClick={this.handleClick}/> 
                     </div>
-                    <div className="form-group">
-                       <input className="btn btn-primary" 
-                                id = "register" 
-                                type="button" 
-                                value="Register"
-                                onClick={this.handleClick}/> 
-                   </div>
-                
-                
-           
-            </form>
+                    
+                    
+            
+                </form>
+            </div>
         );
     }
 }
