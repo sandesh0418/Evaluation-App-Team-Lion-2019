@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
+import jwt_decode from "jwt-decode";
+import { login } from './actions/AuthAction';
+import  {connect} from 'react-redux';
+
 
 
 class LoginPageApp extends Component 
@@ -13,23 +17,15 @@ class LoginPageApp extends Component
         this.onSubmit = this.onSubmit.bind(this);
         this.state={
             email: '',
-            password: ''
+            password: '',
+            errors:{}
+            
         }
     }
 
 
-    onChangeEmail(e){
-        this.setState({
-            email: e.target.value
-        });
-        
-    }
-
-    onChangePassword(e){
-        this.setState({
-            password: e.target.value
-        });
-       
+    onChange(e){
+        this.setState({ [e.target.name]: e.target.value});
     }
 
     handleClick(e){
@@ -38,37 +34,17 @@ class LoginPageApp extends Component
     }
 
    
-    setSession(resData)
-    {
-        sessionStorage.setItem('userRole', resData.role);
-        sessionStorage.setItem('userCWID', resData.CWID);
-    }
+    
 
     onSubmit(e){
         e.preventDefault();
         
-        const obj ={
-            email: this.state.email,
-            password: this.state.password
-        }
+       
         
-        axios.post('http://localhost:8000/', obj)
-             .then(res =>{
-                 if(res.data.role === "Administrator"){
-                        console.log("Logged in as Administrator")
-                        this.setSession(res.data);
-                        window.location.assign('/viewSummary');
-                 }
-                 else if (res.data.role === "Evaluator"){
-                    console.log("Logged in as Evaluator")
-                    this.setSession(res.data);
-                    window.location.assign('/gradeRubric');
-                 }
-                 else{
-                     alert("Please enter valid password")
-                     window.location.assign('/');
-                 }
-             })
+                
+        this.props.login(this.state);
+                
+           
            
         
         
@@ -83,11 +59,15 @@ class LoginPageApp extends Component
     
     render() 
     {
+        const {errors, email, password} = this.state;
         return (
-            <div>
-                <h1>Sign In</h1>
+         
+                
                 <form onSubmit= {this.onSubmit}>
-                    
+                <h1>Sign In</h1>
+                { errors.form && <div className ="alert alert-danger">{errors.div}</div>}
+                       
+                      
                         <div className="from-group">
                             <label>Email:</label>
                             <input 
@@ -96,7 +76,7 @@ class LoginPageApp extends Component
                             name="email" 
                             placeholder="Please enter your email"
                             value = {this.state.value}
-                            onChange={this.onChangeEmail}
+                            onChange={this.onChange}
                             required
                             />
                             
@@ -109,7 +89,8 @@ class LoginPageApp extends Component
                                     name="password" 
                                     placeholder="Please enter your password"
                                     value={this.state.value}
-                                    onChange={this.onChangePassword}
+                                    
+                                    onChange={this.onChange}
                                     required
                                     />
                         </div>
@@ -131,9 +112,16 @@ class LoginPageApp extends Component
                     
             
                 </form>
-            </div>
+            
         );
     }
 }
 
-export default LoginPageApp;
+LoginPageApp.propTypes = {
+login: React.PropTypes.func.isRequired
+}
+
+LoginPageApp.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+export default connect(null, { login }) (LoginPageApp);

@@ -8,6 +8,7 @@ class NavBar extends Component
     {
         sessionStorage.removeItem('userRole');
         sessionStorage.removeItem('userCWID');
+        localStorage.removeItem("jwtToken");
         window.location.assign('/');
     }
 

@@ -139,7 +139,7 @@ export default class ViewRubric extends Component
                             subjectId: this.state.subjectId,
                             scores: scores};
 
-        axios.post('http://localhost:8000/subjectScore', subjectScore)
+        axios.post('/subjectScore', subjectScore)
         .then(res =>{
             console.log(res.data);
         });
