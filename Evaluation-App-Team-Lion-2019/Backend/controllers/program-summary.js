@@ -1,6 +1,6 @@
 var connection = require('../config');
 
-module.exports.getProgramSummary = function(req,res)
+module.exports.getProgramSummary = function(req, res)
 {
     let getOutcomesQuery = "SELECT * FROM outcome";
 
@@ -26,5 +26,5 @@ module.exports.getProgramSummary = function(req,res)
                 programSummary.outcomes.push(element);
             });
         }
-    }
+    })
 }
