@@ -101,7 +101,7 @@ export default class ViewSummary extends Component
 
     getStatistics()
     {
-        axios.get('http://localhost:8000/measureStatistics')
+        axios.get('/measureStatistics')
             .then(res => {
                 console.log(res.data);
                 this.setState({

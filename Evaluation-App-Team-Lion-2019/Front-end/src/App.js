@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
+
 import LogIn from "./LoginPageApp";
 import Register from "./Register";
 import ViewSummary from "./components/viewSummary/viewSummary.js";
@@ -17,20 +18,24 @@ class App extends Component{
     render(){
 
         return(
+          
           <div className="container darkest-gray pb-2">
             <Router>
               <div>
                 <GeneralNavBar />
-                <Route path="/" exact component={LogIn} />
-                <Route path="/register" component={Register} />
-                <Route path="/viewSummary" component={ViewSummary}/>
-                <Route path="/summaryReport" component={ViewSummary} />
-                <Route path="/viewRubric" component={Rubric}/>
-                <Route path="/gradeRubric" component={Rubric}/>
-                <Route path="/rubricList" component={RubricList}/>
-              </div>
+                <Route exact path="/"  component={LogIn} />
+                <Route exact path="/register" component={Register} />
+                
+                <Route exact path="/viewSummary" component={ViewSummary}/>
+                <Route exact path="/summaryReport" component={ViewSummary} />
+                <Route exact path="/viewRubric" component={Rubric}/>
+                <Route exact path="/gradeRubric" component={Rubric}/>
+                <Route exact path="/rubricList" component={RubricList}/>
+                
+            </div>
           </Router>
         </div>
+       
         );
       }
     }
