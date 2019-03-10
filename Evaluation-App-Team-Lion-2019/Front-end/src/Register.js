@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
 import {RegisterAction} from './actions/RegisterAction';
 import {connect} from 'react-redux';
 

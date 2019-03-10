@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import NavBar from '../layout/navEvaluator';
 
 
 //dummy data
@@ -207,7 +206,6 @@ export default class ViewRubric extends Component
         return (
 
             <div>
-                <NavBar />
                 <h1>Rubric</h1>
                 <div>
                     <span className="mr-4">{this.state.gradeMode ? "Grade" : null} {Rubric.title}</span>

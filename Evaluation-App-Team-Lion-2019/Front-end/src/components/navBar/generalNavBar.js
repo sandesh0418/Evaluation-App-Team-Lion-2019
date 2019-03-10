@@ -5,7 +5,6 @@ import './generalNavBar.css'
 import AdminNavBar from './navAdmin';
 import EvalNavBar from './navEvaluator';
 import LoginNav from './loginNav.js';
-import login from '../../LoginPageApp';
 
 const user = sessionStorage.getItem('userRole');
 

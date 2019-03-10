@@ -6,6 +6,8 @@ const cors = require('cors');
 
 const users = require("./routes/api/users");
 
+var measureStatistics = require('./routes/measureStatistics');
+
 const app = express();
 app.use(cors());
 // Bodyparser middleware
@@ -26,7 +28,7 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.get('/measureStatistics', measureStatistics.calculateAverageOfEachStudent);
 
 const port = process.env.PORT || 5000;
-
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

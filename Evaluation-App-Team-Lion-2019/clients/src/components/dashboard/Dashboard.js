@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import NavBar from '../layout/navAdmin';
 
 class Dashboard extends Component {
   
@@ -12,9 +10,7 @@ class Dashboard extends Component {
     console.log(user)
     return (
       <div>
-        <NavBar />
-      
-     
+        <p>Future Dashboard Here.</p>
       </div>
     );
   }

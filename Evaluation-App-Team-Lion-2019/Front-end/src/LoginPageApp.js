@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
-import jwt_decode from "jwt-decode";
 import { login } from './actions/AuthAction';
 import  {connect} from 'react-redux';
 
@@ -59,7 +57,7 @@ class LoginPageApp extends Component
     
     render() 
     {
-        const {errors, email, password} = this.state;
+        const {errors} = this.state;
         return (
          
                 
