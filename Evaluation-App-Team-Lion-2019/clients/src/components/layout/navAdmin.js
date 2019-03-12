@@ -32,12 +32,14 @@ class NavAdmin extends Component
                     </NavDropdown>
                     <Nav.Link href="/summaryReport">Report</Nav.Link>
                     <Nav.Link href="/dashboard">Past Assesments</Nav.Link>
+                    <NavDropdown title="Cycle">
+                        <NavDropdown.Item href="/viewSummary">Start Cycle</NavDropdown.Item>
+                        <NavDropdown.Item href="/viewSummary">End Cycle</NavDropdown.Item>
+                    </NavDropdown>
                     <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
                 </Nav> 
             </Navbar.Collapse>
-            </>
-          
-          
+            </> 
         );
     }
 }

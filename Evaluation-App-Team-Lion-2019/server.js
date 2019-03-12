@@ -5,8 +5,7 @@ const passport = require("passport");
 const cors = require('cors');
 
 const users = require("./routes/api/users");
-
-var measureStatistics = require('./routes/measureStatistics');
+var summaryReport = require('./routes/summaryReport');
 
 const app = express();
 app.use(cors());
@@ -28,7 +27,7 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
-app.get('/measureStatistics', measureStatistics.calculateAverageOfEachStudent);
+app.use('/summaryReport', summaryReport);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
