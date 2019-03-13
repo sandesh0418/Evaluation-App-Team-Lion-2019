@@ -52,8 +52,8 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <div className="container">
               <Switch>
-                <PrivateRoute exact path="/gradeRubric" component={Rubric} />
-                <PrivateRoute exact path="/viewRubric" component={Rubric} />
+                <PrivateRoute exact path="/gradeRubric/:id" component={Rubric} />
+                <PrivateRoute exact path="/viewRubric/:id" component={Rubric} />
                 <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />

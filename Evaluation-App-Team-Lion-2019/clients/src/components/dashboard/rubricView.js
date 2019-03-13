@@ -12,10 +12,10 @@ function TopRowGradeScale(props)
 
 function CriteriaRow(props)
 {
-    return props.criteria.map(function(currentCriteria)
+    return props.criteria.map(function(currentCriteria, i)
     {
         return (
-            <tr key={currentCriteria.criteria_title}>
+            <tr key={i}>
                 <th scope="row">{currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
                 {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
@@ -35,7 +35,7 @@ function CriteriaDescription(props)
 function CriteriaGradeInput(props)
 {
     return (
-        <select className="form-control" id={props.currentCriteria.criteria_title}>
+        <select className="form-control" id={props.currentCriteria.criteria_title} >
             <option disabled value> -- select an option -- </option>
             {props.gradeScale}
         </select>
@@ -52,7 +52,7 @@ export default class ViewRubric extends Component
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
         this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
         this.state = {
-            rubricTitle: 'BUSN 3005',
+            rubricTitle: '',
             rubric: {
                 criteria:[{descriptions : []}]
             },
@@ -81,11 +81,10 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('http://localhost:5000/rubric/getRubric/'+this.state.rubricTitle)
+        axios.get('http://localhost:5000/rubric/getRubric/'+this.props.match.params.id)
             .then(res => {
-                console.log("The results from the backend. ");
-                console.log(res.data.rubric);
                 this.setState({
+                    rubricTitle: res.data.rubric.rubric_title,
                     rubric: res.data.rubric
                 })
             })
@@ -178,7 +177,7 @@ export default class ViewRubric extends Component
             <div>
                 <h1>Rubric</h1>
                 <div>
-                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.title}</h2>
+                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.rubric_title}</h2>
                     {SubjectIdTextbox}
                 </div>
                 

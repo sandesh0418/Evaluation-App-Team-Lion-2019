@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 var connection = require('../models/User');
 
+//Path rubric/getRubric/<rubricTitle>
 router.get('/getRubric/:id', (req, res) => {
     let rubricTitle = req.params.id;
 
@@ -101,7 +102,28 @@ router.get('/getRubric/:id', (req, res) => {
         }
 
     }
+})
 
+//Path rubric/getList
+router.get('/getList', (req, res) => {
+    let queryGetRubrics = "SELECT Rubric_Title FROM rubric";
+
+    connection.query(queryGetRubrics, function(error, results, fields) {
+        if (error) 
+        {
+            res.json({
+            status:false,
+            error: error,
+            message:'The rubrics could not be retrieved.'
+            })
+        }
+        else
+        {
+            res.json({
+                rubrics: Object.values(JSON.parse(JSON.stringify(results)))
+            })
+        }
+    })
 })
 
 module.exports = router;
