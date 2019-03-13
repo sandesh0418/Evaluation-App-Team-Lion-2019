@@ -1,12 +1,13 @@
-var connection = require('../config');
+const express = require("express");
+const router = express.Router();
+var connection = require('../models/User');
 
-module.exports.insertSubjectId = function(req,res)
-{
+router.post('/rubricScore', (req, res) => {
 
     let subjectScore = {
         "Measure_ID": req.body.measureId,
         "Subject_ID": req.body.subjectId,
-        "User_CWID": req.body.userCWID
+        "User_Email": req.body.userEmail
     }
 
     connection.query("USE nodejs_login1");
@@ -31,11 +32,13 @@ module.exports.insertSubjectId = function(req,res)
         let subjectScores = {
             "Measure_ID": req.body.measureId,
             "Subject_ID": req.body.subjectId,
-            "Criteria_Title": currentScore.criteria_title,
+            "Criteria_Title": currentScore.criteriaTitle,
             "Score": currentScore.value
         }
-        console.log(currentScore.description);
+        console.log(currentScore.criteriaTitle);
 
         connection.query('INSERT INTO subject_scores SET ?', subjectScores, function (error, results, fields) {});
     });
-}
+})
+
+module.exports = router;
