@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 
-//dummy data
+/*dummy data
 
 var crit1desc1 = {
     value_title: 1,
@@ -115,7 +115,7 @@ var dummyRubric = {
     scale: [ [1, "1 - Limited"], [2, "2 - Developing"], [3, "3 - Capable"], [4, "4 - Strong"], [5, "5 - Excellent"]],
     criteria: [criteriaOne, criteriaTwo, criteriaThree]
 }
-//end dummy data
+*/ //end dummy data
 
 function TopRowGradeScale(props)
 {
@@ -167,7 +167,10 @@ export default class ViewRubric extends Component
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
         this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
         this.state = {
-            rubric: dummyRubric,
+            rubricTitle: 'BUSN 3005',
+            rubric: {
+                criteria:[{descriptions : []}]
+            },
             gradeMode: false,
             subjectID: '',
             averageScore: 1,
@@ -178,6 +181,7 @@ export default class ViewRubric extends Component
     componentDidMount()
     {
         this.setView();
+        this.getData();
     }
 
     setView()
@@ -188,6 +192,18 @@ export default class ViewRubric extends Component
                 gradeMode: true
             })
         }
+    }
+
+    getData()
+    {
+        axios.get('http://localhost:5000/rubric/getRubric/'+this.state.rubricTitle)
+            .then(res => {
+                console.log("The results from the backend. ");
+                console.log(res.data.rubric);
+                this.setState({
+                    rubric: res.data.rubric
+                })
+            })
     }
 
     handleSaveGradeClick()
@@ -276,7 +292,7 @@ export default class ViewRubric extends Component
             <div>
                 <h1>Rubric</h1>
                 <div>
-                    <span className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.title}</span>
+                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.title}</h2>
                     {SubjectIdTextbox}
                 </div>
                 
