@@ -71,7 +71,7 @@ export default class ViewRubric extends Component
 
     setView()
     {
-        if (window.location.pathname==='/gradeRubric')
+        if (window.location.pathname.includes('/gradeRubric/'))
         {
             this.setState({
                 gradeMode: true

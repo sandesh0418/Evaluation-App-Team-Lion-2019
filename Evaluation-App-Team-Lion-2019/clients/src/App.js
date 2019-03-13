@@ -17,6 +17,7 @@ import NavBar from '../src/components/layout/Navbar';
 import Rubric from './components/dashboard/rubricView.js';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
 import RubricList from './components/dashboard/rubricList.js';
+import MyAssignments from './components/dashboard/myAssignments.js';
 
 import "./App.css";
 
@@ -58,6 +59,7 @@ class App extends Component {
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <PrivateRoute exact path="/rubricList" component={RubricList} />
+                <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
               </Switch>
             </div>
           </div>
