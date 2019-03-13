@@ -2,121 +2,6 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 
-/*dummy data
-
-var crit1desc1 = {
-    value_title: 1,
-    value_name: '1 - Limited',
-    value_description: 'student does not have grasp of info; cannot answer questions.'
-}
-
-var crit1desc2 = {
-    value_title: 2,
-    value_name: '2 - Developing',
-    value_description: 'uncomfortable with info; able to answer very few questions.'
-}
-
-var crit1desc3 = {
-    value_title: 3,
-    value_name: '3 - Capable',
-    value_description: 'comfortable with info; can answer simple questions.'
-}
-
-var crit1desc4 = {
-    value_title: 4,
-    value_name: '4 - Strong',
-    value_description: 'shows full knowledge; answers questions easily but does not elaborate'
-}
-
-var crit1desc5 = {
-    value_title: 5,
-    value_name: '5 - Excellent',
-    value_description: 'knowledge is more than required; answers questions with details and elaboration'
-}
-
-var criteriaOne = {
-    criteria_title: "Subject Knowledge",
-    descriptions: [ crit1desc1, crit1desc2, crit1desc3, crit1desc4, crit1desc5 ]
-}
-
-var crit2desc1 = {
-    value_title: 1,
-    value_name: '1 - Limited',
-    value_description: 'audience cannot understand  presentation; no logical sequence of information'
-}
-
-var crit2desc2 = {
-    value_title: 2,
-    value_name: '2 - Developing',
-    value_description: 'audience has difficulty following; info jumps around'
-}
-
-var crit2desc3 = {
-    value_title: 3,
-    value_name: '3 - Capable',
-    value_description: 'logical sequence with a few minor jumps'
-}
-
-var crit2desc4 = {
-    value_title: 4,
-    value_name: '4 - Strong',
-    value_description: 'logical sequence'
-}
-
-var crit2desc5 = {
-    value_title: 5,
-    value_name: '5 - Excellent',
-    value_description: 'logical sequence;  ideas clearly linked'
-}
-
-var criteriaTwo = {
-    criteria_title: "Organization",
-    descriptions: [ crit2desc1, crit2desc2, crit2desc3, crit2desc4, crit2desc5 ]
-}
-
-var crit3desc1 = {
-    value_title: 1,
-    value_name: '1 - Limited',
-    value_description: 'numerous spelling and/or  grammar errors; no  communication  aids or detracting aids'
-}
-
-var crit3desc2 = {
-    value_title: 2,
-    value_name: '2 - Developing',
-    value_description: 'several spelling and/or grammar errors; aids highlight unimportant info'
-}
-
-var crit3desc3 = {
-    value_title: 3,
-    value_name: '3 - Capable',
-    value_description: 'few spelling or grammar errors; aids lack originality or adequate development'
-}
-
-var crit3desc4 = {
-    value_title: 4,
-    value_name: '4 - Strong',
-    value_description: 'two or fewer spelling or grammar errors; aids support and relate to text and presentation'
-}
-
-var crit3desc5 = {
-    value_title: 5,
-    value_name: '5 - Excellent',
-    value_description: 'no spelling or grammatical errors; aids explain and enhance text and presentation'
-}
-
-var criteriaThree = {
-    criteria_title: "Use of Communication Aids",
-    descriptions: [ crit3desc1, crit3desc2, crit3desc3, crit3desc4, crit3desc5 ]
-}
-
-var dummyRubric = {
-    title: "Oral Presentation",
-    measureId: 1,
-    scale: [ [1, "1 - Limited"], [2, "2 - Developing"], [3, "3 - Capable"], [4, "4 - Strong"], [5, "5 - Excellent"]],
-    criteria: [criteriaOne, criteriaTwo, criteriaThree]
-}
-*/ //end dummy data
-
 function TopRowGradeScale(props)
 {
     return props.oneCriteria.descriptions.map(function(currentDescription)
@@ -218,6 +103,7 @@ export default class ViewRubric extends Component
                             userEmail: localStorage.getItem('email'),
                             subjectId: this.state.subjectId,
                             scores: scores};
+        console.log(subjectScore);
 
         axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
         .then(res =>{

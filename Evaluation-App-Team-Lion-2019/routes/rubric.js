@@ -7,7 +7,7 @@ router.get('/getRubric/:id', (req, res) => {
 
     let rubric = {
         rubric_title: rubricTitle,
-        measureID: '',
+        measureId: '',
         criteria: []
     }
 
@@ -24,36 +24,40 @@ router.get('/getRubric/:id', (req, res) => {
         }
         else
         {
-            rubric.measureID = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
+            rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
+            getCriteria();
         }
     })
 
-    let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
+    function getCriteria()
+    {
+        let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
 
-    connection.query(queryGetCriteriaTitles, function(error, results, fields) {
-        if (error) 
-        {
-            res.json({
-              status:false,
-              error: error,
-              message:'The criteria for this rubric could not be retrieved.'
-              })
-        }
-        else
-        {
-            let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
-            criteriaTitles.forEach((title) => {
-                let tempCriteriaObj = {
-                    criteria_title: title.Criteria_Title,
-                    descriptions: []
-                }
+        connection.query(queryGetCriteriaTitles, function(error, results, fields) {
+            if (error) 
+            {
+                res.json({
+                status:false,
+                error: error,
+                message:'The criteria for this rubric could not be retrieved.'
+                })
+            }
+            else
+            {
+                let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
+                criteriaTitles.forEach((title) => {
+                    let tempCriteriaObj = {
+                        criteria_title: title.Criteria_Title,
+                        descriptions: []
+                    }
 
-                rubric.criteria.push(tempCriteriaObj);
-            })
+                    rubric.criteria.push(tempCriteriaObj);
+                })
 
-            getCriteriaDescriptions();
-        }
-    })
+                getCriteriaDescriptions();
+            }
+        })
+    }
 
     function getCriteriaDescriptions() 
     {
