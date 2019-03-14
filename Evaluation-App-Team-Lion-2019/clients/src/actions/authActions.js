@@ -66,3 +66,16 @@ export const logoutUser = () => dispatch => {
   dispatch(setCurrentUser({}));
  
 };
+
+//create rubric
+export const rubricCreator = (userData, history) => dispatch => {
+  axios
+    .post("http://localhost:5000/rubric/create", userData)
+    //.then(res => history.push("/login"))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};

@@ -13,6 +13,7 @@ class NavAdmin extends Component
         this.props.logoutUser();
     }
     
+    
     render()
     {
         return (
