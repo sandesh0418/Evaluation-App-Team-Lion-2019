@@ -65,7 +65,7 @@ router.get('/measureStatistics', passport.authenticate("jwt",{ session:false }),
 // @route GET summaryReport/getSummary
 // @desc retrieve the program summary.
 // @access Private
-router.get('/getSummary', (req, res) => {
+router.get('/getSummary', passport.authenticate("jwt", { session: false }), (req, res) => {
     console.log("in /geSummary route");
     let programSummary = {
         title: 'Assessmentt 2019',
