@@ -11,7 +11,7 @@ var connection = require('../models/User');
 // @route GET summaryReport/measureStatistics
 // @desc retrieve statistics on the measure.
 // @access Private
-router.get('/measureStatistics', (req, res) => {
+router.get('/measureStatistics', passport.authenticate("jwt",{ session:false }), (req, res) => {
     let queryAverageScoreOfEachStudent = "SELECT Subject_ID, AVG(Score) as Average FROM subject_scores WHERE Measure_ID = 1 GROUP BY Subject_ID";
     let subjectAveragesByMeasure = [];
 
