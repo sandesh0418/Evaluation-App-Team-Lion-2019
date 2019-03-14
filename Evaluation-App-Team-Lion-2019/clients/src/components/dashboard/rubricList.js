@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
-//dummy data
-var rubrics = ["Rubric 1", "Rubric 2", "Rubric 3"];
-
-
 function ListDisplay(props)
 {
     return props.rubrics.map(function(rubric){
