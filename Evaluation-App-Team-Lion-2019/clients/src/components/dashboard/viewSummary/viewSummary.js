@@ -122,10 +122,11 @@ export default class ViewSummary extends Component
 
     render()
     {
-        const editMode = this.state.editMode;
+        const edit = this.state.editMode;
+       // console.log(this.state.editMode);
         let addOutcomeButton;
 
-        if (editMode)
+        if (edit)
         {
             addOutcomeButton = <div><button type="button" className="btn btn-primary">Add Outcome</button></div>
         }
@@ -146,7 +147,7 @@ export default class ViewSummary extends Component
                     </tbody>
                 </table>
                 {addOutcomeButton}
-                <button type="button" className="btn btn-primary" onClick={this.handleEditClick}>Edit Program Summary</button>
+                <button type="button" className="btn btn-primary" onClick={this.handleEditClick.bind(this)}>Edit Program Summary</button>
             </div>
         );
     }
