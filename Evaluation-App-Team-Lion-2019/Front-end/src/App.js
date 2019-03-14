@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
+
 import LogIn from "./LoginPageApp";
 import Register from "./Register";
-import ViewSummary from "./components/view-summary/view-summary.component";
-import Rubric from "./components/view-rubric/view-rubric.component";
-import RubricList from "./components/rubric-list/rubric-list.component";
+import ViewSummary from "./components/viewSummary/viewSummary.js";
+import Rubric from "./components/viewRubric/viewRubric";
+import RubricList from "./components/rubricList/rubricList";
+import GeneralNavBar from './components/navBar/generalNavBar.js';
+
+require('bootstrap');
 
 
 class App extends Component{
@@ -14,18 +18,24 @@ class App extends Component{
     render(){
 
         return(
-          <Router>
-          <div className="container">
-
-            <Route path="/" exact component={LogIn} />
-            <Route path="/register" component={Register} />
-            <Route path="/view-summary" component={ViewSummary}/>
-            <Route path="/viewRubric" component={Rubric}/>
-            <Route path="/gradeRubric" component={Rubric}/>
-            <Route path="/rubric-list" component={RubricList}/>
-            <Route path="/" />
-          </div>
-        </Router>
+          
+          <div className="container darkest-gray pb-2">
+            <Router>
+              <div>
+                <GeneralNavBar />
+                <Route exact path="/"  component={LogIn} />
+                <Route exact path="/register" component={Register} />
+                
+                <Route exact path="/viewSummary" component={ViewSummary}/>
+                <Route exact path="/summaryReport" component={ViewSummary} />
+                <Route exact path="/viewRubric" component={Rubric}/>
+                <Route exact path="/gradeRubric" component={Rubric}/>
+                <Route exact path="/rubricList" component={RubricList}/>
+                
+            </div>
+          </Router>
+        </div>
+       
         );
       }
     }

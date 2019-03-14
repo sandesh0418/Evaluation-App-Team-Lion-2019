@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
-import Nav from "./components/nav-bar/loginNav";
+import {RegisterAction} from './actions/RegisterAction';
+import {connect} from 'react-redux';
 
 class Register extends Component{
 
@@ -75,17 +75,7 @@ onSubmit(e){
         role: this.state.role
     }
 
-    axios.post('http://localhost:8000/register',obj)
-         .then(res =>{
-             if(res.data.status === true){
-                    console.log("Submitted");
-                    
-             }
-             else{
-                    console.log("something went wrong")
-                    console.log(res.data.message);
-             }
-         })
+   this.props.RegisterAction(obj);
 
          this.setState({
             cwid: '',
@@ -96,7 +86,7 @@ onSubmit(e){
             role: ''
          })
 
-         this.props.history.push('/');
+        
 
 }
 
@@ -104,8 +94,6 @@ render(){
 
     return(
         <form onSubmit = {this.onSubmit}>
-    
-    <Nav />
 
     <div className="form-group" style={{marginTop:50}}>
       <label>CWID</label>
@@ -198,4 +186,4 @@ render(){
 
 }
 
-export default Register;
+export default connect ({RegisterAction})(Register);

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
-//import view from './components/rubric-list/rubric-list.component';
-//import { Link } from 'react-router-dom';
-//import Register from './Register';
+import { login } from './actions/AuthAction';
+import  {connect} from 'react-redux';
 
-import Nav from "./components/nav-bar/loginNav";
 
 
 class LoginPageApp extends Component 
@@ -18,23 +15,15 @@ class LoginPageApp extends Component
         this.onSubmit = this.onSubmit.bind(this);
         this.state={
             email: '',
-            password: ''
+            password: '',
+            errors:{}
+            
         }
     }
 
 
-    onChangeEmail(e){
-        this.setState({
-            email: e.target.value
-        });
-        
-    }
-
-    onChangePassword(e){
-        this.setState({
-            password: e.target.value
-        });
-       
+    onChange(e){
+        this.setState({ [e.target.name]: e.target.value});
     }
 
     handleClick(e){
@@ -43,15 +32,14 @@ class LoginPageApp extends Component
     }
 
    
+    
 
     onSubmit(e){
         e.preventDefault();
         
-        const obj ={
-            email: this.state.email,
-            password: this.state.password
-        }
+       
         
+<<<<<<< HEAD
         axios.post('http://localhost:8000/', obj)
              .then(res =>{
                  console.log(res.data);
@@ -70,6 +58,12 @@ class LoginPageApp extends Component
                      window.location.assign('/');
                  }
              })
+=======
+                
+        this.props.login(this.state);
+                
+           
+>>>>>>> master
            
         
         
@@ -84,56 +78,69 @@ class LoginPageApp extends Component
     
     render() 
     {
+        const {errors} = this.state;
         return (
-            <form onSubmit= {this.onSubmit}>
-            
-                    <Nav />
+         
                 
-                    <div className="from-group" style={{marginTop:100}}>
-                        <label>Email:</label>
-                        <input 
-                        className="form-control" 
-                        type="text" 
-                        name="email" 
-                        placeholder="Please enter your email"
-                       value = {this.state.value}
-                        onChange={this.onChangeEmail}
-                        required
-                        />
-                        
-                    </div>
+                <form onSubmit= {this.onSubmit}>
+                <h1>Sign In</h1>
+                { errors.form && <div className ="alert alert-danger">{errors.div}</div>}
+                       
+                      
+                        <div className="from-group">
+                            <label>Email:</label>
+                            <input 
+                            className="form-control" 
+                            type="text" 
+                            name="email" 
+                            placeholder="Please enter your email"
+                            value = {this.state.value}
+                            onChange={this.onChange}
+                            required
+                            />
+                            
+                        </div>
 
-                    <div className="form-group">
-                        <label>Password:</label>
-                        <input className="form-control" 
-                                type="password" 
-                                name="password" 
-                                placeholder="Please enter your password"
-                                value={this.state.value}
-                                onChange={this.onChangePassword}
-                                required
-                                />
-                    </div>
+                        <div className="form-group">
+                            <label>Password:</label>
+                            <input className="form-control" 
+                                    type="password" 
+                                    name="password" 
+                                    placeholder="Please enter your password"
+                                    value={this.state.value}
+                                    
+                                    onChange={this.onChange}
+                                    required
+                                    />
+                        </div>
 
-                    <div className="form-group">
+                        <div className="form-group">
+                            <input className="btn btn-primary" 
+                                    type="submit" 
+                                    value="Sign In" 
+                                    />  
+                        </div>
+                        <div className="form-group">
                         <input className="btn btn-primary" 
-                                type="submit" 
-                                value="Sign In" 
-                                />  
+                                    id = "register" 
+                                    type="button" 
+                                    value="Register"
+                                    onClick={this.handleClick}/> 
                     </div>
-                    <div className="form-group">
-                       <input className="btn btn-primary" 
-                                id = "register" 
-                                type="button" 
-                                value="Register"
-                                onClick={this.handleClick}/> 
-                   </div>
-                
-                
-           
-            </form>
+                    
+                    
+            
+                </form>
+            
         );
     }
 }
 
-export default LoginPageApp;
+LoginPageApp.propTypes = {
+login: React.PropTypes.func.isRequired
+}
+
+LoginPageApp.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+export default connect(null, { login }) (LoginPageApp);

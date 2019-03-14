@@ -12,3 +12,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* For the main container div */
+.darkest-gray
+{
+  background-color: #F1F1F1;
+  min-height: 100vh;
+}
+
+/* For the left and right sides of the app that contain no content. */
+.dark-gray
+{
+  background-color: #F9F9F9;
+}
+
+/* For the navbar and buttons. */
+.app-blue
+{
+  background-color:#55A5D2;
+}
+
+.form-field-color
+{
+  background-color: #DDDDDD;
+}
+
+table.table-bordered > thead > tr > th{
+  border:2px solid gray;
+}
+table.table-bordered > tbody > tr > td{
+  border:2px solid gray;
+}
+table.table-bordered > tbody > tr > th{
+  border:2px solid gray;
+}

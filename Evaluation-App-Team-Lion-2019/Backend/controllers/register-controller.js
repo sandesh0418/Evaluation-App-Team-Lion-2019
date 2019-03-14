@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var express=require("express");
+var key = require('../key');
+var jwt = require('jsonwebtoken'); 
 
 
  
@@ -12,12 +14,12 @@ module.exports.register=function(req,res){
   
   
     var users={
-		"cwid" : req.body.cwid,
+		    "cwid" : req.body.cwid,
         "firstName":req.body.firstName,
-		"lastName":req.body.lastName,
+		    "lastName":req.body.lastName,
         "email":req.body.email,
         "password":hash,
-		"role" : req.body.role
+		    "role" : req.body.role
         
     }
  
@@ -32,20 +34,23 @@ module.exports.register=function(req,res){
       if (error) {
         res.json({
             status:false,
-            message:'there are some error with query'
+            token: null,
+            message:"There was a problem registering the user"
         })
       }else{
-          res.json({
-            status:true,
-            data:results,
+        
+          res.status(200).send({
+            auth:true,
+            token: null,
             message:'user registered sucessfully'
         })
       }
-    });}
+    });
+  }
 	else{
     res.json({
-      status:false,
-      
+      auth:false,
+      token: null,
       message:"please Enter valid CWID"
   })
 		

@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10; 
+var VerifyToken = require('./VerifyToken');
 var connection = require('../config');
-
+var jwt = require('jsonwebtoken'); 
+var key = require('../key');
 
 module.exports.authenticate=function(req,res){
     var email=req.body.email;
@@ -14,7 +16,8 @@ module.exports.authenticate=function(req,res){
       
       if (error) {
           res.json({
-            status:false,
+            auth:false,
+            toke: null,
             message:'there are some error with query'
             })
       }else{
@@ -25,21 +28,45 @@ module.exports.authenticate=function(req,res){
            // console.log(response);
            // console.log(bcrypt.compareSync(password, results[0].password)); 
                     if(response === true){
+<<<<<<< HEAD
                         res.send(results[0].role)
                         //console.log(password);
                       //  console.log(results[0].password);
                     }else{
                       //console.log("dsf");
                       res.send("Email and password do not match");
+=======
+                      var token = jwt.sign({id: email},key.secret, {
+                        expiresIn: 86400
+                      });
+                        res.status(200).send({
+                          auth: true,
+                          token: token,
+                          role: results[0].role
+                        });
+                       
+                    }else{
+                      res.status(401).send({
+                       auth: false,
+                       token: null
+>>>>>>> master
                     
-                    }
-                  });
-                }
+                    });
+                  }
+                });
+              }
 
         else{
+<<<<<<< HEAD
           res.json({
               status:false,    
             message:"Email does not exist"
+=======
+          res.status(404).send({
+              auth:false, 
+              token: null,   
+            message:"Email does not exits"
+>>>>>>> master
           });
         }
       }
