@@ -1,40 +1,57 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
-import axios from "axios";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { rubricCreator } from "../../actions/authActions";
+import { connect } from "react-redux";
 
 
-export default class CreateRubric extends Component{
 
-    constructor(props){
-        super(props);
-        
+class CreateRubric extends Component{
+
+    constructor(){
+        super();
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.state = ({
             addMode : false,
-            rows: 0,
-            columns:0,
-            measureID:0,
+            rows: 3,
+            columns:3,
+            measureID:1,
             rubricTitle:""
         });
     }
 
+    onChange = e => {
+        this.setState({ [e.target.id]: e.target.value });
+      };
+
     onSubmit = e=> {
         e.preventDefault();
+        this.setState({addMode: true});
+        //console.log('TEST');
 
         this.props.rubricCreator(this.state, this.props.history);
     }
 
     render() {
-        //const add = this.state.addMode();
+        const add = this.state.addMode;
         console.log('sdfsdf');
-        return(
-        <div>
+        let rubricFiller;
+        if (add){
+            rubricFiller=<div>
+                
+            </div>
+        }else
+         {
+            rubricFiller = 
+            <div>
            <form noValidate onSubmit={this.onSubmit}>
            <div >
                <input 
                onChange={this.onChange}
                value ={this.state.measureID}
                id ="measureID"
-               type="int"
+               type="number"
                />
                <label htmlFor="measureID">Enter the measure ID you like like to create a rubric for</label>
            </div>
@@ -44,7 +61,7 @@ export default class CreateRubric extends Component{
                onChange={this.onChange}
                value ={this.state.rubricTitle}
                id ="rubricTitle"
-               type="int"
+               type="text"
                />
                <label htmlFor="rubricTitle">Enter a title for the rubric</label>
            </div>
@@ -54,7 +71,7 @@ export default class CreateRubric extends Component{
                   onChange={this.onChange}
                   value={this.state.rows}
                   id="rows"
-                  type="int"
+                  type="number"
                 />
 
                 <label htmlFor="rows">Enter the desired number of rows for the rubric</label>
@@ -65,7 +82,7 @@ export default class CreateRubric extends Component{
                   onChange={this.onChange}
                   value={this.state.columns}
                   id="columns"
-                  type="int"
+                  type="number"
                 />
 
                 <label htmlFor="columns">Enter the desired number of columns for the rubric</label>
@@ -77,8 +94,26 @@ export default class CreateRubric extends Component{
               </button>
               </form>
         </div>
-        
+        }
+        return(
+            <div>
+                {rubricFiller}
+            </div>
+            
         );
     }
 }
 
+CreateRubric.propTypes = {
+    rubricCreator: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    errors: state.errors
+})
+
+export default connect(
+    mapStateToProps,
+    { rubricCreator }
+)(withRouter (CreateRubric));

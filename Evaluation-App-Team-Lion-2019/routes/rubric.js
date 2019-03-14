@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 var connection = require('../models/User');
 
+// Load User model
+const config = require("../models/User");
+
 //Path rubric/getRubric/<rubricTitle>
 router.get('/getRubric/:id', (req, res) => {
     let rubricTitle = req.params.id;
@@ -127,6 +130,16 @@ router.get('/getList', (req, res) => {
 })
 
 router.post("/create", (req,res) => {
-    
+    const newRubric ={
+        "Rubric_Title" :req.body.rubricTitle,
+        "Measure_ID" : req.body.measureID
+    };
+    config.query('INSERT INTO rubric SET ?', newRubric, function(error, results, fields) {
+        if(error) {
+            console.log(error);
+        } else {
+            res.json(newRubric);
+        }
+    });
 })
 module.exports = router;
