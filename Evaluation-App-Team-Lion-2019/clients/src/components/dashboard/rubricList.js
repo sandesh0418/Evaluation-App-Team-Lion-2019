@@ -38,6 +38,7 @@ export default class RubricList extends Component
         return(
             <div>
                 <h1>Rubric List</h1>
+                
                 <ListDisplay rubrics={this.state.rubrics} />
             </div>
         );

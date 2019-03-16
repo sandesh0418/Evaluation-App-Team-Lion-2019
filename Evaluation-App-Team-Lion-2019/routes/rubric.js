@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 var connection = require('../models/User');
 const passport = require('passport');
+const secret = require('../config/keys');
 
 
 //Path rubric/getRubric/<rubricTitle>
 
 
-router.post("/createRubric", passport.authenticate("jwt", { session: false}), (req,res) =>{
+router.post("/createRubric", passport.authenticate("jwt", { session: false}),  (req,res) =>{
 var rubricTitle = req.body.rubric_title;
 var measureId = req.body.measureId;
 
@@ -143,7 +144,7 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
 })
 
 //Path rubric/getList
-router.get('/getList', passport.authenticate("jwt", {session: false}),(req, res) => {
+router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
     let queryGetRubrics = "SELECT Rubric_Title FROM rubric";
 
     connection.query(queryGetRubrics, function(error, results, fields) {
@@ -157,8 +158,9 @@ router.get('/getList', passport.authenticate("jwt", {session: false}),(req, res)
         }
         else
         {
+            console.log(results[0]);
             res.json({
-                rubrics: Object.values(JSON.parse(JSON.stringify(results)))
+                rubrics: Object.values(JSON.parse(JSON.stringify(results[0])))
             })
         }
     })
