@@ -6,7 +6,7 @@ import axios from "axios";
 function ListDisplay(props)
 {
     return props.rubrics.map(function(rubric){
-        return <div key={rubric.Rubric_Title}><Link to={"/viewRubric/" + rubric.Rubric_Title}>{rubric.Rubric_Title}</Link></div>;
+        return <div key={rubric.Rubric_Title}><Link to={"/gradeRubric/" + rubric.Rubric_Title}>{rubric.Rubric_Title}</Link></div>;
     });
 }
 
@@ -35,7 +35,6 @@ export default class RubricList extends Component
         return(
             <div>
                 <h1>Rubric List</h1>
-                
                 <ListDisplay rubrics={this.state.rubrics} />
             </div>
         );

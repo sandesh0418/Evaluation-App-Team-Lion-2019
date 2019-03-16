@@ -1,60 +1,46 @@
 import React, {Component} from 'react';
 import './viewSummary.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-/*
-var outcome1 = {
-    description: "Outcome 1 ",
-    measures: ["1.1 Measure 1", "1.2 Measure 2"]
-};
+var dummyMeasure = {
+    Description: '',
+    Percent_to_reach_target: 0,
+    Target_Score: 0
+}
 
-var outcome2 = {
-    description: "Outcome 2",
-    measures: ["2.1 Measure 1", "2.2 Measure 2 Look see how."]
-};
+var dummyOutcome = {
+    Outcome_ID: 3,
+    Description: 'outcome 3',
+    measures: [dummyMeasure]
+}
 
-var outcome3 = {
-    description: "Outcome 3",
-    measures: ["3.1 Measure 1", "3.2 Measure 2", "3.3 Measure 3"]
-};
-
-var programSummary = { 
+var dummySummary = {
     title: "Assessment 2019",
-    outcomes: [outcome1, outcome2, outcome3]
-};
-*/
-
-var outcome1 = {
-    description: "Communicate effectively in a variety of professional contexts.",
-    measures: ["75% or more of students evaluated on oral presentation skills will have an average BUSN 3005 rubric score of 3 or better."]
-};
-
-var programSummary = {
-    title: "Assessment 2019",
-    outcomes: [outcome1]
+    outcomes: [dummyOutcome]
 };
 
 const ProgramSummaryBody = props =>
 {
-    return programSummary.outcomes.map(function(currentOutcome, i){
-        return <Outcome outcome={currentOutcome} reportMode={props.reportMode} state={props.state} key={i} />;
+    return props.state.programSummary.outcomes.map(function(currentOutcome, i){
+        return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
     });
 }
 
 const Outcome = props => (
     <tr>
-        <th scope="row">{props.outcome.description}</th>
-        <td><Measures outcome={props.outcome} reportMode={props.reportMode} state={props.state}  /></td>
+        <th scope="row">{props.outcome.Description}</th>
+        <td><Measures measures={props.outcome.measures} state={props.state}  /></td>
     </tr>
 )
 
 function Measures(props)
 {
-    return props.outcome.measures.map(function(currentMeasure, i){
+    return props.measures.map(function(currentMeasure, i){
         return (
             <div key={i}>
-                <p>{currentMeasure}</p>
-                {props.reportMode ? <Statistics state={props.state} /> : null}
+                <p>{currentMeasure.Description}</p>
+                {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
             </div>
         )
     });
@@ -63,8 +49,10 @@ function Measures(props)
 function Statistics(props)
 {
     return <p>
-            Measure statistics: {((props.state.metTarget /props.state.total) * 100).toFixed(2)}% of 
-            evaluations have met the target score of 3. {props.state.total} subjects have been evaluated.
+            {props.measure.totalEvaluated !== 0 ? 
+                <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
+                evaluations have met the target score of {props.measure.Target_Score}.</span> : null}
+            {props.measure.totalEvaluated} subjects have been evaluated.
             </p>
 }
 
@@ -73,11 +61,10 @@ export default class ViewSummary extends Component
     
     constructor(props){
         super(props);
-        this.handleEditModeClick = this.handleEditClick.bind(this);
         this.setView = this.setView.bind(this);
         this.state = {
-            editMode: false,
             reportMode: false,
+            programSummary: dummySummary,
             total: 0,
             metTarget: 0
         };
@@ -92,43 +79,44 @@ export default class ViewSummary extends Component
     {
         if (window.location.pathname==="/summaryReport")
         {
-            this.getStatistics();
+            this.getSummaryWithStatistics();
             this.setState({
                 reportMode: true
             });
         }
+        else
+        {
+            this.getSummary();
+        }
     }
 
-    getStatistics()
+    getSummaryWithStatistics()
     {
-        axios.get('/measureStatistics')
+        axios.get('http://localhost:5000/summaryReport/measureStatistics')
             .then(res => {
                 console.log(res.data);
                 this.setState({
-                    total: res.data.total,
-                    metTarget: res.data.metTarget
+                    programSummary: res.data.programSummary
                 })
             })
     }
 
-    handleEditClick()
+    getSummary()
     {
-        this.setState({editMode: true});
+        axios.get('http://localhost:5000/summaryReport/getSummary')
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    programSummary: res.data.programSummary
+                })
+            })
     }
 
     render()
     {
-        const editMode = this.state.editMode;
-        let addOutcomeButton;
-
-        if (editMode)
-        {
-            addOutcomeButton = <div><button type="button" className="btn btn-primary">Add Outcome</button></div>
-        }
-
         return (
             <div>
-                <h1>{programSummary.title}</h1>
+                <h1>{this.state.programSummary.title}</h1>
             
                 <table className="table table-bordered">
                     <thead>
@@ -138,11 +126,10 @@ export default class ViewSummary extends Component
                         </tr>
                     </thead>
                     <tbody>
-                        <ProgramSummaryBody reportMode={this.state.reportMode} state={this.state} />
+                        <ProgramSummaryBody state={this.state} />
                     </tbody>
                 </table>
-                {addOutcomeButton}
-                <button type="button" className="btn btn-primary" onClick={this.handleEditClick}>Edit Program Summary</button>
+                <Link to="/editProgramSummary" className="btn btn-primary">Edit Program Summary</Link>
             </div>
         );
     }

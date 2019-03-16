@@ -1,97 +1,45 @@
 import React, {Component} from 'react';
 import axios from "axios";
 
-//dummy data
-var criteriaOne = {
-    description: "Subject Knowledge",
-    scores: [
-        "student does not have grasp of info; cannot answer questions.",
-            "uncomfortable with info; able to answer very few questions.",
-            "comfortable with info; can answer simple questions.",
-            "shows full knowledge; answers questions easily but does not elaborate",
-            "knowledge is more than required; answers questions with details and elaboration"
-    ]
-}
-
-var criteriaTwo = {
-    description: "Organization",
-    scores: [
-        "audience cannot understand  presentation; no logical sequence of information",
-        "audience has difficulty following; info jumps around",
-        "logical sequence with a few minor jumps",
-        "logical sequence",
-        "logical sequence;  ideas clearly linked"
-    ]
-}
-
-var criteriaThree = {
-    description: "Use of Communication Aids",
-    scores: [
-        "numerous spelling and/or  grammar errors; no  communication  aids or detracting aids",
-        "several spelling and/or grammar errors; aids highlight unimportant info",
-        "few spelling or grammar errors; aids lack originality or adequate development",
-        "two or fewer spelling or grammar errors; aids support and relate to text and presentation",
-        "no spelling or grammatical errors; aids explain and enhance text and presentation"
-    ]
-}
-
-var Rubric = {
-    title: "Oral Presentation",
-    measureId: 1,
-    scale: [ [1, "1 - Limited"], [2, "2 - Developing"], [3, "3 - Capable"], [4, "4 - Strong"], [5, "5 - Excellent"]],
-    criteria: [criteriaOne, criteriaTwo, criteriaThree]
-}
 
 function TopRowGradeScale(props)
 {
-    return Rubric.scale.map(function(currentScore, i)
-        {
-            return <th scope="col" key={i}>{currentScore[1]}</th>
-        });
+    return props.oneCriteria.descriptions.map(function(currentDescription)
+    {
+        return <th scope="col" key={currentDescription.value_title}>{currentDescription.value_name}</th>
+    });
 }
 
 function CriteriaRow(props)
 {
-    return Rubric.criteria.map(function(currentCriteria, i)
+    return props.criteria.map(function(currentCriteria, i)
     {
         return (
             <tr key={i}>
-                <th scope="row">{currentCriteria.description}</th>
-                <CriteriaDescription criteria={currentCriteria} />
-                {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} /></td> : null}
+                <th scope="row">{currentCriteria.criteria_title}</th>
+                <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
+                {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
             </tr>
             );
     });
 }
 
-const gradeScale = generateGradeScale();
+function CriteriaDescription(props)
+{
+    return props.criteriaDescriptions.map(function(currentDescription)
+    {
+        return <td key={currentDescription.value_title}>{currentDescription.value_description}</td>
+    });
+}
 
 function CriteriaGradeInput(props)
 {
     return (
-        <select className="form-control" id={props.currentCriteria.description}>
+        <select className="form-control" id={props.currentCriteria.criteria_title} >
             <option disabled value> -- select an option -- </option>
-            {gradeScale}
+            {props.gradeScale}
         </select>
     )
-}
-
-function CriteriaDescription(props)
-{
-    return props.criteria.scores.map(function(currentScore, i)
-    {
-        return <td key={i}>{currentScore}</td>
-    });
-}
-
-function generateGradeScale()
-{
-    return (
-        Rubric.scale.map(function(currentScore, i)
-        {
-            return <option key={i} value={currentScore[0]}>{currentScore[1]}</option>
-        })
-    );
 }
 
 export default class ViewRubric extends Component
@@ -104,6 +52,10 @@ export default class ViewRubric extends Component
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
         this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
         this.state = {
+            rubricTitle: '',
+            rubric: {
+                criteria:[{descriptions : []}]
+            },
             gradeMode: false,
             subjectID: '',
             averageScore: 1,
@@ -114,11 +66,12 @@ export default class ViewRubric extends Component
     componentDidMount()
     {
         this.setView();
+        this.getData();
     }
 
     setView()
     {
-        if (window.location.pathname==='/gradeRubric')
+        if (window.location.pathname.includes('/gradeRubric/'))
         {
             this.setState({
                 gradeMode: true
@@ -126,20 +79,32 @@ export default class ViewRubric extends Component
         }
     }
 
+    getData()
+    {
+        axios.get('http://localhost:5000/rubric/getRubric/'+this.props.match.params.id)
+            .then(res => {
+                this.setState({
+                    rubricTitle: res.data.rubric.rubric_title,
+                    rubric: res.data.rubric
+                })
+            })
+    }
+
     handleSaveGradeClick()
     {
-        let scores = Rubric.criteria.map(function(currentCriteria)
+        let scores = this.state.rubric.criteria.map(function(currentCriteria)
         {
-            return {description: currentCriteria.description,
-                    value: document.getElementById(currentCriteria.description).value};
+            return {criteriaTitle: currentCriteria.criteria_title,
+                    value: document.getElementById(currentCriteria.criteria_title).value};
         })
 
-        let subjectScore = {measureId: 1,
-                            userCWID: sessionStorage.getItem('userCWID'),
+        let subjectScore = {measureId: this.state.rubric.measureId,
+                            userEmail: localStorage.getItem('email'),
                             subjectId: this.state.subjectId,
                             scores: scores};
+        console.log(subjectScore);
 
-        axios.post('/subjectScore', subjectScore)
+        axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
         .then(res =>{
             console.log(res.data);
         });
@@ -153,9 +118,9 @@ export default class ViewRubric extends Component
         })
         let totalScore = 0;
         let numberOfCriteria = 0;
-        Rubric.criteria.forEach(function(currentCriteria)
+        this.state.rubric.criteria.forEach(function(currentCriteria)
         {
-                totalScore = totalScore + parseInt(document.getElementById(currentCriteria.description).value);
+                totalScore = totalScore + parseInt(document.getElementById(currentCriteria.criteria_title).value);
                 numberOfCriteria++;
         });
         console.log(totalScore);
@@ -175,6 +140,7 @@ export default class ViewRubric extends Component
 
     render()
     {
+        
         let saveGradeButton;
         let SubjectIdTextbox;
         let rubricAverage;
@@ -201,11 +167,17 @@ export default class ViewRubric extends Component
             </div>
         }
 
+        let gradeScale = this.state.rubric.criteria[0].descriptions.map(function(currentDescription)
+        {
+            return <option key={currentDescription.value_title} value={currentDescription.value_title}>{currentDescription.value_name}</option>
+        })
+
         return (
+
             <div>
                 <h1>Rubric</h1>
                 <div>
-                    <span className="mr-4">{this.state.gradeMode ? "Grade" : null} {Rubric.title}</span>
+                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.rubric_title}</h2>
                     {SubjectIdTextbox}
                 </div>
                 
@@ -213,12 +185,12 @@ export default class ViewRubric extends Component
                     <thead>
                         <tr>
                             <th scope="col" className="outcome-width">Criteria</th>
-                            <TopRowGradeScale />
+                            <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
                             {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
                         </tr>
                     </thead>
                     <tbody>
-                        <CriteriaRow gradeMode={this.state.gradeMode} />
+                        <CriteriaRow gradeMode={this.state.gradeMode} criteria={this.state.rubric.criteria} gradeScale={gradeScale} />
                     </tbody>
                 </table>
                 {rubricAverage}
