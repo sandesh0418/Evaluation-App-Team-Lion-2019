@@ -33,7 +33,7 @@ export const loginUser = userData => dispatch => {
       localStorage.setItem("email", userData.email);
       //localStorage.setItem("role", res.data.role);
       // Decode token to get user data
-      const decoded = jwt_decode(token);
+      const decoded = (token);
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
