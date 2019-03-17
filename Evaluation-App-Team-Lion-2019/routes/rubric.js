@@ -145,9 +145,10 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
 
 //Path rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric";
+    let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
 
     connection.query(queryGetRubrics, function(error, results, fields) {
+        
         if (error) 
         {
             res.status(404).json({
@@ -156,13 +157,20 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
             message:'The rubrics could not be retrieved.'
             })
         }
-        else
-        {
-            console.log(results[0]);
-            res.json({
-                rubrics: Object.values(JSON.parse(JSON.stringify(results[0])))
-            })
+        
+        var list = '';
+
+        for(var i = 0;i<results.length;i++){
+            if(i != results.length-1){
+            list+= results[i].Rubric_Title+" ";
+            }
+            else{
+                list+= results[i].Rubric_Title
+            }
         }
+            console.log(list);
+           res.send(list);
+        
     })
 })
 
