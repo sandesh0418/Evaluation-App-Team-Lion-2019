@@ -44,6 +44,7 @@ return res.send("Rubric has been added!");
 
 router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (req, res) => {
     let rubricTitle = req.params.id;
+    console.log(rubricTitle);
 
     let rubric = {
         rubric_title: rubricTitle,
@@ -64,8 +65,20 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
         }
         else
         {
-            rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
-            getCriteria();
+            if (results.length > 0)
+            {
+                rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
+                getCriteria();
+            }
+            else
+            {
+                res.status(404).json({
+                    status:false,
+                    error: error,
+                    message:'There is no rubric with this title.'
+                    })
+            }
+            
         }
     })
 
@@ -157,19 +170,13 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
             message:'The rubrics could not be retrieved.'
             })
         }
-        
-        var list = '';
-
-        for(var i = 0;i<results.length;i++){
-            if(i != results.length-1){
-            list+= results[i].Rubric_Title+" ";
-            }
-            else{
-                list+= results[i].Rubric_Title
-            }
+        else
+        {
+            console.log(Object.values(JSON.parse(JSON.stringify(results))));
+            res.json({
+                rubrics: Object.values(JSON.parse(JSON.stringify(results)))
+            })
         }
-            console.log(list);
-           res.send(list);
         
     })
 })
