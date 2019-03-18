@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './viewSummary.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 var dummyMeasure = {
     Description: '',
@@ -48,8 +49,10 @@ function Measures(props)
 function Statistics(props)
 {
     return <p>
-            Measure statistics: {((props.measure.metTarget /props.measure.total) * 100).toFixed(2)}% of 
-            evaluations have met the target score of 3. {props.measure.total} subjects have been evaluated.
+            {props.measure.totalEvaluated !== 0 ? 
+                <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
+                evaluations have met the target score of {props.measure.Target_Score}.</span> : null}
+            {props.measure.totalEvaluated} subjects have been evaluated.
             </p>
 }
 
@@ -58,10 +61,8 @@ export default class ViewSummary extends Component
     
     constructor(props){
         super(props);
-        this.handleEditModeClick = this.handleEditClick.bind(this);
         this.setView = this.setView.bind(this);
         this.state = {
-            editMode: false,
             reportMode: false,
             programSummary: dummySummary,
             total: 0,
@@ -97,39 +98,23 @@ export default class ViewSummary extends Component
             .then(res => {
                 console.log(res.data);
                 this.setState({
-                    total: res.data.total,
-                    metTarget: res.data.metTarget
+                    programSummary: res.data.programSummary
                 })
             })
     }
 
     getSummary()
     {
-        console.log("Inside getSummary");
         axios.get('http://localhost:5000/summaryReport/getSummary')
             .then(res => {
-                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
             })
     }
 
-    handleEditClick()
-    {
-        this.setState({editMode: true});
-    }
-
     render()
     {
-        const editMode = this.state.editMode;
-        let addOutcomeButton;
-
-        if (editMode)
-        {
-            addOutcomeButton = <div><button type="button" className="btn btn-primary">Add Outcome</button></div>
-        }
-
         return (
             <div>
                 <h1>{this.state.programSummary.title}</h1>
@@ -145,8 +130,7 @@ export default class ViewSummary extends Component
                         <ProgramSummaryBody state={this.state} />
                     </tbody>
                 </table>
-                {addOutcomeButton}
-                <button type="button" className="btn btn-primary" onClick={this.handleEditClick}>Edit Program Summary</button>
+                <Link to="/editProgramSummary" className="btn btn-primary">Edit Program Summary</Link>
             </div>
         );
     }

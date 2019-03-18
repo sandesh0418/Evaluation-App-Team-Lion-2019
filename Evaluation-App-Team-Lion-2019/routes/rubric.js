@@ -64,8 +64,20 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
         }
         else
         {
-            rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
-            getCriteria();
+            if (results.length > 0)
+            {
+                rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
+                getCriteria();
+            }
+            else
+            {
+                res.status(404).json({
+                    status:false,
+                    error: error,
+                    message:'There is no rubric with this title.'
+                    })
+            }
+            
         }
     })
 
@@ -145,9 +157,10 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
 
 //Path rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric";
+    let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
 
     connection.query(queryGetRubrics, function(error, results, fields) {
+        
         if (error) 
         {
             res.status(404).json({
@@ -158,11 +171,12 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
         }
         else
         {
-            console.log(results[0]);
+            console.log(Object.values(JSON.parse(JSON.stringify(results))));
             res.json({
-                rubrics: Object.values(JSON.parse(JSON.stringify(results[0])))
+                rubrics: Object.values(JSON.parse(JSON.stringify(results)))
             })
         }
+        
     })
 })
 
