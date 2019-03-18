@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import axios from "axios";
-//heash
 
 
 function TopRowGradeScale(props)
