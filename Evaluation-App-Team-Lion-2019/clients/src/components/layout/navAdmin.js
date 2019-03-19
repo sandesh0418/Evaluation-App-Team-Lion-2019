@@ -24,7 +24,7 @@ class NavAdmin extends Component
                     <Nav.Link href="/viewSummary">View Summary</Nav.Link>
                     <NavDropdown title="Assignments">
                         <NavDropdown.Item href="/myAssignments">My Assignments</NavDropdown.Item>
-                        <NavDropdown.Item href="/viewSummary">Create Assignment</NavDropdown.Item>
+                        <NavDropdown.Item href="/createAssignment">Create Assignment</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title="Rubrics">
                         <NavDropdown.Item href="/rubricList">Rubric List</NavDropdown.Item>

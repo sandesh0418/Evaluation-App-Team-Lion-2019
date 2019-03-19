@@ -172,7 +172,6 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
         }
         else
         {
-            console.log(Object.values(JSON.parse(JSON.stringify(results))));
             res.json({
                 rubrics: Object.values(JSON.parse(JSON.stringify(results)))
             })
