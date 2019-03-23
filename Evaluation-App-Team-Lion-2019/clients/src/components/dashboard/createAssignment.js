@@ -134,10 +134,15 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        this.setState({
-            selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
-            selectedEvaluator: this.state.evaluatorList[0].email
-        })
+        axios.get('http://localhost:5000/assignments/outcomesAndMeasures')
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    outcomeList: res.data.outcomeList,
+                    selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
+                    selectedEvaluator: this.state.evaluatorList[0].email
+                })
+            })
     }
 
     handleSelectOutcome(e)

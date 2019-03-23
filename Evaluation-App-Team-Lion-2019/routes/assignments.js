@@ -39,8 +39,9 @@ router.post('/createAssignment', (req,res) => {
     });
 })
 
-//Get outcomes, measures, and evaluators to load page.
-router.get('/outcomesMeasuresAndEvaluators', (req, res) => {
+
+//Get outcomes and measures to load page.
+router.get('/outcomesAndMeasures', (req, res) => {
     let outcomeList = [];
 
     let queryOutcomes = "SELECT Outcome_ID, Description FROM outcome"
@@ -58,7 +59,15 @@ router.get('/outcomesMeasuresAndEvaluators', (req, res) => {
         {
             if (results.length > 0)
             {
-                outcomeList = Object.values(JSON.parse(JSON.stringify(results)));
+                Object.values(JSON.parse(JSON.stringify(results))).forEach(outcome => {
+                    tempOutcome = {
+                        Outcome_ID: outcome.Outcome_ID,
+                        Description: outcome.Description,
+                        measures: []
+                    }
+                    outcomeList.push(tempOutcome);
+                })
+                getMeasures();
             }
             else
             {
@@ -66,10 +75,44 @@ router.get('/outcomesMeasuresAndEvaluators', (req, res) => {
                     status:false,
                     error: error,
                     message:'There are no outcomes.'
-                    })
+                })
             }
         }
     })
+
+    function getMeasures()
+    {
+        for (let i = 0; i < outcomeList.length; i++)
+        {
+            let queryMeasures = "SELECT Measure_ID, Description FROM measure WHERE Outcome_ID=" + 
+                                outcomeList[i].Outcome_ID;
+
+            connection.query(queryMeasures, function(error, results, fields) {
+                if (error) 
+                {
+                    res.status(404).json({
+                    status:false,
+                    error: error,
+                    message:'The measures could not be retrieved for outcome ' + outcomeList[i].Outcome_ID
+                    })
+                }
+                else
+                {
+                    Object.values(JSON.parse(JSON.stringify(results))).forEach(measure => {
+                        outcomeList[i].measures.push(measure);
+                    })
+
+                    if (i == outcomeList.length - 1)
+                    {
+                        res.status(200).json({
+                            outcomeList: outcomeList
+                        })
+                        console.log(outcomeList);
+                    }
+                }
+            })
+        }
+    }
 })
 
 module.exports = router;
