@@ -105,7 +105,7 @@ export default class ViewRubric extends Component
         console.log(subjectScore);
 
         axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
-        .then(res =>{
+        .then(res => {
             console.log(res.data);
         });
         alert("The score has been saved.");

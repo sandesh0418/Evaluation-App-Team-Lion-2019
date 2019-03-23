@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from "axios";
 
 //dummy data
 var out1mea1 = {
@@ -107,6 +108,11 @@ function SelectEvaluator(props)
     })
 }
 
+function getExtension(filename) {
+    let parts = filename.split('.');
+    return parts[parts.length - 1];
+}
+
 export default class CreateAssignment extends Component
 {
     constructor(props)
@@ -115,17 +121,23 @@ export default class CreateAssignment extends Component
         this.handleSelectOutcome = this.handleSelectOutcome.bind(this);
         this.handleSelectMeasure = this.handleSelectMeasure.bind(this);
         this.handleSelectEvaluator = this.handleSelectEvaluator.bind(this);
+        this.fileInput = React.createRef();
+        this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             outcomeList: dummyOutcomeList,
             evaluatorList: evalList,
             selectedOutcomeIndex: 0,
-            selectedMeasure: -1,
+            selectedMeasure: undefined,
             selectedEvaluator: ''
         }
     }
 
     componentDidMount()
     {
+        this.setState({
+            selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
+            selectedEvaluator: this.state.evaluatorList[0].email
+        })
     }
 
     handleSelectOutcome(e)
@@ -150,10 +162,26 @@ export default class CreateAssignment extends Component
         })
     }
 
+    onSubmit(e)
+    {
+        e.preventDefault();
+        let assignment = {
+            Measure_ID: this.state.selectedMeasure,
+            User_Email: this.state.selectedEvaluator,
+            studentList: this.fileInput.current.files[0]
+        }
+
+        axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+            .then(res =>  {
+                console.log(res.data);
+            });
+
+    }
+
     render()
     {
         return(
-            <form>
+            <form onSubmit={this.onSubmit}>
                 <h1>Create Assignment</h1>
                 <div className="form-group">
                     <label>Select Outcome: </label>
@@ -173,16 +201,17 @@ export default class CreateAssignment extends Component
                     <label>Select Evaluator: </label>
                     <select className="form-control" value={this.state.selectedEvaluator}
                             onChange={this.handleSelectEvaluator} onClick={this.handleSelectEvaluator}>
-                        <option value=''>Please pick an evaluator</option>
                         <SelectEvaluator evaluatorList={this.state.evaluatorList} />
                     </select>
                 </div>
                 <div className="form-group">
                     <label>Select List of Subjects as .csv file: </label>
-                    <input type="file" className="form-control-file" />
+                    <input type="file" className="form-control-file" ref={this.fileInput} />
                 </div>
+                <input type="submit" value="submit" className="btn btn-primary" onClick={this.onSubmit} />
                 <p>The current selectedMeasure {this.state.selectedMeasure}</p>
                 <p>The current selectedEvaluator {this.state.selectedEvaluator}</p>
+                <p>The current student list {this.state.studentList}</p>
             </form>
         )
     }

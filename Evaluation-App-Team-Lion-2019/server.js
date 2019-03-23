@@ -8,6 +8,7 @@ const users = require("./routes/api/users");
 const summaryReport = require('./routes/summaryReport');
 const scoreSubmission = require('./routes/scoreSubmission');
 const rubric = require('./routes/rubric.js');
+const assignments = require('./routes/assignments.js');
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ app.use("/api/users", users);
 app.use('/summaryReport', summaryReport);
 app.use('/scoreSubmission', scoreSubmission)
 app.use('/rubric', rubric);
+app.use('/assignments', assignments)
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

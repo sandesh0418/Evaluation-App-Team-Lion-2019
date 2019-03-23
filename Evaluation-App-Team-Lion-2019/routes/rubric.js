@@ -6,8 +6,6 @@ const secret = require('../config/keys');
 
 
 //Path rubric/getRubric/<rubricTitle>
-
-
 router.post("/createRubric", passport.authenticate("jwt", { session: false}),  (req,res) =>{
 var rubricTitle = req.body.rubric_title;
 var measureId = req.body.measureId;
@@ -161,7 +159,6 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
     let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
 
     connection.query(queryGetRubrics, function(error, results, fields) {
-        
         if (error) 
         {
             res.status(404).json({
