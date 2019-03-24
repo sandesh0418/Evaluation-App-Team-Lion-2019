@@ -107,7 +107,6 @@ router.get('/outcomesAndMeasures', (req, res) => {
                         res.status(200).json({
                             outcomeList: outcomeList
                         })
-                        console.log(outcomeList);
                     }
                 }
             })

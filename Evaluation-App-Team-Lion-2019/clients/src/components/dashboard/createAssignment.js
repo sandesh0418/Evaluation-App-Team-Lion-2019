@@ -3,67 +3,17 @@ import axios from "axios";
 
 //dummy data
 var out1mea1 = {
-    Measure_ID: 11,
-    Description: 'out 1 measure 1'
-}
-
-var out1mea2 = {
-    Measure_ID: 12,
-    Description: 'out 1 measure 2'
-}
-
-var out1mea3 = {
-    Measure_ID: 13,
-    Description: 'out 1 measure 3'
+    Measure_ID: 1,
+    Description: ''
 }
 
 var out1 = {
     Outcome_ID: 1,
-    Description: 'outcome 1',
-    measures: [out1mea1, out1mea2, out1mea3]
+    Description: '',
+    measures: [out1mea1]
 }
 
-var out2mea1 = {
-    Measure_ID: 21,
-    Description: 'out 2 measure 1'
-}
-
-var out2mea2 = {
-    Measure_ID: 22,
-    Description: 'out 2 measure 2'
-}
-
-var out2mea3 = {
-    Measure_ID: 23,
-    Description: 'out 2 measure 3'
-}
-
-var out2 = {
-    Outcome_ID: 2,
-    Description: 'outcome 2',
-    measures: [out2mea1, out2mea2, out2mea3]
-}
-
-var out3mea1 = {
-    Measure_ID: 31,
-    Description: 'out 3 measure 1'
-}
-
-var out3mea2 = {
-    Measure_ID: 32,
-    Description: 'out 3 measure 2'
-}
-
-var out3mea3 = {
-    Measure_ID: 33,
-    Description: 'out 3 measure 3'
-}
-
-var out3 = {
-    Outcome_ID: 3,
-    Description: 'outcome 3',
-    measures: [out3mea1, out3mea2, out3mea3]
-}
+var dummyOutcomeList = [out1];
 
 var eval1 = {
     email: 'a@gmail.com',
@@ -84,8 +34,6 @@ var eval3 = {
 }
 
 var evalList = [eval1, eval2, eval3];
-
-var dummyOutcomeList = [out1, out2, out3];
 
 function SelectOutcome(props)
 {
@@ -136,13 +84,18 @@ export default class CreateAssignment extends Component
     {
         axios.get('http://localhost:5000/assignments/outcomesAndMeasures')
             .then(res => {
-                console.log(res.data);
                 this.setState({
                     outcomeList: res.data.outcomeList,
                     selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
-                    selectedEvaluator: this.state.evaluatorList[0].email
                 })
             })
+        axios.get('http://localhost:5000/evaluators/evaluatorList')
+        .then(res => {
+            console.log(res.data);
+            this.setState({
+                evaluatorList: res.data.evaluatorList
+            })
+        })
     }
 
     handleSelectOutcome(e)
