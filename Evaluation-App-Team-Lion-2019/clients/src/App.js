@@ -18,7 +18,7 @@ import Rubric from './components/dashboard/rubricView.js';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
 import RubricList from './components/dashboard/rubricList.js';
 import MyAssignments from './components/dashboard/myAssignments.js';
-import EditProgramSummary from './components/dashboard/editProgramSummary.js';
+import EditProgramSummary from './components/dashboard/editProgramSummary/editProgramSummary.js';
 import CreateRubric from './components/dashboard/createRubric';
 import CreateAssignment from './components/dashboard/createAssignment.js';
 

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import uuid from 'uuid/v1';
+import AddRubricMeasurePopup from './addRubricMeasurePopup';
 
 var dummyMeasure = {
     Description: '',
@@ -25,6 +28,8 @@ const OutcomeList = props => {
                     key={currentOutcome.Outcome_ID} 
                     outcome={currentOutcome} 
                     handleOutcomeChange={props.handleOutcomeChange}  
+                    handleAddRubricMeasure={props.handleAddRubricMeasure}
+                    handleAddTestMeasure={props.handleAddTestMeasure}
                 />
     })
 }
@@ -43,7 +48,18 @@ const Outcome = props => {
             </div>
             <div className="col-8 border p-3">
                 <Measures measures={props.outcome.measures} />
-                <button className="btn btn-primary">Add Measure</button>
+                <DropdownButton id="dropdown-basic-button" title="Add Measure">
+                    <Dropdown.Item 
+                        onClick={props.handleAddTestMeasure}
+                        outcomeId={props.outcome.Outcome_ID}>
+                        Add Test Measure
+                    </Dropdown.Item>
+                    <Dropdown.Item 
+                        onClick={props.handleAddRubricMeasure}
+                        outcomeId={props.outcome.Outcome_ID}>
+                        Add Rubric Measure
+                    </Dropdown.Item>
+                </DropdownButton>
             </div>
         </div>
     )
@@ -63,9 +79,14 @@ export default class EditProgramSummary extends Component
         super(props);
         this.handleAddOutcome = this.handleAddOutcome.bind(this);
         this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
+        this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
+        this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
+        this.closePopup = this.closePopup.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
-            programSummary: dummySummary
+            programSummary: dummySummary,
+            showAddRubricMeasurePopup: false,
+            showAddTestMeasurePopup: false
         }
     }
 
@@ -108,6 +129,28 @@ export default class EditProgramSummary extends Component
         })
     }
 
+    handleAddRubricMeasure(e)
+    {
+        this.setState({
+            showAddRubricMeasurePopup: true
+        })
+    }
+
+    handleAddTestMeasure(e)
+    {
+        this.setState({
+            showAddTestMeasurePopup: true
+        })
+    }
+
+    closePopup(e)
+    {
+        this.setState({
+            showAddRubricMeasurePopup: false,
+            showAddTestMeasurePopup: false
+        })
+    }
+
     handleSave()
     {
         //stuff
@@ -120,11 +163,16 @@ export default class EditProgramSummary extends Component
             <h1>Edit Program Summary</h1>
             <OutcomeList 
                 outcomes={this.state.programSummary.outcomes} 
-                handleOutcomeChange={this.handleOutcomeChange} 
+                handleOutcomeChange={this.handleOutcomeChange}
+                handleAddRubricMeasure={this.handleAddRubricMeasure}
+                handleAddTestMeasure={this.handleAddTestMeasure} 
             />
             <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
             <div><button className="btn btn-danger mb-4" onClick={this.handleSave}>Save Changes</button></div>
-            
+            {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup closePopup={this.closePopup} /> : null}
+
+            <p>{"The showRubricMeasure: " + this.state.showAddRubricMeasurePopup}</p>
+            <p>{"The showTestMeasure: " + this.state.showAddTestMeasurePopup}</p>
             </>
         )
     }
