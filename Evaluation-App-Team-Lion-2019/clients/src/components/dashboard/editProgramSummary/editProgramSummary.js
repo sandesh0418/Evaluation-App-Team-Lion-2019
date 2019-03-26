@@ -50,13 +50,13 @@ const Outcome = props => {
                 <Measures measures={props.outcome.measures} />
                 <DropdownButton id="dropdown-basic-button" title="Add Measure">
                     <Dropdown.Item 
-                        onClick={props.handleAddTestMeasure}
-                        outcomeId={props.outcome.Outcome_ID}>
+                        onSelect={props.handleAddTestMeasure}
+                        eventKey={props.outcome.Outcome_ID}>
                         Add Test Measure
                     </Dropdown.Item>
                     <Dropdown.Item 
-                        onClick={props.handleAddRubricMeasure}
-                        outcomeId={props.outcome.Outcome_ID}>
+                        onSelect={props.handleAddRubricMeasure}
+                        eventKey={props.outcome.Outcome_ID}>
                         Add Rubric Measure
                     </Dropdown.Item>
                 </DropdownButton>
@@ -82,11 +82,14 @@ export default class EditProgramSummary extends Component
         this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
         this.closePopup = this.closePopup.bind(this);
+        this.addNewRubricMeasure = this.addNewRubricMeasure.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
             programSummary: dummySummary,
+            rubrics: null,
             showAddRubricMeasurePopup: false,
-            showAddTestMeasurePopup: false
+            showAddTestMeasurePopup: false,
+            outcomeOfNewMeasure: "hello"
         }
     }
 
@@ -97,14 +100,19 @@ export default class EditProgramSummary extends Component
                 this.setState({
                     programSummary: res.data.programSummary
                 })
-            })
+        })
+        axios.get('http://localhost:5000/rubric/getList')
+            .then(res => {
+                this.setState({
+                    rubrics: res.data.rubrics
+                })
+        })
     }
 
     handleAddOutcome()
     {
         let tempSummary = this.state.programSummary;
         let newId = uuid();
-        console.log(newId);
         tempSummary.outcomes.push({
             Outcome_ID: newId,
             Description: "Enter outcome description.",
@@ -125,14 +133,7 @@ export default class EditProgramSummary extends Component
         tempSummary.outcomes[index].Description = newDescription;
 
         this.setState({
-            programSummary: tempSummary
-        })
-    }
-
-    handleAddRubricMeasure(e)
-    {
-        this.setState({
-            showAddRubricMeasurePopup: true
+            programSummary: tempSummary,
         })
     }
 
@@ -143,12 +144,35 @@ export default class EditProgramSummary extends Component
         })
     }
 
+    handleAddRubricMeasure(e)
+    {
+        this.setState({
+            showAddRubricMeasurePopup: true,
+            outcomeOfNewMeasure: e
+        })
+    }
+
     closePopup(e)
     {
         this.setState({
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false
         })
+    }
+
+    addNewRubricMeasure(e)
+    {
+        /*
+        let newMeasure = {
+            Description: e.target.description,
+            Percent_to_reach_target: e.target.state.percentToReachTarget,
+            Target_Score: e.target.state.targetScore
+        }
+        */
+        console.log(e.description);
+        let tempSummary = this.state.programSummary;
+
+
     }
 
     handleSave()
@@ -169,10 +193,15 @@ export default class EditProgramSummary extends Component
             />
             <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
             <div><button className="btn btn-danger mb-4" onClick={this.handleSave}>Save Changes</button></div>
-            {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup closePopup={this.closePopup} /> : null}
+            {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
+                                                        closePopup={this.closePopup} 
+                                                        submit={this.addNewRubricMeasure}
+                                                        rubrics={this.state.rubrics}
+                                                    /> : null}
 
             <p>{"The showRubricMeasure: " + this.state.showAddRubricMeasurePopup}</p>
             <p>{"The showTestMeasure: " + this.state.showAddTestMeasurePopup}</p>
+            <p>{"The outcome of the new measure: " + this.state.outcomeOfNewMeasure}</p>
             </>
         )
     }

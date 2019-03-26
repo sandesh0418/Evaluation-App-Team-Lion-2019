@@ -154,7 +154,7 @@ router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (r
     }
 })
 
-//Path rubric/getList
+//Path /rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
     let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
 
