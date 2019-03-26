@@ -231,10 +231,6 @@ export default class EditProgramSummary extends Component
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}
                                                     /> : null}
-
-            <p>{"The showRubricMeasure: " + this.state.showAddRubricMeasurePopup}</p>
-            <p>{"The showTestMeasure: " + this.state.showAddTestMeasurePopup}</p>
-            <p>{"The outcome of the new measure: " + this.state.outcomeIdOfNewMeasure}</p>
             </>
         )
     }
