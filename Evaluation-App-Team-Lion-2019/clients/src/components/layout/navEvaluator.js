@@ -21,7 +21,7 @@ class NavBar extends Component
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <Nav.Link href="/dashboard">Home</Nav.Link>
-                    <Nav.Link href="/gradeRubric">My Assignments</Nav.Link>
+                    <Nav.Link href="/myAssignments">My Assignments</Nav.Link>
                     <Nav.Link  href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
