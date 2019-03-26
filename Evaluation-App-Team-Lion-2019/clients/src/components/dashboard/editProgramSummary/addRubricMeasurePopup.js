@@ -6,10 +6,11 @@ import './popup.css';
  * -closePopup: a function to close the popup.
  * -rubrics: the list of rubrics to show in select form.
  * -submit: a function to save the changes to the measure.
- * -handleRubricChange: a function to change the rubric
- * -handleDescriptionChange: to change the description
- * -handleTargetScoreChange: to change desired score.
- * -handlePercentToReachTargetChange: to change percent to reach target.
+ * -handleInputChange: a function to take inputs by name and update their state.
+ * -rubric: the current selected rubric.
+ * -description: the description that will be in the new measure
+ * -targetScore: the target score of the new measure
+ * -percentToReachTarget: the percent to reach to the target score
  */
 
 const Rubrics = props => {
@@ -24,44 +25,6 @@ export default class AddRubricMeasurePopup extends Component
     constructor(props)
     {
       super(props);
-      this.handleRubricChange = this.handleRubricChange.bind(this);
-      this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
-      this.handleTargetScoreChange = this.handleDesiredScoreChange.bind(this);
-      this.handlePercentToReachTargetChange = this.handleDesiredAchievementChange.bind(this);
-      this.state = {
-        rubric: '',
-        description: "Enter measure description.  This will displayed in Program Assessment Summary.",
-        targetScore: 0,
-        percentToReachTarget: 0
-      }
-    }
-
-    handleRubricChange(e)
-    {
-        this.setState({
-          rubric: e.target.value
-        })
-    }
-
-    handleDescriptionChange(e)
-    {
-        this.setState({
-          description: e.target.value
-        })
-    }
-
-    handleDesiredScoreChange(e)
-    {
-      this.setState({
-        desiredScore: e.target.value
-      })
-    }
-
-    handleDesiredAchievementChange(e)
-    {
-      this.setState({
-        desiredAcievement: e.target.value
-      })
     }
 
     render() {
@@ -74,8 +37,10 @@ export default class AddRubricMeasurePopup extends Component
                   <label>Select rubric: </label>
                   <select 
                     className="form-control"
-                    value={this.state.rubric} 
-                    onChange={this.handleRubricChange}>
+                    value={this.props.rubric} 
+                    name="rubric"
+                    onChange={this.props.handleInputChange}
+                    onClick={this.props.handleInputChange}>
                     <Rubrics rubrics={this.props.rubrics} />
                   </select>
                 </div>
@@ -84,17 +49,19 @@ export default class AddRubricMeasurePopup extends Component
                   <textarea 
                     className="form-control" 
                     rows="7"
-                    value={this.state.description}
-                    onChange={this.handleDescriptionChange} 
+                    name="description"
+                    value={this.props.description}
+                    onChange={this.props.handleInputChange} 
                   />
                 </div>
                 <div className="form-group">
-                  <label>Enter desired score: </label>
+                  <label>Enter target score: </label>
                   <input 
                     type="number" 
                     className="form-control"
-                    value={this.state.targetScore} 
-                    onChange={this.handleDesiredScoreChange}
+                    name="targetScore"
+                    value={this.props.targetScore} 
+                    onChange={this.props.handleInputChange}
                     min="0" />
                 </div>
                 <div className="form-group">
@@ -102,21 +69,20 @@ export default class AddRubricMeasurePopup extends Component
                   <input 
                     type="number" 
                     className="form-control"
-                    value={this.state.percentToReachTarget}
-                    onChange={this.handleDesiredAchievementChange} 
+                    name="percentToReachTarget"
+                    value={this.props.percentToReachTarget}
+                    onChange={this.props.handleInputChange} 
                     min="0" 
                     max="100" />
                 </div>
               </form>
               <button
                 className="btn btn-primary mr-4" 
-                onClick={this.props.submit}
-                eventKey={this.state}>
-                {console.log(this.state)}
+                onClick={this.props.submit}>
                 Submit
               </button>
               <button 
-                className="btn btn-danger" 
+                className="btn btn-danger mr-4" 
                 onClick={this.props.closePopup}>
                 Cancel
               </button>

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const uuidv1 = require('uuid/v1')
+const uuidv1 = require('uuid/v1');
 var connection = require('../models/User');
 
 

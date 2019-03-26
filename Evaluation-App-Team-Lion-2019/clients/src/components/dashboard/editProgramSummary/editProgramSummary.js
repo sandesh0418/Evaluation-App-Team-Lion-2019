@@ -6,6 +6,7 @@ import uuid from 'uuid/v1';
 import AddRubricMeasurePopup from './addRubricMeasurePopup';
 
 var dummyMeasure = {
+    Measure_ID: '',
     Description: '',
     Percent_to_reach_target: 0,
     Target_Score: 0
@@ -81,6 +82,7 @@ export default class EditProgramSummary extends Component
         this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
         this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.closePopup = this.closePopup.bind(this);
         this.addNewRubricMeasure = this.addNewRubricMeasure.bind(this);
         this.handleSave = this.handleSave.bind(this);
@@ -89,7 +91,12 @@ export default class EditProgramSummary extends Component
             rubrics: null,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
-            outcomeOfNewMeasure: "hello"
+            outcomeIdOfNewMeasure: "hello",
+            //The following values are passed to and manipulated in the addRubricMeasurePopup.
+            rubric: '',
+            description: "Enter measure description.  This will displayed in Program Assessment Summary.",
+            targetScore: 0,
+            percentToReachTarget: 0
         }
     }
 
@@ -100,11 +107,13 @@ export default class EditProgramSummary extends Component
                 this.setState({
                     programSummary: res.data.programSummary
                 })
+                console.log(res.data.programSummary);
         })
         axios.get('http://localhost:5000/rubric/getList')
             .then(res => {
                 this.setState({
-                    rubrics: res.data.rubrics
+                    rubrics: res.data.rubrics,
+                    rubric: res.data.rubrics[0].Rubric_Title
                 })
         })
     }
@@ -134,6 +143,14 @@ export default class EditProgramSummary extends Component
 
         this.setState({
             programSummary: tempSummary,
+
+        })
+    }
+
+    handleInputChange(e)
+    {
+        this.setState({
+            [e.target.name]: e.target.value
         })
     }
 
@@ -148,7 +165,7 @@ export default class EditProgramSummary extends Component
     {
         this.setState({
             showAddRubricMeasurePopup: true,
-            outcomeOfNewMeasure: e
+            outcomeIdOfNewMeasure: e
         })
     }
 
@@ -162,22 +179,33 @@ export default class EditProgramSummary extends Component
 
     addNewRubricMeasure(e)
     {
-        /*
+        let newId = uuid()
         let newMeasure = {
-            Description: e.target.description,
-            Percent_to_reach_target: e.target.state.percentToReachTarget,
-            Target_Score: e.target.state.targetScore
+            Measure_ID: newId,
+            Description: this.state.description,
+            Percent_to_reach_target: this.state.percentToReachTarget,
+            Target_Score: this.state.targetScore
         }
-        */
-        console.log(e.description);
+        let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
+        console.log(this.state.outcomeIdofNewMeasure);
         let tempSummary = this.state.programSummary;
-
-
+        tempSummary.outcomes[index].measures.push(newMeasure);
+        this.setState({
+            programSummary: tempSummary,
+            showAddRubricMeasurePopup: false,
+            rubric: '',
+            description: "Enter measure description.  This will displayed in Program Assessment Summary.",
+            targetScore: 0,
+            percentToReachTarget: 0
+        })
     }
 
     handleSave()
     {
-        //stuff
+        axios.post('http://localhost:5000/editProgramSummary/editProgramSummary', this.state.programSummary)
+            .then(res => {
+                this.props.history.push("/viewSummary");
+            })
     }
 
     render()
@@ -197,11 +225,16 @@ export default class EditProgramSummary extends Component
                                                         closePopup={this.closePopup} 
                                                         submit={this.addNewRubricMeasure}
                                                         rubrics={this.state.rubrics}
+                                                        handleInputChange={this.handleInputChange}
+                                                        rubric={this.state.rubric}
+                                                        description={this.state.description}
+                                                        targetScore={this.state.targetScore}
+                                                        percentToReachTarget={this.state.percentToReachTarget}
                                                     /> : null}
 
             <p>{"The showRubricMeasure: " + this.state.showAddRubricMeasurePopup}</p>
             <p>{"The showTestMeasure: " + this.state.showAddTestMeasurePopup}</p>
-            <p>{"The outcome of the new measure: " + this.state.outcomeOfNewMeasure}</p>
+            <p>{"The outcome of the new measure: " + this.state.outcomeIdOfNewMeasure}</p>
             </>
         )
     }
