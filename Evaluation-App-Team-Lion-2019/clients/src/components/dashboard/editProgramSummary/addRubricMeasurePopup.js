@@ -58,7 +58,7 @@ export default class AddRubricMeasurePopup extends Component
                   <label>Enter target score: </label>
                   <input 
                     type="number" 
-                    className="form-control"
+                    className="form-control bg-sm"
                     name="targetScore"
                     value={this.props.targetScore} 
                     onChange={this.props.handleInputChange}

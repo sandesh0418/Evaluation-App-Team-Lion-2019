@@ -48,7 +48,7 @@ function Measures(props)
 
 function Statistics(props)
 {
-    return <p>
+    return <p className="italic ml-3">
             {props.measure.totalEvaluated !== 0 ? 
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                 evaluations have met the target score of {props.measure.Target_Score}.</span> : null}

@@ -5,3 +5,7 @@
 .measure-width {
     width:70%
 }
+
+.italic {
+    font-style: italic;
+}

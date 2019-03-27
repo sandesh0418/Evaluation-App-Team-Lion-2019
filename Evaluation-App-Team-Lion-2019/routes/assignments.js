@@ -3,22 +3,20 @@ const router = express.Router();
 const uuidv1 = require('uuid/v1');
 var connection = require('../models/User');
 
-
-//Create a new assignment
+/**
+ * Create a new assignment
+ * PATH: /assignments/createAssignments
+ */
 router.post('/createAssignment', (req,res) => {
     let Measure_ID = req.body.Measure_ID;
     let User_Email = req.body.User_Email;
     let Assignment_ID = uuidv1();
-
-    console.log(Assignment_ID);
 
     let assignment = {
         Measure_ID: Measure_ID,
         User_Email: User_Email,
         Assignment_ID: Assignment_ID
     }
-
-    console.log(assignment);
 
     connection.query("USE nodejs_login1");
 
@@ -39,7 +37,10 @@ router.post('/createAssignment', (req,res) => {
     });
 })
 
-
+/**
+ * Get outcomes and measures for createAssignment.
+ * PATH: /assignments/outcomesAndMeasures
+ */
 //Get outcomes and measures to load page.
 router.get('/outcomesAndMeasures', (req, res) => {
     let outcomeList = [];
@@ -84,8 +85,8 @@ router.get('/outcomesAndMeasures', (req, res) => {
     {
         for (let i = 0; i < outcomeList.length; i++)
         {
-            let queryMeasures = "SELECT Measure_ID, Description FROM measure WHERE Outcome_ID=" + 
-                                outcomeList[i].Outcome_ID;
+            let queryMeasures = "SELECT Measure_ID, Description FROM measure WHERE Outcome_ID=\'" + 
+                                outcomeList[i].Outcome_ID + "\'";
 
             connection.query(queryMeasures, function(error, results, fields) {
                 if (error) 
@@ -112,6 +113,38 @@ router.get('/outcomesAndMeasures', (req, res) => {
             })
         }
     }
+})
+
+/**
+ * Get assignments by User_Email for myAssignments
+ * PATH: /assignments/myAssignments 
+ */
+router.get('/myAssignments/:email', (req, res) => {
+    console.log("this is the req.body: ")
+    console.log(req.params.email);
+    let queryGetAssignments = "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
+                                "a.Assignment_ID as assignmentId " + 
+                            "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
+                                "a.Measure_ID=m.Measure_ID " + 
+                            "WHERE a.User_Email='" + req.params.email + "'";
+
+    connection.query(queryGetAssignments, (error, results, field) => {
+        if (error) 
+        {
+            console.log(error);
+            res.status(404).json({
+            status:false,
+            error: error,
+            message:'Could not get assignments for user with email' + req.body
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                assignments: Object.values(JSON.parse(JSON.stringify(results)))
+            })
+        }
+    })
 })
 
 module.exports = router;

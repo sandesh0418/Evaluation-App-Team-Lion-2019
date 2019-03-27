@@ -5,8 +5,14 @@ import axios from "axios";
 
 function ListDisplay(props)
 {
-    return props.rubrics.map(function(rubric){
-        return <div key={rubric.Rubric_Title}><Link to={"/gradeRubric/" + rubric.Rubric_Title}>{rubric.Rubric_Title}</Link></div>;
+    return props.assignments.map(a => {
+        return (
+            <div className="m-3 p-3 border rounded" key={a.assignmentId}>
+                <div>{"Outcome: " + a.outcomeDescription}</div>
+                <div>{"Measure: " + a.measureDescription}</div>
+                <Link>Evaluate</Link>
+            </div>
+        )
     });
 }
 
@@ -16,16 +22,16 @@ export default class RubricList extends Component
     {
         super(props);
         this.state = {
-            rubrics: []
+            assignments: []
         }
     }
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/rubric/getList')
+        axios.get('http://localhost:5000/assignments/myAssignments/' + localStorage.getItem("email"))
             .then(res => {
                 this.setState({
-                    rubrics: res.data.rubrics
+                    assignments: res.data.assignments
                 })
             })
     }
@@ -34,8 +40,8 @@ export default class RubricList extends Component
     {
         return(
             <div>
-                <h1>Rubric List</h1>
-                <ListDisplay rubrics={this.state.rubrics} />
+                <h1>My Assignments</h1>
+                <ListDisplay assignments={this.state.assignments} />
             </div>
         );
     }

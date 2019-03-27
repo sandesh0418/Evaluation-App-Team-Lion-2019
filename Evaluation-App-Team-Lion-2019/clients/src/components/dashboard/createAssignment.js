@@ -93,7 +93,8 @@ export default class CreateAssignment extends Component
         .then(res => {
             console.log(res.data);
             this.setState({
-                evaluatorList: res.data.evaluatorList
+                evaluatorList: res.data.evaluatorList,
+                selectedEvaluator: res.data.evaluatorList[0].email
             })
         })
     }
@@ -167,9 +168,6 @@ export default class CreateAssignment extends Component
                     <input type="file" className="form-control-file" ref={this.fileInput} />
                 </div>
                 <input type="submit" value="submit" className="btn btn-primary" onClick={this.onSubmit} />
-                <p>The current selectedMeasure {this.state.selectedMeasure}</p>
-                <p>The current selectedEvaluator {this.state.selectedEvaluator}</p>
-                <p>The current student list {this.state.studentList}</p>
             </form>
         )
     }

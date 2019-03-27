@@ -42,7 +42,6 @@ return res.send("Rubric has been added!");
 
 router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (req, res) => {
     let rubricTitle = req.params.id;
-    console.log(rubricTitle);
 
     let rubric = {
         rubric_title: rubricTitle,
