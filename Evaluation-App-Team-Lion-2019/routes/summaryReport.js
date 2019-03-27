@@ -254,7 +254,3 @@ module.exports.calculateAverageOfEachStudent = function(req,res)
 }
 
 */
-
-}
-
-*/
