@@ -31,7 +31,6 @@ export default class RubricList extends Component
     {
         axios.get('http://localhost:5000/rubric/getList')
             .then(res => {
-                
                 this.setState({
                     rubrics: res.data.rubrics
                 })

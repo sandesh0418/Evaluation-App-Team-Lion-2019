@@ -72,11 +72,13 @@ export default class ViewSummary extends Component
 
     componentDidMount()
     {
+        console.log("Inside componentDidMount");
         this.setView();
     }
 
     setView()
     {
+        console.log("Inside setView");
         if (window.location.pathname==="/summaryReport")
         {
             this.getSummaryWithStatistics();

@@ -27,6 +27,8 @@ router.get('/evaluatorList', (req, res) => {
                     status: true,
                     evaluatorList: evaluatorList
                 })
+                console.log(evaluatorList);
+                console.log("i am here");
             }
             else
             {

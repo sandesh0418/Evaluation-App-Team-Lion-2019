@@ -201,6 +201,55 @@ module.exports.calculateAverageOfEachStudent = function(req,res)
             }
         }
     });
+    
+    let queryAverageScoreOfEachStudent = "SELECT Subject_ID, AVG(Score) as Average FROM subject_scores WHERE Measure_ID = 1 GROUP BY Subject_ID";
+    let subjectAveragesByMeasure = [];
+
+
+    let metTarget = 0;
+    let total = 0;
+    function makeData(subjects)
+    {
+        let target = 3;
+ 
+        subjects.forEach(function(currentSubject)
+        {
+            
+            if (currentSubject.Average >= target)
+            {
+                metTarget++;
+            }
+            total++;
+        })
+    }
+
+    connection.query(queryAverageScoreOfEachStudent, function(error, results, fields) {
+
+        if (error) 
+        {
+            res.json({
+              status:false,
+              error: error,
+              message:'Subject averages could not be retrieved'
+              })
+        }
+        else
+        {
+            if (results.length > 0)
+            {
+                subjectAveragesByMeasure = Object.values(JSON.parse(JSON.stringify(results)));
+                makeData(subjectAveragesByMeasure);
+                res.json({
+                    metTarget: metTarget,
+                    total: total
+                })
+            }
+            else
+            {
+                subjectAveragesByMeasure = "there are no completed evaluations.";
+            }
+        }
+    })
 
 }
 
