@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -10,7 +9,13 @@ function ListDisplay(props)
             <div className="m-3 p-3 border rounded" key={a.assignmentId}>
                 <div>{"Outcome: " + a.outcomeDescription}</div>
                 <div>{"Measure: " + a.measureDescription}</div>
-                <Link>Evaluate</Link>
+                <button 
+                    type="button" 
+                    className="btn btn-secondary mt-2" 
+                    id={a.toolName}
+                    onClick={props.onClick}>
+                    {"Evaluate " + a.toolName}
+                </button>
             </div>
         )
     });
@@ -21,6 +26,7 @@ export default class RubricList extends Component
     constructor(props)
     {
         super(props);
+        this.handleEvaluateClick = this.handleEvaluateClick.bind(this);
         this.state = {
             assignments: []
         }
@@ -36,12 +42,24 @@ export default class RubricList extends Component
             })
     }
 
+    handleEvaluateClick(e)
+    {
+        if (e.target.id === 'Test')
+        {
+            //Take to test evaluation.
+        }
+        else
+        {
+            this.props.history.push("/gradeRubric/" + e.target.id);
+        }
+    }
+
     render()
     {
         return(
             <div>
                 <h1>My Assignments</h1>
-                <ListDisplay assignments={this.state.assignments} />
+                <ListDisplay assignments={this.state.assignments} onClick={this.handleEvaluateClick} />
             </div>
         );
     }

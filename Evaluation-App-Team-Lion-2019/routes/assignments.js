@@ -123,7 +123,7 @@ router.get('/myAssignments/:email', (req, res) => {
     console.log("this is the req.body: ")
     console.log(req.params.email);
     let queryGetAssignments = "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
-                                "a.Assignment_ID as assignmentId " + 
+                                "a.Assignment_ID as assignmentId, m.Tool_Name as toolName " + 
                             "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
                                 "a.Measure_ID=m.Measure_ID " + 
                             "WHERE a.User_Email='" + req.params.email + "'";
