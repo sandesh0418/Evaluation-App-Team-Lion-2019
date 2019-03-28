@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const uuidv1 = require('uuid/v1');
-var connection = require('../models/User');
+const connection = require('../models/User');
+var fileReader = require('fs');
 
 /**
  * Create a new assignment
@@ -21,20 +22,55 @@ router.post('/createAssignment', (req,res) => {
     connection.query("USE nodejs_login1");
 
     connection.query('INSERT INTO assignments SET ?', assignment, function (error, results, fields) {
-        if (error) {
-            res.json({
-                status:false,
-                message:'The assignment cannot be inserted into the subject_score table.',
-                error: error
-            })
-          }else{
-              res.json({
-                status:true,
-                data:results,
-                message:'The assignment was inserted into the subject_scores table.'
-            })
-          }
+        if (error) 
+        {
+            console.log(error)
+        }
+        else
+        {
+            console.log('The assignment was inserted into the subject_scores table.');
+        }
     });
+
+    let separatedList = "";
+    let lines = req.body.studentList.split("\n");
+    lines.splice(0, 1);
+
+    for (let i = 0; i < lines.length; i++)
+    {
+        if (i == lines.length - 1)
+        {
+            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "')"
+        }
+        else
+        {
+            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "'),";
+        }
+    }
+
+    function formatLine(line)
+    {
+        let newLines = line.split(",");
+        let returnValue = "";
+        newLines.forEach(l => {
+            returnValue += "'" + l + "',";
+        })
+        return returnValue;
+    }
+
+    let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
+        separatedList;
+
+    connection.query(queryInsertSubjects, function (error, results, fields) {
+        if (error) 
+        {
+            console.log(error);
+        }
+        else
+        {
+            console.log('The subjects were inserted into the subject_list table.');
+        }
+    })
 })
 
 /**
@@ -120,13 +156,12 @@ router.get('/outcomesAndMeasures', (req, res) => {
  * PATH: /assignments/myAssignments 
  */
 router.get('/myAssignments/:email', (req, res) => {
-    console.log("this is the req.body: ")
-    console.log(req.params.email);
-    let queryGetAssignments = "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
-                                "a.Assignment_ID as assignmentId, m.Tool_Name as toolName " + 
-                            "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-                                "a.Measure_ID=m.Measure_ID " + 
-                            "WHERE a.User_Email='" + req.params.email + "'";
+    let queryGetAssignments = "" + 
+        "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
+            "a.Assignment_ID as assignmentId, m.Tool_Name as toolName " + 
+        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
+            "a.Measure_ID=m.Measure_ID " + 
+        "WHERE a.User_Email='" + req.params.email + "'";
 
     connection.query(queryGetAssignments, (error, results, field) => {
         if (error) 
@@ -142,6 +177,31 @@ router.get('/myAssignments/:email', (req, res) => {
         {
             res.status(200).json({
                 assignments: Object.values(JSON.parse(JSON.stringify(results)))
+            })
+        }
+    })
+})
+
+router.get('/subjectList/:id', (req, res) => {
+    let queryGetSubjectList = "" + 
+        "SELECT Subject_Name as subjectName, Subject_ID as subjectId " +
+        "FROM subject_list " + 
+        "WHERE Assignment_ID='" + req.params.id + "'";
+
+    connection.query(queryGetSubjectList, (error, results, field) => {
+        if (error) 
+        {
+            console.log(error);
+            res.status(404).json({
+            status:false,
+            error: error,
+            message:'Could not get subjects'
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                subjectList: Object.values(JSON.parse(JSON.stringify(results)))
             })
         }
     })

@@ -5,7 +5,6 @@ var connection = require('../../models/User');
 //PATH: evaluators/evaluatorsList
 router.get('/evaluatorList', (req, res) => {
     let evaluatorList;
-    console.log("INside eval route");
 
     let queryGetEvaluators = "SELECT firstName, lastName, email FROM users";
     
@@ -27,8 +26,6 @@ router.get('/evaluatorList', (req, res) => {
                     status: true,
                     evaluatorList: evaluatorList
                 })
-                console.log(evaluatorList);
-                console.log("i am here");
             }
             else
             {

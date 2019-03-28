@@ -37,7 +37,7 @@ export default class ViewEvaluator extends Component
         console.log(this.state.evaluatorList);
         return(
             <div>
-                <h1> Assign Rubric to Evaluators</h1>
+                <h1>Evaluators</h1>
                 
                 <form>
                 <p>Select Evaluator: </p>

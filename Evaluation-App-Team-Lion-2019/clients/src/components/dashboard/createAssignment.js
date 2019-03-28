@@ -15,25 +15,13 @@ var out1 = {
 
 var dummyOutcomeList = [out1];
 
-var eval1 = {
-    email: 'a@gmail.com',
-    firstName: 'Ryan',
-    lastName: 'Blomquist'
-}
-
-var eval2 = {
-    email: 'b@gmail.com',
-    firstName: 'Bryan',
-    lastName: 'Rlomquist'
-}
-
 var eval3 = {
-    email: 'c@gmail.com',
-    firstName: 'Cyan',
-    lastName: 'Hlomquist'
+    email: '',
+    firstName: '',
+    lastName: ''
 }
 
-var evalList = [eval1, eval2, eval3];
+var evalList = [eval3];
 
 function SelectOutcome(props)
 {
@@ -56,11 +44,6 @@ function SelectEvaluator(props)
     })
 }
 
-function getExtension(filename) {
-    let parts = filename.split('.');
-    return parts[parts.length - 1];
-}
-
 export default class CreateAssignment extends Component
 {
     constructor(props)
@@ -69,6 +52,7 @@ export default class CreateAssignment extends Component
         this.handleSelectOutcome = this.handleSelectOutcome.bind(this);
         this.handleSelectMeasure = this.handleSelectMeasure.bind(this);
         this.handleSelectEvaluator = this.handleSelectEvaluator.bind(this);
+        this.changeFile = this.changeFile.bind(this);
         this.fileInput = React.createRef();
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
@@ -76,7 +60,8 @@ export default class CreateAssignment extends Component
             evaluatorList: evalList,
             selectedOutcomeIndex: 0,
             selectedMeasure: undefined,
-            selectedEvaluator: ''
+            selectedEvaluator: '',
+            showFileAlert: false
         }
     }
 
@@ -121,20 +106,47 @@ export default class CreateAssignment extends Component
         })
     }
 
+    changeFile(e)
+    {
+        if (!(this.fileInput.current.files[0].type == "text/csv"))
+        {
+            this.setState({
+                showFileAlert: true
+            })
+        }
+        else
+        {
+            this.setState({
+                showFileAlert: false
+            })
+        }
+    }
+
     onSubmit(e)
     {
         e.preventDefault();
-        let assignment = {
-            Measure_ID: this.state.selectedMeasure,
-            User_Email: this.state.selectedEvaluator,
-            studentList: this.fileInput.current.files[0]
+
+        if (this.fileInput.current.files[0])
+        {
+            let fileReader = new FileReader();
+            fileReader.onloadend = e => {
+                let assignment = {
+                    Measure_ID: this.state.selectedMeasure,
+                    User_Email: this.state.selectedEvaluator,
+                    studentList: fileReader.result
+                }
+                
+                axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+                    .then(res =>  {
+                        console.log(res.data);
+                    });
+            }
+            fileReader.readAsText(this.fileInput.current.files[0]);
         }
-
-        axios.post('http://localhost:5000/assignments/createAssignment', assignment)
-            .then(res =>  {
-                console.log(res.data);
-            });
-
+        else
+        {
+            console.log("No file");
+        }
     }
 
     render()
@@ -165,7 +177,8 @@ export default class CreateAssignment extends Component
                 </div>
                 <div className="form-group">
                     <label>Select List of Subjects as .csv file: </label>
-                    <input type="file" className="form-control-file" ref={this.fileInput} />
+                    <input type="file" className="form-control-file" ref={this.fileInput} onChange={this.changeFile} />
+                    {this.state.showFileAlert ? <p className="text-danger">Invalid File</p>: null}
                 </div>
                 <input type="submit" value="submit" className="btn btn-primary" onClick={this.onSubmit} />
             </form>

@@ -60,6 +60,7 @@ export default class ViewRubric extends Component
             subjectID: '',
             averageScore: 1,
             calcAverage: 2,
+            subjectList: []
         }
     }
 
@@ -81,11 +82,17 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('http://localhost:5000/rubric/getRubric/'+this.props.match.params.id)
+        axios.get('http://localhost:5000/rubric/getRubric/'+this.props.match.params.rubric)
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
                     rubric: res.data.rubric
+                })
+            })
+        axios.get('http://localhost:5000/assignments/subjectList/'+this.props.match.params.assignment)
+            .then(res => {
+                this.setState({
+                    subjectList: res.data.subjectList
                 })
             })
     }

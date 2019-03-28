@@ -38,7 +38,6 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
             "Criteria_Title": currentScore.criteriaTitle,
             "Score": currentScore.value
         }
-        console.log(currentScore.criteriaTitle);
 
         connection.query('INSERT INTO subject_scores SET ?', subjectScores, function (error, results, fields) {});
     });
