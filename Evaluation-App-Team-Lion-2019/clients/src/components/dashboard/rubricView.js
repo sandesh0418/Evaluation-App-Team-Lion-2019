@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import './rubricView.css';
 
 
 function TopRowGradeScale(props)
@@ -42,6 +43,23 @@ function CriteriaGradeInput(props)
     )
 }
 
+const SubjectSelector = props => {
+    return (
+        <div className="form-group">
+            <label className="mr-2">Select Subject:</label>
+            <select className="form-control width-200" value={props.value} onChange={props.onChange} onClick={props.onChange}>
+                <SubjectList subjectList={props.subjectList} />
+            </select>
+        </div>
+    )
+}
+
+const SubjectList = props => {
+    return props.subjectList.map(s => {
+        return <option key={s.subjectId} value={s.subjectId}>{s.subjectName}</option>
+    })
+}
+
 export default class ViewRubric extends Component
 {
 
@@ -57,7 +75,8 @@ export default class ViewRubric extends Component
                 criteria:[{descriptions : []}]
             },
             gradeMode: false,
-            subjectID: '',
+            measureId: '',
+            subjectId: '',
             averageScore: 1,
             calcAverage: 2,
             subjectList: []
@@ -92,8 +111,16 @@ export default class ViewRubric extends Component
         axios.get('http://localhost:5000/assignments/subjectList/'+this.props.match.params.assignment)
             .then(res => {
                 this.setState({
-                    subjectList: res.data.subjectList
+                    subjectList: res.data.subjectList,
+                    subjectId: res.data.subjectList[0]
                 })
+            })
+        axios.get('http://localhost:5000/assignments/assignmentMeasureId/' + this.props.match.params.assignment)
+            .then(res => {
+                this.setState({
+                    measureId: res.data.measureId
+                })
+                console.log(this.state.measureId)
             })
     }
 
@@ -105,11 +132,10 @@ export default class ViewRubric extends Component
                     value: document.getElementById(currentCriteria.criteria_title).value};
         })
 
-        let subjectScore = {measureId: this.state.rubric.measureId,
+        let subjectScore = {measureId: this.state.measureId,
                             userEmail: localStorage.getItem('email'),
                             subjectId: this.state.subjectId,
                             scores: scores};
-        console.log(subjectScore);
 
         axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
@@ -147,21 +173,13 @@ export default class ViewRubric extends Component
 
     render()
     {
-        
         let saveGradeButton;
-        let SubjectIdTextbox;
         let rubricAverage;
 
         if (this.state.gradeMode)
         {
             saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
-            SubjectIdTextbox = <>
-                                <label className="mr-2">Subject ID:</label>
-                                <input type="text" 
-                                        placeholder="subject Id as integer" 
-                                        value={this.state.value}
-                                        onChange={this.onChangeSubjectId}/>
-                               </>
+
             rubricAverage = <div>
                 <label className="pr-1">Calculate Average</label>
                 <select type="button" className="btn btn-secondary btn-sm" onClick={this.handleAverageScoreClick}>
@@ -180,12 +198,17 @@ export default class ViewRubric extends Component
         })
 
         return (
-
             <div>
                 <h1>Rubric</h1>
                 <div>
                     <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.rubric_title}</h2>
-                    {SubjectIdTextbox}
+                    {this.state.gradeMode ? 
+                        <SubjectSelector 
+                            subjectList={this.state.subjectList} 
+                            onChange={this.onChangeSubjectId}
+                            value={this.state.subjectId}
+                            className="bg-danger" />
+                        : null}
                 </div>
                 
                 <table className="table table-bordered">

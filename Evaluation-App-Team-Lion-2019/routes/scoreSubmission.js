@@ -7,11 +7,14 @@ const secret = require('../config/keys');
 
 router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (req, res) => {
 
+
     let subjectScore = {
         "Measure_ID": req.body.measureId,
         "Subject_ID": req.body.subjectId,
         "User_Email": req.body.userEmail
     }
+
+    console.log(subjectScore);
 
     connection.query("USE nodejs_login1");
 

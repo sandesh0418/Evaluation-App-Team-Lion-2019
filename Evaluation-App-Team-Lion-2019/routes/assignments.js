@@ -207,4 +207,33 @@ router.get('/subjectList/:id', (req, res) => {
     })
 })
 
+/**
+ * Get assignment's measureId by assignmentId for grading measures.
+ * PATH: /assignments/assignmentMeasureId/:id 
+ */
+router.get('/assignmentMeasureId/:id', (req, res) => {
+    let queryGetAssignment = "" + 
+        "SELECT Measure_ID " +
+        "FROM assignments " +
+        "WHERE Assignment_ID='" + req.params.id + "'";
+
+    connection.query(queryGetAssignment, (error, results, field) => {
+        if (error) 
+        {
+            console.log(error);
+            res.status(404).json({
+            status:false,
+            error: error,
+            message:'Could not get assignment Measure ID'
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                measureId: Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID
+            })
+        }
+    })
+})
+
 module.exports = router;

@@ -184,10 +184,10 @@ export default class EditProgramSummary extends Component
             Measure_ID: newId,
             Description: this.state.description,
             Percent_to_reach_target: this.state.percentToReachTarget,
-            Target_Score: this.state.targetScore
+            Target_Score: this.state.targetScore,
+            Tool_Name: this.state.rubric
         }
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
-        console.log(this.state.outcomeIdofNewMeasure);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].measures.push(newMeasure);
         this.setState({
