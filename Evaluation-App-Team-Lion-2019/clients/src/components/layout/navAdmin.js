@@ -6,6 +6,12 @@ import { logoutUser} from '../../actions/authActions';
 
 import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
 
+function User() {
+    return(
+        "Hi "+localStorage.name+"!"
+    );
+}
+
 class NavAdmin extends Component 
 {
     onLogOut(e){
@@ -40,7 +46,9 @@ class NavAdmin extends Component
                         <NavDropdown.Item href="/viewSummary">Start Cycle</NavDropdown.Item>
                         <NavDropdown.Item href="/viewSummary">End Cycle</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
+                    <NavDropdown title={User()}>
+                        <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
+                    </NavDropdown>
                 </Nav> 
             </Navbar.Collapse>
             </> 

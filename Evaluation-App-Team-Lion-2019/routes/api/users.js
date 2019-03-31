@@ -99,7 +99,6 @@ router.post("/login", (req, res) => {
         // Create JWT Payload
         const payload = {
           email: email
-          
         };
 
         // Sign token
@@ -113,8 +112,10 @@ router.post("/login", (req, res) => {
             res.json({
               success: true,
               token: "Bearer " + token,
-              role: results[0].role
+              role: results[0].role,
+              name: results[0].firstName
             });
+            console.log(results[0]);
           }
         );
     }

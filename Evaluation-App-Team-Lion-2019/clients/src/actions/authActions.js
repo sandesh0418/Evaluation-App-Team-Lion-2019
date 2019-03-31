@@ -31,6 +31,7 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("email", userData.email);
+      localStorage.setItem("name", res.data.name);
       //localStorage.setItem("role", res.data.role);
       // Decode token to get user data
       const decoded = (token);
@@ -61,6 +62,8 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("jwtToken");
   // Remove auth header for future requests
   localStorage.removeItem("role");
+  localStorage.removeItem("firstName");
+  localStorage.removeItem("name");
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
