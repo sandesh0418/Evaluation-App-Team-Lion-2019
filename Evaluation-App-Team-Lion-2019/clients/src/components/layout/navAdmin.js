@@ -28,7 +28,7 @@ class NavAdmin extends Component
                     </NavDropdown>
                     <NavDropdown title="Rubrics">
                         <NavDropdown.Item href="/rubricList">Rubric List</NavDropdown.Item>
-                        <NavDropdown.Item href="/createRubric">Create Rubric</NavDropdown.Item>
+                        <NavDropdown.Item href="/Rubric">Create Rubric</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="/summaryReport">Report</Nav.Link>
                     <Nav.Link href="/dashboard">Past Assesments</Nav.Link>

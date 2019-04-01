@@ -14,11 +14,12 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import NavBar from '../src/components/layout/Navbar';
-import Rubric from './components/dashboard/rubricView.js';
+import ViewRubric from './components/dashboard/rubricView.js';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
 import RubricList from './components/dashboard/rubricList.js';
 import MyAssignments from './components/dashboard/myAssignments.js';
 import EditProgramSummary from './components/dashboard/editProgramSummary.js';
+import Rubric from './components/dashboard/Rubric';
 import CreateRubric from './components/dashboard/createRubric';
 
 import "./App.css";
@@ -55,14 +56,15 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <div className="container">
               <Switch>
-                <PrivateRoute exact path="/gradeRubric/:id" component={Rubric} />
-                <PrivateRoute exact path="/viewRubric/:id" component={Rubric} />
+                <PrivateRoute exact path="/gradeRubric/:id" component={ViewRubric} />
+                <PrivateRoute exact path="/viewRubric/:id" component={ViewRubric} />
                 <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <PrivateRoute exact path="/rubricList" component={RubricList} />
                 <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
                 <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
+                <PrivateRoute exact path="/Rubric" component={Rubric} />
                 <PrivateRoute exact path="/createRubric" component={CreateRubric} />
               </Switch>
             </div>

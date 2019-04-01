@@ -7,7 +7,7 @@ function ListDisplay(props)
 {
     const list = props.rubrics;
     const listItems = list.map((number)=>
-    <li><Link to ={"/viewRubric/"+number}>{number}</Link></li>
+    <li><Link to ={"/viewRubric/"+number.Rubric_Title}>{number.Rubric_Title}</Link></li>
     );
     return (
         <ol>{listItems}</ol>
@@ -33,7 +33,7 @@ export default class RubricList extends Component
             .then(res => {
                 
                 this.setState({
-                    rubrics: res.data.split(" ")
+                    rubrics: res.data.rubrics
                 })
                 
             })
@@ -47,8 +47,7 @@ export default class RubricList extends Component
         return(
             <div>
                 <h1>Rubric List</h1>
-                
-            <ListDisplay rubrics = {this.state.rubrics} />
+                <ListDisplay rubrics = {this.state.rubrics} />
             </div>
         );
     }
