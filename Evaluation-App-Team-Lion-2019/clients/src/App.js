@@ -23,6 +23,7 @@ import CreateRubric from './components/dashboard/createRubric';
 import CreateAssignment from './components/dashboard/createAssignment.js';
 import ViewEvaluator from './components/dashboard/viewEvaluator';
 import AddEvaluator from './components/dashboard/addEvaluator';
+import EditProfile from './components/dashboard/editProfile';
 
 import "./App.css";
 
@@ -70,6 +71,7 @@ class App extends Component {
                 <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />
                 <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
                 <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
+                <PrivateRoute exact path="/editProfile" component={EditProfile} />
               </Switch>
             </div>
           </div>

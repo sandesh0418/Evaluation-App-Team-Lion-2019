@@ -17,6 +17,18 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
+//Update user info
+export const updateUser = (userData, history) => dispatch => {
+  axios.post("http://localhost:5000/api/users/update", userData)
+  .then(res => history.push("/update"))
+  .catch(err =>
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    })
+    );
+}
+
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios

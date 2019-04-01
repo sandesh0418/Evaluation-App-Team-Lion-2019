@@ -52,7 +52,7 @@ config.query("SELECT * FROM users WHERE Email = ?",[req.body.email], function(er
 
         if(cwid.length == 8){
           
-          config.query('INSERT INTO users SET ?',newUser, function (error, results, fields) {
+          config.query("INSERT INTO users SET ?",newUser, function (error, results, fields) {
              if(error){
                console.log(error);
              } 
@@ -72,6 +72,43 @@ config.query("SELECT * FROM users WHERE Email = ?",[req.body.email], function(er
  
 });
 
+router.post("/update", (req,res) => {
+
+  config.query("USE nodejs_login1");
+  var sql = "UPDATE users SET ";
+  if (!(req.body.firstName === "")){
+    sql+="firstName=\""+req.body.firstName+"\", ";
+  }
+  if (!(req.body.lastName === "")){
+    sql+="lastName=\""+req.body.lastName+"\" ";
+  }
+  // if (!(req.body.cwid === "")){
+  //   sql+="cwid=""+req.body.cwid+"" ";
+  // }
+  // if (!(req.body.email === "")){
+  //   sql+="email=\""+req.body.email+"\" ";
+  // }
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(req.body.password, salt, (err, hash) => {
+  if (req.body.password === req.body.passowrd2){
+        sql+="password=\""+hash+"\"";
+        console.log(hash);
+  }
+      });
+    });
+  sql +="WHERE email=\""+req.body.currentEmail+"\";";
+  
+  console.log(sql);
+  config.query(sql, function (error, results, fields) {
+    if (error){
+      console.log(error);
+    }
+  });
+
+
+
+})
+
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
@@ -87,7 +124,7 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
-  config.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
+  config.query("SELECT * FROM users WHERE email = ?",[email], function (error, results, fields) {
   if(results[0].length<0){
     return res.status(404).json({ emailnotfound: "Email not found" });
  
@@ -115,7 +152,6 @@ router.post("/login", (req, res) => {
               role: results[0].role,
               name: results[0].firstName
             });
-            console.log(results[0]);
           }
         );
     }
