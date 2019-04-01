@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './viewSummary.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 var dummyMeasure = {
     Description: '',
@@ -41,18 +43,37 @@ function Measures(props)
             <div key={i}>
                 <p>{currentMeasure.Description}</p>
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
+                <hr/>
             </div>
+            
         )
     });
 }
 
 function Statistics(props)
 {
+    
+    var target ;
+    target = props.measure.Percent_to_reach_target*100;
+    console.log(target);
+    var achieved = ((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2);
+    console.log(achieved);
+    let colorToBe;
+    if (achieved > target){
+        colorToBe = "success";
+    }
+    else if(achieved < target){
+        colorToBe ="danger";
+    }
+    else {
+        colorToBe="warning";
+    }
     return <p>
             {props.measure.totalEvaluated !== 0 ? 
+                <Alert color={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
-                evaluations have met the target score of {props.measure.Target_Score}.</span> : null}
-            {props.measure.totalEvaluated} subjects have been evaluated.
+                evaluations have met the target score of {props.measure.Target_Score}.</span></Alert> : null}
+            <Alert color="info"> {props.measure.totalEvaluated} subjects have been evaluated.</Alert>
             </p>
 }
 
@@ -72,13 +93,13 @@ export default class ViewSummary extends Component
 
     componentDidMount()
     {
-        console.log("Inside componentDidMount");
+        //console.log("Inside componentDidMount");
         this.setView();
     }
 
     setView()
     {
-        console.log("Inside setView");
+       // console.log("Inside setView");
         if (window.location.pathname==="/summaryReport")
         {
             this.getSummaryWithStatistics();
@@ -96,7 +117,7 @@ export default class ViewSummary extends Component
     {
         axios.get('http://localhost:5000/summaryReport/measureStatistics')
             .then(res => {
-                console.log(res.data);
+                //console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -107,7 +128,7 @@ export default class ViewSummary extends Component
     {
         axios.get('http://localhost:5000/summaryReport/getSummary')
             .then(res => {
-                console.log(res.data);
+                //console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -136,3 +157,16 @@ export default class ViewSummary extends Component
         );
     }
 }
+
+Alert.propTypes = {
+    className: PropTypes.string,
+    closeClassName: PropTypes.string,
+    color: PropTypes.string, // default: 'success'
+    isOpen: PropTypes.bool,  // default: true
+    toggle: PropTypes.func,
+    tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+    //fade: PropTypes.bool, // default: true
+    // Controls the transition of the alert fading in and out
+    // See Fade for more details
+    //transition: PropTypes.shape(Fade.propTypes),
+  }
