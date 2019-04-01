@@ -61,9 +61,9 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <div className="container pb-5">
               <Switch>
-                <PrivateRoute exact path="/gradeRubric/:rubric/:assignment" component={Rubric} />
+                <PrivateRoute exact path="/gradeRubric/:rubric/:assignment" component={ViewRubric} />
                 <PrivateRoute exact path="/evaluateTest/:test/:assignment" component={EvaluateTest} />
-                <PrivateRoute exact path="/viewRubric/:id" component={Rubric} />
+                <PrivateRoute exact path="/viewRubric/:rubric" component={ViewRubric} />
                 <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />

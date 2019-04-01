@@ -249,7 +249,7 @@ router.post("/setData/:handle", passport.authenticate("jwt" , {session: false}),
 })
 
 
-router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (req, res) => {
+router.get('/getRubric/:id', (req, res) => {
     let rubricTitle = req.params.id;
 
     let rubric = {

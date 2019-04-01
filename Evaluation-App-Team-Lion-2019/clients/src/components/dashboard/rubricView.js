@@ -113,20 +113,24 @@ export default class ViewRubric extends Component
                     rubric: res.data.rubric
                 })
             })
-        axios.get('http://localhost:5000/assignments/subjectList/'+this.props.match.params.assignment)
+
+        if(window.location.pathname.includes('/gradeRubric/'))
+        {
+            axios.get('http://localhost:5000/assignments/subjectList/'+this.props.match.params.assignment)
             .then(res => {
                 this.setState({
                     subjectList: res.data.subjectList,
                     subjectId: res.data.subjectList[0]
                 })
             })
-        axios.get('http://localhost:5000/assignments/assignmentMeasure/' + this.props.match.params.assignment)
-            .then(res => {
-                this.setState({
-                    measureId: res.data.measure.measureId
+            axios.get('http://localhost:5000/assignments/assignmentMeasure/' + this.props.match.params.assignment)
+                .then(res => {
+                    this.setState({
+                        measureId: res.data.measure.measureId
+                    })
+                    console.log(this.state.measureId)
                 })
-                console.log(this.state.measureId)
-            })
+        }
     }
 
     handleSaveGradeClick()
