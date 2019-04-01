@@ -17,6 +17,18 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
+//Update user info
+export const updateUser = (userData, history) => dispatch => {
+  axios.post("http://localhost:5000/api/users/update", userData)
+  .then(res => history.push("/update"))
+  .catch(err =>
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    })
+    );
+}
+
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
@@ -31,6 +43,7 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("email", userData.email);
+      localStorage.setItem("name", res.data.name);
       //localStorage.setItem("role", res.data.role);
       // Decode token to get user data
       const decoded = (token);
@@ -61,6 +74,7 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("jwtToken");
   // Remove auth header for future requests
   localStorage.removeItem("role");
+  localStorage.removeItem("name");
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));

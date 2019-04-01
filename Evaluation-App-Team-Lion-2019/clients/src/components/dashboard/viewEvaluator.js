@@ -1,54 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-
-function ListEvaluators(props)
-    {
-        const list = props.evaluatorList;
-        const listItems = list.map((number)=>
-        <li>{number.firstName+number.lastName}</li>);
-        return (<option>{listItems}</option>);
-    }
-
+import { Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 export default class ViewEvaluator extends Component
 {
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            evaluatorList :[]
-        }
-    }
-
-    componentDidMount()
-    {
-        axios.get("http://localhost:5000/evaluators/evaluatorList")
-        .then(res => {
-            this.setState({
-                evaluatorList:res.data.evaluatorList
-                
-            })
-        })
-    }
 
     render()
     {
-        console.log(this.state.evaluatorList);
         return(
             <div>
-                <h1>Evaluators</h1>
-                
-                <form>
-                <p>Select Evaluator: </p>
-                <select>
-                    <option value = "a">skjdlfj</option>
-                    <option value = "b">lksjdlf</option>
-                </select>
-                <input type ="submit"/>
-                </form>
+                <Alert color="success">
+                    <h1> Test</h1>
+                </Alert> 
 
             </div>
         );
     }
 }
+
+Alert.propTypes = {
+    className: PropTypes.string,
+    closeClassName: PropTypes.string,
+    color: PropTypes.string, // default: 'success'
+    isOpen: PropTypes.bool,  // default: true
+    toggle: PropTypes.func,
+    tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+    //fade: PropTypes.bool, // default: true
+    // Controls the transition of the alert fading in and out
+    // See Fade for more details
+    //transition: PropTypes.shape(Fade.propTypes),
+  }

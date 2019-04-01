@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import {connect } from 'react-redux';
 import { logoutUser} from '../../actions/authActions';
 
-import { Navbar, Nav} from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
+
+function User() {
+    return(
+        "Hi "+localStorage.name+"!"
+    );
+}
 
 class NavBar extends Component 
 {
@@ -22,7 +28,9 @@ class NavBar extends Component
                 <Nav className="ml-auto">
                     <Nav.Link href="/dashboard">Home</Nav.Link>
                     <Nav.Link href="/myAssignments">My Assignments</Nav.Link>
-                    <Nav.Link  href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
+                    <NavDropdown title={User()}>
+                        <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
+                    </NavDropdown>
                 </Nav>
                 </Navbar.Collapse>
             </>

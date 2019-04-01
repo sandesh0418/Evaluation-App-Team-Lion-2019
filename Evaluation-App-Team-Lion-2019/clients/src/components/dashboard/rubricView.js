@@ -7,7 +7,11 @@ function TopRowGradeScale(props)
 {
     return props.oneCriteria.descriptions.map(function(currentDescription)
     {
-        return <th scope="col" key={currentDescription.value_title}>{currentDescription.value_name}</th>
+        return <th scope="col" key={currentDescription.value_number}
+                                as="textarea"
+                                aria-label="With textarea"
+                                >
+                                {currentDescription.value_name}</th>
     });
 }
 
@@ -68,8 +72,10 @@ export default class ViewRubric extends Component
         this.onChangeSubjectId = this.onChangeSubjectId.bind(this);
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
         this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
+       
         this.state = {
             rubricTitle: '',
+            scale: '',
             rubric: {
                 criteria:[{descriptions : []}]
             },
@@ -168,6 +174,10 @@ export default class ViewRubric extends Component
         this.setState({
             subjectId: e.target.value
         });
+    }
+
+    onChangeScale(e){
+        this.setState({scale: e.target.value})
     }
 
     render()

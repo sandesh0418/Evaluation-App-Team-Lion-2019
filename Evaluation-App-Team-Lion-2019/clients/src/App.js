@@ -14,16 +14,18 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import NavBar from '../src/components/layout/Navbar';
-import Rubric from './components/dashboard/rubricView.js';
+import ViewRubric from './components/dashboard/rubricView.js';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
 import RubricList from './components/dashboard/rubricList.js';
 import MyAssignments from './components/dashboard/myAssignments.js';
-import EditProgramSummary from './components/dashboard/editProgramSummary/editProgramSummary.js';
+import EditProgramSummary from './components/dashboard/editProgramSummary/editProgramSummary';
+import Rubric from './components/dashboard/Rubric';
 import CreateRubric from './components/dashboard/createRubric';
 import CreateAssignment from './components/dashboard/createAssignment.js';
 import ViewEvaluator from './components/dashboard/viewEvaluator';
 import AddEvaluator from './components/dashboard/addEvaluator';
 import EvaluateTest from './components/dashboard/evaluateTest';
+import EditProfile from './components/dashboard/editProfile';
 
 import "./App.css";
 
@@ -68,10 +70,12 @@ class App extends Component {
                 <PrivateRoute exact path="/rubricList" component={RubricList} />
                 <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
                 <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
+                <PrivateRoute exact path="/Rubric" component={Rubric} />
                 <PrivateRoute exact path="/createRubric" component={CreateRubric} />
                 <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />
                 <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
                 <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
+                <PrivateRoute exact path="/editProfile" component={EditProfile} />
               </Switch>
             </div>
           </div>
