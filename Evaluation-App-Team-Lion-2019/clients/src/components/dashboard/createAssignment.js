@@ -79,6 +79,7 @@ export default class CreateAssignment extends Component
             console.log(res.data);
             this.setState({
                 evaluatorList: res.data.evaluatorList,
+                selectedOutcomeIndex: 0,
                 selectedEvaluator: res.data.evaluatorList[0].email
             })
         })
@@ -138,7 +139,14 @@ export default class CreateAssignment extends Component
                 
                 axios.post('http://localhost:5000/assignments/createAssignment', assignment)
                     .then(res =>  {
-                        console.log(res.data);
+                        if (res.data.status)
+                        {
+                            alert(res.data.message);
+                            this.setState({
+                                selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
+                                selectedEvaluator: this.state.evaluatorList[0].email
+                            })
+                        }
                     });
             }
             fileReader.readAsText(this.fileInput.current.files[0]);

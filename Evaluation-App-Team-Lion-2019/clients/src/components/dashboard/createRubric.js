@@ -4,12 +4,6 @@ import { connect } from 'react-redux';
 import { getCriteria, getTopRow, getData, setTopRow, setCriteria, setData} from '../../actions/rubric';
 import { Table, FormControl } from 'react-bootstrap';
 
-
-
-
-
-
-
 class createRubric extends Component{
 
     constructor(props) {
@@ -95,6 +89,7 @@ class createRubric extends Component{
        if(criteria && data){
           var column;
           var i = 0;
+          console.log(criteria);
         if(criteria[0][0].weight >= 0){
             weight = true;
             

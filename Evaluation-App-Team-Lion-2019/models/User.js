@@ -12,7 +12,7 @@ if(!err) {
 		
 	connection.query("USE nodejs_login1",function(err,results){
 
-		connection.query("CREATE TABLE IF NOT EXISTS `rubric`(`Rubric_Title` VARCHAR(40) PRIMARY KEY, `Measure_ID` int(11), `Rows` int(20), `scores` int(20), `weight` int(1) )", function(err,results){
+		connection.query("CREATE TABLE IF NOT EXISTS `rubric`(`Rubric_Title` VARCHAR(40) PRIMARY KEY, `Measure_ID` VARCHAR(36), `Rows` int(20), `scores` int(20), `weight` int(1) )", function(err,results){
 
 		});
 

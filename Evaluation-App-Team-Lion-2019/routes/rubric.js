@@ -4,7 +4,7 @@ var connection = require('../models/User');
 const passport = require('passport');
 const secret = require('../config/keys');
 const validateRubric = require('../validation/rubricValidation');
-const uuidv1 = require('uuid/v1');
+var uniqid = require('uniqid');
 
 router.post("/createRubric", passport.authenticate("jwt", { session: false}), (req,res) =>{
 
@@ -23,54 +23,64 @@ router.post("/createRubric", passport.authenticate("jwt", { session: false}), (r
         let scores = req.body.scores;
         let title = req.body.Rubric_Title;
         let weight;
-        let measureId = 0;
         if(req.body.weight == true){
             weight = 1;
         }
         else{
             weight = 0;
         }
-        console.log(rows+" "+scores+ " "+ title+" "+req.body.weight+ " "+ measureId)
-        connection.query("Insert Into rubric(`Rubric_Title`,`Measure_ID`,`Rows`,`scores`,`weight`) VALUES(?,?,?,?,?)",[title,measureId,rows,scores,weight],function(error, result, fields){
+        console.log(rows+" "+scores+ " "+ title+" "+req.body.weight)
+        connection.query("Insert Into rubric(`Rubric_Title`,`Rows`,`scores`,`weight`) VALUES(?,?,?,?)",[title,rows,scores,weight],function(error, result, fields){
             if (error) 
             {
                console.log(error)
-                  
-                  
+            }
+            else
+            {
+                insertCriteria();
             }
         })
 
         criteriatitle = [];
 
-        for(var i = 0; i<rows;i++){
-            let criteriaTitle = "criteria";
-            criteriaTitle+=i;
-            var rowId = uuidv1();
-            criteriatitle[i]=criteriaTitle;
-            console.log(criteriaTitle)
-       
-            connection.query("Insert Into rubric_criteria(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Weight`) VALUES(?,?,?,?)",[rowId,title,criteriaTitle," "],function(error, result, fields){
-                if (error) 
-                {
-                    console.log(error)
-                  
-            }
-        })
+        function insertCriteria()
+        {
+            for(var i = 0; i<rows;i++){
+                let criteriaTitle = "criteria";
+                criteriaTitle+=i;
+                var rowId = uniqid();
+                criteriatitle[i]=criteriaTitle;
+                console.log(criteriaTitle)
         
-        
-        
-    }
-
-    for(var j = 0 ; j<criteriatitle.length;j++){
-        for(var i = 0; i<scores;i++){
-            var rowId = uuidv1();
-            connection.query("Insert Into rubric_criteria_scale(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Value_Number`,`Value_Name`, `Value_Description`) VALUES(?,?,?,?,?,?)",[rowId,title,criteriatitle[j],i+1," ", " "],function(error, result, fields){
-                if (error) 
-                {
-                    console.log(error)
-            }
-        })
+                connection.query("Insert Into rubric_criteria(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Weight`) VALUES(?,?,?,?)",[rowId,title,criteriaTitle," "],function(error, result, fields){
+                    if (error) 
+                    {
+                        console.log(error)     
+                    }
+                    else
+                    {
+                        insertCriteriaScale();
+                    }
+            })
         }
+
+        function insertCriteriaScale()
+        {
+            for(var j = 0 ; j<criteriatitle.length;j++){
+                for(var i = 0; i<scores;i++){
+                    var rowId = uniqid();
+                    connection.query("Insert Into rubric_criteria_scale(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Value_Number`,`Value_Name`, `Value_Description`) VALUES(?,?,?,?,?,?)",[rowId,title,criteriatitle[j],i+1," ", " "],function(error, result, fields){
+                        if (error) 
+                        {
+                            console.log(error)
+                        }
+                    })
+                }
+            }
+        }
+        
+        
+        
     }
 
 
@@ -140,9 +150,8 @@ router.get("/getCriteria/:title", (req, res) =>{
     
     
     connection.query("Select `weight` from `rubric` where Rubric_Title=\'" + rubricTitle + "\'",function(error, result, fields){
-        if(!error){
+        if(!error && result.length > 0){
             weight += result[0].weight;
-           
         }
         else{
             throw error;

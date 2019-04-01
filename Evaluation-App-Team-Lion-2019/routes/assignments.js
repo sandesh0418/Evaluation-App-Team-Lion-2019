@@ -24,53 +24,68 @@ router.post('/createAssignment', (req,res) => {
     connection.query('INSERT INTO assignments SET ?', assignment, function (error, results, fields) {
         if (error) 
         {
-            console.log(error)
+            res.status(404).json({
+                status:false,
+                error: error,
+                message:'The assignment could not be added.'
+            })
         }
         else
         {
-            console.log('The assignment was inserted into the subject_scores table.');
+            insertSubjectList();
         }
     });
 
-    let separatedList = "";
-    let lines = req.body.studentList.split("\n");
-    lines.splice(0, 1);
-
-    for (let i = 0; i < lines.length; i++)
+    function insertSubjectList()
     {
-        if (i == lines.length - 1)
-        {
-            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "')"
-        }
-        else
-        {
-            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "'),";
-        }
-    }
+        let separatedList = "";
+        let lines = req.body.studentList.split("\n");
+        lines.splice(0, 1);
 
-    function formatLine(line)
-    {
-        let newLines = line.split(",");
-        let returnValue = "";
-        newLines.forEach(l => {
-            returnValue += "'" + l + "',";
+        for (let i = 0; i < lines.length; i++)
+        {
+            if (i == lines.length - 1)
+            {
+                separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "')"
+            }
+            else
+            {
+                separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "'),";
+            }
+        }
+
+        function formatLine(line)
+        {
+            let newLines = line.split(",");
+            let returnValue = "";
+            newLines.forEach(l => {
+                returnValue += "'" + l + "',";
+            })
+            return returnValue;
+        }
+
+        let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
+            separatedList;
+
+        connection.query(queryInsertSubjects, function (error, results, fields) {
+            if (error) 
+            {
+                res.status(404).json({
+                    status:false,
+                    error: error,
+                    message:'The subject list could not be added.'
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    status: true,
+                    error: error,
+                    message:'The assignment has been added.'
+                })
+            }
         })
-        return returnValue;
     }
-
-    let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
-        separatedList;
-
-    connection.query(queryInsertSubjects, function (error, results, fields) {
-        if (error) 
-        {
-            console.log(error);
-        }
-        else
-        {
-            console.log('The subjects were inserted into the subject_list table.');
-        }
-    })
 })
 
 /**
