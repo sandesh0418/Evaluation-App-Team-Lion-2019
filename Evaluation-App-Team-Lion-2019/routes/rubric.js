@@ -168,9 +168,20 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
         }
         else
         {
-            res.json({
-                rubrics: Object.values(JSON.parse(JSON.stringify(results)))
-            })
+            if(results.length > 0)
+            {
+                res.json({
+                    status: true,
+                    rubrics: Object.values(JSON.parse(JSON.stringify(results)))
+                })
+            }
+            else
+            {
+                res.json({
+                    status: false
+                })
+            }
+            
         }
         
     })

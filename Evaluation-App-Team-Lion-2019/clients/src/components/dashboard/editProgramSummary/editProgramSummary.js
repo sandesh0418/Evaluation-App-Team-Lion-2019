@@ -4,6 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import uuid from 'uuid/v1';
 import AddRubricMeasurePopup from './addRubricMeasurePopup';
+import AddTestMeasurePopup from './addTestMeasurePopup';
 
 var dummyMeasure = {
     Measure_ID: '',
@@ -13,13 +14,13 @@ var dummyMeasure = {
 }
 
 var dummyOutcome = {
-    Outcome_ID: 3,
-    Description: 'outcome 3',
+    Outcome_ID: 0,
+    Description: '',
     measures: [dummyMeasure]
 }
 
 var dummySummary = {
-    title: "Assessment 2019",
+    title: "",
     outcomes: [dummyOutcome]
 };
 
@@ -84,7 +85,7 @@ export default class EditProgramSummary extends Component
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.closePopup = this.closePopup.bind(this);
-        this.addNewRubricMeasure = this.addNewRubricMeasure.bind(this);
+        this.addNewMeasure = this.addNewMeasure.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
             programSummary: dummySummary,
@@ -93,7 +94,8 @@ export default class EditProgramSummary extends Component
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
             //The following values are passed to and manipulated in the addRubricMeasurePopup.
-            rubric: '',
+            rubric: null,
+            //The following values are passed to both the addRubricMeasure and addTestMeasurePopups
             description: "Enter measure description.  This will displayed in Program Assessment Summary.",
             targetScore: 0,
             percentToReachTarget: 0
@@ -111,10 +113,13 @@ export default class EditProgramSummary extends Component
         })
         axios.get('http://localhost:5000/rubric/getList')
             .then(res => {
-                this.setState({
-                    rubrics: res.data.rubrics,
-                    rubric: res.data.rubrics[0].Rubric_Title
-                })
+                if(res.data.status)
+                {
+                    this.setState({
+                        rubrics: res.data.rubrics,
+                        rubric: res.data.rubrics[0].Rubric_Title
+                    })
+                }
         })
     }
 
@@ -157,7 +162,8 @@ export default class EditProgramSummary extends Component
     handleAddTestMeasure(e)
     {
         this.setState({
-            showAddTestMeasurePopup: true
+            showAddTestMeasurePopup: true,
+            outcomeIdOfNewMeasure: e
         })
     }
 
@@ -177,15 +183,25 @@ export default class EditProgramSummary extends Component
         })
     }
 
-    addNewRubricMeasure(e)
+    addNewMeasure(e)
     {
-        let newId = uuid()
+        let newId = uuid();
+        let tool_name = '';
+        if (e.target.name == "rubricMeasure")
+        {
+            tool_name = this.state.rubric;
+        }
+        else
+        {
+            tool_name = "Test"
+        }
+
         let newMeasure = {
             Measure_ID: newId,
             Description: this.state.description,
             Percent_to_reach_target: this.state.percentToReachTarget,
             Target_Score: this.state.targetScore,
-            Tool_Name: this.state.rubric
+            Tool_Name: tool_name
         }
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
         let tempSummary = this.state.programSummary;
@@ -193,7 +209,8 @@ export default class EditProgramSummary extends Component
         this.setState({
             programSummary: tempSummary,
             showAddRubricMeasurePopup: false,
-            rubric: '',
+            showAddTestMeasurePopup: false,
+            rubric: this.state.rubrics[0].Rubric_Title,
             description: "Enter measure description.  This will displayed in Program Assessment Summary.",
             targetScore: 0,
             percentToReachTarget: 0
@@ -223,10 +240,18 @@ export default class EditProgramSummary extends Component
             <div><button className="btn btn-danger mb-4" onClick={this.handleSave}>Save Changes</button></div>
             {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                         closePopup={this.closePopup} 
-                                                        submit={this.addNewRubricMeasure}
+                                                        submit={this.addNewMeasure}
                                                         rubrics={this.state.rubrics}
                                                         handleInputChange={this.handleInputChange}
                                                         rubric={this.state.rubric}
+                                                        description={this.state.description}
+                                                        targetScore={this.state.targetScore}
+                                                        percentToReachTarget={this.state.percentToReachTarget}
+                                                    /> : null}
+            {this.state.showAddTestMeasurePopup ? <AddTestMeasurePopup
+                                                        closePopup={this.closePopup}
+                                                        submit={this.addNewMeasure}
+                                                        handleInputChange={this.handleInputChange}
                                                         description={this.state.description}
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}

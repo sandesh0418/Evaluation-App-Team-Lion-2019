@@ -4,24 +4,15 @@ import './popup.css';
 /**
  * Props:
  * -closePopup: a function to close the popup.
- * -rubrics: the list of rubrics to show in select form.
  * -submit: a function to save the changes to the measure.
  * -handleInputChange: a function to take inputs by name and update their state.
- * -rubric: the current selected rubric.
  * -description: the description that will be in the new measure
  * -targetScore: the target score of the new measure
  * -percentToReachTarget: the percent to reach to the target score
  */
 
-const Rubrics = props => {
-  return props.rubrics.map(r => {
-    return <option key={r.Rubric_Title} value={r.Rubric_Title}>{r.Rubric_Title}</option>
-  })
-}
-
-export default class AddRubricMeasurePopup extends Component
+export default class AddTestMeasurePopup extends Component
 {
-
     constructor(props)
     {
       super(props);
@@ -31,19 +22,8 @@ export default class AddRubricMeasurePopup extends Component
         return (
           <div className='popup'>
             <div className='popup_inner p-4'>
-              <h1>Define Rubric Measure</h1>
+              <h1>Define Test Measure</h1>
               <form>
-                <div className="form-group">
-                  <label>Select rubric: </label>
-                  <select 
-                    className="form-control"
-                    value={this.props.rubric} 
-                    name="rubric"
-                    onChange={this.props.handleInputChange}
-                    onClick={this.props.handleInputChange}>
-                    <Rubrics rubrics={this.props.rubrics} />
-                  </select>
-                </div>
                 <div className="form-group">
                   <label>Enter Measure Description: </label>
                   <textarea 
@@ -78,7 +58,7 @@ export default class AddRubricMeasurePopup extends Component
               </form>
               <button
                 className="btn btn-primary mr-4" 
-                name="rubricMeasure"
+                name="testMeasure"
                 onClick={this.props.submit}>
                 Submit
               </button>
