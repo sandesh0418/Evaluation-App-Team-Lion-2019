@@ -44,9 +44,9 @@ export default class RubricList extends Component
 
     handleEvaluateClick(e)
     {
-        if (e.target.id === 'Test')
+        if (e.target.id.includes('Test'))
         {
-            //Take to test evaluation.
+            this.props.history.push("/evaluateTest/" + e.target.id);
         }
         else
         {

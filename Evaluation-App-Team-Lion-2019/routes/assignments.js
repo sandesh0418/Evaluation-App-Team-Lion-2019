@@ -211,10 +211,10 @@ router.get('/subjectList/:id', (req, res) => {
  * Get assignment's measureId by assignmentId for grading measures.
  * PATH: /assignments/assignmentMeasureId/:id 
  */
-router.get('/assignmentMeasureId/:id', (req, res) => {
+router.get('/assignmentMeasure/:id', (req, res) => {
     let queryGetAssignment = "" + 
-        "SELECT Measure_ID " +
-        "FROM assignments " +
+        "SELECT a.Measure_ID as measureId, m.Description as description " +
+        "FROM assignments a JOIN measure m ON a.Measure_ID=m.Measure_ID " +
         "WHERE Assignment_ID='" + req.params.id + "'";
 
     connection.query(queryGetAssignment, (error, results, field) => {
@@ -230,7 +230,7 @@ router.get('/assignmentMeasureId/:id', (req, res) => {
         else
         {
             res.status(200).json({
-                measureId: Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID
+                measure: Object.values(JSON.parse(JSON.stringify(results)))[0]
             })
         }
     })

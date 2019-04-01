@@ -23,6 +23,7 @@ import CreateRubric from './components/dashboard/createRubric';
 import CreateAssignment from './components/dashboard/createAssignment.js';
 import ViewEvaluator from './components/dashboard/viewEvaluator';
 import AddEvaluator from './components/dashboard/addEvaluator';
+import EvaluateTest from './components/dashboard/evaluateTest';
 
 import "./App.css";
 
@@ -59,6 +60,7 @@ class App extends Component {
             <div className="container pb-5">
               <Switch>
                 <PrivateRoute exact path="/gradeRubric/:rubric/:assignment" component={Rubric} />
+                <PrivateRoute exact path="/evaluateTest/:test/:assignment" component={EvaluateTest} />
                 <PrivateRoute exact path="/viewRubric/:id" component={Rubric} />
                 <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />

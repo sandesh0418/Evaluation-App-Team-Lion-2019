@@ -62,7 +62,6 @@ const SubjectList = props => {
 
 export default class ViewRubric extends Component
 {
-
     constructor(props)
     {
         super(props);
@@ -115,10 +114,10 @@ export default class ViewRubric extends Component
                     subjectId: res.data.subjectList[0]
                 })
             })
-        axios.get('http://localhost:5000/assignments/assignmentMeasureId/' + this.props.match.params.assignment)
+        axios.get('http://localhost:5000/assignments/assignmentMeasure/' + this.props.match.params.assignment)
             .then(res => {
                 this.setState({
-                    measureId: res.data.measureId
+                    measureId: res.data.measure.measureId
                 })
                 console.log(this.state.measureId)
             })
