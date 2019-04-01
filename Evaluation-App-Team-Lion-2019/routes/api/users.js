@@ -124,8 +124,8 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
-  config.query("SELECT * FROM users WHERE email = ?",[email], function (error, results, fields) {
-  if(results[0].length<0){
+  config.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
+  if(results.length<0){
     return res.status(404).json({ emailnotfound: "Email not found" });
  
   }

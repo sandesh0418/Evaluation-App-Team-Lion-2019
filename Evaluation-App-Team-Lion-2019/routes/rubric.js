@@ -3,42 +3,252 @@ const router = express.Router();
 var connection = require('../models/User');
 const passport = require('passport');
 const secret = require('../config/keys');
+const validateRubric = require('../validation/rubricValidation');
 
+var uniqid = require('uniqid');
 
-//Path rubric/getRubric/<rubricTitle>
-router.post("/createRubric", passport.authenticate("jwt", { session: false}),  (req,res) =>{
-var rubricTitle = req.body.rubric_title;
-var measureId = req.body.measureId;
+router.post("/createRubric", passport.authenticate("jwt", { session: false}), (req,res) =>{
 
-var criteriaTitle = req.body.criteria.criteria_title;
+   
+    let { errors, isValid} = validateRubric(req.body);
+  
 
-var valueTitle = req.body.criteria.descriptions.value_title;
-var valueName = req.body.criteria.descriptions.value_name;
-var valueDescription = req.body.criteria.descriptions.value_description;
-
-
-connection.query("INSERT INTO rubric Values(?,?)",[rubricTitle,measureId],function(error,results,fields){
-    if(error){
-        return res.send(err);
+    
+    if(!isValid){
+       
+        
+        return res.status(400).json(errors);
     }
-})
+    else{
+        let rows = req.body.rows;
+        let scores = req.body.scores;
+        let title = req.body.Rubric_Title;
+        let weight;
+        let measureId = 0;
+        if(req.body.weight == true){
+            weight = 1;
+        }
+        else{
+            weight = 0;
+        }
+        console.log(rows+" "+scores+ " "+ title+" "+req.body.weight+ " "+ measureId)
+        connection.query("Insert Into rubric(`Rubric_Title`,`Measure_ID`,`Rows`,`scores`,`weight`) VALUES(?,?,?,?,?)",[title,measureId,rows,scores,weight],function(error, result, fields){
+            if (error) 
+            {
+               console.log(error)
+                  
+                  
+            }
+        })
 
-connection.query("INSERT INTO rubric_criteria VALUES(?,?)",[rubricTitle,criteriaTitle],function(err,results,fields){
-    if(err){
-        return res.send(err);
+        criteriatitle = [];
+
+        for(var i = 0; i<rows;i++){
+            let criteriaTitle = "criteria";
+            criteriaTitle+=i;
+            var rowId = uniqid();
+            criteriatitle[i]=criteriaTitle;
+            console.log(criteriaTitle)
+       
+            connection.query("Insert Into rubric_criteria(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Weight`) VALUES(?,?,?,?)",[rowId,title,criteriaTitle," "],function(error, result, fields){
+                if (error) 
+                {
+                    console.log(error)
+                  
+            }
+        })
+        
+        
+        
     }
-})
 
-
-connection.query("INSERT INTO rubric_criteria_scale VALUES(?,?,?,?,?)",[rubricTitle,criteriaTitle,valueTitle,valueName,valueDescription], function(err,results,fields){
-    if(err){
-        return res.send(err);
+    for(var j = 0 ; j<criteriatitle.length;j++){
+        for(var i = 0; i<scores;i++){
+            var rowId = uniqid();
+            connection.query("Insert Into rubric_criteria_scale(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Value_Number`,`Value_Name`, `Value_Description`) VALUES(?,?,?,?,?,?)",[rowId,title,criteriatitle[j],i+1," ", " "],function(error, result, fields){
+                if (error) 
+                {
+                    console.log(error)
+            }
+        })
+        }
     }
+
+
+
+    return res.send(isValid);
+    }
+
+
 })
 
-return res.send("Rubric has been added!");
+
+
+
+router.get("/getRow/:title", (req, res)=>{
+
+    rubricTitle = req.params.title;
+    
+    var criteria = [];
+    var dataRow = [];
+
+
+    connection.query("SELECT * from rubric_criteria where Rubric_Title = ?", rubricTitle, function(err, result, fields){
+        if (err) throw err;
+
+        else{
+            criteria = result;
+        }
+        
+    connection.query("SELECT Row_Id, Value_Description from rubric_criteria_scale where Rubric_Title = ?",rubricTitle,function(err, result, fields){
+        if (err) throw err
+
+        
+        else{
+          
+           let length = 0;
+           let count = 0;
+           
+           while(length != result.length){
+            let arr = new Array();
+            
+            for(var m = 0; m<criteria.length; m++){
+                
+                arr[m]={
+                    Row_Id: `${result[length+m].Row_Id}`,
+                    description: `${result[length+m].Value_Description}`
+                }
+            
+            }
+            
+            dataRow[count] = arr;
+            count++;
+            length+=criteria.length;
+        }
+        }
+
+        res.json(dataRow);
+
+    })
+})
+})
+
+router.get("/getCriteria/:title", (req, res) =>{
+    
+    rubricTitle = req.params.title;
+    var weight = 0;
+    var criteria = [];
+    
+    
+    connection.query("Select `weight` from `rubric` where Rubric_Title=\'" + rubricTitle + "\'",function(error, result, fields){
+        if(!error){
+            weight += result[0].weight;
+           
+        }
+        else{
+            throw error;
+        }
+
+
+    connection.query("Select Row_Id, Criteria_Title, Weight from rubric_criteria where Rubric_Title = ?",rubricTitle, function(err, result, fields){
+        if (err) throw err;
+        else{
+            if(weight == 1){
+            for(var j = 0; j<result.length;j++){
+                criteria[j]= [{
+                    Row_Id: `${result[j].Row_Id}`,
+                    criteria: `${result[j]. Criteria_Title}`,
+                    weight: `${result[j].Weight}`
+                }]
+            }
+            }
+            else{
+                for(var j = 0; j<result.length;j++){
+                    criteria[j]= [{
+                        Row_Id: `${result[j].Row_Id}`,
+                        criteria: `${result[j]. Criteria_Title}`
+                        
+                    }]
+                }
+            }
+
+        }
+
+        res.json(criteria);
 
 })
+})
+})
+
+
+router.get("/getTopRow/:title",  (req,res) =>{
+    rubricTitle = req.params.title;
+   
+    
+    var TopRow = [];
+    
+    var scales = 0;
+    connection.query("Select scores from rubric where Rubric_Title=\'" + rubricTitle + "\'", function(err, result, fields){
+        if (err) throw err;
+
+        else{
+            scales = result[0].scores;
+        }
+        
+    
+    
+        connection.query("Select Row_Id, Value_Number, Value_Name from rubric_criteria_scale where Rubric_Title = ? and Criteria_Title = ?", [rubricTitle, "criteria0"], function(err, result, fields){
+            if (err) throw err;
+            else{
+                for(var i = 0; i<scales; i++){
+                    TopRow[i]= {
+                        Row_Id: `${result[i].Row_Id}`,
+                        value: `${result[i].Value_Number}`,
+                        name: `${result[i].Value_Name}`
+                    }
+                }
+            }
+            res.json(TopRow);
+        })
+    })
+})
+
+
+router.post("/setTopRow/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
+    connection.query("Update rubric_criteria_scale set Value_name = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
+        if (err) throw err;
+        else{
+            res.send("good");
+        }
+    })
+    
+})
+
+router.post("/setCriteria/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
+
+   
+    connection.query("Update rubric_criteria set criteria_title = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
+        if (err) throw err;
+        else{
+            res.send("good");
+        }
+    })
+
+
+
+    
+})
+
+router.post("/setData/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
+    connection.query("Update rubric_criteria_scale set Value_Description = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
+        if (err) throw err;
+        else{
+            res.send("good");
+        }
+    })
+    
+})
+
 
 router.get('/getRubric/:id', passport.authenticate("jwt", { session: false}), (req, res) => {
     let rubricTitle = req.params.id;
@@ -169,6 +379,7 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
         }
         else
         {
+            console.log(Object.values(JSON.parse(JSON.stringify(results))));
             res.json({
                 rubrics: Object.values(JSON.parse(JSON.stringify(results)))
             })

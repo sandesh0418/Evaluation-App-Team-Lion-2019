@@ -1,145 +1,221 @@
 import React, { Component } from 'react';
-import { Jumbotron,Container } from 'react-bootstrap';
-import classnames from "classnames";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getCriteria, getTopRow, getData, setTopRow, setCriteria, setData} from '../../actions/rubric';
+import { Table, FormControl } from 'react-bootstrap';
 
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
 
-class CreateRubric extends Component{
 
-    constructor(props){
-        super(props);
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onChange.bind(this);
-        this.state={
-            columns : 0,
-            rows: 0,
-            rubricTitle: "",
-            errors: {}
 
-        }
+
+
+class createRubric extends Component{
+
+    constructor(props) {
+        super();
+
+        this.state = {
+            value: props.value
+        };
+    }
+    componentDidMount(){
+        this.props.getCriteria();
+        this.props.getData();
+        this.props.getTopRow();
+        this.timer = null;
+      }
+
+ 
+    onSubmit(e){
+        e.preventDefault();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.errors) {
-          this.setState({
-            errors: nextProps.errors
-          });
-        }
-      }
+   onChangeTopRow(e){
+       if(e.target.value != null){
+        this.props.setTopRow(e.target.name, e.target.value);
+       }
+      
+   }
+      
+   onChangeData(e){
+    if(e.target.value != null){
+        this.props.setData(e.target.name, e.target.value);
+    }
+    }
 
-    onChange = e => {
-        this.setState({ [e.target.id]: e.target.value });
-      };
+   onChangeCriteria(e){
 
-      onSubmit(e){
-          e.preventDefault();
-          localStorage.setItem("columns",this.state.columns);
-          localStorage.setItem("rows", this.state.rows);
-
-          const obj ={
-              columns: this.state.columns,
-              rows: this.state.rows,
-              rubricTitle: this.state.rubricTitle
-          }
-
-          
-      }
-
-
-render()
-{
-    const { errors } = this.state;
-return(
-<Jumbotron fluid>
-  <Container>
-    <h1>Create a new rubric</h1>
-    <br />
-    <br />
-   <form onSubmit={this.onSubmit}>
-<div className="input-field col s8">
-    <input type="text"
-            id="rubricTitle"
-            onChange={this.onChange}
-            value={this.state.rubricTitle}
-            errors={errors.rubricTitle}
-            required/>
-            <label htmlFor="number">Rubric Title</label>
-                <span className="red-text">
-                  {errors.rubricTitle}
-                  
-                </span>
-</div>
-<br />
-    <div className="input-field col s8">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.columns}
-                  error={errors.columns}
-                  id="columns"
-                  type="number"
-                  className={classnames("", {
-                    invalid: errors.columns
-                  })}
-                required/>
-                <label htmlFor="number">Number of Columns</label>
-                <span className="red-text">
-                  {errors.columns}
-                  
-                </span>
-              </div>
-              <br />
+    if(e.target.value != null){
+        this.props.setCriteria(e.target.name, e.target.value);
+    }
+    }
+   
     
-    <div className="input-field col s8">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.rows}
-                  error={errors.rows}
-                  id="rows"
-                  type="number"
-                  className={classnames("", {
-                    invalid: errors.rows
-                  })}
-                required/>
-                <label htmlFor="number">Number of Rows</label>
-                <span className="red-text">
-                  {errors.rows}
-                  
-                </span>
-              </div>
+   
+      
+    render(){
+        var weight = false;
+        var display = "";
+        var row = "";
+        
+        let { topRow, criteria, data} = this.props.rubric;
 
-              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <button
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
-                  type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Create
-                </button>
-              </div>
-              </form>
-  </Container>
-</Jumbotron>
-)
+       
 
+       if(topRow){
+        
+        display= topRow.map(singleValue => (
+                <th key ={singleValue.Row_Id} className="borderedCell" style = {{padding: "0"}}>
+                    <FormControl 
+                                as = "textarea"
+                                aria-label="With textarea"
+                                name={singleValue.Row_Id}
+                                onChange = {this.onChangeTopRow.bind(this)}
+                                value={singleValue.name}
+                                style={{width: "100%"}}
+                                className="measureTitle centerAlign cells"/></th>
+                                ))
+
+      
+
+       }
+
+       else{
+          
+        console.log("Loading");  
+
+        
+        
+               
+
+       
+           
+       }
+       if(criteria && data){
+          var column;
+          var i = 0;
+        if(criteria[0][0].weight >= 0){
+            weight = true;
+            
+            row = criteria.map((singleValue, count) => (
+                <tr key ={count} className="borderedCell" style = {{padding: "0"}}>
+                    <FormControl 
+                                as = "textarea"
+                                aria-label="With textarea"
+                                name={singleValue[0].Row_Id}
+                                onChange = {this.onChangeCriteria.bind(this)}
+                                value={singleValue[0].criteria}
+                                style={{width: "100%"}}
+                                className="measureTitle centerAlign cells"/>
+                                
+               
+           {data[count].map((value, index) => (
+
+               
+                <td key ={index} className="borderedCell" style = {{padding: "0"}}>
+                    <FormControl 
+                                as = "textarea"
+                                aria-label="With textarea"
+                                name={value.Row_Id}
+                                onChange = {this.onChangeData.bind(this)}
+                                value={value.description}
+                                style={{width: "100%"}}
+                                className="measureTitle centerAlign cells"/></td>
+                                ))}
+
+       
+
+            {
+                <FormControl 
+                as = "textarea"
+                aria-label="With textarea"
+                name={singleValue[0].Row_Id}
+                onChange = {this.onChangeCriteria.bind(this)}
+                value={singleValue.weight}
+                style={{width: "100%"}}
+                className="measureTitle centerAlign cells"/>
+            }
+
+           
+
+                    </tr>
+                    
+            ));
+        }
+        else{
+            weight = false
+
+            row = criteria.map((singleValue, count) => (
+                <tr key ={count} className="borderedCell" style = {{padding: "0"}}>
+                    <FormControl 
+                                as = "textarea"
+                                aria-label="With textarea"
+                                name={singleValue[0].Row_Id}
+                                onChange = {this.onChangeCriteria.bind(this)}
+                                value={singleValue[0].criteria}
+                                style={{width: "100%"}}
+                                className="measureTitle centerAlign cells"/>
+                                
+               
+           {data[count].map((value, index) => (
+
+               
+                <td key ={index} className="borderedCell" style = {{padding: "0"}}>
+                    <FormControl 
+                                as = "textarea"
+                                aria-label="With textarea"
+                                name={value.Row_Id}
+                                onChange = {this.onChangeData.bind(this)}
+                                value={value.description}
+                                style={{width: "100%"}}
+                                className="measureTitle centerAlign cells"/></td>
+                                ))}
+                   </tr>
+                    
+            ));
+        }
+    }
+       
+        
+       
+        return(
+           
+           
+           
+            <Table bordered striped>
+            <thead>
+                <tr>
+                    <th className="centered borderedCell">Criteria</th>
+            {display}
+            { weight ? <th className="centered borderedCell">Weight</th> : "" }
+           
+            </tr>
+            </thead>
+            <tbody>
+                
+                { row }
+                
+            </tbody>
+            </Table>
+            
+        );
+    }
 }
-}
-CreateRubric.propTypes={
- 
-    errors: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
 
+createRubric.propTypes = {
+    getCriteria: PropTypes.func.isRequired,
+    getData: PropTypes.func.isRequired,
+    getTopRow: PropTypes.func.isRequired,
+    rubric: PropTypes.object.isRequired,
+    setTopRow: PropTypes.func.isRequired,
+    setCriteria: PropTypes.func.isRequired,
+    setData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-     auth: state.auth,
-     errors: state.errors,
-     
+        auth: state.auth,
+        rubric: state.rubric
 })
-export default connect(mapStateToProps)(CreateRubric);
+
+export default connect (mapStateToProps, { getCriteria, getData, getTopRow, setTopRow, setCriteria,setData})(createRubric);
