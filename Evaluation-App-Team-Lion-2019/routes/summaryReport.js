@@ -9,7 +9,7 @@ const isEmpty = require("is-empty");
 var connection = require('../models/User');
 
 let programSummary = {
-    title: 'Assessmentt 2019',
+    title: 'Assessment 2019',
     outcomes: []
 }
 
@@ -17,240 +17,121 @@ let programSummary = {
 // @desc retrieve statistics on the measure.
 // @access Private
 router.get('/measureStatistics', passport.authenticate("jwt",{ session:false }), (req, res) => {
-    buildProgramSummary(true, req, res);
+    buildProgramSummaryV2(true, req, res);
 })
 
 // @route GET summaryReport/getSummary
 // @desc retrieve the program summary.
 // @access Private
 router.get('/getSummary', passport.authenticate("jwt", { session: false }), (req, res) => {
-    buildProgramSummary(false, req, res);
+    buildProgramSummaryV2(false, req, res);
 })
 
-
-function buildProgramSummary(withStats, req, res)
+function buildProgramSummaryV2(withStats, req, res)
 {
-    let queryGetOutcomes = "SELECT * FROM outcome";
+    console.log("in program v2");
+    let programSummaryV2 = {
+        title: 'Assessment 2019',
+        outcomes: []
+    }
 
-    connection.query(queryGetOutcomes, function(error, results, fields) {
+    let queryGetSummary = "" +
+        "SELECT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, m.Measure_ID as measureId, " +
+            "m.Description as measureDescription, m.Percent_to_reach_target as percentToReachTarget, " +
+            "m.Target_Score as targetScore " +
+        "FROM outcome o JOIN measure m ON m.Outcome_ID=o.Outcome_ID";
+
+    connection.query(queryGetSummary, (error, results, fields) => {
+        if (error)
+        {
+            res.json({
+                status: false,
+                error: error,
+                message: "The summary could not be retrieved."
+            })
+        }
+        else
+        {
+            let data = Object.values(JSON.parse(JSON.stringify(results)));
+            data.forEach(row => {
+                let index = programSummaryV2.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
+
+                let newMeasure = {
+                    Measure_ID: row.measureId,
+                    Description: row.measureDescription,
+                    Percent_to_reach_target: row.percentToReachTarget,
+                    Target_Score: row.targetScore,
+                    metTarget: 0,
+                    totalEvaluated: 0
+                }
+
+                if (index == -1)
+                {
+                    let newOutcome = {
+                        Outcome_ID: row.outcomeId,
+                        Description: row.outcomeDescription,
+                        measures: [newMeasure]
+                    }
+                    programSummaryV2.outcomes.push(newOutcome);
+                }
+                else
+                {
+                    programSummaryV2.outcomes[index].measures.push(newMeasure);
+                }
+            })
+            
+            if (withStats)
+            {
+                getMeasureStatisticsV2(req, res, programSummaryV2);
+            }
+            else
+            {
+                res.json({
+                    status: true,
+                    message: "Sent program summary",
+                    programSummary: programSummaryV2
+                })
+            }
+        }
+    })
+}
+
+function getMeasureStatisticsV2(req, res, programSummaryV2)
+{
+    let queryMeasureStatistics = "" + 
+        "SELECT Subject_ID, s.Measure_ID as measureId, AVG(Score) as Average, m.Outcome_ID as outcomeId " +
+        "FROM subject_score s JOIN measure m on s.Measure_ID=m.Measure_ID " +
+        "GROUP BY Subject_ID, s.Measure_ID";
+
+    connection.query(queryMeasureStatistics, (error, results, fields) => {
         if (error) 
         {
             res.json({
               status:false,
               error: error,
               message:'Outcomes could not be retrieved'
-              })
+            })
         }
         else
         {
-            programSummary.outcomes = Object.values(JSON.parse(JSON.stringify(results)));
-            getOutcomeMeasures(withStats, req, res);
-        }
-    })
-}
+            let data = Object.values(JSON.parse(JSON.stringify(results)));
+            data.forEach(row => {
+                let outcomeIndex = programSummaryV2.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
+                let measureIndex = programSummaryV2.outcomes[outcomeIndex].measures.findIndex(m => m.Measure_ID === row.measureId);
 
-function getOutcomeMeasures(withStats, req, res)
-{
-    for (let i = 0; i < programSummary.outcomes.length; i++) 
-    {
-        let queryMeasures = "SELECT Measure_ID, Description, Percent_to_reach_target, Target_Score FROM measure WHERE Outcome_ID=\'"  + programSummary.outcomes[i].Outcome_ID + "\'";
-
-        connection.query(queryMeasures, function(error, results, fields) {
-            if (error) 
-            {
-                res.json({
-                status:false,
-                error: error,
-                message:'Measures could not be retrieved'
-                })
-            }
-            else
-            {
-                programSummary.outcomes[i].measures = Object.values(JSON.parse(JSON.stringify(results)));
-
-                if (withStats)
+                if (row.Average >= programSummaryV2.outcomes[outcomeIndex].measures[measureIndex].Target_Score)
                 {
-                    for (let j = 0; j < programSummary.outcomes[i].measures.length; j++)
-                    {
-                        getMeasureStatistics(i, j, req, res);
-                    }
+                    programSummaryV2.outcomes[outcomeIndex].measures[measureIndex].metTarget++;
                 }
-
-                //If not requesting stats, send the data.  Else data is sent in getMeasureStatistics.
-                if (i == programSummary.outcomes.length - 1  && !withStats)
-                {
-                    res.json({
-                        programSummary: programSummary
-                    })
-                }
-            }
-        })
-    }
-}
-
-function getMeasureStatistics(currentOutcome, currentMeasure, req, res)
-{
-    let measure = programSummary.outcomes[currentOutcome].measures[currentMeasure];
-
-    let queryAverageScoreOfEachStudent = "SELECT Subject_ID, AVG(Score) as Average FROM subject_scores WHERE Measure_ID = \'" + 
-                                            measure.Measure_ID + "\' GROUP BY Subject_ID";
-    let subjectAveragesByMeasure = [];
-
-    let metTarget = 0;
-    let total = 0;
-    function makeData(subjects)
-    {
-        let target = measure.Target_Score;
- 
-        subjects.forEach(function(currentSubject)
-        {
-            
-            if (currentSubject.Average >= target)
-            {
-                metTarget++;
-            }
-            total++;
-        })
-    }
-
-    connection.query(queryAverageScoreOfEachStudent, function(error, results, fields) {
-
-        if (error) 
-        {
-            return "error getting measure statistics";
-        }
-        else
-        {
-            if (results.length > 0)
-            {
-                subjectAveragesByMeasure = Object.values(JSON.parse(JSON.stringify(results)));
-                makeData(subjectAveragesByMeasure);
-
-                programSummary.outcomes[currentOutcome].measures[currentMeasure] = {
-                    Measure_ID: measure.Measure_ID,
-                    Description: measure.Description,
-                    Percent_to_reach_target: measure.Percent_to_reach_target,
-                    Target_Score: measure.Target_Score,
-                    metTarget: metTarget,
-                    totalEvaluated: total
-                }
-
-                let endOfOutcomes = programSummary.outcomes.length;
-                let endOfMeasures = programSummary.outcomes[currentOutcome].measures.length;
-                if (currentOutcome == endOfOutcomes - 1 && currentMeasure == endOfMeasures - 1)
-                {
-                    res.json({
-                        programSummary: programSummary
-                    })
-                }
-            }
-            else
-            {
-                programSummary.outcomes[currentOutcome].measures[currentMeasure] = {
-                    Measure_ID: measure.Measure_ID,
-                    Description: measure.Description,
-                    Percent_to_reach_target: measure.Percent_to_reach_target,
-                    Target_Score: measure.Target_Score,
-                    metTarget: 0,
-                    totalEvaluated: 0
-                };
-
-                let endOfOutcomes = programSummary.outcomes.length;
-                let endOfMeasures = programSummary.outcomes[currentOutcome].measures.length;
-                if (currentOutcome == endOfOutcomes - 1 && currentMeasure == endOfMeasures - 1)
-                {
-                    res.json({
-                        programSummary: programSummary
-                    })
-                }
-            }
+                programSummaryV2.outcomes[outcomeIndex].measures[measureIndex].totalEvaluated++;
+            })
+            res.json({
+                status:true,
+                message:'Outcomes and statistics were retrieved',
+                programSummary: programSummaryV2
+            })
         }
     })
 }
 
 module.exports = router;
-
-/* The following code will find the number of evaluations on each measure.
-module.exports.calculateAverageOfEachStudent = function(req,res)
-{
-
-    /*
-    let countQuery = "SELECT Measure_ID, Count(Subject_ID) FROM subject_score GROUP BY Measure_ID";
-
-    let numberOfEvaluationsOnEachMeasure;
-
-    connection.query(countQuery, function(error, results, fields) {
-
-        if (error) 
-        {
-            res.json({
-              status:false,
-              error: error,
-              message:'Counts of each measures evaluations could not be retrieved'
-              })
-        }
-        else
-        {
-            if (results.length > 0)
-            {
-                numberOfEvaluationsOnEachMeasure = results;
-            }
-            else
-            {
-                numberOfEvaluationsOnEachMeasure = "there are no completed evaluations.";
-            }
-        }
-    });
-    
-    let queryAverageScoreOfEachStudent = "SELECT Subject_ID, AVG(Score) as Average FROM subject_scores WHERE Measure_ID = 1 GROUP BY Subject_ID";
-    let subjectAveragesByMeasure = [];
-
-
-    let metTarget = 0;
-    let total = 0;
-    function makeData(subjects)
-    {
-        let target = 3;
- 
-        subjects.forEach(function(currentSubject)
-        {
-            
-            if (currentSubject.Average >= target)
-            {
-                metTarget++;
-            }
-            total++;
-        })
-    }
-
-    connection.query(queryAverageScoreOfEachStudent, function(error, results, fields) {
-
-        if (error) 
-        {
-            res.json({
-              status:false,
-              error: error,
-              message:'Subject averages could not be retrieved'
-              })
-        }
-        else
-        {
-            if (results.length > 0)
-            {
-                subjectAveragesByMeasure = Object.values(JSON.parse(JSON.stringify(results)));
-                makeData(subjectAveragesByMeasure);
-                res.json({
-                    metTarget: metTarget,
-                    total: total
-                })
-            }
-            else
-            {
-                subjectAveragesByMeasure = "there are no completed evaluations.";
-            }
-        }
-    })
-
-}
-
-*/

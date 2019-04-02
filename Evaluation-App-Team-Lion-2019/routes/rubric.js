@@ -14,8 +14,6 @@ router.post("/createRubric", passport.authenticate("jwt", { session: false}), (r
 
     
     if(!isValid){
-       
-        
         return res.status(400).json(errors);
     }
     else{
@@ -263,39 +261,10 @@ router.get('/getRubric/:id', (req, res) => {
 
     let rubric = {
         rubric_title: rubricTitle,
-        measureId: '',
         criteria: []
     }
 
-    let queryGetMeasureID = "SELECT Measure_ID FROM rubric WHERE Rubric_Title=\'" + rubricTitle + "\'";
-
-    connection.query(queryGetMeasureID, function(error, results, fields) {
-        if (error) 
-        {
-            res.status(404).json({
-              status:false,
-              error: error,
-              message:'The measure ID for this rubric could not be retrieved.'
-              })
-        }
-        else
-        {
-            if (results.length > 0)
-            {
-                rubric.measureId = Object.values(JSON.parse(JSON.stringify(results)))[0].Measure_ID;
-                getCriteria();
-            }
-            else
-            {
-                res.status(404).json({
-                    status:false,
-                    error: error,
-                    message:'There is no rubric with this title.'
-                    })
-            }
-            
-        }
-    })
+    getCriteria();
 
     function getCriteria()
     {
@@ -349,7 +318,7 @@ router.get('/getRubric/:id', (req, res) => {
         
                     descriptions.forEach((description) => {
                         tempDescription = {
-                            value_title: description.Value_Number,
+                            value_number: description.Value_Number,
                             value_name: description.Value_Name,
                             value_description: description.Value_Description
                         }
