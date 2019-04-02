@@ -25,7 +25,7 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
 
     let queryInsertScores = "" + 
         "INSERT INTO subject_score (Measure_ID, Subject_ID, User_Email, Criteria_Title, Score) VALUES " + 
-        scoresToInsert;
+            scoresToInsert;
 
     connection.query("USE nodejs_login1");
 
@@ -43,6 +43,49 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
                 status:true,
                 data:results,
                 message:'The subject score was inserted into the subject_scores table.'
+            })
+        }
+    });
+})
+
+router.post('/testScore', passport.authenticate("jwt", { session:false }), (req, res) => {
+    let standardData = "'" + req.body.measureId + "', '" + req.body.userEmail + "', '" + req.body.criteriaTitle + "'";
+    
+    let scoresToInsert = "";
+
+    for (let i = 0; i < req.body.scores.length; i++)
+    {
+        if (i == req.body.scores.length - 1)
+        {
+            scoresToInsert += "(" + standardData + ", '" + req.body.scores[i].subjectId + "', " + 
+                (req.body.scores[i].score / 100) + ")";
+        }
+        else
+        {
+            scoresToInsert += "(" + standardData + ", '" + req.body.scores[i].subjectId + "', " + 
+                (req.body.scores[i].score / 100) + "),";
+        }
+    }
+
+    let queryInsertScores = "" + 
+        "INSERT INTO subject_score (Measure_ID, User_Email, Criteria_Title, Subject_ID, Score) VALUES " + 
+        scoresToInsert;
+
+    connection.query(queryInsertScores, function (error, results, fields) {
+        if (error) 
+        {
+            res.json({
+                inserted:false,
+                error: error,
+                message:'The subject scores cannot be inserted into the subject_score table.'
+            })
+        }
+        else
+        {
+            res.json({
+                inserted:true,
+                data:results,
+                message:'The subject scores were inserted into the subject_scores table.'
             })
         }
     });

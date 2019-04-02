@@ -150,8 +150,8 @@ export default class ViewRubric extends Component
         axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
             console.log(res.data);
+            alert("The score has been saved.");
         });
-        alert("The score has been saved.");
     }
 
     handleAverageScoreClick(e)
