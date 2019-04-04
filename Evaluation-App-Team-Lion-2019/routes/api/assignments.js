@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uuidv1 = require('uuid/v1');
-const connection = require('../models/User');
+const connection = require('../../models/User');
 
 /**
  * Create a new assignment
@@ -198,6 +198,11 @@ router.get('/myAssignments/:email', (req, res) => {
     })
 })
 
+
+/**
+ * Get the subject list by measure ID
+ * PATH: /assignments/subjectList/:id
+ */
 router.get('/subjectList/:id', (req, res) => {
     let queryGetSubjectList = "" + 
         "SELECT Subject_Name as subjectName, Subject_ID as subjectId " +

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-var connection = require('../models/User');
+var connection = require('../../models/User');
 const passport = require('passport');
 
-const secret = require('../config/keys');
+const secret = require('../../config/keys');
 
 router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (req, res) => {
 

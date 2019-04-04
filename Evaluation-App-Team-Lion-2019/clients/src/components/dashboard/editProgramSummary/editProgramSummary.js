@@ -49,7 +49,7 @@ const Outcome = props => {
                 />
             </div>
             <div className="col-8 border p-3">
-                <Measures measures={props.outcome.measures} />
+                {props.outcome.measures[0] ? <Measures measures={props.outcome.measures} /> : null}
                 <DropdownButton id="dropdown-basic-button" title="Add Measure">
                     <Dropdown.Item 
                         onSelect={props.handleAddTestMeasure}
@@ -69,7 +69,15 @@ const Outcome = props => {
 
 const Measures = props => {
     return props.measures.map(measure => {
-        return <p key={measure.Description}>{measure.Description}</p>
+        return (
+            <div key={measure.Measure_ID}>
+                <p>
+                    {"At least " + (measure.Percent_to_reach_target * 100) + "% of subjects score a " + 
+                    measure.Target_Score + " or higher on " + measure.Tool_Name }
+                 </p>
+                <p className="ml-3">{"Additional description: " + measure.Description}</p>
+            </div>
+        )
     })
 }
 
@@ -89,14 +97,14 @@ export default class EditProgramSummary extends Component
         this.handleSave = this.handleSave.bind(this);
         this.state = {
             programSummary: dummySummary,
-            rubrics: null,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
             //The following values are passed to and manipulated in the addRubricMeasurePopup.
-            rubric: null,
+            rubrics: null,
+            toolName: null,
             //The following values are passed to both the addRubricMeasure and addTestMeasurePopups
-            description: "Enter measure description.  This will displayed in Program Assessment Summary.",
+            description: "",
             targetScore: 0,
             percentToReachTarget: 0
         }
@@ -109,15 +117,14 @@ export default class EditProgramSummary extends Component
                 this.setState({
                     programSummary: res.data.programSummary
                 })
-                console.log(res.data.programSummary);
         })
-        axios.get('http://localhost:5000/rubric/getList')
+        axios.get('http://localhost:5000/rubric/getListWithScale')
             .then(res => {
                 if(res.data.status)
                 {
                     this.setState({
                         rubrics: res.data.rubrics,
-                        rubric: res.data.rubrics[0].Rubric_Title
+                        toolName: res.data.rubrics[0].Rubric_Title
                     })
                 }
         })
@@ -163,6 +170,8 @@ export default class EditProgramSummary extends Component
     {
         this.setState({
             showAddTestMeasurePopup: true,
+            targetScore: 0,
+            toolName: "Test",
             outcomeIdOfNewMeasure: e
         })
     }
@@ -171,7 +180,9 @@ export default class EditProgramSummary extends Component
     {
         this.setState({
             showAddRubricMeasurePopup: true,
-            outcomeIdOfNewMeasure: e
+            outcomeIdOfNewMeasure: e,
+            targetScore: this.state.rubrics[0].scale[0].Value_Number,
+            toolName: this.state.rubrics[0].Rubric_Title
         })
     }
 
@@ -179,39 +190,37 @@ export default class EditProgramSummary extends Component
     {
         this.setState({
             showAddRubricMeasurePopup: false,
-            showAddTestMeasurePopup: false
+            showAddTestMeasurePopup: false,
+            targetScore: 0,
+            toolName: "",
         })
     }
 
     addNewMeasure(e)
     {
         let newId = uuid();
-        let tool_name = '';
-        if (e.target.name == "rubricMeasure")
-        {
-            tool_name = this.state.rubric;
-        }
-        else
-        {
-            tool_name = "Test"
-        }
 
         let newMeasure = {
             Measure_ID: newId,
             Description: this.state.description,
-            Percent_to_reach_target: this.state.percentToReachTarget,
+            Percent_to_reach_target: (this.state.percentToReachTarget / 100),
             Target_Score: this.state.targetScore,
-            Tool_Name: tool_name
+            Tool_Name: this.state.toolName
         }
+
+        console.log(newMeasure);
+
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
+        console.log(index);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].measures.push(newMeasure);
+        console.log(tempSummary);
         this.setState({
             programSummary: tempSummary,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
-            rubric: this.state.rubrics[0].Rubric_Title,
-            description: "Enter measure description.  This will displayed in Program Assessment Summary.",
+            toolName: "",
+            description: "",
             targetScore: 0,
             percentToReachTarget: 0
         })
@@ -243,7 +252,7 @@ export default class EditProgramSummary extends Component
                                                         submit={this.addNewMeasure}
                                                         rubrics={this.state.rubrics}
                                                         handleInputChange={this.handleInputChange}
-                                                        rubric={this.state.rubric}
+                                                        rubric={this.state.toolName}
                                                         description={this.state.description}
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}
@@ -252,6 +261,7 @@ export default class EditProgramSummary extends Component
                                                         closePopup={this.closePopup}
                                                         submit={this.addNewMeasure}
                                                         handleInputChange={this.handleInputChange}
+                                                        testName={this.state.toolName}
                                                         description={this.state.description}
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}

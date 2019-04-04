@@ -41,7 +41,10 @@ function Measures(props)
     return props.measures.map(function(currentMeasure, i){
         return (
             <div key={i}>
-                <p>{currentMeasure.Description}</p>
+                <p>
+                    {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
+                    (currentMeasure.Target_Score * 100) + "% or higher on " + currentMeasure.Tool_Name + "."}
+                </p>
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
                 <hr/>
             </div>

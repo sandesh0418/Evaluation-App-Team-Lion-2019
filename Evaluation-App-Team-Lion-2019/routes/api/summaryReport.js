@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require("../config/keys");
+const keys = require("../../config/keys");
 const passport = require("passport");
 const isEmpty = require("is-empty");
 
-var connection = require('../models/User');
+var connection = require('../../models/User');
 
 // @route GET summaryReport/measureStatistics
 // @desc retrieve statistics on the measure.
@@ -29,12 +29,12 @@ function buildProgramSummary(withStats, req, res)
         outcomes: []
     }
 
-    //Get: outcomeId, outcomeDescription, measureId, measureDescription, percentToReachTarget, targetScore
+    //Get: outcomeId, outcomeDescription, measureId, measureDescription, percentToReachTarget, targetScore, toolName
     let queryGetSummary = "" +
         "SELECT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, m.Measure_ID as measureId, " +
             "m.Description as measureDescription, m.Percent_to_reach_target as percentToReachTarget, " +
-            "m.Target_Score as targetScore " +
-        "FROM outcome o JOIN measure m ON m.Outcome_ID=o.Outcome_ID";
+            "m.Target_Score as targetScore, m.Tool_Name as toolName " +
+        "FROM outcome o LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID";
 
     connection.query(queryGetSummary, (error, results, fields) => {
         if (error)
@@ -51,27 +51,41 @@ function buildProgramSummary(withStats, req, res)
             data.forEach(row => {
                 let outcomeIndex = programSummary.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
 
-                let newMeasure = {
-                    Measure_ID: row.measureId,
-                    Description: row.measureDescription,
-                    Percent_to_reach_target: row.percentToReachTarget,
-                    Target_Score: row.targetScore,
-                    metTarget: 0,
-                    totalEvaluated: 0
-                }
 
-                if (outcomeIndex == -1)
+                if (row.measureId === null && outcomeIndex === -1)
                 {
                     let newOutcome = {
                         Outcome_ID: row.outcomeId,
                         Description: row.outcomeDescription,
-                        measures: [newMeasure]
+                        measures: []
                     }
                     programSummary.outcomes.push(newOutcome);
                 }
-                else
+                else if (row.measureId != null)
                 {
-                    programSummary.outcomes[outcomeIndex].measures.push(newMeasure);
+                    let newMeasure = {
+                        Measure_ID: row.measureId,
+                        Description: row.measureDescription,
+                        Percent_to_reach_target: row.percentToReachTarget,
+                        Target_Score: row.targetScore,
+                        Tool_Name: row.toolName,
+                        metTarget: 0,
+                        totalEvaluated: 0
+                    }
+    
+                    if (outcomeIndex == -1)
+                    {
+                        let newOutcome = {
+                            Outcome_ID: row.outcomeId,
+                            Description: row.outcomeDescription,
+                            measures: [newMeasure]
+                        }
+                        programSummary.outcomes.push(newOutcome);
+                    }
+                    else
+                    {
+                        programSummary.outcomes[outcomeIndex].measures.push(newMeasure);
+                    }
                 }
             })
             

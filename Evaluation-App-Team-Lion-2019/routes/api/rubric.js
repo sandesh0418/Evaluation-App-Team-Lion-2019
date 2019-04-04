@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-var connection = require('../models/User');
+var connection = require('../../models/User');
 const passport = require('passport');
-const secret = require('../config/keys');
-const validateRubric = require('../validation/rubricValidation');
+const secret = require('../../config/keys');
+const validateRubric = require('../../validation/rubricValidation');
 var uniqid = require('uniqid');
 
 router.post("/createRubric", passport.authenticate("jwt", { session: false}), (req,res) =>{
@@ -371,6 +371,59 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
             
         }
         
+    })
+})
+
+/**
+ * Get rubric list with rubric scale.
+ * Used by: editProgramSummary
+ */
+router.get('/getListWithScale', passport.authenticate("jwt", { session: false }),(req, res) => {
+    let queryGetRubrics = "" +
+        "SELECT Rubric_Title as rubricTitle, Value_Number as valueNumber, Value_Name as valueName " +
+        "FROM rubric_criteria_scale " +
+        "GROUP BY Rubric_Title, Value_Number, Value_Name " +
+        "ORDER BY Rubric_Title"
+
+    connection.query(queryGetRubrics, function(error, results, fields) {
+        if (error) 
+        {
+            res.status(404).json({
+            status:false,
+            error: error,
+            message:'The rubrics could not be retrieved.'
+            })
+        }
+        else
+        {
+            data = Object.values(JSON.parse(JSON.stringify(results)))
+            let rubrics = [];
+
+            data.forEach(row => {
+                rubricIndex = rubrics.findIndex(r => r.Rubric_Title === row.rubricTitle);
+                let newScore = {
+                    Value_Number: row.valueNumber,
+                    Value_Name: row.valueName
+                }
+                if (rubricIndex === -1)
+                {
+                    let newRubric = {
+                        Rubric_Title: row.rubricTitle,
+                        scale: [newScore]
+                    }
+                    rubrics.push(newRubric);
+                }
+                else
+                {
+                    rubrics[rubricIndex].scale.push(newScore);
+                }
+            })
+
+            res.json({
+                status: true,
+                rubrics: rubrics
+            })
+        }
     })
 })
 
