@@ -43,8 +43,10 @@ function Measures(props)
             <div key={i}>
                 <p>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
-                    (currentMeasure.Target_Score * 100) + "% or higher on " + currentMeasure.Tool_Name + "."}
+                    (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
+                    (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
                 </p>
+                {currentMeasure.Description ? <p className="ml-3">{"Additional description: " + currentMeasure.Description}</p> : null}
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
                 <hr/>
             </div>

@@ -30,11 +30,16 @@ function buildProgramSummary(withStats, req, res)
     }
 
     //Get: outcomeId, outcomeDescription, measureId, measureDescription, percentToReachTarget, targetScore, toolName
+    //      valueName
     let queryGetSummary = "" +
-        "SELECT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, m.Measure_ID as measureId, " +
+        "SELECT DISTINCT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, m.Measure_ID as measureId, " +
             "m.Description as measureDescription, m.Percent_to_reach_target as percentToReachTarget, " +
-            "m.Target_Score as targetScore, m.Tool_Name as toolName " +
-        "FROM outcome o LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID";
+            "m.Target_Score as targetScore, m.Tool_Name as toolName, valueName " +
+        "FROM outcome o LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
+            "(SELECT r.Value_Name as valueName, m.Measure_ID as measureId " + 
+            "FROM measure m LEFT JOIN rubric_criteria_scale r ON m.Tool_Name=r.Rubric_Title " +
+            "WHERE m.Target_Score=r.Value_Number) as rubric " +
+            "ON m.Measure_ID=rubric.measureId ";
 
     connection.query(queryGetSummary, (error, results, fields) => {
         if (error)
@@ -68,9 +73,10 @@ function buildProgramSummary(withStats, req, res)
                         Description: row.measureDescription,
                         Percent_to_reach_target: row.percentToReachTarget,
                         Target_Score: row.targetScore,
+                        Value_Name: row.valueName,
                         Tool_Name: row.toolName,
                         metTarget: 0,
-                        totalEvaluated: 0
+                        totalEvaluated: 0,
                     }
     
                     if (outcomeIndex == -1)

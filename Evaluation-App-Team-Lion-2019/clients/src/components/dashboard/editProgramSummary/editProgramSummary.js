@@ -72,10 +72,11 @@ const Measures = props => {
         return (
             <div key={measure.Measure_ID}>
                 <p>
-                    {"At least " + (measure.Percent_to_reach_target * 100) + "% of subjects score a " + 
-                    measure.Target_Score + " or higher on " + measure.Tool_Name }
+                    {"At least " + (measure.Percent_to_reach_target * 100) + "% of subjects score " + 
+                    (measure.Value_Name ? "'" + measure.Value_Name + "'" : 
+                    (measure.Target_Score * 100) + "%") +" or higher on " + measure.Tool_Name + "."}
                  </p>
-                <p className="ml-3">{"Additional description: " + measure.Description}</p>
+                {measure.Description ? <p className="ml-3">{"Additional description: " + measure.Description}</p> : null}
             </div>
         )
     })
@@ -87,13 +88,13 @@ export default class EditProgramSummary extends Component
     constructor(props)
     {
         super(props);
-        this.handleAddOutcome = this.handleAddOutcome.bind(this);
-        this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
         this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
+        this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleAddOutcome = this.handleAddOutcome.bind(this);
+        this.addNewMeasure = this.addNewMeasure.bind(this);  
         this.closePopup = this.closePopup.bind(this);
-        this.addNewMeasure = this.addNewMeasure.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
             programSummary: dummySummary,
@@ -104,7 +105,7 @@ export default class EditProgramSummary extends Component
             rubrics: null,
             toolName: null,
             //The following values are passed to both the addRubricMeasure and addTestMeasurePopups
-            description: "",
+            description: null,
             targetScore: 0,
             percentToReachTarget: 0
         }
@@ -200,10 +201,18 @@ export default class EditProgramSummary extends Component
     {
         let newId = uuid();
 
+        let rubricIndex = this.state.rubrics.findIndex(r => r.Rubric_Title === this.state.toolName);
+        let valueName = null;
+        if (rubricIndex > -1)
+        {
+            valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore].Value_Name;
+        }
+
         let newMeasure = {
             Measure_ID: newId,
             Description: this.state.description,
             Percent_to_reach_target: (this.state.percentToReachTarget / 100),
+            Value_Name: valueName,
             Target_Score: this.state.targetScore,
             Tool_Name: this.state.toolName
         }
@@ -220,7 +229,7 @@ export default class EditProgramSummary extends Component
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             toolName: "",
-            description: "",
+            description: null,
             targetScore: 0,
             percentToReachTarget: 0
         })
