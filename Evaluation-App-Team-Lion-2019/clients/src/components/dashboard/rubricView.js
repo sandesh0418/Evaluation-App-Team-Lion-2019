@@ -7,11 +7,13 @@ function TopRowGradeScale(props)
 {
     return props.oneCriteria.descriptions.map(function(currentDescription)
     {
-        return <th scope="col" key={currentDescription.value_number}
-                                as="textarea"
-                                aria-label="With textarea"
-                                >
-                                {currentDescription.value_name}</th>
+        console.log(currentDescription.value_number);
+        return <th scope="col" 
+                    key={currentDescription.value_number}
+                    as="textarea"
+                    aria-label="With textarea">
+                    {currentDescription.value_name}
+                </th>
     });
 }
 
@@ -33,7 +35,7 @@ function CriteriaDescription(props)
 {
     return props.criteriaDescriptions.map(function(currentDescription)
     {
-        return <td key={currentDescription.value_title}>{currentDescription.value_description}</td>
+        return <td key={currentDescription.value_number}>{currentDescription.value_description}</td>
     });
 }
 
@@ -120,7 +122,7 @@ export default class ViewRubric extends Component
             .then(res => {
                 this.setState({
                     subjectList: res.data.subjectList,
-                    subjectId: res.data.subjectList[0]
+                    subjectId: res.data.subjectList[0].subjectId
                 })
             })
             axios.get('http://localhost:5000/assignments/assignmentMeasure/' + this.props.match.params.assignment)
@@ -128,7 +130,6 @@ export default class ViewRubric extends Component
                     this.setState({
                         measureId: res.data.measure.measureId
                     })
-                    console.log(this.state.measureId)
                 })
         }
     }
@@ -149,8 +150,8 @@ export default class ViewRubric extends Component
         axios.post('http://localhost:5000/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
             console.log(res.data);
+            alert("The score has been saved.");
         });
-        alert("The score has been saved.");
     }
 
     handleAverageScoreClick(e)
@@ -207,7 +208,7 @@ export default class ViewRubric extends Component
 
         let gradeScale = this.state.rubric.criteria[0].descriptions.map(function(currentDescription)
         {
-            return <option key={currentDescription.value_title} value={currentDescription.value_title}>{currentDescription.value_name}</option>
+            return <option key={currentDescription.value_number} value={currentDescription.value_number}>{currentDescription.value_name}</option>
         })
 
         return (

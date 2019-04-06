@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uuidv1 = require('uuid/v1');
-const connection = require('../models/User');
-var fileReader = require('fs');
+const connection = require('../../models/User');
 
 /**
  * Create a new assignment
@@ -176,7 +175,9 @@ router.get('/myAssignments/:email', (req, res) => {
             "a.Assignment_ID as assignmentId, m.Tool_Name as toolName " + 
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
             "a.Measure_ID=m.Measure_ID " + 
-        "WHERE a.User_Email='" + req.params.email + "'";
+        "WHERE a.User_Email='" + req.params.email + "' " +
+        "ORDER BY assignmentId";
+
 
     connection.query(queryGetAssignments, (error, results, field) => {
         if (error) 
@@ -197,6 +198,11 @@ router.get('/myAssignments/:email', (req, res) => {
     })
 })
 
+
+/**
+ * Get the subject list by measure ID
+ * PATH: /assignments/subjectList/:id
+ */
 router.get('/subjectList/:id', (req, res) => {
     let queryGetSubjectList = "" + 
         "SELECT Subject_Name as subjectName, Subject_ID as subjectId " +

@@ -5,10 +5,10 @@ const passport = require("passport");
 const cors = require('cors');
 
 const users = require("./routes/api/users");
-const summaryReport = require('./routes/summaryReport');
-const scoreSubmission = require('./routes/scoreSubmission');
-const rubric = require('./routes/rubric.js');
-const assignments = require('./routes/assignments.js');
+const summaryReport = require('./routes/api/summaryReport');
+const scoreSubmission = require('./routes/api/scoreSubmission');
+const rubric = require('./routes/api/rubric.js');
+const assignments = require('./routes/api/assignments.js');
 const evaluators = require('./routes/api/evaluators');
 const editProgramSummary = require('./routes/api/editProgramSummary');
 

@@ -33,7 +33,7 @@ function SelectOutcome(props)
 function SelectMeasure(props)
 {
     return props.measureList.map(measure => {
-        return <option key={measure.Measure_ID} value={measure.Measure_ID}>{measure.Description}</option>
+        return <option key={measure.Measure_ID} value={measure.Measure_ID}>{measure.Measure_ID}</option>
     })
 }
 
@@ -69,6 +69,7 @@ export default class CreateAssignment extends Component
     {
         axios.get('http://localhost:5000/assignments/outcomesAndMeasures')
             .then(res => {
+                console.log(res.data.outcomeList);
                 this.setState({
                     outcomeList: res.data.outcomeList,
                     selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,

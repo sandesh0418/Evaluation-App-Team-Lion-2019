@@ -23,13 +23,30 @@ export default class AddTestMeasurePopup extends Component
           <div className='popup'>
             <div className='popup_inner p-4'>
               <h1>Define Test Measure</h1>
+              <label>Description of new measure:</label>
+              <p>
+                {"At least " + this.props.percentToReachTarget + "% of subjects score a " + 
+                this.props.targetScore + "% or higher on " + this.props.testName + "."}
+              </p>
+              <p className="ml-3">{this.props.description}</p>
               <form>
                 <div className="form-group">
-                  <label>Enter Measure Description: </label>
+                  <label>Enter Test Name: </label>
+                  <input 
+                    type="text"
+                    className="form-control"
+                    name="toolName"
+                    value={this.props.testName}
+                    onChange={this.props.handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>(Optional) Enter Additional Information: </label>
                   <textarea 
                     className="form-control" 
                     rows="7"
                     name="description"
+                    placeholder="(Optional) Add additional information."
                     value={this.props.description}
                     onChange={this.props.handleInputChange} 
                   />
