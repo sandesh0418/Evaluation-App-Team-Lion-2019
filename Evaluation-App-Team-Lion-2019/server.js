@@ -11,6 +11,7 @@ const rubric = require('./routes/api/rubric.js');
 const assignments = require('./routes/api/assignments.js');
 const evaluators = require('./routes/api/evaluators');
 const editProgramSummary = require('./routes/api/editProgramSummary');
+const cycle = require('./routes/api/cycle');
 
 
 const app = express();
@@ -39,6 +40,7 @@ app.use('/rubric', rubric);
 app.use('/assignments', assignments);
 app.use('/evaluators', evaluators);
 app.use('/editProgramSummary', editProgramSummary);
+app.use('/cycle', cycle);
 
 
 const port = process.env.PORT || 5000;

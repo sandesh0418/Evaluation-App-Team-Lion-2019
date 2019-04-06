@@ -7,3 +7,5 @@ export const SET_TOP_ROW = "SET_TOP_ROW";
 export const GET_DATA = "GET_DATA";
 export const SET_DATA = "SET_DATA";
 export const SET_CRITERIA = "SET_CRITERIA"; 
+export const LOADING = "LOADING";
+export const NEW_CYCLE = "NEW_CYCLE";

@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import { GET_CRITERIA, GET_TOP_ROW, GET_DATA, SET_TOP_ROW, GET_ERRORS} from './types';
+import { GET_CRITERIA, GET_TOP_ROW, GET_DATA, SET_TOP_ROW, GET_ERRORS, LOADING} from './types';
 
 export const getCriteria = () => dispatch => {
     Axios.get(`http://localhost:5000/rubric/getCriteria/${localStorage.title}`)
@@ -65,9 +65,10 @@ export const setTopRow = (id, description) => dispatch => {
         value: description
     })
         .then(res =>{
-            dispatch(getTopRow())
-           
+            
+            
         })
+        
         .catch(err =>{
             dispatch({
                 type: GET_ERRORS,
@@ -84,7 +85,7 @@ export const setCriteria = (id, description) => dispatch => {
         value: description
     })
         .then(res =>{
-            dispatch(getCriteria())
+            
            
         })
         .catch(err =>{
@@ -104,7 +105,7 @@ export const setData = (id, description, criteria) => dispatch => {
         value: description
     })
         .then(res =>{
-            dispatch(getData())
+            
            
         })
         .catch(err =>{

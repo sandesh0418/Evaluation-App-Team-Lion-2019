@@ -6,6 +6,10 @@ const secret = require('../../config/keys');
 const validateRubric = require('../../validation/rubricValidation');
 var uniqid = require('uniqid');
 
+
+/*
+* Post method that stores rubric title, no. of rows, no. of columns and weight into rubric table
+*/
 router.post("/createRubric", passport.authenticate("jwt", { session: false}), (req,res) =>{
 
    
@@ -242,7 +246,7 @@ router.post("/setTopRow/:handle", passport.authenticate("jwt" , {session: false}
     connection.query("Update rubric_criteria_scale set Value_Name = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
         if (err) throw err;
         else{
-            res.send("good");
+           res.send("good"); 
         }
     
 })
