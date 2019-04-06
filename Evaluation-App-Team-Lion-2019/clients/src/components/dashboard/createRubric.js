@@ -17,8 +17,10 @@ class createRubric extends Component{
         this.props.getCriteria();
         this.props.getData();
         this.props.getTopRow();
-        this.timer = null;
+        
       }
+
+     
 
  
     onSubmit(e){
@@ -26,23 +28,23 @@ class createRubric extends Component{
     }
 
    onChangeTopRow(e){
-       if(e.target.value != null){
+       
         this.props.setTopRow(e.target.name, e.target.value);
-       }
+       
       
    }
       
    onChangeData(e){
-    if(e.target.value != null){
+    
         this.props.setData(e.target.name, e.target.value);
-    }
+    
     }
 
    onChangeCriteria(e){
 
-    if(e.target.value != null){
+    
         this.props.setCriteria(e.target.name, e.target.value);
-    }
+    
     }
    
     
@@ -65,7 +67,7 @@ class createRubric extends Component{
                                 as = "textarea"
                                 aria-label="With textarea"
                                 name={singleValue.Row_Id}
-                                onChange = {this.onChangeTopRow.bind(this)}
+                                onChange= {this.onChangeTopRow.bind(this)}
                                 value={singleValue.name}
                                 style={{width: "100%"}}
                                 className="measureTitle centerAlign cells"/></th>

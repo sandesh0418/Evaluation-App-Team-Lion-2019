@@ -50,7 +50,7 @@ router.post("/createRubric", passport.authenticate("jwt", { session: false}), (r
                 criteriaTitle+=i;
                 var rowId = uniqid();
                 criteriatitle[i]=criteriaTitle;
-                console.log(criteriaTitle)
+                
         
                 connection.query("Insert Into rubric_criteria(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Weight`) VALUES(?,?,?,?)",[rowId,title,criteriaTitle," "],function(error, result, fields){
                     if (error) 
@@ -63,19 +63,35 @@ router.post("/createRubric", passport.authenticate("jwt", { session: false}), (r
                     }
             })
         }
-
+        
+        let breakPoint = 0;
         function insertCriteriaScale()
         {
+            
             for(var j = 0 ; j<criteriatitle.length;j++){
+                
+                if(j<breakPoint){
+                    break;
+                }
+                
+                else{
                 for(var i = 0; i<scores;i++){
                     var rowId = uniqid();
+                    
                     connection.query("Insert Into rubric_criteria_scale(`Row_Id`,`Rubric_Title`,`Criteria_Title`,`Value_Number`,`Value_Name`, `Value_Description`) VALUES(?,?,?,?,?,?)",[rowId,title,criteriatitle[j],i+1," ", " "],function(error, result, fields){
                         if (error) 
                         {
                             console.log(error)
                         }
+                        else{
+                            console.log("added");
+                        }
+                       
                     })
                 }
+            }
+            
+                breakPoint = j;
             }
         }
         
@@ -109,7 +125,7 @@ router.get("/getRow/:title", (req, res)=>{
             criteria = result;
         }
         
-    connection.query("SELECT Row_Id, Value_Description from rubric_criteria_scale where Rubric_Title = ?",rubricTitle,function(err, result, fields){
+    connection.query("SELECT Row_Id, Value_Description from rubric_criteria_scale where Rubric_Title = ? Order By Row_Id ASC",rubricTitle,function(err, result, fields){
         if (err) throw err
 
         
@@ -158,7 +174,7 @@ router.get("/getCriteria/:title", (req, res) =>{
         }
 
 
-    connection.query("Select Row_Id, Criteria_Title, Weight from rubric_criteria where Rubric_Title = ?",rubricTitle, function(err, result, fields){
+    connection.query("Select Row_Id, Criteria_Title, Weight from rubric_criteria where Rubric_Title = ? Order By Row_Id ASC",rubricTitle, function(err, result, fields){
         if (err) throw err;
         else{
             if(weight == 1){
@@ -205,7 +221,7 @@ router.get("/getTopRow/:title",  (req,res) =>{
         
     
     
-        connection.query("Select Row_Id, Value_Number, Value_Name from rubric_criteria_scale where Rubric_Title = ? and Criteria_Title = ?", [rubricTitle, "criteria0"], function(err, result, fields){
+        connection.query("Select Row_Id, Value_Number, Value_Name from rubric_criteria_scale where Rubric_Title = ? and Criteria_Title = ? Order By Row_Id ASC", [rubricTitle, "criteria0"], function(err, result, fields){
             if (err) throw err;
             else{
                 for(var i = 0; i<scales; i++){
@@ -223,13 +239,15 @@ router.get("/getTopRow/:title",  (req,res) =>{
 
 
 router.post("/setTopRow/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
-    connection.query("Update rubric_criteria_scale set Value_name = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
+
+   
+    connection.query("Update rubric_criteria_scale set Value_Name = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
         if (err) throw err;
         else{
             res.send("good");
         }
-    })
     
+})
 })
 
 router.post("/setCriteria/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
