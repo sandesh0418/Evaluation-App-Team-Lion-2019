@@ -22,10 +22,10 @@ class NavAdmin extends Component
     render()
     {
         return (
-            <>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
+            < >
+            <Navbar.Toggle aria-controls="basic-navbar-nav"  />
+            <Navbar.Collapse id="responsive-navbar-nav" >
+                <Nav className="ml-auto" >
                     <Nav.Link href="/dashboard">Home</Nav.Link>
                     <Nav.Link href="/viewSummary">View Summary</Nav.Link>
                     <NavDropdown title="Assignments">
