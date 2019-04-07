@@ -25,7 +25,7 @@ class EndCycle extends Component {
                     <div class="card-body">
                       <h5 class="card-title">{singleCycle.Cycle_Name}</h5>
                       <p class="card-text">State Date: {singleCycle.Start_Date}</p>
-                      <a href="#" class="btn btn-primary">EndCycle</a>
+                      <a href="#" class="btn btn-primary">End Cycle</a>
                     </div>
                   </div>
                 </div>

@@ -10,9 +10,8 @@ class Cycle extends Component {
         super(props);
         this.state ={
             startDate : new Date(),
-            endDate : '',
-            cycleName : '',
-            submitted: false
+            
+            cycleName : ''
         }
     }
 
@@ -28,12 +27,12 @@ class Cycle extends Component {
         }
         this.props.CreateNewCycle(obj);
         window.location.reload();
-        this.setState({submitted : true});
+        
     }
 
   render() {
 
-    const thankYou = (this.state.submitted ?<div></div> :<div></div>  );
+   
       
     return (
         <form style = {{padding: "20px", 
