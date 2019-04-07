@@ -11,7 +11,8 @@ class Cycle extends Component {
         this.state ={
             startDate : new Date(),
             endDate : '',
-            cycleName : ''
+            cycleName : '',
+            submitted: false
         }
     }
 
@@ -26,15 +27,21 @@ class Cycle extends Component {
             Start_Date: this.state.startDate
         }
         this.props.CreateNewCycle(obj);
+        window.location.reload();
+        this.setState({submitted : true});
     }
 
   render() {
+
+    const thankYou = (this.state.submitted ?<div></div> :<div></div>  );
       
     return (
         <form style = {{padding: "20px", 
                         border: "1px solid rgba(128, 128, 128, 0.32)", 
                         borderRadius: "15px", 
-                        margin: "150px 0"}} onSubmit={this.onSubmit.bind(this)}>
+                        margin: "150px 0"}} onSubmit={this.onSubmit.bind(this)}
+                         className="container">
+        
         <input onChange={this.onChange.bind(this)}
                 value ={this.state.cycleName}
                 placeholder="Please enter a cycle name"

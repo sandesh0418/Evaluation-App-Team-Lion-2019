@@ -9,3 +9,4 @@ export const SET_DATA = "SET_DATA";
 export const SET_CRITERIA = "SET_CRITERIA"; 
 export const LOADING = "LOADING";
 export const NEW_CYCLE = "NEW_CYCLE";
+export const GET_ALL_CYCLES = "GET_ALL_CYCLES";
