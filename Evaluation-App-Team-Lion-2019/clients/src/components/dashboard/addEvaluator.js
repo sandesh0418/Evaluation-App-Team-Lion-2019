@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { AddNewEvaluator } from "../../actions/evaluator";
 import classnames from "classnames";
 
 class AddEvaluator extends Component {
@@ -11,22 +11,16 @@ class AddEvaluator extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      cwid: '',
+      
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      role: '',
+      department: '',
       errors: {}
     };
   }
 
-  // componentDidMount() {
-  //   // If logged in and user navigates to Register page, should redirect them to dashboard
-  //   if (this.props.auth.isAuthenticated) {
-  //     this.props.history.push("/viewEvaluator");
-  //   }
-  // }
+ 
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -42,10 +36,17 @@ class AddEvaluator extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
+    const obj ={
+      firstName : this.state.firstName,
+      lastName: this.state.lastName,
+      department: this.state.department,
+      email: this.state.email
+    }
    
+    this.props.AddNewEvaluator(obj, this.props.history);
+    // window.location.reload();
 
-    this.props.registerUser(this.state, this.props.history);
+    
   };
 
   render() {
@@ -91,35 +92,8 @@ class AddEvaluator extends Component {
                 <label htmlFor="lastName">Please enter last name of the evaluator</label>
                 <span className="red-text">{errors.lastName}</span>
               </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.cwid}
-                  error={errors.cwid}
-                  id="cwid"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.cwid
-                  })}
-                />
-                <label htmlFor="cwid">Please enter evaluator's CWID</label>
-                <span className="red-text">{errors.cwid}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.role}
-                  error={errors.role}
-                  id="role"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.role
-                  })}
-                />
-
-              <label htmlFor="role">Please enter the Role</label>
-                <span className="red-text">{errors.role}</span>
-              </div>
+              
+              
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
@@ -141,33 +115,20 @@ class AddEvaluator extends Component {
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
-                  value={this.state.password}
-                  error={errors.password}
-                  id="password"
-                  type="password"
+                  value={this.state.department}
+                  error={errors.department}
+                  id="department"
+                  type="text"
                   className={classnames("", {
-                    invalid: errors.password
+                    invalid: errors.department
                   })}
                 />
-                <label htmlFor="password">Password</label>
-                <span className="red-text">{errors.password}</span>
+                <label htmlFor="department">Department</label>
+                <span className="red-text">{errors.department}</span>
               </div>
 
               
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.password2}
-                  error={errors.password2}
-                  id="password2"
-                  type="password"
-                  className={classnames("", {
-                    invalid: errors.password2
-                  })}
-                />
-                <label htmlFor="password2">Confirm Password</label>
-                <span className="red-text">{errors.password2}</span>
-              </div>
+              
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
                   style={{
@@ -191,7 +152,7 @@ class AddEvaluator extends Component {
 }
 
 AddEvaluator.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+  AddNewEvaluator: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -203,5 +164,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  { AddNewEvaluator }
 )(withRouter(AddEvaluator));
