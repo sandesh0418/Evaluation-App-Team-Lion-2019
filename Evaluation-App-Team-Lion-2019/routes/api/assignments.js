@@ -18,7 +18,7 @@ router.post('/createAssignment', (req,res) => {
         Assignment_ID: Assignment_ID
     }
 
-    connection.query("USE nodejs_login1");
+    
 
     connection.query('INSERT INTO assignments SET ?', assignment, function (error, results, fields) {
         if (error) 

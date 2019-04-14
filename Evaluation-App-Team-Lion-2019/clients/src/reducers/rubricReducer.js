@@ -1,11 +1,9 @@
-import { GET_CRITERIA, GET_TOP_ROW, GET_DATA} from '../actions/types';
+import { GET_RUBRIC} from '../actions/types';
 
 
 
 const initialState = {
-  topRow: null,
-  criteria: null,
-  data: null, 
+  rubric: null, 
   loading: false
   
 };
@@ -13,21 +11,11 @@ const initialState = {
 
 export default function (state = initialState, action){
     switch(action.type){
-        case GET_CRITERIA: 
-            return{
-                ...state,
-                criteria: action.payload
-            }
-        case GET_DATA:
-            return{
-                ...state,
-                data: action.payload
-            }
-        case GET_TOP_ROW:
-            return{
-                ...state,
-                topRow: action.payload
-            }
+        case GET_RUBRIC:
+                return{
+                    ...state,
+                    rubric: action.payload
+                }
         default:
             return state
 
