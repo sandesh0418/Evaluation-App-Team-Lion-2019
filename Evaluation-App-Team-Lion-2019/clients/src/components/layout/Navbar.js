@@ -6,6 +6,7 @@ import {connect } from 'react-redux';
 
 import AdminNavBar from './navAdmin.js';
 import EvalNavBar from './navEvaluator.js';
+import Nav from './nav';
 
 class NavBar extends Component 
 {
@@ -25,6 +26,7 @@ class NavBar extends Component
                 </button>
                 {userRole==="administrator" ? <AdminNavBar /> : null}
                 {userRole==="evaluator" ? <EvalNavBar /> : null}
+                {userRole==="admin" ? <Nav /> : null}
             </Navbar>
           
         );

@@ -25,10 +25,8 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  config.query("CREATE DATABASE IF NOT EXISTS `nodejs_login1`");
-  config.query("USE nodejs_login1");
-  var sql="CREATE TABLE IF NOT EXISTS `users`(`CWID` int(8), `firstName` varchar(20), `lastName` varchar(20), `email` varchar(40)  PRIMARY KEY, `password` varchar(200), `role` varchar(20))";
-  config.query(sql);
+  console.log(req.body)
+ 
   
 config.query("SELECT * FROM users WHERE Email = ?",[req.body.email], function(error, results, fields){
   if(!isEmpty(results)){

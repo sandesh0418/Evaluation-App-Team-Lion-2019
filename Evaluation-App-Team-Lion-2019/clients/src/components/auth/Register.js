@@ -17,6 +17,7 @@ class Register extends Component {
       email: '',
       password: '',
       role: '',
+      password2: '',
       errors: {}
     };
   }
@@ -42,10 +43,18 @@ class Register extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
+    const obj ={
+      cwid: this.state.cwid,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2,
+      role: this.state.role
+    }
    
 
-    this.props.registerUser(this.state, this.props.history);
+    this.props.registerUser(obj, this.props.history);
   };
 
   render() {
