@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { NEW_CYCLE, GET_ERRORS, GET_ALL_CYCLES } from './types';
 
 export const CreateNewCycle = (obj) => dispatch =>{
-    Axios.post(`http://localhost:5000/cycle/`,
+    Axios.post(`/cycle/`,
     obj )
     .then(res => {
         dispatch({
@@ -20,7 +20,7 @@ export const CreateNewCycle = (obj) => dispatch =>{
 }
 
 export const GetAllCycle = () => dispatch => {
-    Axios.get("http://localhost:5000/cycle/getCycles")
+    Axios.get("/cycle/getCycles")
         .then(res => {
             dispatch({
                 type: GET_ALL_CYCLES,

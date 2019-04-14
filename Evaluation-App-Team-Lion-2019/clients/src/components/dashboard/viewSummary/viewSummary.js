@@ -124,7 +124,7 @@ export default class ViewSummary extends Component
 
     getSummaryWithStatistics()
     {
-        axios.get('http://localhost:5000/summaryReport/measureStatistics')
+        axios.get('/summaryReport/measureStatistics')
             .then(res => {
                 //console.log(res.data);
                 this.setState({
@@ -135,7 +135,7 @@ export default class ViewSummary extends Component
 
     getSummary()
     {
-        axios.get('http://localhost:5000/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary')
             .then(res => {
                 //console.log(res.data);
                 this.setState({

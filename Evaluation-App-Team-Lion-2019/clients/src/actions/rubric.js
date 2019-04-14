@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { GET_RUBRIC, SET_RUBRIC, LOADING} from './types';
 
 export const getRubric = (title) => dispatch => {
-    Axios.get(`rubric/getRubric/${title}`)
+    Axios.get(`/rubric/getRubric/${title}`)
             .then(res => {
                 dispatch({
                     type: GET_RUBRIC,
@@ -23,7 +23,7 @@ export const getRubric = (title) => dispatch => {
 
 
 export const updateRubric = (obj) => dispatch => {
-    Axios.put(`rubric/updateRubric/`, obj)
+    Axios.put(`/rubric/updateRubric/`, obj)
             .then(res => {
                
             })

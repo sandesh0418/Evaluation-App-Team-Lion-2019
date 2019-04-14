@@ -119,13 +119,13 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary')
             .then(res => {
                 this.setState({
                     programSummary: res.data.programSummary
                 })
         })
-        axios.get('http://localhost:5000/rubric/getListWithScale')
+        axios.get('/rubric/getListWithScale')
             .then(res => {
                 if(res.data.status)
                 {

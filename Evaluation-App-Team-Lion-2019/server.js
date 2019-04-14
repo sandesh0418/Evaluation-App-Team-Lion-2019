@@ -34,13 +34,13 @@ require("./config/passport")(passport);
 
 // Routes
 app.use('/api/users', users);
-app.use('/summaryReport', summaryReport);
-app.use('/scoreSubmission', scoreSubmission);
+app.use('/api/summaryReport', summaryReport);
+app.use('/api/scoreSubmission', scoreSubmission);
 app.use('/api/rubric', rubric);
-app.use('/assignments', assignments);
-app.use('/evaluators', evaluators);
-app.use('/editProgramSummary', editProgramSummary);
-app.use('/cycle', cycle);
+app.use('/api/assignments', assignments);
+app.use('/api/evaluators', evaluators);
+app.use('/api/editProgramSummary', editProgramSummary);
+app.use('/api/cycle', cycle);
 
 
 const port = process.env.PORT || 5000;
