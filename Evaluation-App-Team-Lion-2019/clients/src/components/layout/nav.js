@@ -24,7 +24,7 @@ render()
             <Navbar.Collapse id="responsive-navbar-nav" >
                 <Nav className="ml-auto" >
                     <Nav.Link href="/admin">Add Coordinator</Nav.Link>
-                    <Nav.Link href="/admin">View Coordinators</Nav.Link>
+                    <Nav.Link href="/viewCoordinator">View Coordinators</Nav.Link>
                     <Nav.Link href="/admin">Remove Coordinator</Nav.Link>
                     <NavDropdown title={User()}>
                         <Nav.Link href="/editProfile">Edit Profile</Nav.Link>

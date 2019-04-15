@@ -8,3 +8,4 @@ export const NEW_CYCLE = "NEW_CYCLE";
 export const GET_ALL_CYCLES = "GET_ALL_CYCLES";
 export const ADD_EVALUATOR = "ADD_EVALUATOR";
 export const GET_ALL_EVALUATOR = "GET_ALL_EVALUATOR";
+export const VIEW_COORDINATOR = "VIEW_COORDINATOR";

@@ -13,9 +13,7 @@ if(!err) {
 	connection.query("USE nodejs_login1",function(err,results){
 
 	
-		connection.query("CREATE TABLE IF NOT EXISTS `Cycle`(`Dept_ID` VARCHAR(25) NOT NULL, `Cycle_Id` VARCHAR(25) NOT NULL, `Cycle_Name` VARCHAR(50) NOT NULL, `Start_Date` VARCHAR(20) NOT NULL, `End_Date` VARCHAR(20), Primary Key(`Cycle_Id`))", function(err, result){
 		
-	});
 
 		
 		
