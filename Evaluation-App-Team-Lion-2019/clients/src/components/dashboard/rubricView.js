@@ -114,6 +114,7 @@ export default class ViewRubric extends Component
                     rubricTitle: res.data.rubric.rubric_title,
                     rubric: res.data.rubric
                 })
+                console.log(this.state.rubric);
             })
 
         if(window.location.pathname.includes('/gradeRubric/'))
