@@ -17,7 +17,9 @@ class createRubric extends Component{
         
     }
     componentDidMount(){
-        this.props.getRubric(localStorage.getItem("title"));
+       
+        
+        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
         
       }
     
@@ -37,9 +39,10 @@ class createRubric extends Component{
             Rubric_Id: e.target.name,
             value: e.target.value
         }
-        console.log(obj)
+        
         this.props.updateRubric(obj);
-        this.props.getRubric(localStorage.getItem('title'));
+       
+        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
         
 
 

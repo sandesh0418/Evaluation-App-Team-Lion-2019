@@ -122,33 +122,37 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
+  
   config.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if(results.length<0){
     return res.status(404).json({ emailnotfound: "Email not found" });
  
   }
+
   else{
-    bcrypt.compare(req.body.password, results[0].password, function(err, response) {
+    bcrypt.compare(password, results[0].password, function(err, response) {
     if(response === true){
       // User matched
         // Create JWT Payload
         const payload = {
           email: email
         };
-
+        
         // Sign token
         jwt.sign(
           payload,
           keys.secretOrKey,
           {
-            expiresIn: 86400 // 1 year in seconds
+            expiresIn: 2400 // 1 year in seconds
           },
+          
           (err, token) => {
             res.json({
               success: true,
               token: "Bearer " + token,
               role: results[0].role,
-              name: results[0].firstName
+              name: results[0].firstName,
+              department: results[0].Dept_Id
             });
           }
         );

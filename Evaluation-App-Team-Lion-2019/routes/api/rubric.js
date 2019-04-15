@@ -27,14 +27,14 @@ router.post("/createRubric",  (req,res) =>{
         let title = req.body.Rubric_Title;
         let weight;
         let rubric_Id = uniqid();
-        let dept_Id = uniqid();
+        let dept_Id = req.body.dept_Id;
         if(req.body.weight){
             weight = 1;
         }
         else{
             weight = 0;
         }
-        console.log(rows+" "+scores+ " "+ title+" "+req.body.weight)
+        
 
         connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`dept_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, dept_Id], function(err, result, fields){
             if (err) throw err;
@@ -120,8 +120,11 @@ router.post("/createRubric",  (req,res) =>{
 
 router.get("/getRubric/:title", (req, res)=>{
 
-    rubricTitle = req.params.title;
-    dept_Id = "969gcjug13b6g";
+    var title = req.params.title.split(" ");
+    var rubricTitle = title[0];
+    var dept_Id = title[1];
+    
+    
     var topRow = [];
     var Rubric =[];
     let Rubric_Id;
@@ -295,89 +298,89 @@ else{
 
 
 
-router.get('/getRubric/:id', (req, res) => {
-    let rubricTitle = req.params.id;
+// router.get('/getRubric/:id', (req, res) => {
+//     let rubricTitle = req.params.id;
 
-    let rubric = {
-        rubric_title: rubricTitle,
-        criteria: []
-    }
+//     let rubric = {
+//         rubric_title: rubricTitle,
+//         criteria: []
+//     }
 
-    getCriteria();
+//     getCriteria();
 
-    function getCriteria()
-    {
-        let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
+//     function getCriteria()
+//     {
+//         let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
 
-        connection.query(queryGetCriteriaTitles, function(error, results, fields) {
-            if (error) 
-            {
-                res.status(404).json({
-                status:false,
-                error: error,
-                message:'The criteria for this rubric could not be retrieved.'
-                })
-            }
-            else
-            {
-                let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
-                criteriaTitles.forEach((title) => {
-                    let tempCriteriaObj = {
-                        criteria_title: title.Criteria_Title,
-                        descriptions: []
-                    }
+//         connection.query(queryGetCriteriaTitles, function(error, results, fields) {
+//             if (error) 
+//             {
+//                 res.status(404).json({
+//                 status:false,
+//                 error: error,
+//                 message:'The criteria for this rubric could not be retrieved.'
+//                 })
+//             }
+//             else
+//             {
+//                 let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
+//                 criteriaTitles.forEach((title) => {
+//                     let tempCriteriaObj = {
+//                         criteria_title: title.Criteria_Title,
+//                         descriptions: []
+//                     }
 
-                    rubric.criteria.push(tempCriteriaObj);
-                })
+//                     rubric.criteria.push(tempCriteriaObj);
+//                 })
 
-                getCriteriaDescriptions();
-            }
-        })
-    }
+//                 getCriteriaDescriptions();
+//             }
+//         })
+//     }
 
-    function getCriteriaDescriptions() 
-    {
-        for (let i = 0; i < rubric.criteria.length; i++) 
-        {
-            let queryCriteriaScale = "SELECT Value_Number, Value_Name, Value_Description FROM rubric_criteria_scale WHERE Rubric_Title=\'" +
-                                        rubricTitle + "\' AND Criteria_Title=\'" + rubric.criteria[i].criteria_title + "\'";
+//     function getCriteriaDescriptions() 
+//     {
+//         for (let i = 0; i < rubric.criteria.length; i++) 
+//         {
+//             let queryCriteriaScale = "SELECT Value_Number, Value_Name, Value_Description FROM rubric_criteria_scale WHERE Rubric_Title=\'" +
+//                                         rubricTitle + "\' AND Criteria_Title=\'" + rubric.criteria[i].criteria_title + "\'";
 
-            connection.query(queryCriteriaScale, function(error, results, fields) {
-                if (error) 
-                {
-                    res.status(404).json({
-                    status:false,
-                    error: error,
-                    message:'The criteria for this rubric could not be retrieved.'
-                    })
-                }
-                else
-                {
-                    let descriptions = Object.values(JSON.parse(JSON.stringify(results)));
+//             connection.query(queryCriteriaScale, function(error, results, fields) {
+//                 if (error) 
+//                 {
+//                     res.status(404).json({
+//                     status:false,
+//                     error: error,
+//                     message:'The criteria for this rubric could not be retrieved.'
+//                     })
+//                 }
+//                 else
+//                 {
+//                     let descriptions = Object.values(JSON.parse(JSON.stringify(results)));
         
-                    descriptions.forEach((description) => {
-                        tempDescription = {
-                            value_number: description.Value_Number,
-                            value_name: description.Value_Name,
-                            value_description: description.Value_Description
-                        }
+//                     descriptions.forEach((description) => {
+//                         tempDescription = {
+//                             value_number: description.Value_Number,
+//                             value_name: description.Value_Name,
+//                             value_description: description.Value_Description
+//                         }
 
-                        rubric.criteria[i].descriptions.push(tempDescription);
-                    })
+//                         rubric.criteria[i].descriptions.push(tempDescription);
+//                     })
 
-                    //Send the data if we have traversed all criteria.  If we have time we should refactor this to work naturally with async.
-                    if (i == rubric.criteria.length - 1)
-                    {
-                        res.json({
-                            rubric: rubric
-                        })
-                    }
-                }
-            })
-        }
+//                     //Send the data if we have traversed all criteria.  If we have time we should refactor this to work naturally with async.
+//                     if (i == rubric.criteria.length - 1)
+//                     {
+//                         res.json({
+//                             rubric: rubric
+//                         })
+//                     }
+//                 }
+//             })
+//         }
 
-    }
-})
+//     }
+// })
 
 //Path /rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
