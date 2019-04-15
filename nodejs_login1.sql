@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2019 at 04:17 AM
+-- Generation Time: Apr 15, 2019 at 02:43 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -54,8 +54,8 @@ CREATE TABLE `criteria` (
 INSERT INTO `criteria` (`Rubric_Id`, `Criteria_Title`, `weight`, `Row_Id`) VALUES
 ('966tgjufv269r', 'Appearance', 20.00, 1),
 ('966tgjufv269r', ' ', 0.00, 2),
-('969gcjug13b6f', ' Sandesh', 22.50, 1),
-('969gcjug13b6f', ' dddd', 44.50, 2),
+('969gcjug13b6f', '', 22.50, 1),
+('969gcjug13b6f', ' dddd', 40.00, 2),
 ('96casjug258yz', ' ', 0.00, 1),
 ('96casjug258yz', ' ', 0.00, 2),
 ('96casjug258yz', ' ', 0.00, 3);
@@ -73,6 +73,13 @@ CREATE TABLE `cycle` (
   `Start_Date` varchar(20) NOT NULL,
   `End_Date` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cycle`
+--
+
+INSERT INTO `cycle` (`Dept_ID`, `Cycle_Id`, `Cycle_Name`, `Start_Date`, `End_Date`) VALUES
+('962vkjugbg5be', '962vkjugbg5bf', 'Assessment Fall 2019-2020', 'Fall 2019', ' ');
 
 -- --------------------------------------------------------
 
@@ -109,6 +116,17 @@ INSERT INTO `data` (`Rubric_Id`, `Row_Id`, `Data`, `index`) VALUES
 ('96casjug258yz', 3, '', 1),
 ('96casjug258yz', 3, '', 2),
 ('96casjug258yz', 3, '', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `department`
+--
+
+CREATE TABLE `department` (
+  `department_Id` varchar(40) NOT NULL,
+  `department_Name` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -197,7 +215,7 @@ CREATE TABLE `scales` (
 INSERT INTO `scales` (`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES
 ('966tgjufv269r', 'Average', 1),
 ('966tgjufv269r', 'Good', 2),
-('969gcjug13b6f', ' Apperance', 1),
+('969gcjug13b6f', '', 1),
 ('969gcjug13b6f', ' Good', 2),
 ('96casjug258yz', ' ', 1),
 ('96casjug258yz', ' ', 2),
@@ -242,7 +260,8 @@ CREATE TABLE `users` (
   `email` varchar(60) DEFAULT NULL,
   `password` text,
   `role` text,
-  `Dept_Id` varchar(30) DEFAULT NULL
+  `Dept_Id` varchar(30) DEFAULT NULL,
+  FOREIGN KEY(`Dept_ID`) REFERENCES `department`(`department_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -250,8 +269,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`CWID`, `firstName`, `lastName`, `email`, `password`, `role`, `Dept_Id`) VALUES
-(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '$2a$10$QhiF4lCEr83n7/MkzYVERuX2K6RqfrtmP4Woxhj1/IWGYIKTYOOdG', 'Administrator', NULL),
-(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', NULL);
+(30000000, 'Lon', 'Smith', 'lonsmith@gmail.com', '$2a$10$wHFInz86hIlzVEJ4xejzwuA0Td4j6VEnizoP1cLIWC9LUCLOKaDeS', 'Admin', 'Computer_Science2019'),
+(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '$2a$10$QhiF4lCEr83n7/MkzYVERuX2K6RqfrtmP4Woxhj1/IWGYIKTYOOdG', 'Administrator', ''),
+(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', '');
 
 --
 -- Indexes for dumped tables
@@ -282,6 +302,12 @@ ALTER TABLE `cycle`
 --
 ALTER TABLE `data`
   ADD PRIMARY KEY (`Rubric_Id`,`Row_Id`,`index`);
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+  ADD PRIMARY KEY (`department_Id`);
 
 --
 -- Indexes for table `measure`
