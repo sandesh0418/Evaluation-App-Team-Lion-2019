@@ -18,6 +18,7 @@ class CreateRubric extends Component{
             rows : 0,
             scores: "",
             Rubric_Title: "",
+            dept_Id: "",
             checked: false,
             errors: {}
 
@@ -51,12 +52,13 @@ class CreateRubric extends Component{
               rows: this.state.rows,
               scores: this.state.scores,
               Rubric_Title: this.state.Rubric_Title,
+              dept_Id: localStorage.getItem("dept_Id"),
               weight: this.state.checked
           }
 
           localStorage.setItem("title", this.state.Rubric_Title);
 
-          axios.post("http://localhost:5000/rubric/createRubric", obj)
+          axios.post("/rubric/createRubric", obj)
                 .then(res => window.location.replace('/createRubric'))
                 .catch(err => 
                   this.setState({errors: err.response.data}))

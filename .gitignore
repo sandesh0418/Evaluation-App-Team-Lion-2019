@@ -1,1 +1,5 @@
 node_modules
+DEPARTMENT_EVALUATION_key.pem
+DEPARTMENT_EVALUATION_key.ppk
+EC2 .txt
+putty.ppk

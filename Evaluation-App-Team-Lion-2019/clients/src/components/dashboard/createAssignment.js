@@ -95,7 +95,7 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/assignments/outcomesAndMeasures')
+        axios.get('/assignments/outcomesAndMeasures')
             .then(res => {
                 this.setState({
                     outcomeList: res.data.outcomeList,
@@ -103,7 +103,7 @@ export default class CreateAssignment extends Component
                 })
                 console.log(this.state);
             })
-        axios.get('http://localhost:5000/evaluators/evaluatorList')
+        axios.get('/evaluators/evaluatorList')
         .then(res => {
             this.setState({
                 evaluatorList: res.data.evaluatorList,

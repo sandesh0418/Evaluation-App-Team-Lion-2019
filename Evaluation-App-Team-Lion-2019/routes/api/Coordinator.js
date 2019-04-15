@@ -1,0 +1,58 @@
+const express = require("express");
+const router = express.Router();
+var connection = require('../../models/User');
+const passport = require('passport');
+
+var uniqid = require('uniqid');
+
+router.post('/addCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
+
+    var email = req.body.email;
+    var department= req.body.department;
+    
+    var cwid = (Number) (req.body.cwid);
+    var dept_id = uniqid();
+    connection.query("SELECT * from `users` where email = ? OR CWID = ?",[email, cwid], function(err, result, fields){
+        if (err) throw err;
+
+        if(result.length>0){
+            return res.status(400).json({ email: "Coordinator already exists" });
+        }
+        
+        connection.query("INSERT INTO users(`CWID`, `email`, `Dept_Id`, `role`) VALUES(?,?,?,?)",[cwid,email, dept_id , "Administrator"], function(err, result, fields){
+            if(err) throw err;
+
+            connection.query("INSERT INTO  `department`(department_Id , department_Name) Values(?,?)",[dept_id, department], function(err, result, fields){
+                if (err) throw err;
+
+              
+                    res.send('Coordinator has been added');
+                
+            })
+        })
+    })
+})
+
+
+router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
+    var Coordinator = [];
+    connection.query("SELECT * from users where role =?","Administrator", function(err, result, fields){
+
+        if (err) throw err;
+
+        if(result.length>0){
+            for(var i = 0; i<result.length; i++){
+                Coordinator[i] = {
+                    firstName: `${result[i].firstName}`,
+                    lastName: `${result[i].lastName}`,
+                    email: `${result[i].email}`
+                }
+            }
+        }
+
+        res.send(Coordinator);
+    })
+})
+
+
+module.exports = router;

@@ -25,10 +25,8 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  config.query("CREATE DATABASE IF NOT EXISTS `nodejs_login1`");
-  config.query("USE nodejs_login1");
-  var sql="CREATE TABLE IF NOT EXISTS `users`(`CWID` int(8), `firstName` varchar(20), `lastName` varchar(20), `email` varchar(40)  PRIMARY KEY, `password` varchar(200), `role` varchar(20))";
-  config.query(sql);
+  console.log(req.body)
+ 
   
 config.query("SELECT * FROM users WHERE Email = ?",[req.body.email], function(error, results, fields){
   if(!isEmpty(results)){
@@ -124,33 +122,37 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
+  
   config.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if(results.length<0){
     return res.status(404).json({ emailnotfound: "Email not found" });
  
   }
+
   else{
-    bcrypt.compare(req.body.password, results[0].password, function(err, response) {
+    bcrypt.compare(password, results[0].password, function(err, response) {
     if(response === true){
       // User matched
         // Create JWT Payload
         const payload = {
           email: email
         };
-
+        
         // Sign token
         jwt.sign(
           payload,
           keys.secretOrKey,
           {
-            expiresIn: 86400 // 1 year in seconds
+            expiresIn: 2400 // 1 year in seconds
           },
+          
           (err, token) => {
             res.json({
               success: true,
               token: "Bearer " + token,
               role: results[0].role,
-              name: results[0].firstName
+              name: results[0].firstName,
+              department: results[0].Dept_Id
             });
           }
         );

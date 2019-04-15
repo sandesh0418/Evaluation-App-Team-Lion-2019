@@ -3,7 +3,7 @@ import Axios from 'axios';
 
 
 export const AddNewEvaluator= (obj, history) => dispatch => {
-    Axios.post("http://localhost:5000/evaluators/addEvaluator", obj)
+    Axios.post("/evaluators/addEvaluator", obj)
         .then(res => {
             history.push("/viewEvaluator")
         })
@@ -16,7 +16,7 @@ export const AddNewEvaluator= (obj, history) => dispatch => {
 }
 
 export const GetAllEvaluator = () => dispatch => {
-    Axios.get("http://localhost:5000/evaluators/evaluatorList")
+    Axios.get("/evaluators/evaluatorList")
         .then(res => {
             dispatch({
                 type: GET_ALL_EVALUATOR,

@@ -25,6 +25,8 @@ var dummySummary = {
 };
 
 const OutcomeList = props => {
+
+    if(props.outcomes){
     return props.outcomes.map(function(currentOutcome) {
         return <Outcome 
                     key={currentOutcome.Outcome_ID} 
@@ -34,6 +36,10 @@ const OutcomeList = props => {
                     handleAddTestMeasure={props.handleAddTestMeasure}
                 />
     })
+}
+    else{
+        return null;
+    }
 }
 
 const Outcome = props => {
@@ -113,13 +119,13 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary')
             .then(res => {
                 this.setState({
                     programSummary: res.data.programSummary
                 })
         })
-        axios.get('http://localhost:5000/rubric/getListWithScale')
+        axios.get('/rubric/getListWithScale')
             .then(res => {
                 if(res.data.status)
                 {
@@ -245,14 +251,19 @@ export default class EditProgramSummary extends Component
 
     render()
     {
+        var outcomes = '';
+        if(this.state.programSummary){
+            outcomes=this.state.programSummary.outcomes 
+            
+        }
         return (
             <>
             <h1>Edit Program Summary</h1>
             <OutcomeList 
-                outcomes={this.state.programSummary.outcomes} 
-                handleOutcomeChange={this.handleOutcomeChange}
-                handleAddRubricMeasure={this.handleAddRubricMeasure}
-                handleAddTestMeasure={this.handleAddTestMeasure} 
+                 outcomes = {outcomes}
+                 handleOutcomeChange={this.handleOutcomeChange}
+                 handleAddRubricMeasure={this.handleAddRubricMeasure}
+                 handleAddTestMeasure={this.handleAddTestMeasure} 
             />
             <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
             <div><button className="btn btn-danger mb-4" onClick={this.handleSave}>Save Changes</button></div>

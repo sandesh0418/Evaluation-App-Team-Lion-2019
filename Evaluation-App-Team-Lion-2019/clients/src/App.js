@@ -29,6 +29,8 @@ import EditProfile from './components/dashboard/editProfile';
 import Cycle from './components/dashboard/cycle';
 import EndCycle from './components/dashboard/endCycle';
 import MeasureReport from './components/dashboard/measureReport'
+import Admin from './components/dashboard/admin/admin';
+import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
 
 import "./App.css";
 
@@ -80,6 +82,8 @@ class App extends Component {
                 <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
                 <PrivateRoute exact path="/editProfile" component={EditProfile} />
                 <PrivateRoute exact path="/cycle" component={Cycle} />
+                <PrivateRoute exact path="/admin" component={Admin} />
+                <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/endCycle" component={EndCycle} />
                 <PrivateRoute exact path="/measureReport" component={MeasureReport} />
               </Switch>

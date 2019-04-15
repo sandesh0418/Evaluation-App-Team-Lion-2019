@@ -7,11 +7,12 @@ const cors = require('cors');
 const users = require("./routes/api/users");
 const summaryReport = require('./routes/api/summaryReport');
 const scoreSubmission = require('./routes/api/scoreSubmission');
-const rubric = require('./routes/api/rubric.js');
-const assignments = require('./routes/api/assignments.js');
+const rubric = require('./routes/api/rubric');
+const assignments = require('./routes/api/assignments');
 const evaluators = require('./routes/api/evaluators');
 const editProgramSummary = require('./routes/api/editProgramSummary');
 const cycle = require('./routes/api/cycle');
+const coordinator = require('./routes/api/Coordinator');
 
 
 const app = express();
@@ -34,13 +35,14 @@ require("./config/passport")(passport);
 
 // Routes
 app.use('/api/users', users);
-app.use('/summaryReport', summaryReport);
-app.use('/scoreSubmission', scoreSubmission);
-app.use('/rubric', rubric);
-app.use('/assignments', assignments);
-app.use('/evaluators', evaluators);
-app.use('/editProgramSummary', editProgramSummary);
-app.use('/cycle', cycle);
+app.use('/api/summaryReport', summaryReport);
+app.use('/api/scoreSubmission', scoreSubmission);
+app.use('/api/rubric', rubric);
+app.use('/api/assignments', assignments);
+app.use('/api/evaluators', evaluators);
+app.use('/api/editProgramSummary', editProgramSummary);
+app.use('/api/cycle', cycle);
+app.use('/api/coordinator', coordinator);
 
 
 const port = process.env.PORT || 5000;
