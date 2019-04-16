@@ -224,6 +224,20 @@ class createRubric extends Component{
                 
             </tbody>
             </Table>
+
+            <a href="/rubricList"
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem",
+                    padding: "15px"
+                  }}
+                  type="submit"
+                  className="btn btn-large btn-success waves-effect waves-light hoverable"
+                >
+                  Save
+                </a>
             </>
         );
     }

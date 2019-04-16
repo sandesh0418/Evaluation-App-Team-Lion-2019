@@ -319,7 +319,7 @@ router.get('/getViewRubric/:title', (req, res) => {
     }
 
     let queryGetRubric = "" +
-        "SELECT r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
+        "SELECT r.Rubric_Id, r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
         "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
@@ -338,7 +338,7 @@ router.get('/getViewRubric/:title', (req, res) => {
             results = Object.values(JSON.parse(JSON.stringify(results)));
             
             rubric.rubric_title = results[0].Rubric_Title;
-
+            rubric.Rubric_Id = results[0].Rubric_Id;
             results.forEach(r => {
                 index = rubric.criteria.findIndex(c => c.criteria_title === r.Criteria_Title);
 
