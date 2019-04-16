@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-
+import axios from 'axios';
+import { CyclesInProgress } from './actions/cycle';
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -28,7 +29,7 @@ import EvaluateTest from './components/dashboard/evaluateTest';
 import EditProfile from './components/dashboard/editProfile';
 import Cycle from './components/dashboard/cycle';
 import ViewCycles from './components/dashboard/viewCycle';
-import EndCycle from './components/dashboard/endCycle';
+import EndCycle from './components/dashboard/viewCycle';
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
@@ -55,7 +56,17 @@ if (localStorage.jwtToken) {
     window.location.href = "./login";
   }
 }
+
+
 class App extends Component {
+
+
+  
+componentDidMount(){
+
+  var dept_Id = localStorage.getItem("Dept_Id");
+  
+}
   render() {
     return (
       <Provider store={store}>
@@ -96,5 +107,7 @@ class App extends Component {
     );
   }
 }
+
+
 
 export default App;

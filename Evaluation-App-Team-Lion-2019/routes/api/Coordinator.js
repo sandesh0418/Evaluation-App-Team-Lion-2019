@@ -36,7 +36,7 @@ router.post('/addCoordinator', passport.authenticate("jwt", {session: false}), (
 
 router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
     var Coordinator = [];
-    connection.query("SELECT * from users where role =? and password!='deleted' ","Administrator", function(err, result, fields){
+    connection.query("SELECT * from users where role =? and password!='' ","Administrator", function(err, result, fields){
         // 
         console.log(result);
         if (err) throw err;
@@ -57,7 +57,7 @@ router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (
 
 router.get('/viewCoordinatorDeleted', passport.authenticate("jwt", {session: false}), (req, res) =>{
     var Coordinator = [];
-    connection.query("SELECT * from users where role =? and password='deleted'","Administrator", function(err, result, fields){
+    connection.query("SELECT * from users where role =? and password=''","Administrator", function(err, result, fields){
         // 
         // 
         if (err) throw err;
@@ -87,7 +87,7 @@ router.post('/removeCoordinator', passport.authenticate("jwt", {session: false})
             // return res.status(400).json({ "Coordinator doesn't exist" });
         }
         
-        connection.query("UPDATE users SET password='deleted' where email =?",[email], function(err, result, fields){
+        connection.query("UPDATE users SET password='' where email =?",[email], function(err, result, fields){
             if(err) throw err;
 
 

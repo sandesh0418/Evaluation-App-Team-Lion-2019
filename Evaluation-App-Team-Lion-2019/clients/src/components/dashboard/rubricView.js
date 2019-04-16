@@ -182,6 +182,10 @@ export default class ViewRubric extends Component
         this.setState({scale: e.target.value})
     }
 
+    EditRubric(e){
+        
+    }
+
     render()
     {
         let saveGradeButton;
@@ -233,9 +237,24 @@ export default class ViewRubric extends Component
                     <tbody>
                         <CriteriaRow gradeMode={this.state.gradeMode} criteria={this.state.rubric.criteria} gradeScale={gradeScale} />
                     </tbody>
+                    
                 </table>
                 {rubricAverage}
                 {saveGradeButton}
+                <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                <a href="#"
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem"
+                  }}
+                  onClick={this.EditRubric}
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                  Edit 
+                </a>
+              </div>
             </div>
         );
     }
