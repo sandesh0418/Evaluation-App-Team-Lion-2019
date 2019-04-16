@@ -16,6 +16,7 @@ router.post("/createRubric",  (req,res) =>{
    
     let { errors, isValid} = validateRubric(req.body);
   
+    var cycle = "";
 
     
     if(!isValid){
@@ -27,7 +28,10 @@ router.post("/createRubric",  (req,res) =>{
         let title = req.body.Rubric_Title;
         let weight;
         let rubric_Id = uniqid();
-        let dept_Id = req.body.dept_Id;
+        let Cycle_Id = req.body.Cycle_Id;
+        cycle ={
+            Rubric_Id: rubric_Id
+        }
         if(req.body.weight){
             weight = 1;
         }
@@ -36,7 +40,7 @@ router.post("/createRubric",  (req,res) =>{
         }
         
 
-        connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`dept_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, dept_Id], function(err, result, fields){
+        connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`Cycle_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, Cycle_Id], function(err, result, fields){
             if (err) throw err;
 
             else{
@@ -101,6 +105,8 @@ router.post("/createRubric",  (req,res) =>{
                 
                     breakPoint = j;
                 }
+              
+                return res.send(cycle);
 
             }
 
@@ -108,7 +114,7 @@ router.post("/createRubric",  (req,res) =>{
 
 
 
-    return res.send(isValid);
+   
     }
 
 
@@ -120,25 +126,28 @@ router.post("/createRubric",  (req,res) =>{
 
 router.get("/getRubric/:title", (req, res)=>{
 
-    var title = req.params.title.split(" ");
-    var rubricTitle = title[0];
-    var dept_Id = title[1];
-    console.log(dept_Id);
+    
+    var Rubric_Id = req.params.title
+   
+    
+    
+    
+    
+    
     
     var topRow = [];
     var Rubric =[];
-    let Rubric_Id;
+    
     var score = 0;
     var row = 0;
     var weight = 0;
-    connection.query("SELECT `Rubric_Id`, `scores`,`weight`,`Rows` from `rubric` where `Rubric_Title` = ? and `dept_Id` = ?", [rubricTitle, dept_Id], function(err, result, fields){
+    connection.query("SELECT `scores`,`weight`,`Rows` from `rubric` where `Rubric_Id` = ?", Rubric_Id, function(err, result, fields){
         if (err) throw err;
 
         if(result.length > 0){
             score = result[0].scores;
             row = result[0].Rows;
-            Rubric_Id = result[0].Rubric_Id;  
-            weight = result[0].weight;  
+             weight = result[0].weight;  
         }
        
          
@@ -156,22 +165,25 @@ router.get("/getRubric/:title", (req, res)=>{
         }
 
         Rubric[0] = topRow;
-        
+        console.log(row + score)
        if((Number) (weight) === 1){
-        connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY `Row_Id` ASC", Rubric_Id, function(err, result, field){
+        connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY data.Row_Id ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
 
             var r = [];
-            
-            for(var i = 0 ; i<row; i++){
+            let count = 0;
+            for(var i = 0; i<row; i++){
                 
                 let column = [];
-                let count = 0;
-                for(var j = i; j< score+i; j++){
-                    column[count] = result[i+j];
+                
+                for(var j = 0; j< score; j++){
+                    column[j] = result[count];
                     count++;
                 }
+                
                 r[i] = column;
+
+                 console.log(column)
                 
                 
 
@@ -192,18 +204,19 @@ router.get("/getRubric/:title", (req, res)=>{
             if (err) throw err;
 
             var r = [];
-            
+            let count = 0;
             for(var i = 0 ; i<row; i++){
                 
                 let column = [];
-                let count = 0;
-                for(var j = i; j< score+i; j++){
-                    column[count] = result[i+j];
-                    count++;
+                
+                for(var j = 0; j< score; j++){
+                    column[j] = result[i+count];
+                    
                 }
+                count+=score;
                 r[i] = column;
                 
-                
+                console.log(column)
 
                  
             }
@@ -212,7 +225,7 @@ router.get("/getRubric/:title", (req, res)=>{
         
 
 
-
+           
         res.json(Rubric);
     
     })

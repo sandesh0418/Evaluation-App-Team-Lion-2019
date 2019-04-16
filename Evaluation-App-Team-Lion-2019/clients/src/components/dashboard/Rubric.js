@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Jumbotron,Container, Form } from 'react-bootstrap';
 import classnames from "classnames";
-
+import { createRubric } from '../../actions/rubric';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from 'axios';
@@ -20,18 +20,21 @@ class CreateRubric extends Component{
             Rubric_Title: "",
             dept_Id: "",
             checked: false,
+            Rubric_Id: '',
             errors: {}
 
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.errors) {
-          this.setState({
-            errors: nextProps.errors
-          });
-        }
-      }
+    componentWillReceiveProps(nextProps){
+      if(nextProps.rubric !== this.props.rubric){
+        localStorage.setItem("Rubric_Id", nextProps.rubric.rubric[0][0].Rubric_Id);
+        window.location.replace('/createRubric');
+        console.log(nextProps.rubric.rubric[0][0].Rubric_Id)
+    }
+  }
+
+    
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
@@ -52,18 +55,18 @@ class CreateRubric extends Component{
               rows: this.state.rows,
               scores: this.state.scores,
               Rubric_Title: this.state.Rubric_Title,
-              dept_Id: localStorage.getItem("dept_Id"),
+              Cycle_Id: localStorage.getItem("Cycle_Id"),
               weight: this.state.checked
           }
 
-          localStorage.setItem("title", this.state.Rubric_Title);
+          this.props.createRubric(obj);
+          
 
-          axios.post("/rubric/createRubric", obj)
-                .then(res => window.location.replace('/createRubric'))
-                .catch(err => 
-                  this.setState({errors: err.response.data}))
 
-          ;
+          
+          
+
+          
 
           
       }
@@ -173,14 +176,15 @@ return(
 }
 CreateRubric.propTypes={
  
-    
+    rubric: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired
 
 }
 
 const mapStateToProps = state => ({
-     auth: state.auth,
+    auth: state.auth,
+     rubric: state.rubric
      
      
 })
-export default connect(mapStateToProps)(CreateRubric);
+export default connect(mapStateToProps,{createRubric})(CreateRubric);

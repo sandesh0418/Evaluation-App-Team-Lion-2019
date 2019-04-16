@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import { NEW_CYCLE, GET_ERRORS, GET_ALL_CYCLES } from './types';
+import { NEW_CYCLE, GET_ERRORS, PREVIOUS_CYCLES, CYCLES_IN_PROGRESS } from './types';
 
 export const CreateNewCycle = (obj) => dispatch =>{
     Axios.post(`/cycle/`,
@@ -19,18 +19,61 @@ export const CreateNewCycle = (obj) => dispatch =>{
     })
 }
 
-export const GetAllCycle = () => dispatch => {
-    Axios.get("/cycle/getCycles")
+
+export const GetPreviousCycle = () => dispatch =>{
+    Axios.get("/cycle/getPreviousCycles/"+localStorage.getItem("dept_Id"))
         .then(res => {
             dispatch({
-                type: GET_ALL_CYCLES,
+                type: PREVIOUS_CYCLES,
                 payload: res.data
             })
         })
-        .catch(err => {
+        .catch(err =>{
             dispatch({
                 type: GET_ERRORS,
-                payload:err
+                payload: err
             })
         })
+}
+
+export const CyclesInProgress = () => dispatch => {
+    Axios.get("/cycle/getCyclesInProgress/"+localStorage.getItem("dept_Id"))
+    .then(res => {
+        dispatch({
+            type: CYCLES_IN_PROGRESS,
+            payload: res.data
+        })
+    })
+    .catch(err =>{
+        dispatch({
+            type: GET_ERRORS,
+            payload: err
+        })
+    })
+}
+
+// export const UseCycle= (obj) => dispatch => {
+//     Axios.post('/cycle/useCycle', obj)
+//          .then(res => {
+
+//          })
+//          .catch(err => {
+//              dispatch({
+//                  type: GET_ERRORS,
+//                  payload: err
+//              })
+//          })
+// }
+
+export const EndCycle= (obj) => dispatch => {
+    Axios.post('/cycle/endCycle', obj)
+         .then(res => {
+
+         })
+         .catch(err => {
+             dispatch({
+                 type: GET_ERRORS,
+                 payload: err
+             })
+         })
 }

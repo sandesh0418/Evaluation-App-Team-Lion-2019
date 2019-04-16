@@ -36,8 +36,9 @@ router.post('/addCoordinator', passport.authenticate("jwt", {session: false}), (
 
 router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
     var Coordinator = [];
-    connection.query("SELECT * from users where role =?","Administrator", function(err, result, fields){
-
+    connection.query("SELECT * from users where role =? and password!='deleted' ","Administrator", function(err, result, fields){
+        // 
+        console.log(result);
         if (err) throw err;
 
         if(result.length>0){
@@ -51,6 +52,50 @@ router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (
         }
 
         res.send(Coordinator);
+    })
+})
+
+router.get('/viewCoordinatorDeleted', passport.authenticate("jwt", {session: false}), (req, res) =>{
+    var Coordinator = [];
+    connection.query("SELECT * from users where role =? and password='deleted'","Administrator", function(err, result, fields){
+        // 
+        // 
+        if (err) throw err;
+        console.log(result)
+        if(result.length>0){
+            for(var i = 0; i<result.length; i++){
+                Coordinator[i] = {
+                    firstName: `${result[i].firstName}`,
+                    lastName: `${result[i].lastName}`,
+                    email: `${result[i].email}`
+                }
+            }
+        }
+
+        res.send(Coordinator);
+    })
+})
+
+router.post('/removeCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
+
+    var email = req.body.email;
+    console.log(email);
+    connection.query("SELECT * from `users` where email = ?",[email], function(err, result, fields){
+        if (err) throw err;
+
+        if(result.length<=0){
+            // return res.status(400).json({ "Coordinator doesn't exist" });
+        }
+        
+        connection.query("UPDATE users SET password='deleted' where email =?",[email], function(err, result, fields){
+            if(err) throw err;
+
+
+              
+                    res.send('Coordinator has been removed');
+                
+            
+        })
     })
 })
 

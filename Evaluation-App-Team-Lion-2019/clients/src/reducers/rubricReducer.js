@@ -4,6 +4,7 @@ import { GET_RUBRIC} from '../actions/types';
 
 const initialState = {
   rubric: null, 
+  
   loading: false
   
 };
@@ -16,6 +17,8 @@ export default function (state = initialState, action){
                     ...state,
                     rubric: action.payload
                 }
+
+        
         default:
             return state
 

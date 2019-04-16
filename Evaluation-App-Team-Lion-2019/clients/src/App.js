@@ -27,6 +27,7 @@ import AddEvaluator from './components/dashboard/addEvaluator';
 import EvaluateTest from './components/dashboard/evaluateTest';
 import EditProfile from './components/dashboard/editProfile';
 import Cycle from './components/dashboard/cycle';
+import ViewCycles from './components/dashboard/viewCycle';
 import EndCycle from './components/dashboard/endCycle';
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
@@ -40,7 +41,7 @@ if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;
   setAuthToken(token);
   // Decode token and get user info and exp
-  
+
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
@@ -84,6 +85,7 @@ class App extends Component {
                 <PrivateRoute exact path="/cycle" component={Cycle} />
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
+                <PrivateRoute exact path="/cycles" component={ViewCycles} />
                 <PrivateRoute exact path="/endCycle" component={EndCycle} />
                 <PrivateRoute exact path="/measureReport" component={MeasureReport} />
               </Switch>

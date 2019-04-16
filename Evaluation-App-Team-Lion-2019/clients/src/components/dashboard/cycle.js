@@ -10,7 +10,6 @@ class Cycle extends Component {
         super(props);
         this.state ={
             startDate : '',
-            
             cycleName : ''
         }
     }
@@ -23,10 +22,11 @@ class Cycle extends Component {
         e.preventDefault();
         const obj ={
             Cycle_Name: this.state.cycleName,
-            Start_Date: this.state.startDate
+            Start_Date: this.state.startDate,
+            deptId: localStorage.getItem("dept_Id")
         }
         this.props.CreateNewCycle(obj);
-        window.location.reload();
+        window.location.reload('/endCycle');
         
     }
 
@@ -45,7 +45,8 @@ class Cycle extends Component {
                 value ={this.state.cycleName}
                 placeholder="Please enter a cycle name"
                 type = "text"
-                name="cycleName"/>
+                name="cycleName"
+                required/>
                 <label> Cycle name</label>
                 <input onChange={this.onChange.bind(this)}
                         value ={this.state.startDate}
@@ -54,7 +55,7 @@ class Cycle extends Component {
                         placeholder="Please enter a start date"
                         
 
-                />
+                required/>
                 <label> Cycle Start Date</label>
          <br></br>       
          <button

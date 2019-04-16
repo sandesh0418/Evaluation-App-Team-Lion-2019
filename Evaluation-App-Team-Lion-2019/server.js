@@ -42,7 +42,7 @@ app.use('/api/assignments', assignments);
 app.use('/api/evaluators', evaluators);
 app.use('/api/editProgramSummary', editProgramSummary);
 app.use('/api/cycle', cycle);
-app.use('/api/coordinator', coordinator);
+app.use('/api/Coordinator', coordinator);
 
 
 const port = process.env.PORT || 5000;

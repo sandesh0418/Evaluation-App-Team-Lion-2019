@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2019 at 02:43 AM
+-- Generation Time: Apr 16, 2019 at 04:34 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -47,19 +47,6 @@ CREATE TABLE `criteria` (
   `Row_Id` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `criteria`
---
-
-INSERT INTO `criteria` (`Rubric_Id`, `Criteria_Title`, `weight`, `Row_Id`) VALUES
-('966tgjufv269r', 'Appearance', 20.00, 1),
-('966tgjufv269r', ' ', 0.00, 2),
-('969gcjug13b6f', '', 22.50, 1),
-('969gcjug13b6f', ' dddd', 40.00, 2),
-('96casjug258yz', ' ', 0.00, 1),
-('96casjug258yz', ' ', 0.00, 2),
-('96casjug258yz', ' ', 0.00, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -67,19 +54,20 @@ INSERT INTO `criteria` (`Rubric_Id`, `Criteria_Title`, `weight`, `Row_Id`) VALUE
 --
 
 CREATE TABLE `cycle` (
-  `Dept_ID` varchar(25) NOT NULL,
   `Cycle_Id` varchar(25) NOT NULL,
   `Cycle_Name` varchar(50) NOT NULL,
   `Start_Date` varchar(20) NOT NULL,
-  `End_Date` varchar(20) DEFAULT NULL
+  `End_Date` varchar(20) DEFAULT NULL,
+  `Dept_Id` varchar(30) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cycle`
 --
 
-INSERT INTO `cycle` (`Dept_ID`, `Cycle_Id`, `Cycle_Name`, `Start_Date`, `End_Date`) VALUES
-('962vkjugbg5be', '962vkjugbg5bf', 'Assessment Fall 2019-2020', 'Fall 2019', ' ');
+INSERT INTO `cycle` (`Cycle_Id`, `Cycle_Name`, `Start_Date`, `End_Date`, `Dept_Id`, `status`) VALUES
+('96oojuj5njdc', 'Fall Assestment', 'Fall 2019', ' ', '962vkjugbg5be', 'In Progress');
 
 -- --------------------------------------------------------
 
@@ -94,29 +82,6 @@ CREATE TABLE `data` (
   `index` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `data`
---
-
-INSERT INTO `data` (`Rubric_Id`, `Row_Id`, `Data`, `index`) VALUES
-('966tgjufv269r', 1, 'samn', 1),
-('966tgjufv269r', 1, 'ssds', 2),
-('966tgjufv269r', 2, 'wqw', 1),
-('966tgjufv269r', 2, '3w', 2),
-('969gcjug13b6f', 1, '', 1),
-('969gcjug13b6f', 1, '', 2),
-('969gcjug13b6f', 2, '', 1),
-('969gcjug13b6f', 2, '', 2),
-('96casjug258yz', 1, '', 1),
-('96casjug258yz', 1, '', 2),
-('96casjug258yz', 1, '', 3),
-('96casjug258yz', 2, '', 1),
-('96casjug258yz', 2, '', 2),
-('96casjug258yz', 2, '', 3),
-('96casjug258yz', 3, '', 1),
-('96casjug258yz', 3, '', 2),
-('96casjug258yz', 3, '', 3);
-
 -- --------------------------------------------------------
 
 --
@@ -127,6 +92,13 @@ CREATE TABLE `department` (
   `department_Id` varchar(40) NOT NULL,
   `department_Name` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `department`
+--
+
+INSERT INTO `department` (`department_Id`, `department_Name`) VALUES
+('962vkjugbg5be', 'Computer Science');
 
 -- --------------------------------------------------------
 
@@ -184,17 +156,8 @@ CREATE TABLE `rubric` (
   `Rows` int(20) NOT NULL,
   `scores` int(20) NOT NULL,
   `weight` int(1) NOT NULL,
-  `dept_Id` varchar(30) NOT NULL
+  `Cycle_Id` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `rubric`
---
-
-INSERT INTO `rubric` (`Rubric_Id`, `Rubric_Title`, `Rows`, `scores`, `weight`, `dept_Id`) VALUES
-('966tgjufv269r', 'sandesh', 2, 2, 0, '966tgjufv269s'),
-('969gcjug13b6f', 's', 2, 2, 1, '969gcjug13b6g'),
-('96casjug258yz', 'b', 3, 3, 0, '96casjug258z0');
 
 -- --------------------------------------------------------
 
@@ -207,19 +170,6 @@ CREATE TABLE `scales` (
   `Value_Name` varchar(80) DEFAULT NULL,
   `Value_Number` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `scales`
---
-
-INSERT INTO `scales` (`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES
-('966tgjufv269r', 'Average', 1),
-('966tgjufv269r', 'Good', 2),
-('969gcjug13b6f', '', 1),
-('969gcjug13b6f', ' Good', 2),
-('96casjug258yz', ' ', 1),
-('96casjug258yz', ' ', 2),
-('96casjug258yz', ' ', 3);
 
 -- --------------------------------------------------------
 
@@ -260,8 +210,7 @@ CREATE TABLE `users` (
   `email` varchar(60) DEFAULT NULL,
   `password` text,
   `role` text,
-  `Dept_Id` varchar(30) DEFAULT NULL,
-  FOREIGN KEY(`Dept_ID`) REFERENCES `department`(`department_Id`)
+  `Dept_Id` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -270,8 +219,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`CWID`, `firstName`, `lastName`, `email`, `password`, `role`, `Dept_Id`) VALUES
 (30000000, 'Lon', 'Smith', 'lonsmith@gmail.com', '$2a$10$wHFInz86hIlzVEJ4xejzwuA0Td4j6VEnizoP1cLIWC9LUCLOKaDeS', 'Admin', 'Computer_Science2019'),
-(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '$2a$10$QhiF4lCEr83n7/MkzYVERuX2K6RqfrtmP4Woxhj1/IWGYIKTYOOdG', 'Administrator', ''),
-(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', '');
+(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '$2a$10$QhiF4lCEr83n7/MkzYVERuX2K6RqfrtmP4Woxhj1/IWGYIKTYOOdG', 'Administrator', '962vkjugbg5be'),
+(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', 'comp4020');
 
 --
 -- Indexes for dumped tables
@@ -295,7 +244,8 @@ ALTER TABLE `criteria`
 -- Indexes for table `cycle`
 --
 ALTER TABLE `cycle`
-  ADD PRIMARY KEY (`Cycle_Id`);
+  ADD PRIMARY KEY (`Cycle_Id`),
+  ADD KEY `Dept_Id` (`Dept_Id`);
 
 --
 -- Indexes for table `data`
@@ -326,7 +276,8 @@ ALTER TABLE `outcome`
 -- Indexes for table `rubric`
 --
 ALTER TABLE `rubric`
-  ADD PRIMARY KEY (`Rubric_Id`);
+  ADD PRIMARY KEY (`Rubric_Id`),
+  ADD KEY `Cycle_Id` (`Cycle_Id`);
 
 --
 -- Indexes for table `scales`
@@ -372,6 +323,12 @@ ALTER TABLE `criteria`
   ADD CONSTRAINT `criteria_ibfk_1` FOREIGN KEY (`Rubric_Id`) REFERENCES `rubric` (`Rubric_Id`);
 
 --
+-- Constraints for table `cycle`
+--
+ALTER TABLE `cycle`
+  ADD CONSTRAINT `cycle_ibfk_1` FOREIGN KEY (`Dept_Id`) REFERENCES `department` (`department_Id`);
+
+--
 -- Constraints for table `data`
 --
 ALTER TABLE `data`
@@ -382,6 +339,12 @@ ALTER TABLE `data`
 --
 ALTER TABLE `measure`
   ADD CONSTRAINT `measure_ibfk_1` FOREIGN KEY (`Outcome_ID`) REFERENCES `outcome` (`Outcome_ID`);
+
+--
+-- Constraints for table `rubric`
+--
+ALTER TABLE `rubric`
+  ADD CONSTRAINT `rubric_ibfk_1` FOREIGN KEY (`Cycle_Id`) REFERENCES `cycle` (`Cycle_Id`);
 
 --
 -- Constraints for table `scales`
