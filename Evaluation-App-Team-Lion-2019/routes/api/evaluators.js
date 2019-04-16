@@ -47,15 +47,18 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
         }
     })
 })
-router.get('/evaluatorList', (req, res) => {
+
+
+router.get('/evaluatorList/:deptId', (req, res) => {
+    departmentId = req.params.deptId;
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users where role = 'Evaluator'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
         {
-            res.status(404).json({
+            res.status(400).json({
               status:false,
               error: error,
               message:'The evaluators could not be retrieved.'

@@ -13,11 +13,6 @@ import './popup.css';
 
 export default class AddTestMeasurePopup extends Component
 {
-    constructor(props)
-    {
-      super(props);
-    }
-
     render() {
         return (
           <div className='popup'>

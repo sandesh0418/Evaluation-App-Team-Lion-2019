@@ -5,9 +5,10 @@ const connection = require('../../models/User');
 
 /**
  * Create a new assignment
- * PATH: /assignments/createAssignments
+ * PATH: /assignments/createAssignment
  */
 router.post('/createAssignment', (req,res) => {
+    console.log("Entered create assignment");
     let Measure_ID = req.body.Measure_ID;
     let User_Email = req.body.User_Email;
     let Assignment_ID = uuidv1();
@@ -17,8 +18,6 @@ router.post('/createAssignment', (req,res) => {
         User_Email: User_Email,
         Assignment_ID: Assignment_ID
     }
-
-    
 
     connection.query('INSERT INTO assignments SET ?', assignment, function (error, results, fields) {
         if (error) 
@@ -95,10 +94,12 @@ router.post('/createAssignment', (req,res) => {
 router.get('/outcomesAndMeasures', (req, res) => {
     let outcomeList = [];
 
-    let queryOutcomes = "SELECT Outcome_ID, Description FROM outcome"
+    let queryOutcomesWithMeasures = "" +
+        "SELECT o.Outcome_ID, o.Description as oDescription, m.Measure_ID, m.Description as mDescription " +
+        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID";
 
-    connection.query(queryOutcomes, function(error, results, fields) {
-        if (error) 
+    connection.query(queryOutcomesWithMeasures, (error, results, fields) => {
+        if (error || results.length === 0) 
         {
             res.status(404).json({
               status:false,
@@ -108,61 +109,37 @@ router.get('/outcomesAndMeasures', (req, res) => {
         }
         else
         {
-            if (results.length > 0)
-            {
-                Object.values(JSON.parse(JSON.stringify(results))).forEach(outcome => {
-                    tempOutcome = {
-                        Outcome_ID: outcome.Outcome_ID,
-                        Description: outcome.Description,
-                        measures: []
-                    }
-                    outcomeList.push(tempOutcome);
-                })
-                getMeasures();
-            }
-            else
-            {
-                res.status(404).json({
-                    status:false,
-                    error: error,
-                    message:'There are no outcomes.'
-                })
-            }
-        }
-    })
+            results = Object.values(JSON.parse(JSON.stringify(results)));
+            results.forEach(r => {
+                index = outcomeList.findIndex(o => o.Outcome_ID === r.Outcome_ID);
 
-    function getMeasures()
-    {
-        for (let i = 0; i < outcomeList.length; i++)
-        {
-            let queryMeasures = "SELECT Measure_ID, Description FROM measure WHERE Outcome_ID=\'" + 
-                                outcomeList[i].Outcome_ID + "\'";
+                let newMeasure = {
+                    Measure_ID: r.Measure_ID,
+                    Description: r.mDescription
+                }
 
-            connection.query(queryMeasures, function(error, results, fields) {
-                if (error) 
+                if (index === -1)
                 {
-                    res.status(404).json({
-                    status:false,
-                    error: error,
-                    message:'The measures could not be retrieved for outcome ' + outcomeList[i].Outcome_ID
-                    })
+                    let newOutcome = {
+                        Outcome_ID: r.Outcome_ID,
+                        Description: r.oDescription,
+                        measures:[newMeasure]
+                    }
+
+                    outcomeList.push(newOutcome);
                 }
                 else
                 {
-                    Object.values(JSON.parse(JSON.stringify(results))).forEach(measure => {
-                        outcomeList[i].measures.push(measure);
-                    })
-
-                    if (i == outcomeList.length - 1)
-                    {
-                        res.status(200).json({
-                            outcomeList: outcomeList
-                        })
-                    }
+                    outcomeList[index].measures.push(newMeasure);
                 }
             })
+
+            res.status(200).json({
+                status: true,
+                outcomeList: outcomeList
+            })
         }
-    }
+    })
 })
 
 /**
@@ -182,7 +159,6 @@ router.get('/myAssignments/:email', (req, res) => {
     connection.query(queryGetAssignments, (error, results, field) => {
         if (error) 
         {
-            console.log(error);
             res.status(404).json({
             status:false,
             error: error,
@@ -212,7 +188,6 @@ router.get('/subjectList/:id', (req, res) => {
     connection.query(queryGetSubjectList, (error, results, field) => {
         if (error) 
         {
-            console.log(error);
             res.status(404).json({
             status:false,
             error: error,
@@ -241,7 +216,6 @@ router.get('/assignmentMeasure/:id', (req, res) => {
     connection.query(queryGetAssignment, (error, results, field) => {
         if (error) 
         {
-            console.log(error);
             res.status(404).json({
             status:false,
             error: error,
