@@ -30,19 +30,6 @@ class createRubric extends Component{
         e.preventDefault();
     }
 
-   onChangeTopRow(e){
-        
-      
-        this.props.setTopRow(e.target.name, e.target.value);
-        this.props.getTopRow();
-      
-   }
-      
-   onChangeData(e){
-    
-        this.props.setData(e.target.name, e.target.value);
-        this.props.getData();
-    }
     
 
 
@@ -59,9 +46,6 @@ class createRubric extends Component{
         
 
 
-    
-        this.props.setCriteria(e.target.name, e.target.value);
-        this.props.getCriteria();
     }
    
    
@@ -210,97 +194,10 @@ class createRubric extends Component{
         />
       </div>;
 
-        
-        
-               
 
-       
            
        }
-       if(criteria && data){
-          var column;
-          var i = 0;
-        if(criteria[0][0].weight >= 0){
-            weight = true;
-            
-            row = criteria.map((singleValue, count) => (
-                <tr key ={count} className="borderedCell" style = {{padding: "0"}}>
-                    <FormControl 
-                                as = "textarea"
-                                aria-label="With textarea"
-                                name={singleValue[0].Row_Id}
-                                onChange = {this.onChangeCriteria.bind(this)}
-                                value={singleValue[0].criteria}
-                                style={{width: "100%"}}
-                                className="measureTitle centerAlign cells"/>
-                                
-               
-           {data[count].map((value, index) => (
-
-               
-                <td key ={index} className="borderedCell" style = {{padding: "0"}}>
-                    <FormControl 
-                                as = "textarea"
-                                aria-label="With textarea"
-                                name={value.Row_Id}
-                                onChange= {this.onChangeData.bind(this)}
-                                value={value.description}
-                                style={{width: "100%"}}
-                                className="measureTitle centerAlign cells"/></td>
-                                ))}
-
-       
-
-            {
-                <FormControl 
-                as = "textarea"
-                aria-label="With textarea"
-                name={singleValue[0].Row_Id}
-                onChange = {this.onChangeCriteria.bind(this)}
-                value={singleValue.weight}
-                style={{width: "100%"}}
-                className="measureTitle centerAlign cells"/>
-            }
-
-           
-
-                    </tr>
-                    
-            ));
-        }
-        else{
-            weight = false
-
-            row = criteria.map((singleValue, count) => (
-                <tr key ={count} className="borderedCell" style = {{padding: "0"}}>
-                    <FormControl 
-                                as = "textarea"
-                                aria-label="With textarea"
-                                name={singleValue[0].Row_Id}
-                                onChange = {this.onChangeCriteria.bind(this)}
-                                value={singleValue[0].criteria}
-                                style={{width: "100%"}}
-                                className="measureTitle centerAlign cells"/>
-                                
-               
-           {data[count].map((value, index) => (
-
-               
-                <td key ={index} className="borderedCell" style = {{padding: "0"}}>
-                    <FormControl 
-                                as = "textarea"
-                                aria-label="With textarea"
-                                name={value.Row_Id}
-                                onChange = {this.onChangeData.bind(this)}
-                                value={value.description}
-                                style={{width: "100%"}}
-                                className="measureTitle centerAlign cells"/></td>
-                                ))}
-                   </tr>
-                    
-            ));
-        }
-    }
+      
        
         
        

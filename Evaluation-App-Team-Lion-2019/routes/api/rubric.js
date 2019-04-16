@@ -191,25 +191,6 @@ router.get("/getRubric/:title", (req, res)=>{
         connection.query("Select d.Rubric_Id, d.Row_Id,d.Data, d.index, c.Criteria_Title from `data` as d NATURAL JOIN `criteria` as c where d.Rubric_Id = ? ORDER BY `Row_Id` ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
 
-    connection.query("Select Row_Id, Criteria_Title, Weight from rubric_criteria where Rubric_Title = ? Order By Row_Id ASC",rubricTitle, function(err, result, fields){
-        if (err) throw err;
-        else{
-            if(weight == 1){
-            for(var j = 0; j<result.length;j++){
-                criteria[j]= [{
-                    Row_Id: `${result[j].Row_Id}`,
-                    criteria: `${result[j]. Criteria_Title}`,
-                    weight: `${result[j].Weight}`
-                }]
-            }
-            }
-            else{
-                for(var j = 0; j<result.length;j++){
-                    criteria[j]= [{
-                        Row_Id: `${result[j].Row_Id}`,
-                        criteria: `${result[j]. Criteria_Title}`
-                        
-                    }]
             var r = [];
             
             for(var i = 0 ; i<row; i++){
@@ -242,50 +223,6 @@ router.get("/getRubric/:title", (req, res)=>{
 })
 
 
-router.get("/getTopRow/:title",  (req,res) =>{
-    rubricTitle = req.params.title;
-   
-    
-    var TopRow = [];
-    
-    var scales = 0;
-    connection.query("Select scores from rubric where Rubric_Title=\'" + rubricTitle + "\'", function(err, result, fields){
-        if (err) throw err;
-
-        else{
-            scales = result[0].scores;
-        }
-        
-    
-    
-        connection.query("Select Row_Id, Value_Number, Value_Name from rubric_criteria_scale where Rubric_Title = ? and Criteria_Title = ? Order By Row_Id ASC", [rubricTitle, "criteria0"], function(err, result, fields){
-            if (err) throw err;
-            else{
-                for(var i = 0; i<scales; i++){
-                    TopRow[i]= {
-                        Row_Id: `${result[i].Row_Id}`,
-                        value: `${result[i].Value_Number}`,
-                        name: `${result[i].Value_Name}`
-                    }
-                }
-            }
-            res.json(TopRow);
-        })
-    })
-})
-
-
-router.post("/setTopRow/:handle", passport.authenticate("jwt" , {session: false}), (req, res)=>{
-
-   
-    connection.query("Update rubric_criteria_scale set Value_Name = ? where Row_Id = ?", [req.body.value, req.body.row], function(err, result, fields){
-        if (err) throw err;
-        else{
-           res.send("good"); 
-        }
-    
-})
-})
 
 router.put("/updateRubric/", (req, res) =>{
     var id = req.body.Rubric_Id;

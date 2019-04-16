@@ -1,7 +1,9 @@
-import { VIEW_COORDINATOR } from '../actions/types';
+import { VIEW_COORDINATOR, DELETED_COORDINATOR } from '../actions/types';
+
 
 const intialState = {
-    coordinators: null
+    coordinators: null,
+    deleted: null
 }
 
 
@@ -11,6 +13,11 @@ export default function(state = intialState, action){
             return{
                 ...state,
                 coordinators: action.payload
+            }
+        case DELETED_COORDINATOR:
+            return{
+                ...state,
+                deleted: action.payload
             }
         default:
             return state;

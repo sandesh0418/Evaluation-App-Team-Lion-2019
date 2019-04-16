@@ -35,65 +35,6 @@ export const updateRubric = (obj) => dispatch => {
                 })
             })
 
-}
-
-export const setTopRow = (id, description) => dispatch => {
-   
-    Axios.post(`http://localhost:5000/rubric/setTopRow/${localStorage.title}`, {
-        row: id,
-        value: description
-    })
-        .then(res =>{
-            
-            
-        })
-        
-        .catch(err =>{
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.data
-            })
-        })
-}
-
-
-export const setCriteria = (id, description) => dispatch => {
-   
-    Axios.post(`http://localhost:5000/rubric/setCriteria/${localStorage.title}`, {
-        row: id,
-        value: description
-    })
-        .then(res =>{
-            
-           
-        })
-        .catch(err =>{
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.data
-            })
-        })
-
-   
-}
-
-export const setData = (id, description, criteria) => dispatch => {
-   
-    Axios.post(`http://localhost:5000/rubric/setData/${localStorage.title}`, {
-        row: id,
-        value: description
-    })
-        .then(res =>{
-            
-           
-        })
-        .catch(err =>{
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.data
-            })
-        })
-}
                 
                 
 }
