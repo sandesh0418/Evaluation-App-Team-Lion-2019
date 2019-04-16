@@ -18,14 +18,12 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
       main();
 
     async function main(){
-        let account = await nodemailer.createTestAccount();
+        
         let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, 
+            service: 'gmail', 
             auth: {
-              user: account.user, 
-              pass: account.pass 
+              user: "", 
+              pass: "" 
             }
           });
           let mailOptions = {
@@ -52,7 +50,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
 router.get('/evaluatorList', (req, res) => {
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users where role = 'Evaluator'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 

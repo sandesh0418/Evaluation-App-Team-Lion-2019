@@ -7,7 +7,7 @@ import { GET_ERRORS, SET_CURRENT_USER} from "./types";
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post("http://localhost:5000/api/users/register", userData)
+    .post("/users/register", userData)
     .then(res => history.push("/login"))
     .catch(err =>
       dispatch({
@@ -19,7 +19,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 //Update user info
 export const updateUser = (userData, history) => dispatch => {
-  axios.post("http://localhost:5000/api/users/update", userData)
+  axios.post("/users/update", userData)
   .then(res => history.push("/update"))
   .catch(err =>
     dispatch({
@@ -32,7 +32,7 @@ export const updateUser = (userData, history) => dispatch => {
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
-    .post("http://localhost:5000/api/users/login", userData)
+    .post("/users/login", userData)
     .then(res => {
       // Save to localStorage
 
@@ -42,7 +42,7 @@ export const loginUser = userData => dispatch => {
       // Set token to Auth header
       setAuthToken(token);
       localStorage.setItem("role", res.data.role);
-      localStorage.setItem("email", userData.email);
+      localStorage.setItem("dept_Id", res.data.department);
       localStorage.setItem("name", res.data.name);
       //localStorage.setItem("role", res.data.role);
       // Decode token to get user data

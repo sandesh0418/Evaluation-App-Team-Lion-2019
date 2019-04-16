@@ -9,7 +9,7 @@ class Cycle extends Component {
     constructor(props){
         super(props);
         this.state ={
-            startDate : new Date(),
+            startDate : '',
             
             cycleName : ''
         }
@@ -49,8 +49,9 @@ class Cycle extends Component {
                 <label> Cycle name</label>
                 <input onChange={this.onChange.bind(this)}
                         value ={this.state.startDate}
-                        type = "date"
+                        type = "text"
                         name="startDate"
+                        placeholder="Please enter a start date"
                         
 
                 />

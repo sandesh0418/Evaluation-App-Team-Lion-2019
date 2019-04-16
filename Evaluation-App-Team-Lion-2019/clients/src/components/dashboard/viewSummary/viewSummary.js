@@ -45,11 +45,11 @@ function Measures(props)
     return props.measures.map(function(currentMeasure, i){
         return (
             <div key={i}>
-                <p>
+                <a href={"/measureReport" /* + currentMeasure.Measure_ID*/}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
-                </p>
+                </a>
                 {currentMeasure.Description ? <p className="ml-3">{"Additional description: " + currentMeasure.Description}</p> : null}
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
                 <hr/>
@@ -124,7 +124,7 @@ export default class ViewSummary extends Component
 
     getSummaryWithStatistics()
     {
-        axios.get('http://localhost:5000/summaryReport/measureStatistics')
+        axios.get('/summaryReport/measureStatistics')
             .then(res => {
                 //console.log(res.data);
                 this.setState({
@@ -135,7 +135,7 @@ export default class ViewSummary extends Component
 
     getSummary()
     {
-        axios.get('http://localhost:5000/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary')
             .then(res => {
                 //console.log(res.data);
                 this.setState({

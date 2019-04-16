@@ -1,18 +1,19 @@
 import Axios from 'axios';
 
-import { GET_CRITERIA, GET_TOP_ROW, GET_DATA, SET_TOP_ROW, GET_ERRORS, LOADING} from './types';
+import { GET_RUBRIC, SET_RUBRIC, LOADING} from './types';
 
-export const getCriteria = () => dispatch => {
-    Axios.get(`http://localhost:5000/rubric/getCriteria/${localStorage.title}`)
+export const getRubric = (title, obj) => dispatch => {
+    
+    Axios.get(`/rubric/getRubric/${title+" "+obj}`)
             .then(res => {
                 dispatch({
-                    type: GET_CRITERIA,
+                    type: GET_RUBRIC,
                     payload: res.data
                 })
             })
             .catch(err =>{
                 dispatch({
-                    type: GET_CRITERIA,
+                    type: GET_RUBRIC,
                     payload: err
                 })
             })
@@ -22,36 +23,14 @@ export const getCriteria = () => dispatch => {
 }
 
 
-export const getTopRow = () => dispatch =>{
-    Axios.get(`http://localhost:5000/rubric/getTopRow/${localStorage.title}`)
-        .then(res => {
-            dispatch({
-                type: GET_TOP_ROW,
-                payload: res.data
-            })
-        })
-        .catch(err =>{
-            dispatch({
-                type: GET_TOP_ROW,
-                payload: err
-            })
-        })
-
-
-}
-
-
-export const getData = () => dispatch => {
-    Axios.get(`http://localhost:5000/rubric/getRow/${localStorage.title}`)
+export const updateRubric = (obj) => dispatch => {
+    Axios.put(`/rubric/updateRubric/`, obj)
             .then(res => {
-                dispatch({
-                    type: GET_DATA,
-                    payload: res.data
-                })
+               
             })
             .catch(err =>{
                 dispatch({
-                    type: GET_DATA,
+                    type: GET_RUBRIC,
                     payload: err
                 })
             })
@@ -115,3 +94,8 @@ export const setData = (id, description, criteria) => dispatch => {
             })
         })
 }
+                
+                
+}
+
+

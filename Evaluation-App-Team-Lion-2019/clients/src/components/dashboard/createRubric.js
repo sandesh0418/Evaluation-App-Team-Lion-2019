@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCriteria, getTopRow, getData, setTopRow, setCriteria, setData} from '../../actions/rubric';
+import { getRubric, updateRubric} from '../../actions/rubric';
 import { Table, FormControl } from 'react-bootstrap';
+import { ClipLoader } from 'react-spinners';
+import '../../stylesheets/rubric.css';
 
 class createRubric extends Component{
 
     constructor(props) {
         super();
-
         this.state = {
-            value: props.value,
-            
-        };
+            saveRubric: []
+        }
+
+        
     }
     componentDidMount(){
-        this.props.getCriteria();
-        this.props.getData();
-        this.props.getTopRow();
+       
+        
+        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
         
       }
     
@@ -41,13 +43,27 @@ class createRubric extends Component{
         this.props.setData(e.target.name, e.target.value);
         this.props.getData();
     }
+    
 
-   onChangeCriteria(e){
+
+    onChange(e){
+        const obj = {
+            Row: e.target.id,
+            Rubric_Id: e.target.name,
+            value: e.target.value
+        }
+        
+        this.props.updateRubric(obj);
+       
+        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
+        
+
 
     
         this.props.setCriteria(e.target.name, e.target.value);
         this.props.getCriteria();
     }
+   
    
     
    
@@ -56,32 +72,143 @@ class createRubric extends Component{
         var weight = false;
         var display = "";
         var row = "";
+        var weight = 0;
+        var load = '';
         
-        let { topRow, criteria, data} = this.props.rubric;
-
-       
-
-       if(topRow){
+        let { rubric } = this.props.rubric;
         
-        display= topRow.map(singleValue => (
-                <th key ={singleValue.Row_Id} className="borderedCell" style = {{padding: "0"}}>
+
+       if(rubric){
+           
+        
+            
+                display = rubric[0].map((singleValue, index) => (
+                    <th key ={index} className="borderedCell" style = {{padding: "0", textAlign: "center"}} >
                     <FormControl 
                                 as = "textarea"
-                                aria-label="With textarea"
-                                name={singleValue.Row_Id}
-                                onChange= {this.onChangeTopRow.bind(this)}
-                                value={singleValue.name}
-                                style={{width: "100%"}}
-                                className="measureTitle centerAlign cells"/></th>
-                                ))
+                                aria-label ="With textarea"
+                                name = {singleValue.Rubric_Id}
+                                onChange={this.onChange.bind(this)}
+                                defaultValue={singleValue.Value_Name}
+                                id={"scale"+ " " +singleValue.Value_Number}
+                                className="measureTitle centerAlign cells"
+                                style = {{width : "100%"}}/>
+                            Value- {singleValue.Value_Number}
+                    </th>
+                ))
+            
+            
 
-      
 
+      console.log(rubric[1][0][0].weight)
+        if(rubric[1][0][0].weight === undefined){
+        row = rubric[1].map((single, index) => (
+            
+            <tr key ={index} className="borderedCell" style = {{padding: "0", textAlign: "center"}} >
+                <td key = {index}>
+                        <FormControl 
+                                as = "textarea"
+                                aria-label ="With textarea"
+                                name = {single[0].Rubric_Id}
+                                onChange={this.onChange.bind(this)}
+                                defaultValue={single[0].Criteria_Title}
+                                id={"criteria"+" "+single[0].Row_Id}
+                                className="measureTitle centerAlign cells"
+                                style = {{width : "100%"}}/>
+                               
+                        
+                    </td>
+
+                    {
+                        single.map((value, i ) =>(
+                            <td key ={i}>
+                            <FormControl 
+                                        as = "textarea"
+                                        aria-label ="With textarea"
+                                        name = {single[0].Rubric_Id}
+                                        onChange={this.onChange.bind(this)}
+                                        defaultValue={value.Data}
+                                        id={"data"+" "+value.Row_Id+" "+value.index}
+                                        className="measureTitle centerAlign cells"
+                                        style = {{width : "100%"}}/>
+                                
+                            </td>
+                        ))
+                    }
+                
+                
+            </tr>
+            
+        ))
        }
+    
+        else{
+            weight = 1;
+            row = rubric[1].map((single, index) => (
+            
+                <tr key ={index} className="borderedCell" style = {{padding: "0", textAlign: "center"}} >
+                    <td key = {index}>
+                            <FormControl 
+                                    as = "textarea"
+                                    aria-label ="With textarea"
+                                    name = {single[0].Rubric_Id}
+                                    onChange={this.onChange.bind(this)}
+                                    defaultValue={single[0].Criteria_Title}
+                                    id={"criteria"+" "+single[0].Row_Id}
+                                    className="measureTitle centerAlign cells"
+                                    style = {{width : "100%"}}/>
+                                   
+                            
+                        </td>
+    
+                        {
+                            single.map((value, i ) =>(
+                                <td key ={i}>
+                                <FormControl 
+                                            as = "textarea"
+                                            aria-label ="With textarea"
+                                            name = {single[0].Rubric_Id}
+                                            onChange={this.onChange.bind(this)}
+                                            defaultValue={value.Data}
+                                            id={"data"+" "+value.Row_Id+" "+value.index}
+                                            className="measureTitle centerAlign cells"
+                                            style = {{width : "100%"}}/>
+                                    
+                                </td>
+                            ))
+                        }
 
+                        {<td key = {single[0].Row_Id}>
+                            <FormControl 
+                                    as = "textarea"
+                                    aria-label ="With textarea"
+                                    name = {single[0].Rubric_Id}
+                                    onChange={this.onChange.bind(this)}
+                                    defaultValue={single[0].weight}
+                                    id={"weight"+" "+single[0].Row_Id}
+                                    className="measureTitle centerAlign cells"
+                                    style = {{width : "100%"}}/>
+                                   
+                            
+                        </td>
+                        }                       
+                    
+                </tr>
+                
+            ))
+        }
+    }
        else{
           
-        console.log("Loading");  
+        load = <div className='sweet-loading'>
+        <ClipLoader
+         
+          sizeUnit={"px"}
+          size={150}
+          color={'#123abc'}
+          
+        />
+      </div>;
 
         
         
@@ -180,11 +307,13 @@ class createRubric extends Component{
         return(
            
            
-           
+           <>
+            
             <Table bordered striped>
             <thead>
                 <tr>
                     <th className="centered borderedCell">Criteria</th>
+                    {load}
             {display}
             { weight ? <th className="centered borderedCell">Weight</th> : "" }
            
@@ -196,19 +325,15 @@ class createRubric extends Component{
                 
             </tbody>
             </Table>
-            
+            </>
         );
     }
 }
 
 createRubric.propTypes = {
-    getCriteria: PropTypes.func.isRequired,
-    getData: PropTypes.func.isRequired,
-    getTopRow: PropTypes.func.isRequired,
-    rubric: PropTypes.object.isRequired,
-    setTopRow: PropTypes.func.isRequired,
-    setCriteria: PropTypes.func.isRequired,
-    setData: PropTypes.func.isRequired
+    getRubric: PropTypes.func.isRequired,
+    updateRubric: PropTypes.func.isRequired,
+    rubric: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -216,4 +341,4 @@ const mapStateToProps = state => ({
         rubric: state.rubric
 })
 
-export default connect (mapStateToProps, { getCriteria, getData, getTopRow, setTopRow, setCriteria,setData})(createRubric);
+export default connect (mapStateToProps, { getRubric, updateRubric })(createRubric);

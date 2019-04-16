@@ -34,7 +34,7 @@ export default class RubricList extends Component
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/assignments/myAssignments/' + localStorage.getItem("email"))
+        axios.get('/assignments/myAssignments/' + localStorage.getItem("email"))
             .then(res => {
                 this.setState({
                     assignments: res.data.assignments

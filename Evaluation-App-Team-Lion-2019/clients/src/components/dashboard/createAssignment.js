@@ -2,26 +2,8 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 //dummy data
-var out1mea1 = {
-    Measure_ID: 1,
-    Description: ''
-}
-
-var out1 = {
-    Outcome_ID: 1,
-    Description: '',
-    measures: [out1mea1]
-}
-
-var dummyOutcomeList = [out1];
-
-var eval3 = {
-    email: '',
-    firstName: '',
-    lastName: ''
-}
-
-var evalList = [eval3];
+var dummyOutcomeList = [{ Outcome_ID: 1, Description: '', measures: [{ Measure_ID: 1, Description: ''}]}];
+var evalList = [{ email: '', firstName: '', lastName: ''}];
 
 function SelectOutcome(props)
 {
@@ -44,6 +26,49 @@ function SelectEvaluator(props)
     })
 }
 
+function ManualStudentEntry(props)
+{
+    return props.formData.map((d, index) => {
+        return (
+            <div key={index} className="row">
+                <div className="col-5">
+                    <span>Full Name:</span>
+                    <input 
+                        className="form-control" 
+                        id={index}
+                        name="subjectName" 
+                        value={props.formData[index].subjectName}
+                        onChange={props.onChange} 
+                        type="text" 
+                    />
+                </div>
+                <div className="col-5">
+                    <span>Unique Identifier:</span>
+                    <input 
+                        className="form-control" 
+                        id={index}
+                        name="subjectId" 
+                        value={props.formData[index].subjectId}
+                        onChange={props.onChange} 
+                        type="text" 
+                    />
+                </div>
+            </div>
+        )
+    })
+}
+
+function manualStudentEntryToString(list)
+{
+    let studentList = "";
+
+    list.forEach(i => {
+        studentList += i.subjectName + "," + i.subjectId + "\n";
+    })
+
+    return studentList;
+}
+
 export default class CreateAssignment extends Component
 {
     constructor(props)
@@ -51,7 +76,9 @@ export default class CreateAssignment extends Component
         super(props);
         this.handleSelectOutcome = this.handleSelectOutcome.bind(this);
         this.handleSelectMeasure = this.handleSelectMeasure.bind(this);
-        this.handleSelectEvaluator = this.handleSelectEvaluator.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.updateManualStudentEntry = this.updateManualStudentEntry.bind(this);
+        this.addStudent = this.addStudent.bind(this);
         this.changeFile = this.changeFile.bind(this);
         this.fileInput = React.createRef();
         this.onSubmit = this.onSubmit.bind(this);
@@ -61,23 +88,23 @@ export default class CreateAssignment extends Component
             selectedOutcomeIndex: 0,
             selectedMeasure: undefined,
             selectedEvaluator: '',
-            showFileAlert: false
+            showFileAlert: false,
+            manualStudentEntry: []
         }
     }
 
     componentDidMount()
     {
-        axios.get('http://localhost:5000/assignments/outcomesAndMeasures')
+        axios.get('/assignments/outcomesAndMeasures')
             .then(res => {
-                console.log(res.data.outcomeList);
                 this.setState({
                     outcomeList: res.data.outcomeList,
-                    selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
+                    selectedMeasure: res.data.outcomeList[0].measures[0].Measure_ID,
                 })
+                console.log(this.state);
             })
-        axios.get('http://localhost:5000/evaluators/evaluatorList')
+        axios.get('/evaluators/evaluatorList')
         .then(res => {
-            console.log(res.data);
             this.setState({
                 evaluatorList: res.data.evaluatorList,
                 selectedOutcomeIndex: 0,
@@ -101,10 +128,10 @@ export default class CreateAssignment extends Component
         })
     }
 
-    handleSelectEvaluator(e)
+    handleInputChange(e)
     {
         this.setState({
-            selectedEvaluator: e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
@@ -124,8 +151,41 @@ export default class CreateAssignment extends Component
         }
     }
 
+    updateManualStudentEntry(e)
+    {
+        let index = e.target.id;
+        let tempManualEntry = this.state.manualStudentEntry;
+
+        if(e.target.name === "subjectName")
+        {
+            tempManualEntry[index].subjectName = e.target.value
+        }
+        else if (e.target.name === "subjectId")
+        {
+            tempManualEntry[index].subjectId = e.target.value
+        }
+
+        this.setState({
+            manualStudentEntry: tempManualEntry
+        })
+    }
+
+    addStudent(e)
+    {
+        let tempManualEntry = this.state.manualStudentEntry;
+        tempManualEntry.push({
+            subjectName: '',
+            subjectId: ''
+        })
+
+        this.setState({
+            manualStudentEntry: tempManualEntry
+        })
+    }
+
     onSubmit(e)
     {
+        console.log("Entered on submit");
         e.preventDefault();
 
         if (this.fileInput.current.files[0])
@@ -135,7 +195,7 @@ export default class CreateAssignment extends Component
                 let assignment = {
                     Measure_ID: this.state.selectedMeasure,
                     User_Email: this.state.selectedEvaluator,
-                    studentList: fileReader.result
+                    studentList: fileReader.result + "\n" + manualStudentEntryToString(this.state.manualStudentEntry)
                 }
                 
                 axios.post('http://localhost:5000/assignments/createAssignment', assignment)
@@ -154,7 +214,23 @@ export default class CreateAssignment extends Component
         }
         else
         {
-            console.log("No file");
+            let assignment = {
+                Measure_ID: this.state.selectedMeasure,
+                User_Email: this.state.selectedEvaluator,
+                studentList: "Name,ID\n" + manualStudentEntryToString(this.state.manualStudentEntry)
+            }
+
+            axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+                .then(res =>  {
+                    if (res.data.status)
+                    {
+                        alert(res.data.message);
+                        this.setState({
+                            selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
+                            selectedEvaluator: this.state.evaluatorList[0].email
+                        })
+                    }
+                });
         }
     }
 
@@ -179,15 +255,22 @@ export default class CreateAssignment extends Component
                 </div>
                 <div className="form-group">
                     <label>Select Evaluator: </label>
-                    <select className="form-control" value={this.state.selectedEvaluator}
-                            onChange={this.handleSelectEvaluator} onClick={this.handleSelectEvaluator}>
+                    <select className="form-control" value={this.state.selectedEvaluator} name="selectedEvaluator"
+                            onChange={this.handleInputChange} onClick={this.handleInputChange}>
                         <SelectEvaluator evaluatorList={this.state.evaluatorList} />
                     </select>
                 </div>
                 <div className="form-group">
-                    <label>Select List of Subjects as .csv file: </label>
+                    <label>Upload list of subjects as .csv file: </label>
                     <input type="file" className="form-control-file" ref={this.fileInput} onChange={this.changeFile} />
                     {this.state.showFileAlert ? <p className="text-danger">Invalid File</p>: null}
+                </div>
+                <div className="form-group">
+                    <ManualStudentEntry formData={this.state.manualStudentEntry} onChange={this.updateManualStudentEntry} />
+                </div>
+                <div>
+                    <button className="btn btn-secondary mb-4" type="button" 
+                    onClick={this.addStudent}>Add Student Manually</button>
                 </div>
                 <input type="submit" value="submit" className="btn btn-primary" onClick={this.onSubmit} />
             </form>
