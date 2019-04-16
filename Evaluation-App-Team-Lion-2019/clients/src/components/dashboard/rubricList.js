@@ -6,14 +6,14 @@ import axios from "axios";
 function ListDisplay(props)
 {
     const list = props.rubrics;
-    const listItems = list.map((number)=>
-    <li><Link to ={"/viewRubric/"+number.Rubric_Title}>{number.Rubric_Title}</Link></li>
+
+    const listItems = list.map((number) =>
+        <li><Link to ={"/viewRubric/"+number.Rubric_Title}>{number.Rubric_Title}</Link></li>
     );
+
     return (
         <ol>{listItems}</ol>
     )
-
-
 }
 
 
@@ -34,7 +34,6 @@ export default class RubricList extends Component
                 this.setState({
                     rubrics: res.data.rubrics
                 })
-                
             })
     }
 

@@ -16,6 +16,7 @@ router.post("/createRubric",  (req,res) =>{
    
     let { errors, isValid} = validateRubric(req.body);
   
+    var cycle = "";
 
     
     if(!isValid){
@@ -27,7 +28,10 @@ router.post("/createRubric",  (req,res) =>{
         let title = req.body.Rubric_Title;
         let weight;
         let rubric_Id = uniqid();
-        let dept_Id = req.body.dept_Id;
+        let Cycle_Id = req.body.Cycle_Id;
+        cycle ={
+            Rubric_Id: rubric_Id
+        }
         if(req.body.weight){
             weight = 1;
         }
@@ -36,7 +40,7 @@ router.post("/createRubric",  (req,res) =>{
         }
         
 
-        connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`dept_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, dept_Id], function(err, result, fields){
+        connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`Cycle_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, Cycle_Id], function(err, result, fields){
             if (err) throw err;
 
             else{
@@ -101,6 +105,8 @@ router.post("/createRubric",  (req,res) =>{
                 
                     breakPoint = j;
                 }
+              
+                return res.send(cycle);
 
             }
 
@@ -108,7 +114,7 @@ router.post("/createRubric",  (req,res) =>{
 
 
 
-    return res.send(isValid);
+   
     }
 
 
@@ -120,25 +126,28 @@ router.post("/createRubric",  (req,res) =>{
 
 router.get("/getRubric/:title", (req, res)=>{
 
-    var title = req.params.title.split(" ");
-    var rubricTitle = title[0];
-    var dept_Id = title[1];
+    
+    var Rubric_Id = req.params.title
+   
+    
+    
+    
+    
     
     
     var topRow = [];
     var Rubric =[];
-    let Rubric_Id;
+    
     var score = 0;
     var row = 0;
     var weight = 0;
-    connection.query("SELECT `Rubric_Id`, `scores`,`weight`,`Rows` from `rubric` where `Rubric_Title` = ? and `dept_Id` = ?", [rubricTitle, dept_Id], function(err, result, fields){
+    connection.query("SELECT `scores`,`weight`,`Rows` from `rubric` where `Rubric_Id` = ?", Rubric_Id, function(err, result, fields){
         if (err) throw err;
 
         if(result.length > 0){
             score = result[0].scores;
             row = result[0].Rows;
-            Rubric_Id = result[0].Rubric_Id;  
-            weight = result[0].weight;  
+             weight = result[0].weight;  
         }
        
          
@@ -156,22 +165,25 @@ router.get("/getRubric/:title", (req, res)=>{
         }
 
         Rubric[0] = topRow;
-        
+        console.log(row + score)
        if((Number) (weight) === 1){
-        connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY `Row_Id` ASC", Rubric_Id, function(err, result, field){
+        connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY data.Row_Id ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
 
             var r = [];
-            
-            for(var i = 0 ; i<row; i++){
+            let count = 0;
+            for(var i = 0; i<row; i++){
                 
                 let column = [];
-                let count = 0;
-                for(var j = i; j< score+i; j++){
-                    column[count] = result[i+j];
+                
+                for(var j = 0; j< score; j++){
+                    column[j] = result[count];
                     count++;
                 }
+                
                 r[i] = column;
+
+                 console.log(column)
                 
                 
 
@@ -192,18 +204,19 @@ router.get("/getRubric/:title", (req, res)=>{
             if (err) throw err;
 
             var r = [];
-            
+            let count = 0;
             for(var i = 0 ; i<row; i++){
                 
                 let column = [];
-                let count = 0;
-                for(var j = i; j< score+i; j++){
-                    column[count] = result[i+j];
-                    count++;
+                
+                for(var j = 0; j< score; j++){
+                    column[j] = result[i+count];
+                    
                 }
+                count+=score;
                 r[i] = column;
                 
-                
+                console.log(column)
 
                  
             }
@@ -212,7 +225,7 @@ router.get("/getRubric/:title", (req, res)=>{
         
 
 
-
+           
         res.json(Rubric);
     
     })
@@ -296,91 +309,67 @@ else{
 })
 
 
+router.get('/getViewRubric/:title', (req, res) => {
+    let rubricTitle = req.params.title;
+    console.log(rubricTitle);
 
+    let rubric = {
+        rubric_title: rubricTitle,
+        criteria: []
+    }
 
-// router.get('/getRubric/:id', (req, res) => {
-//     let rubricTitle = req.params.id;
+    let queryGetRubric = "" +
+        "SELECT r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
+        "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
+            "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
+        "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
 
-//     let rubric = {
-//         rubric_title: rubricTitle,
-//         criteria: []
-//     }
+    connection.query(queryGetRubric, function(error, results, fields) {
+        if (error || results.length < 1) 
+        {
+            res.status(404).json({
+                status:false,
+                error: error,
+                message:'This rubric could not be retrieved.'
+            })
+        }
+        else
+        {
+            results = Object.values(JSON.parse(JSON.stringify(results)));
+            
+            rubric.rubric_title = results[0].Rubric_Title;
 
-//     getCriteria();
+            results.forEach(r => {
+                index = rubric.criteria.findIndex(c => c.criteria_title === r.Criteria_Title);
 
-//     function getCriteria()
-//     {
-//         let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
+                let newDescription = {
+                    value_number: r.Value_Number,
+                    value_name: r.Value_Name,
+                    value_description: r.data
+                }
 
-//         connection.query(queryGetCriteriaTitles, function(error, results, fields) {
-//             if (error) 
-//             {
-//                 res.status(404).json({
-//                 status:false,
-//                 error: error,
-//                 message:'The criteria for this rubric could not be retrieved.'
-//                 })
-//             }
-//             else
-//             {
-//                 let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
-//                 criteriaTitles.forEach((title) => {
-//                     let tempCriteriaObj = {
-//                         criteria_title: title.Criteria_Title,
-//                         descriptions: []
-//                     }
+                if (index === -1)
+                {
+                    let newCrit = {
+                        criteria_title: r.Criteria_Title,
+                        descriptions: [newDescription]
+                    }
+                    rubric.criteria.push(newCrit);
+                }
+                else
+                {
+                    rubric.criteria[index].descriptions.push(newDescription);
+                }
+            })
+            
+            res.status(200).json({
+                status: true,
+                rubric: rubric
+            })
+        }
+    })
 
-//                     rubric.criteria.push(tempCriteriaObj);
-//                 })
-
-//                 getCriteriaDescriptions();
-//             }
-//         })
-//     }
-
-//     function getCriteriaDescriptions() 
-//     {
-//         for (let i = 0; i < rubric.criteria.length; i++) 
-//         {
-//             let queryCriteriaScale = "SELECT Value_Number, Value_Name, Value_Description FROM rubric_criteria_scale WHERE Rubric_Title=\'" +
-//                                         rubricTitle + "\' AND Criteria_Title=\'" + rubric.criteria[i].criteria_title + "\'";
-
-//             connection.query(queryCriteriaScale, function(error, results, fields) {
-//                 if (error) 
-//                 {
-//                     res.status(404).json({
-//                     status:false,
-//                     error: error,
-//                     message:'The criteria for this rubric could not be retrieved.'
-//                     })
-//                 }
-//                 else
-//                 {
-//                     let descriptions = Object.values(JSON.parse(JSON.stringify(results)));
-        
-//                     descriptions.forEach((description) => {
-//                         tempDescription = {
-//                             value_number: description.Value_Number,
-//                             value_name: description.Value_Name,
-//                             value_description: description.Value_Description
-//                         }
-
-//                         rubric.criteria[i].descriptions.push(tempDescription);
-//                     })
-
-//                     //Send the data if we have traversed all criteria.  If we have time we should refactor this to work naturally with async.
-//                     if (i == rubric.criteria.length - 1)
-//                     {
-//                         res.json({
-//                             rubric: rubric
-//                         })
-//                     }
-//                 }
-//             })
-//         }
-
-//     }
-// })
+})
 
 //Path /rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {

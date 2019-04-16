@@ -46,8 +46,8 @@ class NavAdmin extends Component
                     </NavDropdown>
                     <Nav.Link href="/dashboard">Past Assesments</Nav.Link>
                     <NavDropdown title="Cycle">
-                        <NavDropdown.Item href="/cycle">Start Cycle</NavDropdown.Item>
-                        <NavDropdown.Item href="/endCycle">End Cycle</NavDropdown.Item>
+                        <NavDropdown.Item href="/cycle">Start a new Cycle</NavDropdown.Item>
+                        <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title={User()}>
                         <Nav.Link href="/editProfile">Edit Profile</Nav.Link>
