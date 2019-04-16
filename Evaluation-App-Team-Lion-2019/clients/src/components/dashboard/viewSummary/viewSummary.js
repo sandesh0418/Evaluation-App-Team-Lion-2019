@@ -24,9 +24,13 @@ var dummySummary = {
 
 const ProgramSummaryBody = props =>
 {
+    if(props.state.programSummary != undefined){
     return props.state.programSummary.outcomes.map(function(currentOutcome, i){
         return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
-    });
+    });}
+    else{
+        return null;
+    }
 }
 
 const Outcome = props => (
@@ -142,9 +146,14 @@ export default class ViewSummary extends Component
 
     render()
     {
+        var programSum= '';
+        if(this.state.programSummary){
+                programSum = this.state.programSummary.title;
+        }
         return (
             <div>
-                <h1>{this.state.programSummary.title}</h1>
+                
+                <h1>{programSum}</h1>
             
                 <table className="table table-bordered">
                     <thead>

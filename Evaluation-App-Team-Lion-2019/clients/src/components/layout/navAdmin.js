@@ -22,10 +22,10 @@ class NavAdmin extends Component
     render()
     {
         return (
-            <>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
+            < >
+            <Navbar.Toggle aria-controls="basic-navbar-nav"  />
+            <Navbar.Collapse id="responsive-navbar-nav" >
+                <Nav className="ml-auto" >
                     <Nav.Link href="/dashboard">Home</Nav.Link>
                     <Nav.Link href="/viewSummary">View Summary</Nav.Link>
                     <NavDropdown title="Assignments">
@@ -43,8 +43,8 @@ class NavAdmin extends Component
                     <Nav.Link href="/summaryReport">Report</Nav.Link>
                     <Nav.Link href="/dashboard">Past Assesments</Nav.Link>
                     <NavDropdown title="Cycle">
-                        <NavDropdown.Item href="/viewSummary">Start Cycle</NavDropdown.Item>
-                        <NavDropdown.Item href="/viewSummary">End Cycle</NavDropdown.Item>
+                        <NavDropdown.Item href="/cycle">Start Cycle</NavDropdown.Item>
+                        <NavDropdown.Item href="/endCycle">End Cycle</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title={User()}>
                         <Nav.Link href="/editProfile">Edit Profile</Nav.Link>

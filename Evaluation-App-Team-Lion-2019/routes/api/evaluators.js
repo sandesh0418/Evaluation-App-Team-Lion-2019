@@ -1,8 +1,54 @@
 const express = require("express");
 const router = express.Router();
 var connection = require('../../models/User');
-
+var passport = require('passport');
+var connection = require('../../models/User')
+var validator = require('../../validation/evaluatorValidator');
+var nodemailer = require('nodemailer');
 //PATH: evaluators/evaluatorsList
+
+
+router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (req,res) =>{
+
+    const { errors , isValid } = validator(req.body);
+    
+    if (!isValid) {
+        return res.status(400).json(errors);
+      }
+      main();
+
+    async function main(){
+        let account = await nodemailer.createTestAccount();
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false, 
+            auth: {
+              user: account.user, 
+              pass: account.pass 
+            }
+          });
+          let mailOptions = {
+            from: `"Fred Foo 👻" <email@gmail.com>`, 
+            to: req.body.email, 
+            subject: "Invitation to register for Department Evaluation Application", 
+            text: "Hello "+req.body.firstName+"Follow the link to sign up: "+"www.google.com" 
+            
+          };
+          let info = await transporter.sendMail(mailOptions);
+          console.log("Message sent: %s", info.messageId);
+  
+          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        
+    }
+      
+    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`) VALUES(?,?,?)", [req.body.firstName, req.body.lastName, req.body.email], function(err, result){
+        if (err) throw err;
+        else{
+            res.send("Evaluator has been added");
+        }
+    })
+})
 router.get('/evaluatorList', (req, res) => {
     let evaluatorList;
 

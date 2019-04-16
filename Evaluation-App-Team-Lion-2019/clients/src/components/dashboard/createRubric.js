@@ -10,15 +10,18 @@ class createRubric extends Component{
         super();
 
         this.state = {
-            value: props.value
+            value: props.value,
+            
         };
     }
     componentDidMount(){
         this.props.getCriteria();
         this.props.getData();
         this.props.getTopRow();
-        this.timer = null;
+        
       }
+    
+     
 
  
     onSubmit(e){
@@ -26,23 +29,24 @@ class createRubric extends Component{
     }
 
    onChangeTopRow(e){
-       if(e.target.value != null){
+        
+      
         this.props.setTopRow(e.target.name, e.target.value);
-       }
+        this.props.getTopRow();
       
    }
       
    onChangeData(e){
-    if(e.target.value != null){
+    
         this.props.setData(e.target.name, e.target.value);
-    }
+        this.props.getData();
     }
 
    onChangeCriteria(e){
 
-    if(e.target.value != null){
+    
         this.props.setCriteria(e.target.name, e.target.value);
-    }
+        this.props.getCriteria();
     }
    
     
@@ -65,7 +69,7 @@ class createRubric extends Component{
                                 as = "textarea"
                                 aria-label="With textarea"
                                 name={singleValue.Row_Id}
-                                onChange = {this.onChangeTopRow.bind(this)}
+                                onChange= {this.onChangeTopRow.bind(this)}
                                 value={singleValue.name}
                                 style={{width: "100%"}}
                                 className="measureTitle centerAlign cells"/></th>
@@ -89,7 +93,6 @@ class createRubric extends Component{
        if(criteria && data){
           var column;
           var i = 0;
-          console.log(criteria);
         if(criteria[0][0].weight >= 0){
             weight = true;
             
@@ -113,7 +116,7 @@ class createRubric extends Component{
                                 as = "textarea"
                                 aria-label="With textarea"
                                 name={value.Row_Id}
-                                onChange = {this.onChangeData.bind(this)}
+                                onChange= {this.onChangeData.bind(this)}
                                 value={value.description}
                                 style={{width: "100%"}}
                                 className="measureTitle centerAlign cells"/></td>

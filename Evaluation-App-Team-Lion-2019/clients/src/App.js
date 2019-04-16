@@ -26,6 +26,8 @@ import ViewEvaluator from './components/dashboard/viewEvaluator';
 import AddEvaluator from './components/dashboard/addEvaluator';
 import EvaluateTest from './components/dashboard/evaluateTest';
 import EditProfile from './components/dashboard/editProfile';
+import Cycle from './components/dashboard/cycle';
+import EndCycle from './components/dashboard/endCycle';
 
 import "./App.css";
 
@@ -76,6 +78,8 @@ class App extends Component {
                 <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
                 <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
                 <PrivateRoute exact path="/editProfile" component={EditProfile} />
+                <PrivateRoute exact path="/cycle" component={Cycle} />
+                <PrivateRoute exact path="/endCycle" component={EndCycle} />
               </Switch>
             </div>
           </div>
