@@ -19,7 +19,7 @@ class createRubric extends Component{
     componentDidMount(){
        
         
-        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
+        this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"));
         
       }
     
@@ -39,10 +39,12 @@ class createRubric extends Component{
             Rubric_Id: e.target.name,
             value: e.target.value
         }
+
+        console.log(obj)
         
         this.props.updateRubric(obj);
        
-        this.props.getRubric(localStorage.getItem("title"), localStorage.getItem("dept_Id"));
+        this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"));
         
 
 
@@ -84,7 +86,7 @@ class createRubric extends Component{
             
 
 
-      console.log(rubric[1][0][0].weight)
+      
         if(rubric[1][0][0].weight === undefined){
         row = rubric[1].map((single, index) => (
             
@@ -162,7 +164,7 @@ class createRubric extends Component{
                             ))
                         }
 
-                        {<td key = {single[0].Row_Id}>
+                        {<td key = {index+1}>
                             <FormControl 
                                     as = "textarea"
                                     aria-label ="With textarea"
@@ -184,7 +186,7 @@ class createRubric extends Component{
     }
        else{
           
-        load = <div className='sweet-loading'>
+        load = <td className='sweet-loading'>
         <ClipLoader
          
           sizeUnit={"px"}
@@ -192,7 +194,7 @@ class createRubric extends Component{
           color={'#123abc'}
           
         />
-      </div>;
+      </td>;
 
         
         

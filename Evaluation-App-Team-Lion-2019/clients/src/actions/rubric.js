@@ -1,10 +1,10 @@
 import Axios from 'axios';
 
-import { GET_RUBRIC, SET_RUBRIC, LOADING} from './types';
+import { GET_RUBRIC, GET_ERRORS} from './types';
 
-export const getRubric = (title, obj) => dispatch => {
+export const getRubric = (title) => dispatch => {
     
-    Axios.get(`/rubric/getRubric/${title+" "+obj}`)
+    Axios.get(`/rubric/getRubric/${title}`)
             .then(res => {
                 dispatch({
                     type: GET_RUBRIC,
@@ -20,6 +20,20 @@ export const getRubric = (title, obj) => dispatch => {
 
                 
                 
+}
+
+export const createRubric = (obj) =>dispatch =>{
+    Axios.post('/rubric/createRubric', obj)
+        .then(res => {
+            
+            dispatch(getRubric(res.data.Rubric_Id))
+        })
+        .catch(err =>{
+            dispatch({
+                type: GET_ERRORS,
+                payload: err
+            })
+        })
 }
 
 

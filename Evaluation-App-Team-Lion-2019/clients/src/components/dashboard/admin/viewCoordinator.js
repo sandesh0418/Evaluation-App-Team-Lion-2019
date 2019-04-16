@@ -5,10 +5,7 @@ import { connect } from 'react-redux';
 
 
 class ViewCoordinator extends Component {
-    constructor(props){
-        super(props)
-    }
-
+   
     componentDidMount(){
         this.props.viewCoordinator();
     }
@@ -19,12 +16,12 @@ class ViewCoordinator extends Component {
         if(coordinators.coordinators != null){
             
             display = coordinators.coordinators.map((singleValue, index) =>(
-                <div class="row" key={index}>
-                <div class="col-sm-6" style={{margin: "auto"}}>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
-                      <p class="card-text">Email: {singleValue.email}</p>
+                <div className="row" key={index}>
+                <div className="col-sm-6" style={{margin: "auto"}}>
+                  <div className="card">
+                    <div className="card-body">
+                      <h5 className="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
+                      <p className="card-text">Email: {singleValue.email}</p>
                       
                     </div>
                   </div>

@@ -1,17 +1,25 @@
-import {GET_ALL_CYCLES} from '../actions/types';
+import {PREVIOUS_CYCLES, CYCLES_IN_PROGRESS} from '../actions/types';
 
 
 const initialState = {
-    cycles: null
+    
+    previousCycle: null,
+    inProgressCycles: null
 }
 
 
 export default function(state = initialState, action){
     switch(action.type){
-        case GET_ALL_CYCLES:
+        
+        case PREVIOUS_CYCLES:
             return{
                 ...state,
-                cycles: action.payload
+                previousCycle: action.payload
+            }
+        case CYCLES_IN_PROGRESS:
+            return{
+                ...state,
+                inProgressCycles: action.payload
             }
         default:
             return{

@@ -103,10 +103,10 @@ class Admin extends Component {
 Admin.propTypes = {
   addCoordinator: PropTypes.func.isRequired,
   viewCoordinator: PropTypes.func.isRequired,
-  coordinator: PropTypes.object.isRequired
+  coordinators: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  coordinator: state.coordinator
+  coordinators: state.coordinator
 })
 export default connect (mapStateToProps, {addCoordinator, viewCoordinator})(Admin);
