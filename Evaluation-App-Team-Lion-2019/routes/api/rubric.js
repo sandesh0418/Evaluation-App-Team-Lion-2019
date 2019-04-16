@@ -131,6 +131,10 @@ router.get("/getRubric/:title", (req, res)=>{
    
     
     
+    
+    
+    
+    
     var topRow = [];
     var Rubric =[];
     
@@ -305,91 +309,67 @@ else{
 })
 
 
+router.get('/getViewRubric/:title', (req, res) => {
+    let rubricTitle = req.params.title;
+    console.log(rubricTitle);
 
+    let rubric = {
+        rubric_title: rubricTitle,
+        criteria: []
+    }
 
-// router.get('/getRubric/:id', (req, res) => {
-//     let rubricTitle = req.params.id;
+    let queryGetRubric = "" +
+        "SELECT r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
+        "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
+            "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
+        "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
 
-//     let rubric = {
-//         rubric_title: rubricTitle,
-//         criteria: []
-//     }
+    connection.query(queryGetRubric, function(error, results, fields) {
+        if (error || results.length < 1) 
+        {
+            res.status(404).json({
+                status:false,
+                error: error,
+                message:'This rubric could not be retrieved.'
+            })
+        }
+        else
+        {
+            results = Object.values(JSON.parse(JSON.stringify(results)));
+            
+            rubric.rubric_title = results[0].Rubric_Title;
 
-//     getCriteria();
+            results.forEach(r => {
+                index = rubric.criteria.findIndex(c => c.criteria_title === r.Criteria_Title);
 
-//     function getCriteria()
-//     {
-//         let queryGetCriteriaTitles = "SELECT Criteria_Title FROM rubric_criteria WHERE Rubric_Title=\'" + rubricTitle + "\'";
+                let newDescription = {
+                    value_number: r.Value_Number,
+                    value_name: r.Value_Name,
+                    value_description: r.data
+                }
 
-//         connection.query(queryGetCriteriaTitles, function(error, results, fields) {
-//             if (error) 
-//             {
-//                 res.status(404).json({
-//                 status:false,
-//                 error: error,
-//                 message:'The criteria for this rubric could not be retrieved.'
-//                 })
-//             }
-//             else
-//             {
-//                 let criteriaTitles = Object.values(JSON.parse(JSON.stringify(results)));
-//                 criteriaTitles.forEach((title) => {
-//                     let tempCriteriaObj = {
-//                         criteria_title: title.Criteria_Title,
-//                         descriptions: []
-//                     }
+                if (index === -1)
+                {
+                    let newCrit = {
+                        criteria_title: r.Criteria_Title,
+                        descriptions: [newDescription]
+                    }
+                    rubric.criteria.push(newCrit);
+                }
+                else
+                {
+                    rubric.criteria[index].descriptions.push(newDescription);
+                }
+            })
+            
+            res.status(200).json({
+                status: true,
+                rubric: rubric
+            })
+        }
+    })
 
-//                     rubric.criteria.push(tempCriteriaObj);
-//                 })
-
-//                 getCriteriaDescriptions();
-//             }
-//         })
-//     }
-
-//     function getCriteriaDescriptions() 
-//     {
-//         for (let i = 0; i < rubric.criteria.length; i++) 
-//         {
-//             let queryCriteriaScale = "SELECT Value_Number, Value_Name, Value_Description FROM rubric_criteria_scale WHERE Rubric_Title=\'" +
-//                                         rubricTitle + "\' AND Criteria_Title=\'" + rubric.criteria[i].criteria_title + "\'";
-
-//             connection.query(queryCriteriaScale, function(error, results, fields) {
-//                 if (error) 
-//                 {
-//                     res.status(404).json({
-//                     status:false,
-//                     error: error,
-//                     message:'The criteria for this rubric could not be retrieved.'
-//                     })
-//                 }
-//                 else
-//                 {
-//                     let descriptions = Object.values(JSON.parse(JSON.stringify(results)));
-        
-//                     descriptions.forEach((description) => {
-//                         tempDescription = {
-//                             value_number: description.Value_Number,
-//                             value_name: description.Value_Name,
-//                             value_description: description.Value_Description
-//                         }
-
-//                         rubric.criteria[i].descriptions.push(tempDescription);
-//                     })
-
-//                     //Send the data if we have traversed all criteria.  If we have time we should refactor this to work naturally with async.
-//                     if (i == rubric.criteria.length - 1)
-//                     {
-//                         res.json({
-//                             rubric: rubric
-//                         })
-//                     }
-//                 }
-//             })
-//         }
-
-//     }
-// })
+})
 
 //Path /rubric/getList
 router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {

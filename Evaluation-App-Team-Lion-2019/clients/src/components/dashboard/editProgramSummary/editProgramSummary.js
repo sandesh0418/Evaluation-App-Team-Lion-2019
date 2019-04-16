@@ -216,7 +216,7 @@ export default class EditProgramSummary extends Component
 
         let newMeasure = {
             Measure_ID: newId,
-            Description: this.state.description,
+            Description: (this.state.description ? this.state.description : null),
             Percent_to_reach_target: (this.state.percentToReachTarget / 100),
             Value_Name: valueName,
             Target_Score: this.state.targetScore,

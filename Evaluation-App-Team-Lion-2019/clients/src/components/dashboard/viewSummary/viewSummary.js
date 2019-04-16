@@ -24,11 +24,14 @@ var dummySummary = {
 
 const ProgramSummaryBody = props =>
 {
-    if(props.state.programSummary != undefined){
-    return props.state.programSummary.outcomes.map(function(currentOutcome, i){
-        return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
-    });}
-    else{
+    if(props.state.programSummary != undefined)
+    {
+        return props.state.programSummary.outcomes.map(function(currentOutcome, i){
+            return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
+        });
+    }
+    else
+    {
         return null;
     }
 }
@@ -45,11 +48,11 @@ function Measures(props)
     return props.measures.map(function(currentMeasure, i){
         return (
             <div key={i}>
-                <p>
+                <a href={"/measureReport" /* + currentMeasure.Measure_ID*/}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
-                </p>
+                </a>
                 {currentMeasure.Description ? <p className="ml-3">{"Additional description: " + currentMeasure.Description}</p> : null}
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
                 <hr/>
@@ -137,7 +140,7 @@ export default class ViewSummary extends Component
     {
         axios.get('/summaryReport/getSummary')
             .then(res => {
-                //console.log(res.data);
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -150,6 +153,7 @@ export default class ViewSummary extends Component
         if(this.state.programSummary){
                 programSum = this.state.programSummary.title;
         }
+
         return (
             <div>
                 
