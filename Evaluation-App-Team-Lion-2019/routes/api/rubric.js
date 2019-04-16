@@ -399,7 +399,7 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
 router.get('/getListWithScale', passport.authenticate("jwt", { session: false }),(req, res) => {
     let queryGetRubrics = "" +
         "SELECT Rubric_Title as rubricTitle, Value_Number as valueNumber, Value_Name as valueName " +
-        "FROM rubric_criteria_scale " +
+        "FROM rubric JOIN scales ON rubric.Rubric_Id=scales.Rubric_Id " +
         "GROUP BY Rubric_Title, Value_Number, Value_Name " +
         "ORDER BY Rubric_Title"
 

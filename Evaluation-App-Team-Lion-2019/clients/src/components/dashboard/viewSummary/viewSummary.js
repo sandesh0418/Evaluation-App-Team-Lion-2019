@@ -24,7 +24,7 @@ var dummySummary = {
 
 const ProgramSummaryBody = props =>
 {
-    if(props.state.programSummary != undefined)
+    if(props.state.programSummary !== undefined)
     {
         return props.state.programSummary.outcomes.map(function(currentOutcome, i){
             return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;

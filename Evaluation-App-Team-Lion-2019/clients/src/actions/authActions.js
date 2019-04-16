@@ -44,7 +44,6 @@ export const loginUser = userData => dispatch => {
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("dept_Id", res.data.department);
       localStorage.setItem("name", res.data.name);
-      //localStorage.setItem("role", res.data.role);
       // Decode token to get user data
       const decoded = (token);
       // Set current user
