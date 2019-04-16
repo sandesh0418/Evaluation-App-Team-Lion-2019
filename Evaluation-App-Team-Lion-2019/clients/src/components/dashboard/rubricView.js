@@ -7,7 +7,6 @@ function TopRowGradeScale(props)
 {
     return props.oneCriteria.descriptions.map(function(currentDescription)
     {
-        console.log(currentDescription.value_number);
         return <th scope="col" 
                     key={currentDescription.value_number}
                     as="textarea"
@@ -108,13 +107,12 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('/rubric/getRubric/'+this.props.match.params.rubric)
+        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric)
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
                     rubric: res.data.rubric
                 })
-                console.log(this.state.rubric);
             })
 
         if(window.location.pathname.includes('/gradeRubric/'))
@@ -150,7 +148,6 @@ export default class ViewRubric extends Component
 
         axios.post('/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
-            console.log(res.data);
             alert("The score has been saved.");
         });
     }
@@ -167,7 +164,6 @@ export default class ViewRubric extends Component
                 totalScore = totalScore + parseInt(document.getElementById(currentCriteria.criteria_title).value);
                 numberOfCriteria++;
         });
-        console.log(totalScore);
         let average = (totalScore / numberOfCriteria).toFixed(e.target.value);
 
         this.setState({

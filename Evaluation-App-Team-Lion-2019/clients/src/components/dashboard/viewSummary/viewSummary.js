@@ -24,11 +24,14 @@ var dummySummary = {
 
 const ProgramSummaryBody = props =>
 {
-    if(props.state.programSummary != undefined){
-    return props.state.programSummary.outcomes.map(function(currentOutcome, i){
-        return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
-    });}
-    else{
+    if(props.state.programSummary != undefined)
+    {
+        return props.state.programSummary.outcomes.map(function(currentOutcome, i){
+            return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
+        });
+    }
+    else
+    {
         return null;
     }
 }
@@ -137,7 +140,7 @@ export default class ViewSummary extends Component
     {
         axios.get('/summaryReport/getSummary')
             .then(res => {
-                //console.log(res.data);
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -150,6 +153,7 @@ export default class ViewSummary extends Component
         if(this.state.programSummary){
                 programSum = this.state.programSummary.title;
         }
+
         return (
             <div>
                 
