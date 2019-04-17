@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { AddNewEvaluator } from "../../actions/evaluator";
+import { AddNewEvaluator } from "../../../actions/evaluator";
 import classnames from "classnames";
 
 class AddEvaluator extends Component {
@@ -15,7 +15,7 @@ class AddEvaluator extends Component {
       firstName: '',
       lastName: '',
       email: '',
-      department: '',
+      
       errors: {}
     };
   }
@@ -39,8 +39,8 @@ class AddEvaluator extends Component {
     const obj ={
       firstName : this.state.firstName,
       lastName: this.state.lastName,
-      department: this.state.department,
-      email: this.state.email
+      email: this.state.email,
+      Dept_Id: localStorage.getItem("dept_Id")
     }
    
     this.props.AddNewEvaluator(obj, this.props.history);
@@ -112,20 +112,7 @@ class AddEvaluator extends Component {
                 <span className="red-text">{errors.email}</span>
               </div>
 
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.department}
-                  error={errors.department}
-                  id="department"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.department
-                  })}
-                />
-                <label htmlFor="department">Department</label>
-                <span className="red-text">{errors.department}</span>
-              </div>
+              
 
               
               

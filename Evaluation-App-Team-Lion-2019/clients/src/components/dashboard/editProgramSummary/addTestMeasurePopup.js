@@ -16,7 +16,7 @@ export default class AddTestMeasurePopup extends Component
     render() {
         return (
           <div className='popup' >
-            <div className='popup_inner p-4' style={{overflow: "scroll", height: "100%"}}>
+            <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Test Measure </h1>
               
               <label>Description of new measure:</label>
@@ -37,7 +37,7 @@ export default class AddTestMeasurePopup extends Component
                   />
                 </div>
                 <div className="form-group">
-                  <label>(Optional) Enter Additional Information: </label>
+                  <label>(Optional) Additional Information: </label>
                   <textarea 
                     className="form-control" 
                     rows="7"

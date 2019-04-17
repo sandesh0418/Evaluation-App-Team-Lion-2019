@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Jumbotron,Container, Form } from 'react-bootstrap';
 import classnames from "classnames";
-import { createRubric } from '../../actions/rubric';
+import { createRubric } from '../../../actions/rubric';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from 'axios';

@@ -131,7 +131,7 @@ export default class EditProgramSummary extends Component
                 {
                     this.setState({
                         rubrics: res.data.rubrics,
-                        toolName: res.data.rubrics[0].Rubric_Title
+                        toolName: (res.data.rubrics[0].Rubric_Title ? res.data.rubrics[0].Rubric_Title : null)
                     })
                 }
         })
@@ -209,9 +209,15 @@ export default class EditProgramSummary extends Component
 
         let rubricIndex = this.state.rubrics.findIndex(r => r.Rubric_Title === this.state.toolName);
         let valueName = null;
+        let targetScore = this.state.targetScore;
+
         if (rubricIndex > -1)
         {
             valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore].Value_Name;
+        }
+        else
+        {
+            targetScore = targetScore / 100;
         }
 
         let newMeasure = {
@@ -219,17 +225,13 @@ export default class EditProgramSummary extends Component
             Description: (this.state.description ? this.state.description : null),
             Percent_to_reach_target: (this.state.percentToReachTarget / 100),
             Value_Name: valueName,
-            Target_Score: this.state.targetScore,
+            Target_Score: targetScore,
             Tool_Name: this.state.toolName
         }
 
-        console.log(newMeasure);
-
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
-        console.log(index);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].measures.push(newMeasure);
-        console.log(tempSummary);
         this.setState({
             programSummary: tempSummary,
             showAddRubricMeasurePopup: false,

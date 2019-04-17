@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getRubric, updateRubric} from '../../actions/rubric';
+import { getRubric, updateRubric} from '../../../actions/rubric';
 import { Table, FormControl } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
-import '../../stylesheets/rubric.css';
+import '../../../stylesheets/rubric.css';
 
 class createRubric extends Component{
 

@@ -7,7 +7,7 @@ const connection = require('../../models/User');
  * Create a new assignment
  * PATH: /assignments/createAssignment
  */
-router.post('/createAssignment', (req,res) => {
+router.post('/createAssignment/', (req,res) => {
     console.log("Entered create assignment");
     let Measure_ID = req.body.Measure_ID;
     let User_Email = req.body.User_Email;
@@ -149,9 +149,9 @@ router.get('/outcomesAndMeasures', (req, res) => {
 router.get('/myAssignments/:email', (req, res) => {
     let queryGetAssignments = "" + 
         "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
-            "a.Assignment_ID as assignmentId, m.Tool_Name as toolName " + 
+            "a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as rubricTitle " + 
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID " + 
+            "a.Measure_ID=m.Measure_ID LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title " + 
         "WHERE a.User_Email='" + req.params.email + "' " +
         "ORDER BY assignmentId";
 
