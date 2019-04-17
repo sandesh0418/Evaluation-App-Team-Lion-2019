@@ -123,15 +123,7 @@ router.post("/createRubric",  (req,res) =>{
 
 
 router.get("/getRubric/:title", (req, res)=>{
-
-    
-    var Rubric_Id = req.params.title
-   
-    
-    
-    
-    
-    
+    var Rubric_Id = req.params.title;
     
     var topRow = [];
     var Rubric =[];

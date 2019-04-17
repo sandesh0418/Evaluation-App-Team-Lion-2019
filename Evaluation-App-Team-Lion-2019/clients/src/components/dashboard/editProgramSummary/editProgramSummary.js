@@ -31,7 +31,8 @@ const OutcomeList = props => {
         return <Outcome 
                     key={currentOutcome.Outcome_ID} 
                     outcome={currentOutcome} 
-                    handleOutcomeChange={props.handleOutcomeChange}  
+                    handleOutcomeChange={props.handleOutcomeChange}
+                    handleOutcomeNameChange={props.handleOutcomeNameChange}
                     handleAddRubricMeasure={props.handleAddRubricMeasure}
                     handleAddTestMeasure={props.handleAddTestMeasure}
                 />
@@ -46,10 +47,17 @@ const Outcome = props => {
     return (
         <div className="row">
             <div className="col border p-3">
+                <input 
+                    className="form-control"
+                    type="text" 
+                    name={props.outcome.Outcome_ID}
+                    value={props.outcome.Outcome_Name} 
+                    onChange={props.handleOutcomeNameChange}
+                />
                 <textarea 
                     className="form-control" 
                     rows="7"
-                    id={props.outcome.Outcome_ID} 
+                    name={props.outcome.Outcome_ID} 
                     value={props.outcome.Description} 
                     onChange={props.handleOutcomeChange} 
                 />
@@ -97,6 +105,7 @@ export default class EditProgramSummary extends Component
         this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
         this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
+        this.handleOutcomeNameChange = this.handleOutcomeNameChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleAddOutcome = this.handleAddOutcome.bind(this);
         this.addNewMeasure = this.addNewMeasure.bind(this);  
@@ -119,7 +128,7 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
-        axios.get('/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     programSummary: res.data.programSummary
@@ -143,6 +152,7 @@ export default class EditProgramSummary extends Component
         let newId = uuid();
         tempSummary.outcomes.push({
             Outcome_ID: newId,
+            Outcome_Name: "Outcome #",
             Description: "Enter outcome description.",
             measures: []
         })
@@ -155,14 +165,24 @@ export default class EditProgramSummary extends Component
     handleOutcomeChange(e)
     {
         let newDescription = e.target.value;
-        let id = e.target.id;
+        let id = e.target.name;
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === id);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].Description = newDescription;
 
         this.setState({
-            programSummary: tempSummary,
+            programSummary: tempSummary
+        })
+    }
 
+    handleOutcomeNameChange(e)
+    {
+        let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.name);
+        let tempSummary = this.state.programSummary;
+        tempSummary.outcomes[index].Outcome_Name = e.target.value;
+
+        this.setState({
+            programSummary: tempSummary
         })
     }
 
@@ -262,7 +282,8 @@ export default class EditProgramSummary extends Component
             <>
             <h1>Edit Program Summary</h1>
             <OutcomeList 
-                 outcomes = {outcomes}
+                 outcomes={outcomes}
+                 handleOutcomeNameChange={this.handleOutcomeNameChange}
                  handleOutcomeChange={this.handleOutcomeChange}
                  handleAddRubricMeasure={this.handleAddRubricMeasure}
                  handleAddTestMeasure={this.handleAddTestMeasure} 
