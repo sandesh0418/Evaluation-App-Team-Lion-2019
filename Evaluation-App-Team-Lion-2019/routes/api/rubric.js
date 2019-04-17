@@ -316,7 +316,7 @@ router.get('/getViewRubric/:title', (req, res) => {
     }
 
     let queryGetRubric = "" +
-        "SELECT r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
+        "SELECT r.Rubric_Id, r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
         "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
@@ -335,7 +335,7 @@ router.get('/getViewRubric/:title', (req, res) => {
             results = Object.values(JSON.parse(JSON.stringify(results)));
             
             rubric.rubric_title = results[0].Rubric_Title;
-
+            rubric.Rubric_Id = results[0].Rubric_Id;
             results.forEach(r => {
                 index = rubric.criteria.findIndex(c => c.criteria_title === r.Criteria_Title);
 
@@ -369,16 +369,20 @@ router.get('/getViewRubric/:title', (req, res) => {
 })
 
 //Path /rubric/getList
-router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
+router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req, res) => {
 
-    connection.query(queryGetRubrics, function(error, results, fields) {
+    var Cycle_Id = req.params.id;
+    console.log(Cycle_Id)
+    let queryGetRubrics = "SELECT Rubric_Title FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
+
+    connection.query(queryGetRubrics,Cycle_Id, function(error, results, fields) {
         if (error) 
         {
             res.status(404).json({
             status:false,
             error: error,
-            message:'The rubrics could not be retrieved.'
+            message:'The rubrics could not be retrieved.',
+            rubrics: []
             })
         }
         else

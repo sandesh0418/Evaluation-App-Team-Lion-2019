@@ -43,8 +43,8 @@ export default class AddRubricMeasurePopup extends Component
 
     render() {
         return (
-          <div className='popup'>
-            <div className='popup_inner p-4'>
+          <div className='popup' >
+            <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Rubric Measure</h1>
               <label>Description of new measure: </label>
               <p>
