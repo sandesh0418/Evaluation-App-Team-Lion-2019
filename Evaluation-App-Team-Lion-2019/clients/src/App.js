@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-
+import axios from 'axios';
+import { CyclesInProgress } from './actions/cycle';
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -55,7 +56,17 @@ if (localStorage.jwtToken) {
     window.location.href = "./login";
   }
 }
+
+
 class App extends Component {
+
+
+  
+componentDidMount(){
+
+  var dept_Id = localStorage.getItem("Dept_Id");
+  
+}
   render() {
     return (
       <Provider store={store}>
@@ -96,5 +107,7 @@ class App extends Component {
     );
   }
 }
+
+
 
 export default App;

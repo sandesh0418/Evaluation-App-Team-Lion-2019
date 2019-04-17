@@ -243,7 +243,7 @@ export default class EditProgramSummary extends Component
 
     handleSave()
     {
-        axios.post('http://localhost:5000/editProgramSummary/editProgramSummary', this.state.programSummary)
+        axios.post('/editProgramSummary/editProgramSummary', this.state.programSummary)
             .then(res => {
                 this.props.history.push("/viewSummary");
             })

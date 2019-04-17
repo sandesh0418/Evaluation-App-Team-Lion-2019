@@ -101,16 +101,15 @@ export default class CreateAssignment extends Component
                     outcomeList: res.data.outcomeList,
                     selectedMeasure: res.data.outcomeList[0].measures[0].Measure_ID,
                 })
-                console.log(this.state);
             })
-        axios.get('/evaluators/evaluatorList')
-        .then(res => {
-            this.setState({
-                evaluatorList: res.data.evaluatorList,
-                selectedOutcomeIndex: 0,
-                selectedEvaluator: res.data.evaluatorList[0].email
+        axios.get('/evaluators/evaluatorList/' + localStorage.getItem("dept_Id"))
+            .then(res => {
+                this.setState({
+                    evaluatorList: res.data.evaluatorList,
+                    selectedOutcomeIndex: 0,
+                    selectedEvaluator: res.data.evaluatorList[0].email
+                })
             })
-        })
     }
 
     handleSelectOutcome(e)
@@ -137,7 +136,7 @@ export default class CreateAssignment extends Component
 
     changeFile(e)
     {
-        if (!(this.fileInput.current.files[0].type == "text/csv"))
+        if (!(this.fileInput.current.files[0].type === "text/csv"))
         {
             this.setState({
                 showFileAlert: true
@@ -197,6 +196,8 @@ export default class CreateAssignment extends Component
                     User_Email: this.state.selectedEvaluator,
                     studentList: fileReader.result + "\n" + manualStudentEntryToString(this.state.manualStudentEntry)
                 }
+
+                console.log(assignment);
                 
                 axios.post('http://localhost:5000/assignments/createAssignment', assignment)
                     .then(res =>  {
