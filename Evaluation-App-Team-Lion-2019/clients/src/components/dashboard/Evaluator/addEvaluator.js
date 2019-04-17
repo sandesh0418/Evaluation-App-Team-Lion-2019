@@ -44,7 +44,7 @@ class AddEvaluator extends Component {
     }
    
     this.props.AddNewEvaluator(obj, this.props.history);
-    // window.location.reload();
+    
 
     
   };

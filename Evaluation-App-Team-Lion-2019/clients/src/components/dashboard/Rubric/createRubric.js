@@ -46,7 +46,7 @@ class createRubric extends Component{
        
         this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"));
         
-
+ 
 
     }
    
@@ -60,6 +60,7 @@ class createRubric extends Component{
         var row = "";
         var weight = 0;
         var load = '';
+        var totalWeight = 0;
         
         let { rubric } = this.props.rubric;
         
