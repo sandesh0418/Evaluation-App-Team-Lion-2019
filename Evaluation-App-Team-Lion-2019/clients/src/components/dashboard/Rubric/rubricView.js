@@ -92,6 +92,7 @@ export default class ViewRubric extends Component
 
     componentDidMount()
     {
+        
         this.setView();
         this.getData();
     }

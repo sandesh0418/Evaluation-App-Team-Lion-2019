@@ -14,13 +14,20 @@ class ViewCoordinator extends Component {
     }
 
     componentDidMount(){
+      if(localStorage.getItem("role" === "Admin")){
+        window.location.replace("/admin");
+      }
+      else{
+        window.location.replace("/dashboard");
+      }
         this.props.viewCoordinator();
         this.props.viewCoordinatorDeleted();
+        
     }
 
     removeCoordinator(e){
         console.log(e.target.id);
-        Axios.post("http://localhost:5000/api/Coordinator/removeCoordinator", {email : e.target.id})
+        Axios.post("/Coordinator/removeCoordinator", {email : e.target.id})
         .then(res =>{
             
         })
@@ -37,12 +44,12 @@ class ViewCoordinator extends Component {
             
             display = coordinators.coordinators.map((singleValue, index) =>(
                 // <div class="row" key={index}>
-                <div class="col-sm-8" style={{margin: "auto"}}>
+                <div class="col-sm-8" style={{margin: "auto"}} key={index}>
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
                       <p  class="card-text">Email: {singleValue.email}</p>
-                      <a href="/viewCoordinator" className="btn btn-danger mb-4" 
+                      <a href="/viewCoordinator" className="btn btn-danger" style={{height : "100%"}}
                                 id={singleValue.email}
                       onClick= {this.removeCoordinator}>Remove this coordinator</a>
 
@@ -58,8 +65,8 @@ class ViewCoordinator extends Component {
         if(coordinators.deleted != null){
             
             displayDeleted = coordinators.deleted.map((singleValue, index) =>(
-                // <div class="row" key={index}>
-                <div  class="col-sm-8" style={{margin: "auto"}}>
+                
+                <div  class="col-sm-8" style={{margin: "auto"}} key={index}>
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
@@ -70,7 +77,7 @@ class ViewCoordinator extends Component {
                   </div>
                 </div>
                 
-             // </div>
+             
             )
             )
         }
@@ -102,7 +109,7 @@ class ViewCoordinator extends Component {
 
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-                <h2 style={{textAlign: "center"}}>List of delted coordinators</h2>
+                <h2 style={{textAlign: "center"}}>List of removed coordinators</h2>
 
                 {displayDeleted}
 

@@ -15,11 +15,10 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
     if (!isValid) {
         return res.status(400).json(errors);
       }
-    //   main();
-
-    async function main(){
+  
         
             var email = req.body.email;
+            
             console.log(email);
             let transporter = nodeMailer.createTransport({
                 service: 'gmail',
@@ -45,25 +44,36 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                 }
                 console.log('Message %s sent: %s', info.messageId, info.response);
                     
-            })
+                })
+            
+    connection.query("Select * from `users` where `email` = ?", req.body.email, function(err, result, fields){
+        if(err) throw err;
+
+        if(result.length>0){
+            errors.email = "Evaluator with that email already exist";
+            return res.status(400).json(errors);
+
         }
-      
-    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`) VALUES(?,?,?)", [req.body.firstName, req.body.lastName, req.body.email], function(err, result){
-        console.log("its messed up here");
+    
+    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`,`Dept_Id`,`role`) VALUES(?,?,?,?,?)", [req.body.firstName, req.body.lastName, req.body.email, req.body.Dept_Id, "Evaluator"], function(err, result){
+        
         if (err) throw err;
         else{
             res.send("Evaluator has been added");
         }
     })
+
+})
+
 })
 
 
 router.get('/evaluatorList/:deptId', (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
-    console.log(departmentId)
+    
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' and `role` ='Evaluator'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 

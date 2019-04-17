@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getRubric, updateRubric} from '../../../actions/rubric';
-import { Table, FormControl } from 'react-bootstrap';
+import { Table, FormControl, Form } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../../../stylesheets/rubric.css';
 
@@ -10,17 +10,19 @@ class createRubric extends Component{
 
     constructor(props) {
         super();
+        this.onSubmit= this.onSubmit.bind(this);
         this.state = {
-            saveRubric: []
+            saveRubric: [],
+            weight: true
         }
 
         
     }
     componentDidMount(){
-       
+        
         
         this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"));
-        
+          
       }
     
      
@@ -28,6 +30,20 @@ class createRubric extends Component{
  
     onSubmit(e){
         e.preventDefault();
+        console.log(this.props.rubric.rubric[2].weight)
+        if(this.props.rubric.rubric[2].weight === true){
+           
+            window.location.replace("/rubricList");
+        }
+
+        else{
+            this.setState({weight: false});
+            
+        }
+
+        
+            
+        
     }
 
     
@@ -40,13 +56,16 @@ class createRubric extends Component{
             value: e.target.value
         }
 
-        console.log(obj)
+        if(e.target.id.includes("weight")){
+            this.setState({weight: this.state.weight+parseFloat(e.target.value)})
+        }
+        
         
         this.props.updateRubric(obj);
        
         this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"));
         
-
+ 
 
     }
    
@@ -60,6 +79,7 @@ class createRubric extends Component{
         var row = "";
         var weight = 0;
         var load = '';
+        var totalWeight = 0;
         
         let { rubric } = this.props.rubric;
         
@@ -206,8 +226,8 @@ class createRubric extends Component{
         return(
            
            
-           <>
-            
+           <Form onSubmit={this.onSubmit}>
+            {this.state.weight ? " " : <div className = "alert alert-danger text-center">Rubric has not been saved!!! Total weight is not 100% !!</div>}
             <Table bordered striped>
             <thead>
                 <tr>
@@ -225,7 +245,7 @@ class createRubric extends Component{
             </tbody>
             </Table>
 
-            <a href="/rubricList"
+            <button
                   style={{
                     width: "150px",
                     borderRadius: "3px",
@@ -237,8 +257,8 @@ class createRubric extends Component{
                   className="btn btn-large btn-success waves-effect waves-light hoverable"
                 >
                   Save
-                </a>
-            </>
+                </button>
+            </Form>
         );
     }
 }

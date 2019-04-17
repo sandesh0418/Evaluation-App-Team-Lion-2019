@@ -30,6 +30,15 @@ class AddEvaluator extends Component {
     }
   }
 
+  componentDidMount(){
+    if(localStorage.getItem("role" === "Admin")){
+      window.location.replace("/admin");
+    }
+    else if(localStorage.getItem("role" === "Evaluator")){
+      window.location.replace("/evaluatorDashboard");
+    }
+  }
+
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -44,7 +53,7 @@ class AddEvaluator extends Component {
     }
    
     this.props.AddNewEvaluator(obj, this.props.history);
-    // window.location.reload();
+    
 
     
   };

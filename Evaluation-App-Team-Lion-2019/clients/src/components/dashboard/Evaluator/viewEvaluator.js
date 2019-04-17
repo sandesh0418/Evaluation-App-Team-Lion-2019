@@ -10,6 +10,12 @@ class ViewEvaluator extends Component
     
 
     componentWillMount(){
+        if(localStorage.getItem("role" === "Admin")){
+            window.location.replace("/admin");
+          }
+          else if(localStorage.getItem("role" === "Evaluator")){
+            window.location.replace("/evaluatorDashboard");
+          }
         this.props.GetAllEvaluator();
     }
 

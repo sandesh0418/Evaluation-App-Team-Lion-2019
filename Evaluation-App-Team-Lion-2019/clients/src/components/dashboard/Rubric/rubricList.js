@@ -36,6 +36,7 @@ export default class RubricList extends Component
 
     componentDidMount()
     {
+       
         axios.get('/rubric/getList/'+`${localStorage.getItem("Cycle_Id")}`)
             .then(res => {
                 this.setState({
