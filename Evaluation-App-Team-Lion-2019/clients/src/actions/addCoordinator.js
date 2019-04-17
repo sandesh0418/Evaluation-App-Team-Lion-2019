@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { VIEW_COORDINATOR,DELETED_COORDINATOR, GET_ERRORS } from './types';
+import { VIEW_COORDINATOR,DELETED_COORDINATOR,GET_DEPARTMENT, GET_ERRORS } from './types';
 
 export const addCoordinator = (obj) => dispatch =>{
     axios.post('/coordinator/addCoordinator', obj)
@@ -13,6 +13,22 @@ export const addCoordinator = (obj) => dispatch =>{
             payload: err.response.data
         })  
         })
+}
+
+export const getDepartment = () => dispatch => {
+    axios.get('/coordinator/getDepartment')
+    .then(res => {
+        dispatch({
+            type: GET_DEPARTMENT,
+            payload: res.data
+        })
+    })
+    .catch(err => {
+        dispatch ({
+            type: GET_ERRORS,
+            payload: err
+        })
+    })
 }
 
 

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 var connection = require('../../models/User');
 const passport = require('passport');
+var nodeMailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 var uniqid = require('uniqid');
 
@@ -38,7 +40,7 @@ router.get('/viewCoordinator', passport.authenticate("jwt", {session: false}), (
     var Coordinator = [];
     connection.query("SELECT * from users where role =? and password!='deleted' ","Administrator", function(err, result, fields){
         // 
-        console.log(result);
+       // console.log(result);
         if (err) throw err;
 
         if(result.length>0){
@@ -61,7 +63,7 @@ router.get('/viewCoordinatorDeleted', passport.authenticate("jwt", {session: fal
         // 
         // 
         if (err) throw err;
-        console.log(result)
+       // console.log(result)
         if(result.length>0){
             for(var i = 0; i<result.length; i++){
                 Coordinator[i] = {
@@ -98,6 +100,57 @@ router.post('/removeCoordinator', passport.authenticate("jwt", {session: false})
         })
     })
 })
+
+router.get('/getDepartment', passport.authenticate("jwt", {session: false}), (req, res) =>{
+    var Departments = [];
+    connection.query("SELECT * from department", function(err, result, fields){
+        // 
+        // 
+        if (err) throw err;
+        //console.log(result)
+        if(result.length>0){
+            for(var i = 0; i<result.length; i++){
+                Departments[i] = {
+                    department_Name: `${result[i].department_Name}`,
+                    department_Id: `${result[i].department_Id}`
+                }
+            }
+        }
+
+        res.send(Departments);
+    })
+})
+
+router.post('/emailCoordinator', passport.authenticate("jwt", {session: false}), (req, res) =>{
+
+    var email = req.body.email;
+    console.log(email);
+    let transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'emailtester845@gmail.com',
+            pass: 'TeamLion128'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+    let mailOptions = {
+        from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: "Coordinator Assignment", // Subject line
+        text: "Please go to localhost:3000/register to register as a coordinator" // plain text body
+       // html: '<b>NodeJS Email Tutorial</b>' // html body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+            
+        })
+    })
 
 
 module.exports = router;
