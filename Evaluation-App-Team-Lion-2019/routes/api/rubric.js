@@ -155,7 +155,7 @@ router.get("/getRubric/:title", (req, res)=>{
         }
 
         Rubric[0] = topRow;
-        console.log(row + score)
+        
        if((Number) (weight) === 1){
         connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY data.Row_Id ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
@@ -173,20 +173,39 @@ router.get("/getRubric/:title", (req, res)=>{
                 
                 r[i] = column;
 
-                 console.log(column)
+                 
                 
                 
 
                  
             }
             Rubric[1] = r;
+
+            connection.query("Select `weight` from `criteria` where `Rubric_Id` = ? ",Rubric_Id, function(err, result, fields){
+
+            if (err) throw err; 
+                var totalWeight = 0;
+            if(result.length>0){
+
+                for(var i = 0 ; i<result.length; i++){
+                    totalWeight+= result[i].weight;
+                }
+            }
+
+            if(totalWeight === 100){
+                Rubric[2] = {weight: true}
+            }
+            else{
+                Rubric[2] = {weight: false}
+            }
+
         
         
 
 
 
         res.json(Rubric);
-        
+    })
     })
     }
     else{

@@ -21,7 +21,7 @@ class Login extends Component {
       if(localStorage.role === "Administrator"){
       this.props.history.push("/dashboard");}
       else if (localStorage.role === "Evaluator"){
-        this.props.history.push("/dashboard");
+        this.props.history.push("/evaluatorDashboard");
       }
       else{
         this.props.history.push("/admin");
@@ -34,7 +34,7 @@ class Login extends Component {
       if(localStorage.role === "Administrator"){
         this.props.history.push("/dashboard");}
         else if (localStorage.role === "Evaluator"){
-          this.props.history.push("/dashboard");
+          this.props.history.push("/evaluatorDashboard");
         }
         else{
           this.props.history.push("/admin");

@@ -24,6 +24,12 @@ class Admin extends Component {
 
   componentDidMount(){
     this.props.getDepartment();
+    if(localStorage.getItem("role" === "Admin")){
+      window.location.replace("/admin");
+    }
+    else{
+      window.location.replace("/dashboard");
+    }
   }
   onChange(e){
     this.setState({[e.target.id]: [e.target.value]})

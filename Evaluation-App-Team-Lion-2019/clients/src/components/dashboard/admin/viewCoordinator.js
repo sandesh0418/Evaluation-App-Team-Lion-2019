@@ -14,8 +14,15 @@ class ViewCoordinator extends Component {
     }
 
     componentDidMount(){
+      if(localStorage.getItem("role" === "Admin")){
+        window.location.replace("/admin");
+      }
+      else{
+        window.location.replace("/dashboard");
+      }
         this.props.viewCoordinator();
         this.props.viewCoordinatorDeleted();
+        
     }
 
     removeCoordinator(e){

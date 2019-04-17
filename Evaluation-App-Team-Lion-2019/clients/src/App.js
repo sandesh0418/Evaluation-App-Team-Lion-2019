@@ -13,7 +13,8 @@ import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard/Dashboard";
+import EvaluatorDashboard from "./components/dashboard/Dashboard/EvaluatorDashboard";
 import NavBar from '../src/components/layout/Navbar';
 import ViewRubric from './components/dashboard/Rubric/rubricView';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
@@ -84,6 +85,7 @@ componentDidMount(){
                 <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                 <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                <PrivateRoute exact path="/evaluatorDashboard" component={EvaluatorDashboard} />
                 <PrivateRoute exact path="/rubricList" component={RubricList} />
                 <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
                 <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
