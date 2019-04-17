@@ -8,7 +8,6 @@ const connection = require('../../models/User');
  * PATH: /assignments/createAssignment
  */
 router.post('/createAssignment/', (req,res) => {
-    console.log("Entered create assignment");
     let Measure_ID = req.body.Measure_ID;
     let User_Email = req.body.User_Email;
     let Assignment_ID = uuidv1();
@@ -61,6 +60,8 @@ router.post('/createAssignment/', (req,res) => {
             })
             return returnValue;
         }
+
+        console.log(separatedList);
 
         let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
             separatedList;

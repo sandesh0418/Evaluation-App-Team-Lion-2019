@@ -17,7 +17,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
       }
     //   main();
 
-    // async function main(){
+    async function main(){
         
             var email = req.body.email;
             console.log(email);
@@ -45,8 +45,8 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                 }
                 console.log('Message %s sent: %s', info.messageId, info.response);
                     
-                })
-            }
+            })
+        }
       
     connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`) VALUES(?,?,?)", [req.body.firstName, req.body.lastName, req.body.email], function(err, result){
         console.log("its messed up here");

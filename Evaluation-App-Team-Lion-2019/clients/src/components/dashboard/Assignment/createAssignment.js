@@ -62,9 +62,17 @@ function manualStudentEntryToString(list)
 {
     let studentList = "";
 
-    list.forEach(i => {
-        studentList += i.subjectName + "," + i.subjectId + "\n";
-    })
+    for(let i = 0; i < list.length; i++)
+    {
+        if (i === list.length - 1)
+        {
+            studentList += list[i].subjectName + "," + list[i].subjectId;
+        }
+        else
+        {
+            studentList += list[i].subjectName + "," + list[i].subjectId + "\n";
+        }
+    }
 
     return studentList;
 }
@@ -184,7 +192,6 @@ export default class CreateAssignment extends Component
 
     onSubmit(e)
     {
-        console.log("Entered on submit");
         e.preventDefault();
 
         if (this.fileInput.current.files[0])
@@ -197,8 +204,6 @@ export default class CreateAssignment extends Component
                     studentList: fileReader.result + 
                     (this.state.manualStudentEntry.length === 0 ? null : "\n" + manualStudentEntryToString(this.state.manualStudentEntry))
                 }
-
-                console.log(assignment);
                 
                 axios.post('/assignments/createAssignment', assignment)
                     .then(res =>  {
@@ -216,6 +221,8 @@ export default class CreateAssignment extends Component
         }
         else
         {
+            console.log(manualStudentEntryToString(this.state.manualStudentEntry));
+
             let assignment = {
                 Measure_ID: this.state.selectedMeasure,
                 User_Email: this.state.selectedEvaluator,

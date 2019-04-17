@@ -369,7 +369,7 @@ router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req
     console.log(Cycle_Id)
     let queryGetRubrics = "SELECT `Rubric_Title`, `Rubric_Id` FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
 
-    connection.query(queryGetRubrics,Cycle_Id, function(error, results, fields) {
+    connection.query(queryGetRubrics, Cycle_Id, function(error, results, fields) {
         if (error) 
         {
             res.status(404).json({
