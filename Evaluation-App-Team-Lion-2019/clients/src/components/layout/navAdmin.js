@@ -49,10 +49,12 @@ class NavAdmin extends Component
                         <NavDropdown.Item href="/cycle">Start a new Cycle</NavDropdown.Item>
                         <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
                     </NavDropdown>
-                    <NavDropdown title={User()}>
+                    <NavDropdown title={User()} class="dropdown-menu dropdown-menu-right" >
+                    <dropdownMenu right>
                         <Nav.Link href="/editProfile">Edit Profile</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
-                    </NavDropdown>
+                        </dropdownMenu>
+                </NavDropdown>
                 </Nav> 
             </Navbar.Collapse>
             </> 

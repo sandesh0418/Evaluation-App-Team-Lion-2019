@@ -28,7 +28,7 @@ import EvaluateTest from './components/dashboard/evaluateTest';
 import EditProfile from './components/dashboard/editProfile';
 import Cycle from './components/dashboard/cycle';
 import ViewCycles from './components/dashboard/viewCycle';
-import EndCycle from './components/dashboard/endCycle';
+import ViewCycle from './components/dashboard/viewCycle';
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
@@ -86,7 +86,7 @@ class App extends Component {
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                <PrivateRoute exact path="/endCycle" component={EndCycle} />
+                <PrivateRoute exact path="/endCycle" component={ViewCycle} />
                 <PrivateRoute exact path="/measureReport" component={MeasureReport} />
               </Switch>
             </div>
