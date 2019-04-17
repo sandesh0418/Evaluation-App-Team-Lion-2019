@@ -12,7 +12,7 @@ function ListDisplay(props)
                 <button 
                     type="button" 
                     className="btn btn-secondary mt-2" 
-                    id={a.toolName + "/" + a.assignmentId}
+                    id={a.rubricTitle + "/" + a.assignmentId}
                     onClick={props.onClick}>
                     {"Evaluate " + a.toolName}
                 </button>
@@ -44,7 +44,7 @@ export default class RubricList extends Component
 
     handleEvaluateClick(e)
     {
-        if (e.target.id.includes('Test'))
+        if (e.target.id.includes('null'))
         {
             this.props.history.push("/evaluateTest/" + e.target.id);
         }

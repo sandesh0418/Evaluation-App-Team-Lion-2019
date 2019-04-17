@@ -66,7 +66,7 @@ export default class AddRubricMeasurePopup extends Component
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Enter Measure Description: </label>
+                  <label>(Optional) Additional Information: </label>
                   <textarea 
                     className="form-control" 
                     rows="7"

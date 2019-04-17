@@ -95,7 +95,7 @@ class ViewCoordinator extends Component {
 
                 {display}
 
-                <h2 style={{textAlign: "center"}}>List of delted coordinators</h2>
+                <h2 style={{textAlign: "center"}}>List of deleted coordinators</h2>
 
                 {displayDeleted}
             </div>

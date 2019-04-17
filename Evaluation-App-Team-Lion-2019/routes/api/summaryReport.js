@@ -24,7 +24,6 @@ router.get('/getSummary', passport.authenticate("jwt", { session: false }), (req
 
 function buildProgramSummary(withStats, req, res)
 {
-    console.log("Entered buildProgramSummary");
     let programSummary = {
         title: 'Assessment 2019',
         outcomes: []
@@ -40,7 +39,8 @@ function buildProgramSummary(withStats, req, res)
             "(SELECT s.Value_Name as valueName, m.Measure_ID as measureId " + 
             "FROM measure m LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title JOIN scales s ON s.Rubric_Id=r.Rubric_Id " +
             "WHERE m.Target_Score=s.Value_Number) as rubricScore " +
-            "ON m.Measure_ID=rubricScore.measureId ";
+            "ON m.Measure_ID=rubricScore.measureId " +
+        "ORDER BY o.Outcome_ID DESC ";
 
     connection.query(queryGetSummary, (error, results, fields) => {
         if (error)
@@ -102,7 +102,6 @@ function buildProgramSummary(withStats, req, res)
             }
             else
             {
-                console.log(programSummary);
                 res.json({
                     status: true,
                     message: "Sent program summary.",

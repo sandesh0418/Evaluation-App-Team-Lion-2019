@@ -190,6 +190,7 @@ export default class ViewRubric extends Component
     {
         let saveGradeButton;
         let rubricAverage;
+        let editRubricButton;
 
         if (this.state.gradeMode)
         {
@@ -205,6 +206,23 @@ export default class ViewRubric extends Component
                 </select>
                 <span className="pl-1">The average score is: {this.state.averageScore}</span>
             </div>
+        }
+        else
+        {
+            editRubricButton = <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                <a href="#"
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem"
+                  }}
+                  onClick={this.EditRubric}
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                  Edit 
+                </a>
+              </div>
         }
 
         let gradeScale = this.state.rubric.criteria[0].descriptions.map(function(currentDescription)
@@ -241,20 +259,7 @@ export default class ViewRubric extends Component
                 </table>
                 {rubricAverage}
                 {saveGradeButton}
-                <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <a href="#"
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
-                  onClick={this.EditRubric}
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Edit 
-                </a>
-              </div>
+                {editRubricButton}
             </div>
         );
     }

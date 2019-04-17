@@ -36,7 +36,7 @@ export default class AddTestMeasurePopup extends Component
                   />
                 </div>
                 <div className="form-group">
-                  <label>(Optional) Enter Additional Information: </label>
+                  <label>(Optional) Additional Information: </label>
                   <textarea 
                     className="form-control" 
                     rows="7"

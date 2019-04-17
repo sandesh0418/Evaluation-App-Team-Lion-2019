@@ -6,8 +6,6 @@ const secret = require('../../config/keys');
 const validateRubric = require('../../validation/rubricValidation');
 var uniqid = require('uniqid');
 
-
-
 /*
 * Post method that stores rubric title, no. of rows, no. of columns and weight into rubric table
 */
@@ -210,10 +208,9 @@ router.get("/getRubric/:title", (req, res)=>{
                 let column = [];
                 
                 for(var j = 0; j< score; j++){
-                    column[j] = result[i+count];
-                    
+                    column[j] = result[count];
+                    count++;
                 }
-                count+=score;
                 r[i] = column;
                 
                 console.log(column)
@@ -417,12 +414,13 @@ router.get('/getListWithScale', passport.authenticate("jwt", { session: false })
         "ORDER BY Rubric_Title"
 
     connection.query(queryGetRubrics, function(error, results, fields) {
-        if (error) 
+        if (error || results.length < 1) 
         {
             res.status(404).json({
-            status:false,
-            error: error,
-            message:'The rubrics could not be retrieved.'
+                status:false,
+                error: error,
+                message:'The rubrics could not be retrieved.',
+                rubric: []
             })
         }
         else
