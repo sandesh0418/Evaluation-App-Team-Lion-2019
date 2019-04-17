@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 
 import PropTypes from 'prop-types';
-import { GetAllEvaluator } from '../../actions/evaluator';
+import { GetAllEvaluator } from '../../../actions/evaluator';
 import { connect } from "react-redux";
 
 class ViewEvaluator extends Component

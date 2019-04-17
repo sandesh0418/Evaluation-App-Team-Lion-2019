@@ -15,21 +15,21 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import NavBar from '../src/components/layout/Navbar';
-import ViewRubric from './components/dashboard/rubricView.js';
+import ViewRubric from './components/dashboard/Rubric/rubricView';
 import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
-import RubricList from './components/dashboard/rubricList.js';
-import MyAssignments from './components/dashboard/myAssignments.js';
+import RubricList from './components/dashboard/Rubric/rubricList.js';
+import MyAssignments from './components/dashboard/Assignment/myAssignments.js';
 import EditProgramSummary from './components/dashboard/editProgramSummary/editProgramSummary';
-import Rubric from './components/dashboard/Rubric';
-import CreateRubric from './components/dashboard/createRubric';
-import CreateAssignment from './components/dashboard/createAssignment.js';
-import ViewEvaluator from './components/dashboard/viewEvaluator';
-import AddEvaluator from './components/dashboard/addEvaluator';
+import Rubric from './components/dashboard/Rubric/Rubric';
+import CreateRubric from './components/dashboard/Rubric/createRubric';
+import CreateAssignment from './components/dashboard/Assignment/createAssignment.js';
+import ViewEvaluator from './components/dashboard/Evaluator/viewEvaluator';
+import AddEvaluator from './components/dashboard/Evaluator/addEvaluator';
 import EvaluateTest from './components/dashboard/evaluateTest';
 import EditProfile from './components/dashboard/editProfile';
-import Cycle from './components/dashboard/cycle';
-import ViewCycles from './components/dashboard/viewCycle';
-import ViewCycle from './components/dashboard/viewCycle';
+import Cycle from './components/dashboard/Cycle/cycle';
+import ViewCycles from './components/dashboard/Cycle/viewCycle';
+
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
@@ -97,7 +97,7 @@ componentDidMount(){
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                <PrivateRoute exact path="/endCycle" component={ViewCycle} />
+                
                 <PrivateRoute exact path="/measureReport" component={MeasureReport} />
               </Switch>
             </div>

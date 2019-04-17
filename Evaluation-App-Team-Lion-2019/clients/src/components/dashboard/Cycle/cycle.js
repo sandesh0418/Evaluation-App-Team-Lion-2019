@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { CreateNewCycle }from '../../actions/cycle';
+import { CreateNewCycle }from '../../../actions/cycle';
 
 class Cycle extends Component {
     constructor(props){
