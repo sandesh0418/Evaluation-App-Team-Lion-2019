@@ -11,7 +11,7 @@ function TopRowGradeScale(props)
                     key={currentDescription.value_number}
                     as="textarea"
                     aria-label="With textarea">
-                    {currentDescription.value_name}
+                    {currentDescription.value_name === "" ? "Undefined value name." : currentDescription.value_name}
                 </th>
     });
 }
@@ -22,7 +22,7 @@ function CriteriaRow(props)
     {
         return (
             <tr key={i}>
-                <th scope="row">{currentCriteria.criteria_title}</th>
+                <th scope="row">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
                 {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
             </tr>
@@ -109,7 +109,7 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric)
+        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
