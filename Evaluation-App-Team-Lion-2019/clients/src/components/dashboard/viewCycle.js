@@ -85,14 +85,19 @@ if(cycles.inProgressCycles!= null){
         <div className="card-body">
           <h5 className="card-title">{singleCycle.Cycle_Name}</h5>
           <p className="card-text"><span style={{fontWeight: "bold"}}>Start Date:</span> {singleCycle.Start_Date} </p>
+          {localStorage.getItem("Cycle_Id")===singleCycle.Cycle_Id ? " " :
           <a href="#"  style={{float: "left"}} className="btn btn-primary"
                               id={singleCycle.Cycle_Id}
                               
                               onClick={this.useCycle.bind(this)}>Enter a Cycle</a>
-          <a href="#"  style={{float: "right"}} className="btn btn-primary"
+            }
+          <a href="#" className="enterACycle" style={{float: "right"}} className="btn btn-primary"
                               id={singleCycle.Cycle_Id}
                               
                               onClick={this.endCycle.bind(this)}>End Cycle</a>
+
+
+          
         </div>
       </div>
     

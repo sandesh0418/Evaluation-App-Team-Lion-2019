@@ -20,8 +20,11 @@ class Login extends Component {
     if (this.props.auth.isAuthenticated) {
       if(localStorage.role === "administrator"){
       this.props.history.push("/dashboard");}
+      else if (localStorage.role === "Evaluator"){
+        this.props.history.push("/dashboard");
+      }
       else{
-        this.props.history.push("/viewSummary");
+        this.props.history.push("/admin");
       }
     }
   }
@@ -31,7 +34,7 @@ class Login extends Component {
       if(localStorage.role === "Administrator"){
         this.props.history.push("/dashboard");}
         else if (localStorage.role === "Evaluator"){
-          this.props.history.push("/viewSummary");
+          this.props.history.push("/dashboard");
         }
         else{
           this.props.history.push("/admin");

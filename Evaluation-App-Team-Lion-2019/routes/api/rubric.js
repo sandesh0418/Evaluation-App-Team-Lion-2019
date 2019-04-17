@@ -372,16 +372,20 @@ router.get('/getViewRubric/:title', (req, res) => {
 })
 
 //Path /rubric/getList
-router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
+router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req, res) => {
 
-    connection.query(queryGetRubrics, function(error, results, fields) {
+    var Cycle_Id = req.params.id;
+    console.log(Cycle_Id)
+    let queryGetRubrics = "SELECT Rubric_Title FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
+
+    connection.query(queryGetRubrics,Cycle_Id, function(error, results, fields) {
         if (error) 
         {
             res.status(404).json({
             status:false,
             error: error,
-            message:'The rubrics could not be retrieved.'
+            message:'The rubrics could not be retrieved.',
+            rubrics: []
             })
         }
         else

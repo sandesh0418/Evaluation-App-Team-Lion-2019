@@ -1,4 +1,4 @@
-import { ADD_EVALUATOR, GET_ERRORS, GET_ALL_EVALUATOR } from './types';
+import {GET_ERRORS, GET_ALL_EVALUATOR } from './types';
 import Axios from 'axios';
 
 

@@ -7,10 +7,7 @@ import { connect } from "react-redux";
 
 class ViewEvaluator extends Component
 {
-    constructor(props){
-        super(props);
-        
-    }
+    
 
     componentWillMount(){
         this.props.GetAllEvaluator();
