@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import { Form } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addCoordinator, viewCoordinator } from '../../../actions/addCoordinator';
+import Axios from 'axios';
+import { addCoordinator, viewCoordinator,getDepartment } from '../../../actions/addCoordinator';
+
 
 
 class Admin extends Component {
@@ -20,6 +22,9 @@ class Admin extends Component {
     }
   }
 
+  componentDidMount(){
+    this.props.getDepartment();
+  }
   onChange(e){
     this.setState({[e.target.id]: [e.target.value]})
   }
@@ -35,8 +40,35 @@ class Admin extends Component {
     this.props.addCoordinator(obj);
     
   }
-    render(){
 
+  emailCoordinator(e){
+    console.log(e.target.id);
+    Axios.post("http://localhost:5000/api/Coordinator/emailCoordinator", {email : e.target.id})
+    .then(res =>{
+        
+    })
+}
+
+    render(){
+    //   let { coordinators } = this.props;
+    //   var display = " ";
+    
+    // console.log("test");
+    //   if(coordinators.coordinators != null){
+          
+    //       display = coordinators.coordinators.map((singleValue, index) =>(
+    //           <div class="col-sm-8" style={{margin: "auto"}}>
+    //             <div class="card">
+    //               <div class="card-body">
+    //                 <h5 class="card-title">Name: {singleValue.department_Name}</h5>
+    //                 <p  class="card-text">Email: {singleValue.department_Id}</p>
+
+    //               </div>
+    //             </div>
+    //           </div>
+    //       )
+    //       )
+    //   }
         return (
             <div>
                 <span><h2>Add Coordinator</h2></span>
@@ -67,7 +99,10 @@ class Admin extends Component {
                 <label htmlFor="department">Coordinator's Department</label>
                 
               </div>
-              <div className="input-field col s12">
+              {/* <div>
+              {display}
+              </div> */}
+              {/* <div className="input-field col s12">
                   <input
                       onChange={this.onChange}
                       value={this.state.cwid}
@@ -76,8 +111,10 @@ class Admin extends Component {
                       required/>
                 <label htmlFor="cwid">Coordinator's CWID</label>
                 
-              </div>
-                    <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+              </div> */}
+
+
+                    {/* <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
                   style={{
                     width: "150px",
@@ -90,6 +127,11 @@ class Admin extends Component {
                 >
                   Add Coordinator
                 </button>
+                </div> */}
+                <div>
+                <a href="/admin" className="btn btn-success mb-4" 
+                                id={this.state.email}
+                      onClick= {this.emailCoordinator}>Add coordinator</a>
                 </div>
                 </div>
                 </Form>
@@ -103,10 +145,11 @@ class Admin extends Component {
 Admin.propTypes = {
   addCoordinator: PropTypes.func.isRequired,
   viewCoordinator: PropTypes.func.isRequired,
+  getDepartment: PropTypes.func.isRequired,
   coordinators: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
   coordinators: state.coordinator
 })
-export default connect (mapStateToProps, {addCoordinator, viewCoordinator})(Admin);
+export default connect (mapStateToProps, {addCoordinator,viewCoordinator, getDepartment})(Admin);

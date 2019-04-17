@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  GetPreviousCycle, CyclesInProgress, EndCycle } from '../../actions/cycle';
+import {  GetPreviousCycle, CyclesInProgress, EndCycle } from '../../../actions/cycle';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ClipLoader } from 'react-spinners';

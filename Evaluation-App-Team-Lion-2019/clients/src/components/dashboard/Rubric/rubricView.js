@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import './rubricView.css';
+import '../../../stylesheets/rubricView.css';
 
 
 function TopRowGradeScale(props)

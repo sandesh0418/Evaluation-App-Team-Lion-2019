@@ -4,7 +4,7 @@ var connection = require('../../models/User');
 var passport = require('passport');
 var connection = require('../../models/User')
 var validator = require('../../validation/evaluatorValidator');
-var nodemailer = require('nodemailer');
+var nodeMailer = require('nodemailer');
 //PATH: evaluators/evaluatorsList
 
 
@@ -19,28 +19,37 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
 
     // async function main(){
         
-    //     let transporter = nodemailer.createTransport({
-    //         service: 'gmail', 
-    //         auth: {
-    //           user: "", 
-    //           pass: "" 
-    //         }
-    //       });
-    //       let mailOptions = {
-    //         from: `"Fred Foo 👻" <email@gmail.com>`, 
-    //         to: req.body.email, 
-    //         subject: "Invitation to register for Department Evaluation Application", 
-    //         text: "Hello "+req.body.firstName+"Follow the link to sign up: "+"www.google.com" 
-            
-    //       };
-    //       let info = await transporter.sendMail(mailOptions);
-    //       console.log("Message sent: %s", info.messageId);
-  
-    //       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            var email = req.body.email;
+            console.log(email);
+            let transporter = nodeMailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'emailtester845@gmail.com',
+                    pass: 'TeamLion128'
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+            let mailOptions = {
+                from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
+                to: email, // list of receivers
+                subject: "Evaluator Assignment", // Subject line
+                text: "Please go to localhost:3000/register to register as an evaluator" // plain text body
+               // html: '<b>NodeJS Email Tutorial</b>' // html body
+            };
         
-    // }
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Message %s sent: %s', info.messageId, info.response);
+                    
+                })
+            }
       
-    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`, `Dept_Id`) VALUES(?,?,?,?)", [req.body.firstName, req.body.lastName, req.body.email, req.body.Dept_Id], function(err, result){
+    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`) VALUES(?,?,?)", [req.body.firstName, req.body.lastName, req.body.email], function(err, result){
+        console.log("its messed up here");
         if (err) throw err;
         else{
             res.send("Evaluator has been added");

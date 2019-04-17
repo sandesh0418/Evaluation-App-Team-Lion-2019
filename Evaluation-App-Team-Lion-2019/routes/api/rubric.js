@@ -298,12 +298,12 @@ else{
 })
 
 
-router.get('/getViewRubric/:title', (req, res) => {
-    let rubricTitle = req.params.title;
-    console.log(rubricTitle);
+router.get('/getViewRubric/:id', (req, res) => {
+    let rubricId = req.params.id;
+    
 
     let rubric = {
-        rubric_title: rubricTitle,
+        
         criteria: []
     }
 
@@ -311,9 +311,10 @@ router.get('/getViewRubric/:title', (req, res) => {
         "SELECT r.Rubric_Id, r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
-        "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
+        "WHERE r.Rubric_Id='" + rubricId + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
 
     connection.query(queryGetRubric, function(error, results, fields) {
+        rubric.rubric_title= results[0].Rubric_Title;
         if (error || results.length < 1) 
         {
             res.status(404).json({
@@ -351,6 +352,7 @@ router.get('/getViewRubric/:title', (req, res) => {
                 }
             })
             
+            
             res.status(200).json({
                 status: true,
                 rubric: rubric
@@ -365,7 +367,7 @@ router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req
 
     var Cycle_Id = req.params.id;
     console.log(Cycle_Id)
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
+    let queryGetRubrics = "SELECT `Rubric_Title`, `Rubric_Id` FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
 
     connection.query(queryGetRubrics,Cycle_Id, function(error, results, fields) {
         if (error) 

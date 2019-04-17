@@ -36,8 +36,8 @@ class ViewCoordinator extends Component {
         if(coordinators.coordinators != null){
             
             display = coordinators.coordinators.map((singleValue, index) =>(
-                <div class="row" key={index}>
-                <div class="col-sm-6" style={{margin: "auto"}}>
+                // <div class="row" key={index}>
+                <div class="col-sm-8" style={{margin: "auto"}}>
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
@@ -50,7 +50,7 @@ class ViewCoordinator extends Component {
                   </div>
                 </div>
                 
-              </div>
+              //</div>
             )
             )
         }
@@ -58,8 +58,8 @@ class ViewCoordinator extends Component {
         if(coordinators.deleted != null){
             
             displayDeleted = coordinators.deleted.map((singleValue, index) =>(
-                <div class="row" key={index}>
-                <div class="col-sm-6" style={{margin: "auto"}}>
+                // <div class="row" key={index}>
+                <div  class="col-sm-8" style={{margin: "auto"}}>
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
@@ -70,7 +70,7 @@ class ViewCoordinator extends Component {
                   </div>
                 </div>
                 
-              </div>
+             // </div>
             )
             )
         }
@@ -90,14 +90,24 @@ class ViewCoordinator extends Component {
                }
         
         return (
-            <div>
+            <div class="container">
+            <div class="row">
+               <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
                 <h2 style={{textAlign: "center"}}>List of the coordinators</h2>
 
                 {display}
 
-                <h2 style={{textAlign: "center"}}>List of deleted coordinators</h2>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                <h2 style={{textAlign: "center"}}>List of delted coordinators</h2>
 
                 {displayDeleted}
+
+                </div>
+            </div>
             </div>
         )
     }

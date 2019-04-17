@@ -7,9 +7,10 @@ function ListDisplay(props)
 {
     const list = props.rubrics;
     var listItems = '';
+    console.log(list)
     if(list != null){
     listItems = list.map((number, index) =>
-        <li key={index}><Link to ={"/viewRubric/"+number.Rubric_Title}>{number.Rubric_Title}</Link></li>
+        <li key={index}><Link to ={"/viewRubric/"+number.Rubric_Id}>{number.Rubric_Title}</Link></li>
     );
     }
     else{
