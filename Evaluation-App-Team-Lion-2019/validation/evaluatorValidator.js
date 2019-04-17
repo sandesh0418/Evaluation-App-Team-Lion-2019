@@ -9,7 +9,7 @@ module.exports = function validateRegisterInput(data) {
   data.email = !isEmpty(data.email) ? data.email : "";
   data.firstName = !isEmpty(data.firstName) ? data.firstName : "";
   data.lastName = !isEmpty(data.lastName) ? data.lastName : "";
-  data.department = !isEmpty(data.department) ? data.department : "";
+  
   
   // Email checks
   if (Validator.isEmpty(data.email)) {
@@ -23,9 +23,6 @@ module.exports = function validateRegisterInput(data) {
 
   if (Validator.isEmpty(data.firstName)) {
     errors.firstName = "First Name is required";
-  }
-  if (Validator.isEmpty(data.department)) {
-    errors.department = "Deparment Field is required";
   }
 
   if (Validator.isEmpty(data.lastName)) {

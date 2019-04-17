@@ -15,32 +15,32 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
     if (!isValid) {
         return res.status(400).json(errors);
       }
-      main();
+    //   main();
 
-    async function main(){
+    // async function main(){
         
-        let transporter = nodemailer.createTransport({
-            service: 'gmail', 
-            auth: {
-              user: "", 
-              pass: "" 
-            }
-          });
-          let mailOptions = {
-            from: `"Fred Foo 👻" <email@gmail.com>`, 
-            to: req.body.email, 
-            subject: "Invitation to register for Department Evaluation Application", 
-            text: "Hello "+req.body.firstName+"Follow the link to sign up: "+"www.google.com" 
+    //     let transporter = nodemailer.createTransport({
+    //         service: 'gmail', 
+    //         auth: {
+    //           user: "", 
+    //           pass: "" 
+    //         }
+    //       });
+    //       let mailOptions = {
+    //         from: `"Fred Foo 👻" <email@gmail.com>`, 
+    //         to: req.body.email, 
+    //         subject: "Invitation to register for Department Evaluation Application", 
+    //         text: "Hello "+req.body.firstName+"Follow the link to sign up: "+"www.google.com" 
             
-          };
-          let info = await transporter.sendMail(mailOptions);
-          console.log("Message sent: %s", info.messageId);
+    //       };
+    //       let info = await transporter.sendMail(mailOptions);
+    //       console.log("Message sent: %s", info.messageId);
   
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    //       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         
-    }
+    // }
       
-    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`) VALUES(?,?,?)", [req.body.firstName, req.body.lastName, req.body.email], function(err, result){
+    connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`, `Dept_Id`) VALUES(?,?,?,?)", [req.body.firstName, req.body.lastName, req.body.email, req.body.Dept_Id], function(err, result){
         if (err) throw err;
         else{
             res.send("Evaluator has been added");
@@ -52,6 +52,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
 router.get('/evaluatorList/:deptId', (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
+    console.log(departmentId)
 
     let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "'";
     
@@ -66,6 +67,7 @@ router.get('/evaluatorList/:deptId', (req, res) => {
         }
         else
         {
+            console.log(results)
             if (results.length > 0)
             {
                 evaluatorList = Object.values(JSON.parse(JSON.stringify(results)))

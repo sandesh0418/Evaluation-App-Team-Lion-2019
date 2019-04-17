@@ -16,7 +16,7 @@ export const AddNewEvaluator= (obj, history) => dispatch => {
 }
 
 export const GetAllEvaluator = () => dispatch => {
-    Axios.get("/evaluators/evaluatorList")
+    Axios.get("/evaluators/evaluatorList/"+`${localStorage.getItem("dept_Id")}`)
         .then(res => {
             dispatch({
                 type: GET_ALL_EVALUATOR,

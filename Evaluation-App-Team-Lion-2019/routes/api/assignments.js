@@ -7,7 +7,7 @@ const connection = require('../../models/User');
  * Create a new assignment
  * PATH: /assignments/createAssignment
  */
-router.post('/createAssignment', (req,res) => {
+router.post('/createAssignment/', (req,res) => {
     console.log("Entered create assignment");
     let Measure_ID = req.body.Measure_ID;
     let User_Email = req.body.User_Email;

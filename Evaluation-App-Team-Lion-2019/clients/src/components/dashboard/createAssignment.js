@@ -199,7 +199,7 @@ export default class CreateAssignment extends Component
 
                 console.log(assignment);
                 
-                axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+                axios.post('/assignments/createAssignment', assignment)
                     .then(res =>  {
                         if (res.data.status)
                         {
@@ -221,7 +221,7 @@ export default class CreateAssignment extends Component
                 studentList: "Name,ID\n" + manualStudentEntryToString(this.state.manualStudentEntry)
             }
 
-            axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+            axios.post('/assignments/createAssignment', assignment)
                 .then(res =>  {
                     if (res.data.status)
                     {
