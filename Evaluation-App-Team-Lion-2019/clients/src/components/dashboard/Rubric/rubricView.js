@@ -25,6 +25,7 @@ function CriteriaRow(props)
                 <th scope="row">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
                 {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.weighted ? <td>{currentCriteria.weight + "%"}</td> : null}
             </tr>
             );
     });
@@ -187,11 +188,9 @@ export default class ViewRubric extends Component
     }
 
     EditRubric(e){
-
         localStorage.removeItem("Rubric_Id");
         localStorage.setItem("Rubric_Id", e.target.id);
         window.location.replace('/createRubric');
-        
     }
 
     render()
@@ -261,10 +260,16 @@ export default class ViewRubric extends Component
                             <th scope="col" className="outcome-width">Criteria</th>
                             <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
                             {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
+                            {this.state.rubric.weighted ? <th scope="col">Weight</th> : null}
                         </tr>
                     </thead>
                     <tbody>
-                        <CriteriaRow gradeMode={this.state.gradeMode} criteria={this.state.rubric.criteria} gradeScale={gradeScale} />
+                        <CriteriaRow 
+                            gradeMode={this.state.gradeMode} 
+                            criteria={this.state.rubric.criteria} 
+                            weighted={this.state.rubric.weighted}
+                            gradeScale={gradeScale} 
+                        />
                     </tbody>
                     
                 </table>
