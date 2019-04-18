@@ -130,9 +130,11 @@ export default class EditProgramSummary extends Component
     {
         axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
+            console.log(this.state.programSummary);
         })
         axios.get('/rubric/getListWithScale/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
