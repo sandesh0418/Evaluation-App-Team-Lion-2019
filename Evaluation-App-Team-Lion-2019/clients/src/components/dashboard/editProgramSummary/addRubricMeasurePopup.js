@@ -37,7 +37,6 @@ export default class AddRubricMeasurePopup extends Component
     mapTitleToRubric()
     {
       let index = this.props.rubrics.findIndex(r => r.Rubric_Title === this.props.rubric);
-      console.log(this.props.rubrics[index].scale[0]);
       return this.props.rubrics[index];
     }
 
@@ -46,6 +45,16 @@ export default class AddRubricMeasurePopup extends Component
           <div className='popup' >
             <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Rubric Measure</h1>
+              <div className="form-group">
+                <label>Enter rubric name: </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="measureName"
+                  value={this.props.measureName}
+                  onChange={this.props.handleInputChange}
+                />
+              </div>
               <label>Description of new measure: </label>
               <p>
                 {"At least " + this.props.percentToReachTarget + "% of subjects score a '" + 

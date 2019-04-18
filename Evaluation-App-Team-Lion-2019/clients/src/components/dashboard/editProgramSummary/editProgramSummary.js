@@ -86,6 +86,7 @@ const Measures = props => {
         return (
             <div key={measure.Measure_ID}>
                 <p>
+                    <span className="bold mr-3"><strong>{measure.Measure_Name}</strong></span>
                     {"At least " + (measure.Percent_to_reach_target * 100) + "% of subjects score " + 
                     (measure.Value_Name ? "'" + measure.Value_Name + "'" : 
                     (measure.Target_Score * 100) + "%") +" or higher on " + measure.Tool_Name + "."}
@@ -116,9 +117,10 @@ export default class EditProgramSummary extends Component
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
-            //The following values are passed to and manipulated in the addRubricMeasurePopup.
+            //The following values are passed to and manipulated in the addRubricMeasurePopups.
             rubrics: null,
             toolName: null,
+            measureName: 'Measure #',
             //The following values are passed to both the addRubricMeasure and addTestMeasurePopups
             description: null,
             targetScore: 0,
@@ -130,11 +132,9 @@ export default class EditProgramSummary extends Component
     {
         axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
-                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
-            console.log(this.state.programSummary);
         })
         axios.get('/rubric/getListWithScale/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
@@ -244,7 +244,7 @@ export default class EditProgramSummary extends Component
 
         if (rubricIndex > -1)
         {
-            valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore].Value_Name;
+            valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore - 1].Value_Name;
         }
         else
         {
@@ -253,6 +253,7 @@ export default class EditProgramSummary extends Component
 
         let newMeasure = {
             Measure_ID: newId,
+            Measure_Name: this.state.measureName,
             Description: (this.state.description ? this.state.description : null),
             Percent_to_reach_target: (this.state.percentToReachTarget / 100),
             Value_Name: valueName,
@@ -267,6 +268,7 @@ export default class EditProgramSummary extends Component
             programSummary: tempSummary,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
+            measureName: 'Measure #',
             toolName: "",
             description: null,
             targetScore: 0,
@@ -307,6 +309,7 @@ export default class EditProgramSummary extends Component
                                                         rubrics={this.state.rubrics}
                                                         handleInputChange={this.handleInputChange}
                                                         rubric={this.state.toolName}
+                                                        measureName={this.state.measureName}
                                                         description={this.state.description}
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}
@@ -316,6 +319,7 @@ export default class EditProgramSummary extends Component
                                                         submit={this.addNewMeasure}
                                                         handleInputChange={this.handleInputChange}
                                                         testName={this.state.toolName}
+                                                        measureName={this.state.measureName}
                                                         description={this.state.description}
                                                         targetScore={this.state.targetScore}
                                                         percentToReachTarget={this.state.percentToReachTarget}
