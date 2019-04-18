@@ -1,0 +1,24 @@
+.width-200
+{
+    width: 200px;
+}
+
+
+
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+    padding: 20px;
+}
+
+
+#criteria td{
+    padding: 40px;
+}
+
+.h2, h2 {
+    font-size: 2rem;
+    text-align: center;
+    color: #010101;
+    /* text-decoration: underline; */
+    text-shadow: 2px 2px #9e9e9e9e;
+}

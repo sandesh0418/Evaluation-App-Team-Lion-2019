@@ -18,6 +18,7 @@ class NavAdmin extends Component
     }
 render()
     {
+        
         return (
             < >
             <Navbar.Toggle aria-controls="basic-navbar-nav"  />
@@ -37,7 +38,7 @@ render()
 }
 
 
-Nav.propTypes = {
+NavAdmin.propTypes = {
     auth: PropTypes.object.isRequired,
     logoutUser: PropTypes.func.isRequired
 }

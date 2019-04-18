@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 
 
 import PropTypes from 'prop-types';
-import { GetAllEvaluator } from '../../actions/evaluator';
+import { GetAllEvaluator } from '../../../actions/evaluator';
 import { connect } from "react-redux";
 
 class ViewEvaluator extends Component
 {
-    constructor(props){
-        super(props);
-        
-    }
+    
 
     componentWillMount(){
+        if(localStorage.getItem("role" === "Admin")){
+            window.location.replace("/admin");
+          }
+          else if(localStorage.getItem("role" === "Evaluator")){
+            window.location.replace("/evaluatorDashboard");
+          }
         this.props.GetAllEvaluator();
     }
 

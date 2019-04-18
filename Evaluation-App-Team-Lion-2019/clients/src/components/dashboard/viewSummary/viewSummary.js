@@ -13,7 +13,8 @@ var dummyMeasure = {
 
 var dummyOutcome = {
     Outcome_ID: 3,
-    Description: 'outcome 3',
+    Outcome_Name: '',
+    Description: '',
     measures: [dummyMeasure]
 }
 
@@ -38,7 +39,10 @@ const ProgramSummaryBody = props =>
 
 const Outcome = props => (
     <tr>
-        <th scope="row">{props.outcome.Description}</th>
+        <th scope="row">
+            <p className="h4">{props.outcome.Outcome_Name}</p>
+            <p>{props.outcome.Description}</p>
+        </th>
         <td><Measures measures={props.outcome.measures} state={props.state}  /></td>
     </tr>
 )
@@ -84,7 +88,8 @@ function Statistics(props)
             {props.measure.totalEvaluated !== 0 ? 
                 <Alert color={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
-                evaluations have met the target score of {props.measure.Target_Score}.</span></Alert> : null}
+                evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
+                    (props.measure.Target_Score * 100) + "%")}.</span></Alert> : null}
             <Alert color="info"> {props.measure.totalEvaluated} subjects have been evaluated.</Alert>
             </p>
 }
@@ -127,7 +132,7 @@ export default class ViewSummary extends Component
 
     getSummaryWithStatistics()
     {
-        axios.get('/summaryReport/measureStatistics')
+        axios.get('/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 //console.log(res.data);
                 this.setState({
@@ -138,7 +143,8 @@ export default class ViewSummary extends Component
 
     getSummary()
     {
-        axios.get('/summaryReport/getSummary')
+        console.log(localStorage.getItem("Cycle_Id"));
+        axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 console.log(res.data);
                 this.setState({

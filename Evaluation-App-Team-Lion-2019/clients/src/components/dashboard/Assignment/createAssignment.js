@@ -8,7 +8,7 @@ var evalList = [{ email: '', firstName: '', lastName: ''}];
 function SelectOutcome(props)
 {
     return props.outcomeList.map((outcome, index) => {
-        return <option key={outcome.Outcome_ID} value={index}>{outcome.Description}</option>
+        return <option key={outcome.Outcome_ID} value={index}>{outcome.Outcome_Name}</option>
     })
 }
 
@@ -62,9 +62,17 @@ function manualStudentEntryToString(list)
 {
     let studentList = "";
 
-    list.forEach(i => {
-        studentList += i.subjectName + "," + i.subjectId + "\n";
-    })
+    for(let i = 0; i < list.length; i++)
+    {
+        if (i === list.length - 1)
+        {
+            studentList += list[i].subjectName + "," + list[i].subjectId;
+        }
+        else
+        {
+            studentList += list[i].subjectName + "," + list[i].subjectId + "\n";
+        }
+    }
 
     return studentList;
 }
@@ -95,7 +103,7 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/outcomesAndMeasures')
+        axios.get('/assignments/outcomesAndMeasures/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     outcomeList: res.data.outcomeList,
@@ -184,7 +192,6 @@ export default class CreateAssignment extends Component
 
     onSubmit(e)
     {
-        console.log("Entered on submit");
         e.preventDefault();
 
         if (this.fileInput.current.files[0])
@@ -194,12 +201,11 @@ export default class CreateAssignment extends Component
                 let assignment = {
                     Measure_ID: this.state.selectedMeasure,
                     User_Email: this.state.selectedEvaluator,
-                    studentList: fileReader.result + "\n" + manualStudentEntryToString(this.state.manualStudentEntry)
+                    studentList: fileReader.result + 
+                    (this.state.manualStudentEntry.length === 0 ? null : "\n" + manualStudentEntryToString(this.state.manualStudentEntry))
                 }
-
-                console.log(assignment);
                 
-                axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+                axios.post('/assignments/createAssignment', assignment)
                     .then(res =>  {
                         if (res.data.status)
                         {
@@ -215,13 +221,15 @@ export default class CreateAssignment extends Component
         }
         else
         {
+            console.log(manualStudentEntryToString(this.state.manualStudentEntry));
+
             let assignment = {
                 Measure_ID: this.state.selectedMeasure,
                 User_Email: this.state.selectedEvaluator,
                 studentList: "Name,ID\n" + manualStudentEntryToString(this.state.manualStudentEntry)
             }
 
-            axios.post('http://localhost:5000/assignments/createAssignment', assignment)
+            axios.post('/assignments/createAssignment', assignment)
                 .then(res =>  {
                     if (res.data.status)
                     {
@@ -271,7 +279,7 @@ export default class CreateAssignment extends Component
                 </div>
                 <div>
                     <button className="btn btn-secondary mb-4" type="button" 
-                    onClick={this.addStudent}>Add Student Manually</button>
+                    onClick={this.addStudent}>Add Subject Manually</button>
                 </div>
                 <input type="submit" value="submit" className="btn btn-primary" onClick={this.onSubmit} />
             </form>

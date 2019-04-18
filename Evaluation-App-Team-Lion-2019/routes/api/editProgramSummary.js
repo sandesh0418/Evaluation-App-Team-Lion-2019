@@ -7,8 +7,9 @@ router.post('/editProgramSummary', (req, res) => {
     let newProgramSummary = req.body;
 
     newProgramSummary.outcomes.forEach(o => {
-        let queryAddOutcome = "INSERT INTO outcome (Outcome_ID, Description) VALUES (\'" + o.Outcome_ID +
-                        "\', \'" + o.Description + "\') ON DUPLICATE KEY UPDATE Description=\'" + o.Description + "\'";
+        let queryAddOutcome = "INSERT INTO outcome (Outcome_ID, Outcome_Name, Description, Cycle_Id) VALUES ('" + 
+            o.Outcome_ID + "', '" + o.Outcome_Name + "', '" + o.Description + "', '" + newProgramSummary.cycleId + 
+            "') ON DUPLICATE KEY UPDATE Outcome_Name='" + o.Outcome_Name + "', Description='" + o.Description + "'";
 
         connection.query(queryAddOutcome, (error, results, fields) => {
             if (error) 
@@ -36,11 +37,10 @@ router.post('/editProgramSummary', (req, res) => {
                 if (error)
                 {
                     console.log(error);
-                    console.log("not inserted");
                 }
                 else
                 {
-                    console.log("inserted.");
+                    
                 }
             })
         })

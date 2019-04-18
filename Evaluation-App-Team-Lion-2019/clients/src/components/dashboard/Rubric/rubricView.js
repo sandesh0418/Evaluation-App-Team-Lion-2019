@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import './rubricView.css';
+import '../../../stylesheets/rubricView.css';
+import { ClipLoader } from 'react-spinners';
+import { Spinner } from 'react-bootstrap';
 
 
 function TopRowGradeScale(props)
@@ -11,7 +13,7 @@ function TopRowGradeScale(props)
                     key={currentDescription.value_number}
                     as="textarea"
                     aria-label="With textarea">
-                    {currentDescription.value_name}
+                    {currentDescription.value_name === "" ? "Undefined value name." : currentDescription.value_name}
                 </th>
     });
 }
@@ -22,9 +24,10 @@ function CriteriaRow(props)
     {
         return (
             <tr key={i}>
-                <th scope="row">{currentCriteria.criteria_title}</th>
+                <th scope="row" className="p-3">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
-                {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.gradeMode?  <td className="p-3"><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.weighted ? <td className="p-3">{currentCriteria.weight + "%"}</td> : null}
             </tr>
             );
     });
@@ -92,6 +95,7 @@ export default class ViewRubric extends Component
 
     componentDidMount()
     {
+        
         this.setView();
         this.getData();
     }
@@ -108,7 +112,7 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric)
+        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
@@ -186,17 +190,16 @@ export default class ViewRubric extends Component
     }
 
     EditRubric(e){
-
         localStorage.removeItem("Rubric_Id");
         localStorage.setItem("Rubric_Id", e.target.id);
         window.location.replace('/createRubric');
-        
     }
 
     render()
     {
         let saveGradeButton;
         let rubricAverage;
+        let editRubricButton;
 
         if (this.state.gradeMode)
         {
@@ -211,6 +214,26 @@ export default class ViewRubric extends Component
                     <option value="3">Three Decimals</option>
                 </select>
                 <span className="pl-1">The average score is: {this.state.averageScore}</span>
+            </div>
+        }
+        else
+        {
+            editRubricButton = <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                <a href="#"
+                style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem",
+                    padding: "15px"
+                }}
+                id ={this.state.Rubric_Id}
+                onClick={this.EditRubric}
+
+                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                Edit 
+                </a>
             </div>
         }
 
@@ -235,36 +258,26 @@ export default class ViewRubric extends Component
                 
                 <table className="table table-bordered">
                     <thead>
-                        <tr>
-                            <th scope="col" className="outcome-width">Criteria</th>
+                        <tr id ="criteria"> 
+                            <th scope="col" className="outcome-width" >Criteria</th>
                             <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
                             {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
+                            {this.state.rubric.weighted ? <th scope="col">Weight</th> : null}
                         </tr>
                     </thead>
                     <tbody>
-                        <CriteriaRow gradeMode={this.state.gradeMode} criteria={this.state.rubric.criteria} gradeScale={gradeScale} />
+                        <CriteriaRow 
+                            gradeMode={this.state.gradeMode} 
+                            criteria={this.state.rubric.criteria} 
+                            weighted={this.state.rubric.weighted}
+                            gradeScale={gradeScale} 
+                        />
                     </tbody>
                     
                 </table>
                 {rubricAverage}
                 {saveGradeButton}
-                <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <a href="#"
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem",
-                    padding: "15px"
-                  }}
-                  id ={this.state.Rubric_Id}
-                  onClick={this.EditRubric}
-
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Edit 
-                </a>
-              </div>
+                {editRubricButton}
             </div>
         );
     }

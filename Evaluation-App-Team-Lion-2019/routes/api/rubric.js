@@ -6,8 +6,6 @@ const secret = require('../../config/keys');
 const validateRubric = require('../../validation/rubricValidation');
 var uniqid = require('uniqid');
 
-
-
 /*
 * Post method that stores rubric title, no. of rows, no. of columns and weight into rubric table
 */
@@ -125,15 +123,7 @@ router.post("/createRubric",  (req,res) =>{
 
 
 router.get("/getRubric/:title", (req, res)=>{
-
-    
-    var Rubric_Id = req.params.title
-   
-    
-    
-    
-    
-    
+    var Rubric_Id = req.params.title;
     
     var topRow = [];
     var Rubric =[];
@@ -165,7 +155,7 @@ router.get("/getRubric/:title", (req, res)=>{
         }
 
         Rubric[0] = topRow;
-        console.log(row + score)
+        
        if((Number) (weight) === 1){
         connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY data.Row_Id ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
@@ -183,20 +173,39 @@ router.get("/getRubric/:title", (req, res)=>{
                 
                 r[i] = column;
 
-                 console.log(column)
+                 
                 
                 
 
                  
             }
             Rubric[1] = r;
+
+            connection.query("Select `weight` from `criteria` where `Rubric_Id` = ? ",Rubric_Id, function(err, result, fields){
+
+            if (err) throw err; 
+                var totalWeight = 0;
+            if(result.length>0){
+
+                for(var i = 0 ; i<result.length; i++){
+                    totalWeight+= result[i].weight;
+                }
+            }
+
+            if(totalWeight === 100){
+                Rubric[2] = {weight: true}
+            }
+            else{
+                Rubric[2] = {weight: false}
+            }
+
         
         
 
 
 
         res.json(Rubric);
-        
+    })
     })
     }
     else{
@@ -210,18 +219,17 @@ router.get("/getRubric/:title", (req, res)=>{
                 let column = [];
                 
                 for(var j = 0; j< score; j++){
-                    column[j] = result[i+count];
-                    
+                    column[j] = result[count];
+                    count++;
                 }
-                count+=score;
                 r[i] = column;
                 
-                console.log(column)
+                
 
                  
             }
             Rubric[1] = r;
-        
+            Rubric[2] = {weight: true}
         
 
 
@@ -242,7 +250,7 @@ router.put("/updateRubric/", (req, res) =>{
     var column =req.body.Row;
     var value = req.body.value;
     var category = column.split(" ");
-    console.log(category)
+    
     if(value != null){
         if(category[0] === "scale"){
             var number = (Number) (category[1]);
@@ -291,7 +299,7 @@ router.put("/updateRubric/", (req, res) =>{
         else{
             value = 0.0;
         }
-        console.log(value)
+        
 
         connection.query("Update `criteria` SET `weight`= ? where Rubric_Id = ? and Row_Id = ?", [value,id, number], function(err, result, fields){
             if(err) throw err;
@@ -309,22 +317,28 @@ else{
 })
 
 
-router.get('/getViewRubric/:title', (req, res) => {
-    let rubricTitle = req.params.title;
-    console.log(rubricTitle);
+router.get('/getViewRubric/:id/:cycleId', (req, res) => {
+    let rubricId = req.params.id;
+    let cycleId = req.params.cycleId;
+    
 
     let rubric = {
-        rubric_title: rubricTitle,
+        rubric_title: '',
+        Rubric_Id: '',
+        weighted: false,
         criteria: []
     }
 
     let queryGetRubric = "" +
-        "SELECT r.Rubric_Id, r.Rubric_Title, c.Criteria_Title, d.data, s.Value_Name, s.Value_Number " +
+        "SELECT r.Rubric_Id, r.Rubric_Title, r.Weight, c.Criteria_Title, c.Row_Id, c.weight as critWeight, d.data, s.Value_Name, " + 
+            "s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
-        "WHERE r.Rubric_Title='" + rubricTitle + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number";
+        "WHERE r.Rubric_Id='" + rubricId + "' AND r.Cycle_Id='" + cycleId + "' AND c.Row_Id=d.Row_Id " +
+            "AND d.index=s.Value_Number";
 
     connection.query(queryGetRubric, function(error, results, fields) {
+        rubric.rubric_title= results[0].Rubric_Title;
         if (error || results.length < 1) 
         {
             res.status(404).json({
@@ -339,8 +353,9 @@ router.get('/getViewRubric/:title', (req, res) => {
             
             rubric.rubric_title = results[0].Rubric_Title;
             rubric.Rubric_Id = results[0].Rubric_Id;
+            rubric.weighted = (results[0].Weight === 1 ? true : false);
             results.forEach(r => {
-                index = rubric.criteria.findIndex(c => c.criteria_title === r.Criteria_Title);
+                index = rubric.criteria.findIndex(c => c.row_id === r.Row_Id);
 
                 let newDescription = {
                     value_number: r.Value_Number,
@@ -352,6 +367,8 @@ router.get('/getViewRubric/:title', (req, res) => {
                 {
                     let newCrit = {
                         criteria_title: r.Criteria_Title,
+                        row_id: r.Row_Id,
+                        weight: r.critWeight,
                         descriptions: [newDescription]
                     }
                     rubric.criteria.push(newCrit);
@@ -361,6 +378,7 @@ router.get('/getViewRubric/:title', (req, res) => {
                     rubric.criteria[index].descriptions.push(newDescription);
                 }
             })
+            
             
             res.status(200).json({
                 status: true,
@@ -372,16 +390,20 @@ router.get('/getViewRubric/:title', (req, res) => {
 })
 
 //Path /rubric/getList
-router.get('/getList', passport.authenticate("jwt", { session: false }),(req, res) => {
-    let queryGetRubrics = "SELECT Rubric_Title FROM rubric ORDER BY Rubric_Title ASC";
+router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req, res) => {
 
-    connection.query(queryGetRubrics, function(error, results, fields) {
+    var Cycle_Id = req.params.id;
+    console.log(Cycle_Id)
+    let queryGetRubrics = "SELECT `Rubric_Title`, `Rubric_Id` FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
+
+    connection.query(queryGetRubrics, Cycle_Id, function(error, results, fields) {
         if (error) 
         {
             res.status(404).json({
             status:false,
             error: error,
-            message:'The rubrics could not be retrieved.'
+            message:'The rubrics could not be retrieved.',
+            rubrics: []
             })
         }
         else
@@ -409,20 +431,23 @@ router.get('/getList', passport.authenticate("jwt", { session: false }),(req, re
  * Get rubric list with rubric scale.
  * Used by: editProgramSummary
  */
-router.get('/getListWithScale', passport.authenticate("jwt", { session: false }),(req, res) => {
+router.get('/getListWithScale/:cycleId', passport.authenticate("jwt", { session: false }),(req, res) => {
+    let cycleId = req.params.cycleId;
     let queryGetRubrics = "" +
         "SELECT Rubric_Title as rubricTitle, Value_Number as valueNumber, Value_Name as valueName " +
         "FROM rubric JOIN scales ON rubric.Rubric_Id=scales.Rubric_Id " +
+        "WHERE rubric.Cycle_Id='" + cycleId + "' " + 
         "GROUP BY Rubric_Title, Value_Number, Value_Name " +
         "ORDER BY Rubric_Title"
 
     connection.query(queryGetRubrics, function(error, results, fields) {
-        if (error) 
+        if (error || results.length < 1) 
         {
             res.status(404).json({
-            status:false,
-            error: error,
-            message:'The rubrics could not be retrieved.'
+                status:false,
+                error: error,
+                message:'The rubrics could not be retrieved.',
+                rubric: []
             })
         }
         else

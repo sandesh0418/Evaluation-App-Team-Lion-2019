@@ -44,7 +44,7 @@ export default class AddRubricMeasurePopup extends Component
     render() {
         return (
           <div className='popup' >
-            <div className='popup_inner p-4' style={{overflow: "scroll", height: "100%"}}>
+            <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Rubric Measure</h1>
               <label>Description of new measure: </label>
               <p>
@@ -66,7 +66,7 @@ export default class AddRubricMeasurePopup extends Component
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Enter Measure Description: </label>
+                  <label>(Optional) Additional Information: </label>
                   <textarea 
                     className="form-control" 
                     rows="7"

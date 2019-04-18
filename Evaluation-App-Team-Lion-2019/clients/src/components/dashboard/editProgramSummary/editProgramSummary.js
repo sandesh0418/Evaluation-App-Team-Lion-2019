@@ -31,7 +31,8 @@ const OutcomeList = props => {
         return <Outcome 
                     key={currentOutcome.Outcome_ID} 
                     outcome={currentOutcome} 
-                    handleOutcomeChange={props.handleOutcomeChange}  
+                    handleOutcomeChange={props.handleOutcomeChange}
+                    handleOutcomeNameChange={props.handleOutcomeNameChange}
                     handleAddRubricMeasure={props.handleAddRubricMeasure}
                     handleAddTestMeasure={props.handleAddTestMeasure}
                 />
@@ -46,10 +47,17 @@ const Outcome = props => {
     return (
         <div className="row">
             <div className="col border p-3">
+                <input 
+                    className="form-control"
+                    type="text" 
+                    name={props.outcome.Outcome_ID}
+                    value={props.outcome.Outcome_Name} 
+                    onChange={props.handleOutcomeNameChange}
+                />
                 <textarea 
                     className="form-control" 
                     rows="7"
-                    id={props.outcome.Outcome_ID} 
+                    name={props.outcome.Outcome_ID} 
                     value={props.outcome.Description} 
                     onChange={props.handleOutcomeChange} 
                 />
@@ -97,6 +105,7 @@ export default class EditProgramSummary extends Component
         this.handleAddRubricMeasure = this.handleAddRubricMeasure.bind(this);
         this.handleAddTestMeasure = this.handleAddTestMeasure.bind(this);
         this.handleOutcomeChange = this.handleOutcomeChange.bind(this);
+        this.handleOutcomeNameChange = this.handleOutcomeNameChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleAddOutcome = this.handleAddOutcome.bind(this);
         this.addNewMeasure = this.addNewMeasure.bind(this);  
@@ -119,19 +128,21 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
-        axios.get('/summaryReport/getSummary')
+        axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
+            console.log(this.state.programSummary);
         })
-        axios.get('/rubric/getListWithScale')
+        axios.get('/rubric/getListWithScale/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 if(res.data.status)
                 {
                     this.setState({
                         rubrics: res.data.rubrics,
-                        toolName: res.data.rubrics[0].Rubric_Title
+                        toolName: (res.data.rubrics[0].Rubric_Title ? res.data.rubrics[0].Rubric_Title : null)
                     })
                 }
         })
@@ -143,6 +154,7 @@ export default class EditProgramSummary extends Component
         let newId = uuid();
         tempSummary.outcomes.push({
             Outcome_ID: newId,
+            Outcome_Name: "Outcome #",
             Description: "Enter outcome description.",
             measures: []
         })
@@ -155,14 +167,24 @@ export default class EditProgramSummary extends Component
     handleOutcomeChange(e)
     {
         let newDescription = e.target.value;
-        let id = e.target.id;
+        let id = e.target.name;
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === id);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].Description = newDescription;
 
         this.setState({
-            programSummary: tempSummary,
+            programSummary: tempSummary
+        })
+    }
 
+    handleOutcomeNameChange(e)
+    {
+        let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.name);
+        let tempSummary = this.state.programSummary;
+        tempSummary.outcomes[index].Outcome_Name = e.target.value;
+
+        this.setState({
+            programSummary: tempSummary
         })
     }
 
@@ -185,12 +207,21 @@ export default class EditProgramSummary extends Component
 
     handleAddRubricMeasure(e)
     {
-        this.setState({
-            showAddRubricMeasurePopup: true,
-            outcomeIdOfNewMeasure: e,
-            targetScore: this.state.rubrics[0].scale[0].Value_Number,
-            toolName: this.state.rubrics[0].Rubric_Title
-        })
+        if (this.state.rubrics)
+        {
+            this.setState({
+                showAddRubricMeasurePopup: true,
+                outcomeIdOfNewMeasure: e,
+                targetScore: this.state.rubrics[0].scale[0].Value_Number,
+                toolName: this.state.rubrics[0].Rubric_Title
+            })
+        }
+        else
+        {
+            alert("There are no rubrics associated with the current cycle. \n\nMigrate or create rubrics before making " +
+            "rubric measures.");
+        }
+        
     }
 
     closePopup(e)
@@ -209,9 +240,15 @@ export default class EditProgramSummary extends Component
 
         let rubricIndex = this.state.rubrics.findIndex(r => r.Rubric_Title === this.state.toolName);
         let valueName = null;
+        let targetScore = this.state.targetScore;
+
         if (rubricIndex > -1)
         {
             valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore].Value_Name;
+        }
+        else
+        {
+            targetScore = targetScore / 100;
         }
 
         let newMeasure = {
@@ -219,17 +256,13 @@ export default class EditProgramSummary extends Component
             Description: (this.state.description ? this.state.description : null),
             Percent_to_reach_target: (this.state.percentToReachTarget / 100),
             Value_Name: valueName,
-            Target_Score: this.state.targetScore,
+            Target_Score: targetScore,
             Tool_Name: this.state.toolName
         }
 
-        console.log(newMeasure);
-
         let index = this.state.programSummary.outcomes.findIndex(o => o.Outcome_ID === this.state.outcomeIdOfNewMeasure);
-        console.log(index);
         let tempSummary = this.state.programSummary;
         tempSummary.outcomes[index].measures.push(newMeasure);
-        console.log(tempSummary);
         this.setState({
             programSummary: tempSummary,
             showAddRubricMeasurePopup: false,
@@ -260,7 +293,8 @@ export default class EditProgramSummary extends Component
             <>
             <h1>Edit Program Summary</h1>
             <OutcomeList 
-                 outcomes = {outcomes}
+                 outcomes={outcomes}
+                 handleOutcomeNameChange={this.handleOutcomeNameChange}
                  handleOutcomeChange={this.handleOutcomeChange}
                  handleAddRubricMeasure={this.handleAddRubricMeasure}
                  handleAddTestMeasure={this.handleAddTestMeasure} 

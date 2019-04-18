@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import { Form } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addCoordinator, viewCoordinator } from '../../../actions/addCoordinator';
+import Axios from 'axios';
+import { addCoordinator, viewCoordinator,getDepartment } from '../../../actions/addCoordinator';
+import classnames from "classnames";
 
 
 class Admin extends Component {
@@ -20,8 +22,29 @@ class Admin extends Component {
     }
   }
 
+  componentDidMount(){
+    this.props.getDepartment();
+    if(localStorage.getItem("role" === "Admin")){
+      window.location.replace("/admin");
+    }
+    else{
+      window.location.replace("/dashboard");
+    }
+  }
   onChange(e){
     this.setState({[e.target.id]: [e.target.value]})
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.errors.errors){
+      this.setState({errors: nextProps.errors.errors})
+    }
+    
+    
+    
+      
+    
+  
   }
   onSubmit(e){
     e.preventDefault();
@@ -34,9 +57,16 @@ class Admin extends Component {
 
     this.props.addCoordinator(obj);
     
+    
+      
+    
   }
-    render(){
 
+  
+
+    render(){
+      
+    const {errors} = this.state;
         return (
             <div>
                 <span><h2>Add Coordinator</h2></span>
@@ -46,16 +76,18 @@ class Admin extends Component {
                   <input
                       onChange={this.onChange}
                       value={this.state.email}
-                      
+                      error={errors.email}
                       id="email"
                       type="email"
-                      
+                      className={classnames("", {
+                        invalid: errors.email
+                      })}
                  required/>
 
 
                 
                 <label htmlFor="email">Coordinator's Email</label>
-                
+                <span className="red-text">{errors.email}</span>
               </div>
               <div className="input-field col s12">
                   <input
@@ -67,29 +99,12 @@ class Admin extends Component {
                 <label htmlFor="department">Coordinator's Department</label>
                 
               </div>
-              <div className="input-field col s12">
-                  <input
-                      onChange={this.onChange}
-                      value={this.state.cwid}
-                      id="cwid"
-                      type="number"
-                      required/>
-                <label htmlFor="cwid">Coordinator's CWID</label>
-                
-              </div>
-                    <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <button
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
-                  type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Add Coordinator
-                </button>
+             
+                <div>
+                <a href="/admin" className="btn btn-success mb-4" 
+                                id={this.state.email}
+                                type="submit"
+                      onClick= {this.onSubmit}>Add coordinator</a>
                 </div>
                 </div>
                 </Form>
@@ -103,10 +118,12 @@ class Admin extends Component {
 Admin.propTypes = {
   addCoordinator: PropTypes.func.isRequired,
   viewCoordinator: PropTypes.func.isRequired,
+  getDepartment: PropTypes.func.isRequired,
   coordinators: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  coordinators: state.coordinator
+  coordinators: state.coordinator,
+  errors: state.errors
 })
-export default connect (mapStateToProps, {addCoordinator, viewCoordinator})(Admin);
+export default connect (mapStateToProps, {addCoordinator,viewCoordinator, getDepartment})(Admin);

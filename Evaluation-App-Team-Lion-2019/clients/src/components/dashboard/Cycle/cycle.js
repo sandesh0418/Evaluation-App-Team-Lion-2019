@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import classnames from "classnames";
-import { CreateNewCycle }from '../../actions/cycle';
+
+import { CreateNewCycle }from '../../../actions/cycle';
 
 class Cycle extends Component {
     constructor(props){
@@ -26,7 +26,7 @@ class Cycle extends Component {
             deptId: localStorage.getItem("dept_Id")
         }
         this.props.CreateNewCycle(obj);
-        window.location.reload('/endCycle');
+        window.location.reload('/cycles');
         
     }
 
