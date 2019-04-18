@@ -206,12 +206,13 @@ class createRubric extends Component{
     }
        else{
           
-        load = <td className='sweet-loading'>
+        load = <td className='sweet-loading' >
         <ClipLoader
          
           sizeUnit={"px"}
           size={150}
-          color={'#123abc'}
+          color={'#36D7B7'}
+          
           
         />
       </td>;
@@ -229,10 +230,12 @@ class createRubric extends Component{
            <Form onSubmit={this.onSubmit}>
             {this.state.weight ? " " : <div className = "alert alert-danger text-center">Rubric has not been saved!!! Total weight is not 100% !!</div>}
             <Table bordered striped>
+            {load} 
             <thead>
                 <tr>
+                
                     <th className="centered borderedCell">Criteria</th>
-                    {load}
+                     
             {display}
             { weight ? <th className="centered borderedCell">Weight</th> : "" }
            

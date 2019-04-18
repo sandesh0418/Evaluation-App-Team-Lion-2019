@@ -224,7 +224,7 @@ router.get("/getRubric/:title", (req, res)=>{
                 }
                 r[i] = column;
                 
-                console.log(column)
+                
 
                  
             }
@@ -250,7 +250,7 @@ router.put("/updateRubric/", (req, res) =>{
     var column =req.body.Row;
     var value = req.body.value;
     var category = column.split(" ");
-    console.log(category)
+    
     if(value != null){
         if(category[0] === "scale"){
             var number = (Number) (category[1]);
@@ -299,7 +299,7 @@ router.put("/updateRubric/", (req, res) =>{
         else{
             value = 0.0;
         }
-        console.log(value)
+        
 
         connection.query("Update `criteria` SET `weight`= ? where Rubric_Id = ? and Row_Id = ?", [value,id, number], function(err, result, fields){
             if(err) throw err;
