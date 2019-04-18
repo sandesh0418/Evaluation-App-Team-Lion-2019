@@ -2,3 +2,15 @@
 {
     width: 200px;
 }
+
+
+
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+    padding: 20px;
+}
+
+
+#criteria td{
+    padding: 40px;
+}
