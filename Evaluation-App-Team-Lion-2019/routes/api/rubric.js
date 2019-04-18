@@ -324,11 +324,14 @@ router.get('/getViewRubric/:id/:cycleId', (req, res) => {
 
     let rubric = {
         rubric_title: '',
+        Rubric_Id: '',
+        weighted: false,
         criteria: []
     }
 
     let queryGetRubric = "" +
-        "SELECT r.Rubric_Id, r.Rubric_Title, c.Criteria_Title, c.Row_Id, d.data, s.Value_Name, s.Value_Number " +
+        "SELECT r.Rubric_Id, r.Rubric_Title, r.Weight, c.Criteria_Title, c.Row_Id, c.weight as critWeight, d.data, s.Value_Name, " + 
+            "s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
         "WHERE r.Rubric_Id='" + rubricId + "' AND r.Cycle_Id='" + cycleId + "' AND c.Row_Id=d.Row_Id " +
@@ -350,6 +353,7 @@ router.get('/getViewRubric/:id/:cycleId', (req, res) => {
             
             rubric.rubric_title = results[0].Rubric_Title;
             rubric.Rubric_Id = results[0].Rubric_Id;
+            rubric.weighted = (results[0].Weight === 1 ? true : false);
             results.forEach(r => {
                 index = rubric.criteria.findIndex(c => c.row_id === r.Row_Id);
 
@@ -364,6 +368,7 @@ router.get('/getViewRubric/:id/:cycleId', (req, res) => {
                     let newCrit = {
                         criteria_title: r.Criteria_Title,
                         row_id: r.Row_Id,
+                        weight: r.critWeight,
                         descriptions: [newDescription]
                     }
                     rubric.criteria.push(newCrit);
