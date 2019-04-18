@@ -1,0 +1,10 @@
+#regcontent {
+  z-index: 1;
+  box-shadow: 4px 4px;
+  border: 4px solid whitesmoke;
+  border-radius: 25px;
+}
+
+.row .col.offset-s2 {
+  margin-left: 6.6666666667% !important;
+}

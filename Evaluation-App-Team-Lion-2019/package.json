@@ -21,6 +21,7 @@
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.11",
+    "monk": "^6.0.6",
     "mysql": "^2.16.0",
     "mysql-promise": "^5.0.0",
     "nodemailer": "^6.1.0",

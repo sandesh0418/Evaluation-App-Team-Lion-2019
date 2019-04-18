@@ -1,0 +1,10 @@
+a.nav-link:hover {
+  background-color: greenyellow;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-decoration: underline;
+}
+a.dropdown-item:hover {
+  background-color: greenyellow;
+  text-decoration: underline;
+}
