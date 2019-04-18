@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import '../../../stylesheets/rubricView.css';
+import { ClipLoader } from 'react-spinners';
+import { Spinner } from 'react-bootstrap';
 
 
 function TopRowGradeScale(props)
@@ -22,10 +24,10 @@ function CriteriaRow(props)
     {
         return (
             <tr key={i}>
-                <th scope="row">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
+                <th scope="row" style={{padding: "20px"}}>{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
-                {props.gradeMode?  <td><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
-                {props.weighted ? <td>{currentCriteria.weight + "%"}</td> : null}
+                {props.gradeMode?  <td style={{padding: "20px"}}><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.weighted ? <td style={{padding: "20px"}}>{currentCriteria.weight + "%"}</td> : null}
             </tr>
             );
     });
@@ -256,8 +258,8 @@ export default class ViewRubric extends Component
                 
                 <table className="table table-bordered">
                     <thead>
-                        <tr>
-                            <th scope="col" className="outcome-width">Criteria</th>
+                        <tr id ="criteria"> 
+                            <th scope="col" className="outcome-width" >Criteria</th>
                             <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
                             {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
                             {this.state.rubric.weighted ? <th scope="col">Weight</th> : null}
