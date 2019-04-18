@@ -103,7 +103,7 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/outcomesAndMeasures')
+        axios.get('/assignments/outcomesAndMeasures/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     outcomeList: res.data.outcomeList,

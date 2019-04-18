@@ -92,12 +92,14 @@ router.post('/createAssignment/', (req,res) => {
  * PATH: /assignments/outcomesAndMeasures
  */
 //Get outcomes and measures to load page.
-router.get('/outcomesAndMeasures', (req, res) => {
+router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
+    let cycleId = req.params.cycleId
     let outcomeList = [];
 
     let queryOutcomesWithMeasures = "" +
         "SELECT o.Outcome_ID, o.Description as oDescription, m.Measure_ID, m.Description as mDescription " +
-        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID";
+        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID " +
+        "WHERE o.Cycle_Id='" + cycleId + "'";   
 
     connection.query(queryOutcomesWithMeasures, (error, results, fields) => {
         if (error || results.length === 0) 

@@ -134,7 +134,7 @@ export default class EditProgramSummary extends Component
                     programSummary: res.data.programSummary
                 })
         })
-        axios.get('/rubric/getListWithScale')
+        axios.get('/rubric/getListWithScale/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 if(res.data.status)
                 {
@@ -205,12 +205,21 @@ export default class EditProgramSummary extends Component
 
     handleAddRubricMeasure(e)
     {
-        this.setState({
-            showAddRubricMeasurePopup: true,
-            outcomeIdOfNewMeasure: e,
-            targetScore: this.state.rubrics[0].scale[0].Value_Number,
-            toolName: this.state.rubrics[0].Rubric_Title
-        })
+        if (this.state.rubrics)
+        {
+            this.setState({
+                showAddRubricMeasurePopup: true,
+                outcomeIdOfNewMeasure: e,
+                targetScore: this.state.rubrics[0].scale[0].Value_Number,
+                toolName: this.state.rubrics[0].Rubric_Title
+            })
+        }
+        else
+        {
+            alert("There are no rubrics associated with the current cycle. \n\nMigrate or create rubrics before making " +
+            "rubric measures.");
+        }
+        
     }
 
     closePopup(e)

@@ -78,7 +78,7 @@ function buildProgramSummary(withStats, req, res, cycleId)
                 {
                     let newMeasure = {
                         Measure_ID: row.measureId,
-                        Description: row.measureDescription,
+                        Description: (row.measureDescription !== "null" ? row.measureDescription : null),
                         Percent_to_reach_target: row.percentToReachTarget,
                         Target_Score: row.targetScore,
                         Value_Name: row.valueName,
