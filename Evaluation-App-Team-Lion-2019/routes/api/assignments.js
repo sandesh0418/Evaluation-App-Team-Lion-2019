@@ -97,7 +97,7 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
     let outcomeList = [];
 
     let queryOutcomesWithMeasures = "" +
-        "SELECT o.Outcome_ID, o.Description as oDescription, m.Measure_ID, m.Description as mDescription " +
+        "SELECT o.Outcome_ID, o.Outcome_Name, o.Description as oDescription, m.Measure_ID, m.Description as mDescription " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID " +
         "WHERE o.Cycle_Id='" + cycleId + "'";   
 
@@ -125,6 +125,7 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
                 {
                     let newOutcome = {
                         Outcome_ID: r.Outcome_ID,
+                        Outcome_Name: r.Outcome_Name,
                         Description: r.oDescription,
                         measures:[newMeasure]
                     }
@@ -149,15 +150,18 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
  * Get assignments by User_Email for myAssignments
  * PATH: /assignments/myAssignments 
  */
-router.get('/myAssignments/:email', (req, res) => {
+router.get('/myAssignments/:email/:cycleId', (req, res) => {
     let queryGetAssignments = "" + 
-        "SELECT o.Description as outcomeDescription, m.Description as measureDescription, " + 
-            "a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as rubricTitle " + 
+        "SELECT DISTINCT o.Outcome_Name as outcomeName, o.Description as outcomeDescription, m.Description " +
+            "as measureDescription, a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as " +
+            "rubricTitle, r.Rubric_Id as rubricId " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title " + 
-        "WHERE a.User_Email='" + req.params.email + "' " +
+            "a.Measure_ID=m.Measure_ID LEFT JOIN (SELECT Rubric_Title, Rubric_Id " +
+                                                "FROM measure mm JOIN rubric rr on mm.Tool_Name=rr.Rubric_Title " +
+                                                "WHERE rr.Cycle_Id='" + req.params.cycleId + "') as r ON " +
+            "m.Tool_Name=r.Rubric_Title " +
+        "WHERE a.User_Email='" + req.params.email + "' AND o.Cycle_Id='" + req.params.cycleId + "' " +
         "ORDER BY assignmentId";
-
 
     connection.query(queryGetAssignments, (error, results, field) => {
         if (error) 
@@ -170,6 +174,8 @@ router.get('/myAssignments/:email', (req, res) => {
         }
         else
         {
+            console.log("\n");
+            console.log(Object.values(JSON.parse(JSON.stringify(results))));
             res.status(200).json({
                 assignments: Object.values(JSON.parse(JSON.stringify(results)))
             })

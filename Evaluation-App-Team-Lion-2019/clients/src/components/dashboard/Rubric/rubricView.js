@@ -24,10 +24,10 @@ function CriteriaRow(props)
     {
         return (
             <tr key={i}>
-                <th scope="row" style={{padding: "20px"}}>{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
+                <th scope="row" className="p-3">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
-                {props.gradeMode?  <td style={{padding: "20px"}}><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
-                {props.weighted ? <td style={{padding: "20px"}}>{currentCriteria.weight + "%"}</td> : null}
+                {props.gradeMode?  <td className="p-3"><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.weighted ? <td className="p-3">{currentCriteria.weight + "%"}</td> : null}
             </tr>
             );
     });

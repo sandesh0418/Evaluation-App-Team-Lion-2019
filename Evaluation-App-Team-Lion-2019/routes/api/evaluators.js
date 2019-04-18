@@ -71,9 +71,8 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
 router.get('/evaluatorList/:deptId', (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
-    
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' and `role` ='Evaluator'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND NOT role='Admin'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
