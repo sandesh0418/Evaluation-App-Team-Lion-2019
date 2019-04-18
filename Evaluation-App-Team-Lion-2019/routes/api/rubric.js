@@ -229,7 +229,7 @@ router.get("/getRubric/:title", (req, res)=>{
                  
             }
             Rubric[1] = r;
-        
+            Rubric[2] = {weight: true}
         
 
 
