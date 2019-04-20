@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import axios from 'axios';
-import { CyclesInProgress } from './actions/cycle';
+import axios from "axios";
+import { CyclesInProgress } from "./actions/cycle";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -15,25 +15,25 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 import EvaluatorDashboard from "./components/dashboard/Dashboard/EvaluatorDashboard";
-import NavBar from '../src/components/layout/Navbar';
-import ViewRubric from './components/dashboard/Rubric/rubricView';
-import ViewSummary from './components/dashboard/viewSummary/viewSummary.js';
-import RubricList from './components/dashboard/Rubric/rubricList.js';
-import MyAssignments from './components/dashboard/Assignment/myAssignments.js';
-import EditProgramSummary from './components/dashboard/editProgramSummary/editProgramSummary';
-import Rubric from './components/dashboard/Rubric/Rubric';
-import CreateRubric from './components/dashboard/Rubric/createRubric';
-import CreateAssignment from './components/dashboard/Assignment/createAssignment.js';
-import ViewEvaluator from './components/dashboard/Evaluator/viewEvaluator';
-import AddEvaluator from './components/dashboard/Evaluator/addEvaluator';
-import EvaluateTest from './components/dashboard/evaluateTest';
-import EditProfile from './components/dashboard/editProfile';
-import Cycle from './components/dashboard/Cycle/cycle';
-import ViewCycles from './components/dashboard/Cycle/viewCycle';
+import NavBar from "../src/components/layout/Navbar";
+import ViewRubric from "./components/dashboard/Rubric/rubricView";
+import ViewSummary from "./components/dashboard/viewSummary/viewSummary.js";
+import RubricList from "./components/dashboard/Rubric/rubricList.js";
+import MyAssignments from "./components/dashboard/Assignment/myAssignments.js";
+import EditProgramSummary from "./components/dashboard/editProgramSummary/editProgramSummary";
+import Rubric from "./components/dashboard/Rubric/Rubric";
+import CreateRubric from "./components/dashboard/Rubric/createRubric";
+import CreateAssignment from "./components/dashboard/Assignment/createAssignment.js";
+import ViewEvaluator from "./components/dashboard/Evaluator/viewEvaluator";
+import AddEvaluator from "./components/dashboard/Evaluator/addEvaluator";
+import EvaluateTest from "./components/dashboard/evaluateTest";
+import EditProfile from "./components/dashboard/editProfile";
+import Cycle from "./components/dashboard/Cycle/cycle";
+import ViewCycles from "./components/dashboard/Cycle/viewCycle";
 
-import MeasureReport from './components/dashboard/measureReport'
-import Admin from './components/dashboard/admin/admin';
-import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
+import MeasureReport from "./components/dashboard/measureReport";
+import Admin from "./components/dashboard/admin/admin";
+import ViewCoordinator from "./components/dashboard/admin/viewCoordinator";
 
 import "./App.css";
 
@@ -58,16 +58,10 @@ if (localStorage.jwtToken) {
   }
 }
 
-
 class App extends Component {
-
-
-  
-componentDidMount(){
-
-  var dept_Id = localStorage.getItem("Dept_Id");
-  
-}
+  componentDidMount() {
+    var dept_Id = localStorage.getItem("Dept_Id");
+  }
   render() {
     return (
       <Provider store={store}>
@@ -115,7 +109,5 @@ componentDidMount(){
     );
   }
 }
-
-
 
 export default App;
