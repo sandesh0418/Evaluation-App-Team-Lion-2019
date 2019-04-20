@@ -151,6 +151,7 @@ router.post("/login", (req, res) => {
               success: true,
               token: "Bearer " + token,
               role: results[0].role,
+              email: email,
               name: results[0].firstName,
               department: results[0].Dept_Id
             });

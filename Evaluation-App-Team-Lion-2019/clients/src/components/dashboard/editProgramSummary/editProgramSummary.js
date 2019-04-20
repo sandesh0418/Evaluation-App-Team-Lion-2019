@@ -91,7 +91,12 @@ const Measures = props => {
                     (measure.Value_Name ? "'" + measure.Value_Name + "'" : 
                     (measure.Target_Score * 100) + "%") +" or higher on " + measure.Tool_Name + "."}
                  </p>
-                {measure.Description ? <p className="ml-3">{"Additional description: " + measure.Description}</p> : null}
+                {measure.Description ? 
+                    <details className="ml-3 mb-3">
+                        <summary>Additional description: </summary>
+                        <p className="ml-3">{measure.Description}</p>
+                    </details> 
+                    : null}
             </div>
         )
     })

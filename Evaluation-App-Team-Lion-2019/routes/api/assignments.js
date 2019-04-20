@@ -61,8 +61,6 @@ router.post('/createAssignment/', (req,res) => {
             return returnValue;
         }
 
-        console.log(separatedList);
-
         let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
             separatedList;
 
@@ -97,7 +95,8 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
     let outcomeList = [];
 
     let queryOutcomesWithMeasures = "" +
-        "SELECT o.Outcome_ID, o.Outcome_Name, o.Description as oDescription, m.Measure_ID, m.Description as mDescription " +
+        "SELECT o.Outcome_ID, o.Outcome_Name, o.Description as oDescription, m.Measure_ID, m.Measure_Name, " + 
+        "m.Description as mDescription " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID " +
         "WHERE o.Cycle_Id='" + cycleId + "'";   
 
@@ -118,6 +117,7 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
 
                 let newMeasure = {
                     Measure_ID: r.Measure_ID,
+                    Measure_Name: r.Measure_Name,
                     Description: r.mDescription
                 }
 
@@ -154,14 +154,19 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
     let queryGetAssignments = "" + 
         "SELECT DISTINCT o.Outcome_Name as outcomeName, o.Description as outcomeDescription, m.Description " +
             "as measureDescription, a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as " +
-            "rubricTitle, r.Rubric_Id as rubricId " +
+            "rubricTitle, r.Rubric_Id as rubricId, m.Measure_Name as measureName, sl.Subject_Name as subjectName, " +
+            "sl.Subject_ID as subjectId, ss.Criteria_Title as criteriaTitle, ss.Score as score " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID LEFT JOIN (SELECT Rubric_Title, Rubric_Id " +
-                                                "FROM measure mm JOIN rubric rr on mm.Tool_Name=rr.Rubric_Title " +
-                                                "WHERE rr.Cycle_Id='" + req.params.cycleId + "') as r ON " +
-            "m.Tool_Name=r.Rubric_Title " +
-        "WHERE a.User_Email='" + req.params.email + "' AND o.Cycle_Id='" + req.params.cycleId + "' " +
+            "a.Measure_ID=m.Measure_ID JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN " + 
+            "(SELECT Rubric_Title, Rubric_Id " +
+            "FROM measure mm JOIN rubric rr on mm.Tool_Name=rr.Rubric_Title " +
+            "WHERE rr.Cycle_Id='" + req.params.cycleId + "') as r ON " +
+            "m.Tool_Name=r.Rubric_Title LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND " +
+            "sl.Subject_ID=ss.Subject_ID AND a.User_Email=ss.User_Email " +
+        "WHERE a.User_Email='" + req.params.email + "' AND o.Cycle_Id='" + req.params.cycleId + "' " + 
         "ORDER BY assignmentId";
+
+        let assignments = [];
 
     connection.query(queryGetAssignments, (error, results, field) => {
         if (error) 
@@ -174,10 +179,63 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
         }
         else
         {
-            console.log("\n");
-            console.log(Object.values(JSON.parse(JSON.stringify(results))));
+            let data = Object.values(JSON.parse(JSON.stringify(results)));
+            data.forEach(r => {
+                let assignmentIndex = assignments.findIndex(a => a.assignmentId === r.assignmentId);
+
+                let newScore = {
+                    criteriaTitle: r.criteriaTitle,
+                    score: r.score
+                }
+
+                if (assignmentIndex === -1)
+                {
+                    let newSubject = {
+                        subjectName: r.subjectName,
+                        subjectId: r.subjectId,
+                        scores: [newScore]
+                    }
+
+                    let newAssignment = {
+                        outcomeName: r.outcomeName,
+                        outcomeDescription: r.outcomeDescription,
+                        measureName: r.measureName,
+                        measureDescription: r.measureDescription,
+                        assignmentId: r.assignmentId,
+                        toolName: r.toolName,
+                        rubricTitle: r.rubricTitle,
+                        rubricId: r.rubricId,
+                        subjects: [newSubject]
+                    }
+
+                    //console.log(newAssignment);
+
+                    assignments.push(newAssignment);
+                }
+                else
+                {
+                    let subjectIndex = assignments[assignmentIndex].subjects.findIndex(s => s.subjectId === r.subjectId);
+
+                    if (subjectIndex === -1)
+                    {
+                        let newSubject = {
+                            subjectName: r.subjectName,
+                            subjectId: r.subjectId,
+                            scores: [newScore]
+                        }
+
+                        assignments[assignmentIndex].subjects.push(newSubject);
+                    }
+                    else
+                    {
+                        assignments[assignmentIndex].subjects[subjectIndex].scores.push(newScore);
+                    }
+                }
+            })
+
+
             res.status(200).json({
-                assignments: Object.values(JSON.parse(JSON.stringify(results)))
+                assignments: assignments
             })
         }
     })

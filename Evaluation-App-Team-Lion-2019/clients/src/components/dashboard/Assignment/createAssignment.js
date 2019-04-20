@@ -15,7 +15,7 @@ function SelectOutcome(props)
 function SelectMeasure(props)
 {
     return props.measureList.map(measure => {
-        return <option key={measure.Measure_ID} value={measure.Measure_ID}>{measure.Measure_ID}</option>
+        return <option key={measure.Measure_ID} value={measure.Measure_ID}>{measure.Measure_Name}</option>
     })
 }
 
@@ -202,7 +202,7 @@ export default class CreateAssignment extends Component
                     Measure_ID: this.state.selectedMeasure,
                     User_Email: this.state.selectedEvaluator,
                     studentList: fileReader.result + 
-                    (this.state.manualStudentEntry.length === 0 ? null : "\n" + manualStudentEntryToString(this.state.manualStudentEntry))
+                    (this.state.manualStudentEntry.length === 0 ? '' : "\n" + manualStudentEntryToString(this.state.manualStudentEntry))
                 }
                 
                 axios.post('/assignments/createAssignment', assignment)

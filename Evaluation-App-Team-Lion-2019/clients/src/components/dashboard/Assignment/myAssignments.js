@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import './myAssignments.css';
 
 
 function ListDisplay(props)
@@ -9,7 +10,22 @@ function ListDisplay(props)
             <div className="m-3 p-3 border rounded" key={a.assignmentId}>
                 <p className="h5">{"Outcome name: " + a.outcomeName}</p>
                 <div>{"Outcome description: " + a.outcomeDescription}</div>
-                <div>{"Measure: " + a.measureDescription}</div>
+                <p className="h5">{"Measure name: " + a.measureName}</p>
+                <details>
+                    <summary>Subjects:</summary>
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Id</th> 
+                                <th>Graded?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <SubjectList subjects={a.subjects} />
+                        </tbody>
+                    </table>
+                </details>
                 <button 
                     type="button" 
                     className="btn btn-secondary mt-2" 
@@ -20,6 +36,20 @@ function ListDisplay(props)
             </div>
         )
     });
+}
+
+function SubjectList(props)
+{
+    return props.subjects.map(s => {
+        
+        return (
+            <tr key={s.subjectId}>
+                <td>{s.subjectName}</td>
+                <td>{s.subjectId}</td>
+                <td>{s.scores[0].score === null ? "No" : "Yes"}</td>
+            </tr>
+        )
+    })
 }
 
 export default class RubricList extends Component 
