@@ -22,9 +22,9 @@ class NavAdmin extends Component
     render()
     {
         return (
-            < >
-            <Navbar.Toggle aria-controls="basic-navbar-nav"  />
-            <Navbar.Collapse id="responsive-navbar-nav" >
+            <>
+            <Navbar.Toggle aria-controls="basic-navbar-nav "  />
+            <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="ml-auto" >
                     <Nav.Link href="/dashboard">Home</Nav.Link>
                     <Nav.Link href="/viewSummary">View Summary</Nav.Link>
@@ -48,6 +48,7 @@ class NavAdmin extends Component
                     <NavDropdown title="Cycle">
                         <NavDropdown.Item href="/cycle">Start a new Cycle</NavDropdown.Item>
                         <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
+                        <NavDropdown.Item href="/migrateCycles">Migrate Cycles</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title={User()}  >
                     
@@ -56,8 +57,10 @@ class NavAdmin extends Component
                         
                 </NavDropdown>
                 </Nav> 
+
             </Navbar.Collapse>
-            </> 
+
+            </>
         );
     }
 }

@@ -20,7 +20,7 @@ class NavBar extends Component
             userRole = localStorage.getItem('role').toLowerCase();
         }
         return (
-            <Navbar bg="light" expand="md" className="mb-5">
+            <Navbar bg="light" expand="lg" className="mb-5">
                 <button className="navbar-brand" target="_blank">
                     <img src={logo} width="50" height="50" alt="Not available" />
                 </button>

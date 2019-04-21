@@ -121,8 +121,9 @@ else{
       <div className="container">
        
         <div className="jumbotron" >
+        
         <div className="row">
-       
+        
         
         <div className="col-sm-4" style={{margin: "auto"}}>
         <span style={{fontSize: "30px"}}>Cycles In Progress</span>

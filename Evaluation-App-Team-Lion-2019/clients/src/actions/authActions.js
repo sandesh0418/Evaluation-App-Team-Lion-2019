@@ -46,6 +46,7 @@ export const loginUser = userData => dispatch => {
       localStorage.setItem("name", res.data.name);
       // Decode token to get user data
       const decoded = (token);
+      
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
@@ -74,6 +75,7 @@ export const logoutUser = () => dispatch => {
   // Remove auth header for future requests
   localStorage.removeItem("role");
   localStorage.removeItem("name");
+  localStorage.removeItem("dept_Id");
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));

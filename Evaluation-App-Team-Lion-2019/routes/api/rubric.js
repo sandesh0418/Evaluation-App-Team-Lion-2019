@@ -393,7 +393,7 @@ router.get('/getViewRubric/:id/:cycleId', (req, res) => {
 router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req, res) => {
 
     var Cycle_Id = req.params.id;
-    console.log(Cycle_Id)
+    
     let queryGetRubrics = "SELECT `Rubric_Title`, `Rubric_Id` FROM rubric where Cycle_Id = ? ORDER BY Rubric_Title ASC";
 
     connection.query(queryGetRubrics, Cycle_Id, function(error, results, fields) {
@@ -418,7 +418,9 @@ router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req
             else
             {
                 res.json({
-                    status: false
+                    status: false,
+                    message: "No Rubric for that particular cycle",
+                    rubrics:[]
                 })
             }
             

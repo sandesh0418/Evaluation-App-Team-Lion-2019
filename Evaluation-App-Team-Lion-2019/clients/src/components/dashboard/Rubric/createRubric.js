@@ -30,7 +30,7 @@ class createRubric extends Component{
  
     onSubmit(e){
         e.preventDefault();
-        console.log(this.props.rubric.rubric[2].weight)
+        
         if(this.props.rubric.rubric[2].weight === true){
            
             window.location.replace("/rubricList");
@@ -75,11 +75,11 @@ class createRubric extends Component{
       
     render(){
         var weight = false;
-        var display = "";
-        var row = "";
+        var display;
+        var row;
         var weight = 0;
-        var load = '';
-        var totalWeight = 0;
+        var load;
+       
         
         let { rubric } = this.props.rubric;
         
@@ -206,7 +206,7 @@ class createRubric extends Component{
     }
        else{
           
-        load = <td className='sweet-loading' >
+        load = <tbody><tr className='sweet-loading' >
         <ClipLoader
          
           sizeUnit={"px"}
@@ -215,7 +215,7 @@ class createRubric extends Component{
           
           
         />
-      </td>;
+      </tr></tbody>;
 
 
            
@@ -228,23 +228,19 @@ class createRubric extends Component{
            
            
            <Form onSubmit={this.onSubmit}>
-            {this.state.weight ? " " : <div className = "alert alert-danger text-center">Rubric has not been saved!!! Total weight is not 100% !!</div>}
+            
+            {this.state.weight ? null: <p className = "alert alert-danger text-center">Rubric has not been saved!!! Total weight is not 100% !!</p>}
             <Table bordered striped>
             {load} 
             <thead>
                 <tr>
-                
-                    <th className="centered borderedCell">Criteria</th>
-                     
-            {display}
-            { weight ? <th className="centered borderedCell">Weight</th> : "" }
-           
-            </tr>
+                <th className="centered borderedCell">Criteria</th>
+                {display}
+            {weight ? <th className="centered borderedCell">Weight</th> : null }
+           </tr>
             </thead>
             <tbody>
-                
                 { row }
-                
             </tbody>
             </Table>
 
@@ -256,6 +252,7 @@ class createRubric extends Component{
                     marginTop: "1rem",
                     padding: "15px"
                   }}
+                  
                   type="submit"
                   className="btn btn-large btn-success waves-effect waves-light hoverable"
                 >

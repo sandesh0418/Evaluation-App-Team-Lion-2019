@@ -34,6 +34,7 @@ import ViewCycles from './components/dashboard/Cycle/viewCycle';
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
+import MigrateCycle from './components/dashboard/Cycle/migrateCycle';
 
 import "./App.css";
 
@@ -47,6 +48,7 @@ if (localStorage.jwtToken) {
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
+  localStorage.setItem("email", decoded.email)
   // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
@@ -99,7 +101,7 @@ componentDidMount(){
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                
+                <PrivateRoute exact path="/migrateCycles" component={MigrateCycle} />
                 <PrivateRoute exact path="/measureReport" component={MeasureReport} />
               </Switch>
             </div>
