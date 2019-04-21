@@ -205,6 +205,7 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                         toolName: r.toolName,
                         rubricTitle: r.rubricTitle,
                         rubricId: r.rubricId,
+                        finished: (r.score === null ? false : true),
                         subjects: [newSubject]
                     }
 
@@ -214,6 +215,11 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                 }
                 else
                 {
+                    if (assignments[assignmentIndex].finished && (r.score === null))
+                    {
+                        assignments[assignmentIndex].finished = false;
+                    }
+
                     let subjectIndex = assignments[assignmentIndex].subjects.findIndex(s => s.subjectId === r.subjectId);
 
                     if (subjectIndex === -1)
@@ -293,6 +299,34 @@ router.get('/assignmentMeasure/:id', (req, res) => {
         {
             res.status(200).json({
                 measure: Object.values(JSON.parse(JSON.stringify(results)))[0]
+            })
+        }
+    })
+})
+
+/**
+ * Delete a subject from the subject list.
+ * PATH: /assignments/deleteSubject
+ */
+router.post('/deleteSubject', (req, res) => {
+    let queryDeleteSubject = "DELETE FROM subject_list WHERE Assignment_ID='" + req.body.assignmentId + "' " +
+        "AND Subject_ID='" + req.body.subjectId + "'";
+
+    connection.query(queryDeleteSubject, (error, results, field) => {
+        if (error) 
+        {
+            res.status(404).json({
+                deleted:false,
+                error: error,
+                message:'Could not delete subject'
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                deleted:true,
+                error: error,
+                message:'Subject was deleted.'
             })
         }
     })
