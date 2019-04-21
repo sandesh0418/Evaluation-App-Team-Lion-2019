@@ -55,6 +55,15 @@ function buildProgramSummary(withStats, req, res, cycleId)
                 message: "The summary could not be retrieved."
             })
         }
+        else if (results.length < 1)
+        {
+            res.json({
+                status: false,
+                error: error,
+                message: "There is no summary.",
+                programSummary: programSummary
+            })
+        }
         else
         {
             let data = Object.values(JSON.parse(JSON.stringify(results)));
@@ -78,7 +87,7 @@ function buildProgramSummary(withStats, req, res, cycleId)
                 {
                     let newMeasure = {
                         Measure_ID: row.measureId,
-                        Description: row.measureDescription,
+                        Description: (row.measureDescription !== "null" ? row.measureDescription : null),
                         Percent_to_reach_target: row.percentToReachTarget,
                         Target_Score: row.targetScore,
                         Value_Name: row.valueName,
@@ -124,8 +133,9 @@ function getMeasureStatisticsV2(req, res, programSummary)
 {
     //Get: Subject_ID, measureId, Average, outcomeId
     let queryMeasureStatistics = "" + 
-        "SELECT Subject_ID, s.Measure_ID as measureId, AVG(Score) as Average, m.Outcome_ID as outcomeId " +
-        "FROM subject_score s JOIN measure m on s.Measure_ID=m.Measure_ID " +
+        "SELECT Subject_ID, s.Measure_ID as measureId, AVG(Score) as Average, o.Outcome_ID as outcomeId " +
+        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN subject_score s ON s.Measure_ID=m.Measure_ID " +
+        "WHERE o.Cycle_Id='" + programSummary.cycleId + "' " +
         "GROUP BY Subject_ID, s.Measure_ID";
 
     connection.query(queryMeasureStatistics, (error, results, fields) => {
@@ -142,6 +152,7 @@ function getMeasureStatisticsV2(req, res, programSummary)
             let data = Object.values(JSON.parse(JSON.stringify(results)));
             data.forEach(row => {
                 let outcomeIndex = programSummary.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
+                console.log(outcomeIndex);
                 let measureIndex = programSummary.outcomes[outcomeIndex].measures.findIndex(m => m.Measure_ID === row.measureId);
 
                 if (row.Average >= programSummary.outcomes[outcomeIndex].measures[measureIndex].Target_Score)

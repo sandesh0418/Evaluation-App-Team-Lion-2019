@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
+import "../../stylesheets/Register.css";
 
 class Register extends Component {
   constructor() {
@@ -11,13 +12,13 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      cwid: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      role: '',
-      password2: '',
+      cwid: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      role: "",
+      password2: "",
       errors: {}
     };
   }
@@ -43,7 +44,7 @@ class Register extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const obj ={
+    const obj = {
       cwid: this.state.cwid,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -51,8 +52,7 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2,
       role: this.state.role
-    }
-   
+    };
 
     this.props.registerUser(obj, this.props.history);
   };
@@ -61,7 +61,7 @@ class Register extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="container">
+      <div id="regcontent" className="container">
         <div className="row">
           <div className="col s8 offset-s2">
             <Link to="/" className="btn-flat waves-effect">
@@ -133,7 +133,7 @@ class Register extends Component {
                   })}
                 />
 
-              <label htmlFor="role">Please enter your Role</label>
+                <label htmlFor="role">Please enter your Role</label>
                 <span className="red-text">{errors.role}</span>
               </div>
               <div className="input-field col s12">
@@ -148,8 +148,6 @@ class Register extends Component {
                   })}
                 />
 
-
-                
                 <label htmlFor="email">Email</label>
                 <span className="red-text">{errors.email}</span>
               </div>
@@ -169,7 +167,6 @@ class Register extends Component {
                 <span className="red-text">{errors.password}</span>
               </div>
 
-              
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}

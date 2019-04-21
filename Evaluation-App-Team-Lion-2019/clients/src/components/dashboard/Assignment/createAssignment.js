@@ -8,7 +8,7 @@ var evalList = [{ email: '', firstName: '', lastName: ''}];
 function SelectOutcome(props)
 {
     return props.outcomeList.map((outcome, index) => {
-        return <option key={outcome.Outcome_ID} value={index}>{outcome.Description}</option>
+        return <option key={outcome.Outcome_ID} value={index}>{outcome.Outcome_Name}</option>
     })
 }
 
@@ -103,7 +103,7 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/outcomesAndMeasures')
+        axios.get('/assignments/outcomesAndMeasures/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     outcomeList: res.data.outcomeList,

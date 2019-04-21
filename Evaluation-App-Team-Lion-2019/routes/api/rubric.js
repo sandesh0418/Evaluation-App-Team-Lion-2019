@@ -433,10 +433,12 @@ router.get('/getList/:id', passport.authenticate("jwt", { session: false }),(req
  * Get rubric list with rubric scale.
  * Used by: editProgramSummary
  */
-router.get('/getListWithScale', passport.authenticate("jwt", { session: false }),(req, res) => {
+router.get('/getListWithScale/:cycleId', passport.authenticate("jwt", { session: false }),(req, res) => {
+    let cycleId = req.params.cycleId;
     let queryGetRubrics = "" +
         "SELECT Rubric_Title as rubricTitle, Value_Number as valueNumber, Value_Name as valueName " +
         "FROM rubric JOIN scales ON rubric.Rubric_Id=scales.Rubric_Id " +
+        "WHERE rubric.Cycle_Id='" + cycleId + "' " + 
         "GROUP BY Rubric_Title, Value_Number, Value_Name " +
         "ORDER BY Rubric_Title"
 

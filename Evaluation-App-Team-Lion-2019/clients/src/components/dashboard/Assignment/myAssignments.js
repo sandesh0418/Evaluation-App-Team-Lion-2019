@@ -7,12 +7,13 @@ function ListDisplay(props)
     return props.assignments.map(a => {
         return (
             <div className="m-3 p-3 border rounded" key={a.assignmentId}>
-                <div>{"Outcome: " + a.outcomeDescription}</div>
+                <p className="h5">{"Outcome name: " + a.outcomeName}</p>
+                <div>{"Outcome description: " + a.outcomeDescription}</div>
                 <div>{"Measure: " + a.measureDescription}</div>
                 <button 
                     type="button" 
                     className="btn btn-secondary mt-2" 
-                    id={a.rubricTitle + "/" + a.assignmentId}
+                    id={a.rubricId + "/" + a.assignmentId}
                     onClick={props.onClick}>
                     {"Evaluate " + a.toolName}
                 </button>
@@ -34,11 +35,13 @@ export default class RubricList extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/myAssignments/' + localStorage.getItem("email"))
+        axios.get('/assignments/myAssignments/' + localStorage.getItem("email") + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     assignments: res.data.assignments
                 })
+
+                console.log(this.state.assignments);
             })
     }
 
@@ -59,7 +62,10 @@ export default class RubricList extends Component
         return(
             <div>
                 <h1>My Assignments</h1>
-                <ListDisplay assignments={this.state.assignments} onClick={this.handleEvaluateClick} />
+                {this.state.assingments !== [] ? 
+                    <ListDisplay assignments={this.state.assignments} onClick={this.handleEvaluateClick} /> 
+                    : <p>You have no assignments.</p>
+                }
             </div>
         );
     }
