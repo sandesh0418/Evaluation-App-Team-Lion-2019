@@ -330,6 +330,36 @@ router.post('/deleteSubject', (req, res) => {
             })
         }
     })
+
+    let queryGetSubjectScore = "" + 
+        "SELECT ss.Subject_ID, a.User_Email, m.Measure_ID " +
+        "FROM assignments a JOIN measure m ON a.Measure_ID=m.Measure_ID LEFT JOIN subject_score ss " +
+            "ON m.Measure_ID=ss.Measure_ID AND a.User_Email=ss.User_Email " +
+        "WHERE a.Assignment_ID='" + req.body.assignmentId + "' AND ss.Subject_ID='" + req.body.subjectId + "'";
+
+    connection.query(queryGetSubjectScore, (error, results, field) => {
+        if(error)
+        {
+            console.log(error);
+        }
+        else if (results.length > 0)
+        {
+            let queryDeleteSubjectScores = "" +
+                "DELETE FROM subject_score WHERE Subject_ID='" + results[0].Subject_ID + "' AND " +
+                "User_Email='" + results[0].User_Email + "' AND Measure_ID='" + results[0].Measure_ID + "'";
+
+            connection.query(queryDeleteSubjectScores, (error, results, field) => {
+                if(error)
+                {
+                    console.log(error);
+                }
+                else
+                {
+                    console.log("Deleted the scores");
+                }
+            })
+        }
+    })
 })
 
 module.exports = router;
