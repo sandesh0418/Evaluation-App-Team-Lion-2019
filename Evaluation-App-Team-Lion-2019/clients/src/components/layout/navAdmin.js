@@ -62,14 +62,14 @@ class NavAdmin extends Component {
             </NavDropdown>
             <NavDropdown
               title={User()}
-              class="dropdown-menu dropdown-menu-right"
+              
             >
-              <dropdownMenu right>
-                <Nav.Link href="/editProfile">Edit Profile</Nav.Link>
-                <Nav.Link href="/" onClick={this.onLogOut.bind(this)}>
+              
+                <NavDropdown.Item href="/editProfile">Edit Profile</NavDropdown.Item>
+                <NavDropdown.Item href ="/" onClick={this.onLogOut.bind(this)}>
                   Logout
-                </Nav.Link>
-              </dropdownMenu>
+                </NavDropdown.Item>
+             
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
