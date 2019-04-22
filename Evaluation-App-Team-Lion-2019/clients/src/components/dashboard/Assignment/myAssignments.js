@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import AddSubjects from './addSubjects';
 import './myAssignments.css';
 
 
@@ -13,33 +14,38 @@ function ListDisplay(props)
                     <p className="h5">{"Outcome name: " + a.outcomeName}</p>
                     <div>{"Outcome description: " + a.outcomeDescription}</div>
                     <p className="h5">{"Measure name: " + a.measureName}</p>
-                    <details>
-                        <summary>Subjects:</summary>
-                        <table className="table table-bordered p-3">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Id</th> 
-                                    <th>Graded?</th>
-                                    <th>Remove Subject</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <SubjectList 
-                                    assignmentId={a.assignmentId} 
-                                    subjects={a.subjects}
-                                    removeSubject={props.removeSubject} 
-                                />
-                            </tbody>
-                        </table>
-                    </details>
-                    <button 
-                        type="button" 
-                        className="btn btn-secondary mt-2" 
-                        id={a.rubricId + "/" + a.assignmentId}
-                        onClick={props.onClick}>
-                        {"Evaluate " + a.toolName}
-                    </button>
+                    {a.subjects[0] && a.subjects[0].subjectId !== null ? 
+                        <>
+                            <button 
+                                type="button" 
+                                className="btn btn-secondary mt-2 mb-2" 
+                                id={a.rubricId + "/" + a.assignmentId}
+                                onClick={props.onClick}>
+                                {"Evaluate " + a.toolName}
+                            </button>
+                            <details>
+                                <summary>Subjects:</summary>
+                                <table className="table table-bordered p-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Id</th> 
+                                            <th>Graded?</th>
+                                            <th>Remove Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <SubjectList 
+                                            assignmentId={a.assignmentId} 
+                                            subjects={a.subjects}
+                                            removeSubject={props.removeSubject} 
+                                        />
+                                    </tbody>
+                                </table>
+                            </details>
+                        </>
+                    : <p>There are no subjects in this assignments yet. Add subjects to evaluate.</p> }
+                    <AddSubjects assignmentId={a.assignmentId} />
                 </div>
             )
         }
@@ -103,8 +109,7 @@ export default class RubricList extends Component
                 this.setState({
                     assignments: res.data.assignments
                 })
-
-                console.log(this.state.assignments);
+                console.log(res.data.assignments);
             })
     }
 

@@ -29,61 +29,68 @@ router.post('/createAssignment/', (req,res) => {
         }
         else
         {
-            insertSubjectList();
+            let lines = req.body.studentList;
+            insertSubjectList(req, res, lines, Assignment_ID, true);
         }
     });
 
-    function insertSubjectList()
-    {
-        let separatedList = "";
-        let lines = req.body.studentList.split("\n");
-        lines.splice(0, 1);
-
-        for (let i = 0; i < lines.length; i++)
-        {
-            if (i == lines.length - 1)
-            {
-                separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "')"
-            }
-            else
-            {
-                separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "'),";
-            }
-        }
-
-        function formatLine(line)
-        {
-            let newLines = line.split(",");
-            let returnValue = "";
-            newLines.forEach(l => {
-                returnValue += "'" + l + "',";
-            })
-            return returnValue;
-        }
-
-        let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
-            separatedList;
-
-        connection.query(queryInsertSubjects, function (error, results, fields) {
-            if (error) 
-            {
-                res.status(404).json({
-                    status:false,
-                    error: error,
-                    message:'The subject list could not be added.'
-                })
-            }
-            else
-            {
-                res.status(200).json({
-                    status: true,
-                    error: error,
-                    message:'The assignment has been added.'
-                })
-            }
-        })
-    }
 })
+
+router.post('/addSubjects', (req,res) => {
+    let lines = req.body.subjectList;
+    insertSubjectList(req, res, lines, req.body.assignmentId, false);
+})
+
+function insertSubjectList(req, res, data, Assignment_ID, fromCreateAssignment)
+{
+    let separatedList = "";
+    let lines = data.split("\n");
+    lines.splice(0, 1);
+
+    for (let i = 0; i < lines.length; i++)
+    {
+        if (i == lines.length - 1)
+        {
+            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "')"
+        }
+        else
+        {
+            separatedList += "(" + formatLine(lines[i].trim()) + " '" + Assignment_ID + "'),";
+        }
+    }
+
+    function formatLine(line)
+    {
+        let newLines = line.split(",");
+        let returnValue = "";
+        newLines.forEach(l => {
+            returnValue += "'" + l + "',";
+        })
+        return returnValue;
+    }
+
+    let queryInsertSubjects = "INSERT INTO subject_list (Subject_Name, Subject_ID, Assignment_ID) VALUES " +
+        separatedList;
+
+    connection.query(queryInsertSubjects, function (error, results, fields) {
+        if (error) 
+        {
+            res.status(404).json({
+                status:false,
+                error: error,
+                message:'The subject list could not be added.'
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                status: true,
+                error: error,
+                message: (fromCreateAssignment ? 'The assignment has been added.' : 'The new subjects have been added.')
+            })
+        }
+    })
+}
 
 /**
  * Get outcomes and measures for createAssignment.
@@ -157,7 +164,7 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
             "rubricTitle, r.Rubric_Id as rubricId, m.Measure_Name as measureName, sl.Subject_Name as subjectName, " +
             "sl.Subject_ID as subjectId, ss.Criteria_Title as criteriaTitle, ss.Score as score " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN " + 
+            "a.Measure_ID=m.Measure_ID LEFT JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN " + 
             "(SELECT Rubric_Title, Rubric_Id " +
             "FROM measure mm JOIN rubric rr on mm.Tool_Name=rr.Rubric_Title " +
             "WHERE rr.Cycle_Id='" + req.params.cycleId + "') as r ON " +
@@ -331,13 +338,13 @@ router.post('/deleteSubject', (req, res) => {
         }
     })
 
-    let queryGetSubjectScore = "" + 
+    let queryGetSubjectScoreBySubjectIdAndAssignment = "" + 
         "SELECT ss.Subject_ID, a.User_Email, m.Measure_ID " +
         "FROM assignments a JOIN measure m ON a.Measure_ID=m.Measure_ID LEFT JOIN subject_score ss " +
             "ON m.Measure_ID=ss.Measure_ID AND a.User_Email=ss.User_Email " +
         "WHERE a.Assignment_ID='" + req.body.assignmentId + "' AND ss.Subject_ID='" + req.body.subjectId + "'";
 
-    connection.query(queryGetSubjectScore, (error, results, field) => {
+    connection.query(queryGetSubjectScoreBySubjectIdAndAssignment, (error, results, field) => {
         if(error)
         {
             console.log(error);
@@ -352,10 +359,6 @@ router.post('/deleteSubject', (req, res) => {
                 if(error)
                 {
                     console.log(error);
-                }
-                else
-                {
-                    console.log("Deleted the scores");
                 }
             })
         }

@@ -221,8 +221,6 @@ export default class CreateAssignment extends Component
         }
         else
         {
-            console.log(manualStudentEntryToString(this.state.manualStudentEntry));
-
             let assignment = {
                 Measure_ID: this.state.selectedMeasure,
                 User_Email: this.state.selectedEvaluator,
