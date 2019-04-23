@@ -37,7 +37,6 @@ export default class AddRubricMeasurePopup extends Component
     mapTitleToRubric()
     {
       let index = this.props.rubrics.findIndex(r => r.Rubric_Title === this.props.rubric);
-      console.log(this.props.rubrics[index].scale[0]);
       return this.props.rubrics[index];
     }
 
@@ -46,65 +45,75 @@ export default class AddRubricMeasurePopup extends Component
           <div className='popup' >
             <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Rubric Measure</h1>
-              <label>Description of new measure: </label>
-              <p>
-                {"At least " + this.props.percentToReachTarget + "% of subjects score a '" + 
-                this.mapTitleToRubric().scale[this.props.targetScore - 1].Value_Name + "' or higher on " + 
-                this.props.rubric + "."}
-              </p>
-              <p className="ml-3">{this.props.description}</p>
-              <form>
+              <form onSubmit={this.props.submit} className="mb-3">
                 <div className="form-group">
-                  <label>Select rubric: </label>
-                  <select 
+                  <label>Enter rubric name: </label>
+                  <input
                     className="form-control"
-                    value={this.props.rubric} 
-                    name="toolName"
+                    type="text"
+                    name="measureName"
+                    value={this.props.measureName}
                     onChange={this.props.handleInputChange}
-                    onClick={this.props.handleInputChange}>
-                    <Rubrics rubrics={this.props.rubrics} />
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>(Optional) Additional Information: </label>
-                  <textarea 
-                    className="form-control" 
-                    rows="7"
-                    name="description"
-                    placeholder="(Optional) Add additional information."
-                    value={this.props.description}
-                    onChange={this.props.handleInputChange} 
+                    required
                   />
                 </div>
-                <div className="form-group">
-                  <label>Select target score: </label>
-                  <select 
-                    className="form-control bg-sm"
-                    name="targetScore"
-                    value={this.props.targetScore} 
-                    onChange={this.props.handleInputChange}
-                    onClick={this.props.handleInputChange}>
-                    <SelectTargetScore rubric={this.mapTitleToRubric()} />
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Enter percent to achieve score: </label>
-                  <input 
-                    type="number" 
-                    className="form-control"
-                    name="percentToReachTarget"
-                    value={this.props.percentToReachTarget}
-                    onChange={this.props.handleInputChange} 
-                    min="0" 
-                    max="100" />
-                </div>
+                <label>Description of new measure: </label>
+                <p>
+                  {"At least " + this.props.percentToReachTarget + "% of subjects score a '" + 
+                  this.mapTitleToRubric().scale[this.props.targetScore - 1].Value_Name + "' or higher on " + 
+                  this.props.rubric + "."}
+                </p>
+                <p className="ml-3">{this.props.description}</p>
+                  <div className="form-group">
+                    <label>Select rubric: </label>
+                    <select 
+                      className="form-control"
+                      value={this.props.rubric} 
+                      name="toolName"
+                      onChange={this.props.handleInputChange}
+                      onClick={this.props.handleInputChange}>
+                      <Rubrics rubrics={this.props.rubrics} />
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>(Optional) Additional Information: </label>
+                    <textarea 
+                      className="form-control" 
+                      rows="7"
+                      name="description"
+                      placeholder="(Optional) Add additional information."
+                      value={this.props.description}
+                      onChange={this.props.handleInputChange} 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Select target score: </label>
+                    <select 
+                      className="form-control bg-sm"
+                      name="targetScore"
+                      value={this.props.targetScore} 
+                      onChange={this.props.handleInputChange}
+                      onClick={this.props.handleInputChange}>
+                      <SelectTargetScore rubric={this.mapTitleToRubric()} />
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Enter percent to achieve score: </label>
+                    <input 
+                      type="number" 
+                      className="form-control"
+                      name="percentToReachTarget"
+                      value={this.props.percentToReachTarget}
+                      onChange={this.props.handleInputChange} 
+                      min="0" 
+                      max="100" />
+                  </div>
+                <input
+                  type="submit"
+                  className="btn btn-primary mr-4" 
+                  name="rubricMeasure"
+                />
               </form>
-              <button
-                className="btn btn-primary mr-4" 
-                name="rubricMeasure"
-                onClick={this.props.submit}>
-                Submit
-              </button>
               <button 
                 className="btn btn-danger mr-4" 
                 onClick={this.props.closePopup}>

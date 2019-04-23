@@ -53,7 +53,6 @@ class NavAdmin extends Component {
                 By Measure
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/dashboard">Past Assesments</Nav.Link>
             <NavDropdown title="Cycle">
               <NavDropdown.Item href="/cycle">
                 Start a new Cycle
@@ -61,15 +60,12 @@ class NavAdmin extends Component {
               <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown
-              title={User()}
-              
+              title={User()} 
             >
-              
-                <NavDropdown.Item href="/editProfile">Edit Profile</NavDropdown.Item>
-                <NavDropdown.Item href ="/" onClick={this.onLogOut.bind(this)}>
-                  Logout
-                </NavDropdown.Item>
-             
+              <NavDropdown.Item href="/editProfile">Edit Profile</NavDropdown.Item>
+              <NavDropdown.Item href ="/" onClick={this.onLogOut.bind(this)}>
+                Logout
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
