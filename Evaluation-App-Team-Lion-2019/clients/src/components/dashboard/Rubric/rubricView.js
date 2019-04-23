@@ -76,6 +76,26 @@ const SubjectList = props => {
     })
 }
 
+function calculateUnweightedAverage(scores)
+{
+    let totalScore = 0;
+    let numberOfCriteria = 0;
+    scores.forEach(s => {
+            totalScore = totalScore + parseInt(s.score);
+            numberOfCriteria++;
+    });
+    return (totalScore / numberOfCriteria);
+}
+
+function calculateWeightedAverage(scores)
+{
+    let totalScore = 0;
+    scores.forEach(s => {
+        totalScore = totalScore + (s.score * (s.weight / 100))
+    })
+    return totalScore;
+}
+
 export default class ViewRubric extends Component
 {
     constructor(props)
@@ -171,18 +191,26 @@ export default class ViewRubric extends Component
 
     calculateAverageScore(e)
     {
-        let totalScore = 0;
-        let numberOfCriteria = 0;
-        this.state.rubric.criteria.forEach(function(currentCriteria)
-        {
-                totalScore = totalScore + parseInt(document.getElementById(currentCriteria.criteria_title).value);
-                numberOfCriteria++;
-        });
-        let average = (totalScore / numberOfCriteria);
-
-        this.setState({
-            averageScore: average
+        let scores = this.state.rubric.criteria.map(c => {
+            return {
+                criteriaTitle: c.criteria_title,
+                weight: c.weight,
+                score: document.getElementById(c.criteria_title).value
+            }
         })
+
+        if(this.state.rubric.weighted)
+        {
+            this.setState({
+                averageScore: calculateWeightedAverage(scores)
+            })
+        }
+        else
+        {
+            this.setState({
+                averageScore: calculateUnweightedAverage(scores)
+            })
+        }
     }
 
     handleInput(e)
