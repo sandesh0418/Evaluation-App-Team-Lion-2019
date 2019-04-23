@@ -34,7 +34,7 @@ import ViewCycles from "./components/dashboard/Cycle/viewCycle";
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
-import MigrateCycle from './components/dashboard/Cycle/migrateCycle';
+
 
 
 
@@ -153,7 +153,7 @@ class App extends Component {
                   component={ViewCoordinator}
                 />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                <PrivateRoute exact path="/migrateCycles" component={MigrateCycle} />
+                
                
 
                 <PrivateRoute

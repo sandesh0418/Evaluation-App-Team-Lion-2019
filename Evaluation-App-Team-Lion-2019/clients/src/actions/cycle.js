@@ -52,18 +52,18 @@ export const CyclesInProgress = () => dispatch => {
     })
 }
 
-// export const UseCycle= (obj) => dispatch => {
-//     Axios.post('/cycle/useCycle', obj)
-//          .then(res => {
+export const MigrateCycle= (obj) => dispatch => {
+    Axios.post('/cycle/migrateCycle', obj)
+         .then(res => {
 
-//          })
-//          .catch(err => {
-//              dispatch({
-//                  type: GET_ERRORS,
-//                  payload: err
-//              })
-//          })
-// }
+         })
+         .catch(err => {
+             dispatch({
+                 type: GET_ERRORS,
+                 payload: err
+             })
+         })
+}
 
 export const EndCycle= (obj) => dispatch => {
     Axios.post('/cycle/endCycle', obj)

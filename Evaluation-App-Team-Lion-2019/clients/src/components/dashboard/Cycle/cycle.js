@@ -3,37 +3,90 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { CreateNewCycle }from '../../../actions/cycle';
+import { CreateNewCycle, CyclesInProgress, GetPreviousCycle,MigrateCycle }from '../../../actions/cycle';
+
+import '../../../stylesheets/cycle.css';
+
 
 class Cycle extends Component {
     constructor(props){
         super(props);
+        this.onClick=this.onClick.bind(this);
         this.state ={
             startDate : '',
-            cycleName : ''
+            cycleName : '',
+            migrate: false,
+            migrate_Cycle_Id: ""
         }
+    }
+    
+  
+
+    componentDidMount(){
+      this.props.CyclesInProgress();
+      this.props.GetPreviousCycle();
     }
 
     onChange(e){
         this.setState({[e.target.name]:[e.target.value]})
     }
 
+    onClick(e){
+      this.setState({
+        migrate: true
+      })
+
+    }
+
+    handleChange(e){
+      this.setState({
+        migrate_Cycle_Id: e.target.value
+      })
+    }
+
+   
+
+    
+
+   
+
     onSubmit(e){
         e.preventDefault();
-        const obj ={
+
+        if(this.state.migrate){
+          const obj ={
             Cycle_Name: this.state.cycleName,
             Start_Date: this.state.startDate,
-            deptId: localStorage.getItem("dept_Id")
+            deptId: localStorage.getItem("dept_Id"),
+            migrate_Id: this.state.migrate_Cycle_Id
+
         }
-        this.props.CreateNewCycle(obj);
+
+        console.log(obj);
+        this.props.MigrateCycle(obj);
         window.location.reload('/cycles');
+        
+      }
+      else{
+        const obj ={
+          Cycle_Name: this.state.cycleName,
+          Start_Date: this.state.startDate,
+          deptId: localStorage.getItem("dept_Id")
+
+      }
+      this.props.CreateNewCycle(obj);
+      window.location.reload('/cycles');
+      }
+        
+        
+   
+
         
     }
 
   render() {
+    const {cycles} = this.props;
 
-   
-      
     return (
         <form style = {{padding: "20px", 
                         border: "1px solid rgba(128, 128, 128, 0.32)", 
@@ -47,7 +100,8 @@ class Cycle extends Component {
                 type = "text"
                 name="cycleName"
                 required/>
-                <label> Cycle name</label>
+                <br/>
+                <label> Cycle name</label><br/>
                 <input onChange={this.onChange.bind(this)}
                         value ={this.state.startDate}
                         type = "text"
@@ -56,9 +110,27 @@ class Cycle extends Component {
                         
 
                 required/>
+                <br/>
                 <label> Cycle Start Date</label>
-         <br></br>       
-         <button
+                <br/>
+
+         {this.state.migrate?<section> 
+           <label>Past Cycles</label>
+           
+          <select style={{display: "flex", border: "1px solid #9e9e9e", width: "75%"}} onChange={this.handleChange.bind(this)} value={this.state.migrate_Cycle_Id} name="migrate_Cycle_Id">
+          <option>-- Select a cycle --</option>
+            {cycles.previousCycle.map((single, index) => (
+              <option key={index} 
+                      value={single.Cycle_Id}
+                      >{single.Cycle_Name}</option>
+            ))}
+          </select>
+           
+           </section> : " "
+
+         }
+             
+         {this.state.migrate ? " " : <button
                   style={{
                     width: "150px",
                     borderRadius: "3px",
@@ -68,8 +140,42 @@ class Cycle extends Component {
                   type="submit"
                   className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
                 >
-                  Start a new cycle
-                </button>
+                  Start as a new cycle
+                </button>}
+
+
+              
+              {this.state.migrate ? " " :  <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem",
+                    marginLeft: "10px"
+                  }}
+                  onClick={this.onClick}
+                  className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
+                >
+                  Migrate Cycle
+                </button> }
+
+                {this.state.migrate ? <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem",
+                    marginLeft: "10px"
+                  }}
+                  type="submit"
+                  className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
+                >
+                  Submit
+                </button> : " " }
+
+
+
+                
       </form>
     )
   }
@@ -77,12 +183,16 @@ class Cycle extends Component {
 
 Cycle.propTypes = {
     CreateNewCycle: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    CyclesInProgress: PropTypes.func.isRequired,
+    GetPreviousCycle: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    MigrateCycle: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
+    cycles: state.cycles,
     auth: state.auth
   });
 
   
-export default connect(mapStateToProps,{CreateNewCycle})(Cycle);
+export default connect(mapStateToProps,{CreateNewCycle, GetPreviousCycle, CyclesInProgress, MigrateCycle})(Cycle);

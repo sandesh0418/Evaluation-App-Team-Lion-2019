@@ -76,6 +76,8 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("role");
   localStorage.removeItem("name");
   localStorage.removeItem("dept_Id");
+  localStorage.removeItem("Rubric_Id");
+  localStorage.removeItem("email");
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
