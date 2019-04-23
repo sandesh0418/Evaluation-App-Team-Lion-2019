@@ -9,7 +9,7 @@ const StubjectList = props => {
                     <span>{s.subjectName + ":"}</span>
                 </div>
                 <div className="col-1">
-                    <input id={s.subjectId} type="number" min="0" max="100" />
+                    <input id={s.subjectId} defaultValue={s.scores[0].score * 100} type="number" min="0" max="100" />
                 </div>
             </div>
         )

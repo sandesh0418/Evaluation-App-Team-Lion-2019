@@ -18,6 +18,7 @@ export default class AddTestMeasurePopup extends Component
           <div className='popup' >
             <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Test Measure </h1>
+              <form onSubmit={this.props.submit} className="mb-3">
               <div className="form-group">
                 <label>Enter rubric name: </label>
                 <input
@@ -26,6 +27,7 @@ export default class AddTestMeasurePopup extends Component
                   name="measureName"
                   value={this.props.measureName}
                   onChange={this.props.handleInputChange}
+                  required
                 />
               </div>
               <label>Description of new measure:</label>
@@ -34,7 +36,6 @@ export default class AddTestMeasurePopup extends Component
                 this.props.targetScore + "% or higher on " + this.props.testName + "."}
               </p>
               <p className="ml-3">{this.props.description}</p>
-              <form>
                 <div className="form-group">
                   <label>Enter Test Name: </label>
                   <input 
@@ -77,13 +78,12 @@ export default class AddTestMeasurePopup extends Component
                     min="0" 
                     max="100" />
                 </div>
-              </form>
-              <button
+              <input
+                type="submit"
                 className="btn btn-primary mr-4" 
                 name="testMeasure"
-                onClick={this.props.submit}>
-                Submit
-              </button>
+              />
+              </form>
               <button 
                 className="btn btn-danger mr-4" 
                 onClick={this.props.closePopup}>

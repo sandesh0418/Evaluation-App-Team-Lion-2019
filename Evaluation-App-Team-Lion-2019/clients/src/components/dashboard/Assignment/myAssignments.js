@@ -18,7 +18,7 @@ function ListDisplay(props)
                         <>
                             <button 
                                 type="button" 
-                                className="btn btn-secondary mt-2 mb-2" 
+                                className="btn btn-primary mt-2 mb-2" 
                                 id={a.rubricId + "/" + a.assignmentId}
                                 onClick={props.onClick}>
                                 {"Evaluate " + a.toolName}

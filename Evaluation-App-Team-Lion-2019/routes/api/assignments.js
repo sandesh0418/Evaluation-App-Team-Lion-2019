@@ -216,8 +216,6 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                         subjects: [newSubject]
                     }
 
-                    //console.log(newAssignment);
-
                     assignments.push(newAssignment);
                 }
                 else
@@ -260,10 +258,14 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
  * PATH: /assignments/subjectList/:id
  */
 router.get('/subjectList/:id', (req, res) => {
+    let subjectList = [];
+    
     let queryGetSubjectList = "" + 
-        "SELECT Subject_Name as subjectName, Subject_ID as subjectId " +
-        "FROM subject_list " + 
-        "WHERE Assignment_ID='" + req.params.id + "'";
+        "SELECT sl.Subject_Name as subjectName, sl.Subject_ID as subjectId, ss.Criteria_Title, ss.Score " +
+        "FROM subject_list sl JOIN assignments a ON sl.Assignment_ID=a.Assignment_ID JOIN measure m ON " + 
+            "a.Measure_ID=m.Measure_ID LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND " +
+            "sl.Subject_ID=ss.Subject_ID AND a.User_Email=ss.User_Email " +
+        "WHERE a.Assignment_ID='" + req.params.id + "'";
 
     connection.query(queryGetSubjectList, (error, results, field) => {
         if (error) 
@@ -276,8 +278,35 @@ router.get('/subjectList/:id', (req, res) => {
         }
         else
         {
+            data = Object.values(JSON.parse(JSON.stringify(results)))
+            data.forEach(r => {
+                subjectIndex = subjectList.findIndex(s => s.subjectId === r.subjectId);
+
+                let newScore = {
+                    criteriaTitle: r.Criteria_Title,
+                    score: r.Score
+                }
+
+                if(subjectIndex === -1)
+                {
+                    let newSubject = {
+                        subjectName: r.subjectName,
+                        subjectId: r.subjectId,
+                        scores: [newScore]
+                    }
+
+                    subjectList.push(newSubject);
+                }
+                else
+                {
+                    subjectList[subjectIndex].scores.push(newScore);
+                }
+            })
+
+            console.log(subjectList);
+
             res.status(200).json({
-                subjectList: Object.values(JSON.parse(JSON.stringify(results)))
+                subjectList: subjectList
             })
         }
     })

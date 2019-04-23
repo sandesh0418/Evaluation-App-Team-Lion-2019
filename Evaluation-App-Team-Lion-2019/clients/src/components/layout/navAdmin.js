@@ -53,7 +53,6 @@ class NavAdmin extends Component {
                 By Measure
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/dashboard">Past Assesments</Nav.Link>
             <NavDropdown title="Cycle">
               <NavDropdown.Item href="/cycle">
                 Start a new Cycle

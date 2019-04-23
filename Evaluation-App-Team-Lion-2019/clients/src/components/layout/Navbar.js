@@ -20,8 +20,8 @@ class NavBar extends Component
             userRole = localStorage.getItem('role').toLowerCase();
         }
         return (
-            <Navbar bg="light" expand="md" className="mb-5">
-                <button className="navbar-brand" target="_blank">
+            <Navbar expand="md" className="mb-5 navbar navbar-dark bg-dark">
+                <button className="navbar-brand bg-dark" target="_blank">
                     <img src={logo} width="50" height="50" alt="Not available" />
                 </button>
                 {userRole==="administrator" ? <AdminNavBar /> : null}
