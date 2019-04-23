@@ -24,9 +24,17 @@ function CriteriaRow(props)
     {
         return (
             <tr key={i}>
-                <th scope="row" className="p-3">{currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}</th>
+                <th scope="row" className="p-3">
+                    {currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}
+                </th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
-                {props.gradeMode?  <td className="p-3"><CriteriaGradeInput currentCriteria={currentCriteria} gradeScale={props.gradeScale} /></td> : null}
+                {props.gradeMode?  
+                    <td className="p-3">
+                        <CriteriaGradeInput 
+                            currentCriteria={currentCriteria} 
+                            calculateAverageScore={props.calculateAverageScore} 
+                            gradeScale={props.gradeScale} />
+                    </td> : null}
                 {props.weighted ? <td className="p-3">{currentCriteria.weight + "%"}</td> : null}
             </tr>
             );
@@ -44,7 +52,7 @@ function CriteriaDescription(props)
 function CriteriaGradeInput(props)
 {
     return (
-        <select className="form-control" id={props.currentCriteria.criteria_title} >
+        <select className="form-control" id={props.currentCriteria.criteria_title} onChange={props.calculateAverageScore}>
             <option disabled value> -- select an option -- </option>
             {props.gradeScale}
         </select>
@@ -75,8 +83,8 @@ export default class ViewRubric extends Component
         super(props);
         this.onChangeSubjectId = this.onChangeSubjectId.bind(this);
         this.handleSaveGradeClick = this.handleSaveGradeClick.bind(this);
-        this.handleAverageScoreClick = this.handleAverageScoreClick.bind(this);
-       
+        this.calculateAverageScore = this.calculateAverageScore.bind(this);
+        this.handleInput = this.handleInput.bind(this);
         this.state = {
             rubricTitle: '',
             Rubric_Id: '',
@@ -95,7 +103,6 @@ export default class ViewRubric extends Component
 
     componentDidMount()
     {
-        
         this.setView();
         this.getData();
     }
@@ -144,8 +151,10 @@ export default class ViewRubric extends Component
     {
         let scores = this.state.rubric.criteria.map(function(currentCriteria)
         {
-            return {criteriaTitle: currentCriteria.criteria_title,
-                    value: document.getElementById(currentCriteria.criteria_title).value};
+            return {
+                criteriaTitle: currentCriteria.criteria_title,
+                value: document.getElementById(currentCriteria.criteria_title).value
+            };
         })
 
         let subjectScore = {measureId: this.state.measureId,
@@ -156,14 +165,12 @@ export default class ViewRubric extends Component
         axios.post('/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
             alert("The score has been saved.");
+            window.location.reload();
         });
     }
 
-    handleAverageScoreClick(e)
+    calculateAverageScore(e)
     {
-        this.setState({
-            calcAverage: e.target.value 
-        })
         let totalScore = 0;
         let numberOfCriteria = 0;
         this.state.rubric.criteria.forEach(function(currentCriteria)
@@ -171,10 +178,17 @@ export default class ViewRubric extends Component
                 totalScore = totalScore + parseInt(document.getElementById(currentCriteria.criteria_title).value);
                 numberOfCriteria++;
         });
-        let average = (totalScore / numberOfCriteria).toFixed(e.target.value);
+        let average = (totalScore / numberOfCriteria);
 
         this.setState({
             averageScore: average
+        })
+    }
+
+    handleInput(e)
+    {
+        this.setState({
+            [e.target.name]: e.target.value
         })
     }
 
@@ -183,6 +197,21 @@ export default class ViewRubric extends Component
         this.setState({
             subjectId: e.target.value
         });
+
+        let subjectIndex = this.state.subjectList.findIndex(s => s.subjectId === e.target.value);
+        if (this.state.subjectList[subjectIndex].scores[0].score !== null)
+        {
+            this.state.subjectList[subjectIndex].scores.forEach(s => {
+                console.log(s.criteriaTitle + " " + s.score);
+                document.getElementById(s.criteriaTitle).value = s.score;
+            })
+        }
+        else
+        {
+            this.state.rubric.criteria.forEach(c => {
+                document.getElementById(c.criteria_title).value = 1;
+            })
+        }
     }
 
     onChangeScale(e){
@@ -205,15 +234,18 @@ export default class ViewRubric extends Component
         {
             saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
 
-            rubricAverage = <div>
-                <label className="pr-1">Calculate Average</label>
-                <select type="button" className="btn btn-secondary btn-sm" onClick={this.handleAverageScoreClick}>
+            rubricAverage = <div className="mb-2">
+                <label className="pr-1">Decimal Places in Average</label>
+                <select defaultValue="2" className="form-control width-200" name="calcAverage" 
+                    onChange={this.handleInput} onClick={this.handleInput}>
                     <option value="0">No Decimal</option>
                     <option value="1">One Decimal</option>
                     <option value="2">Two Decimals</option>
                     <option value="3">Three Decimals</option>
                 </select>
-                <span className="pl-1">The average score is: {this.state.averageScore}</span>
+                <span>The average score is: 
+                    {" " + this.state.averageScore.toFixed(this.state.calcAverage)}
+                </span>
             </div>
         }
         else
@@ -270,7 +302,8 @@ export default class ViewRubric extends Component
                             gradeMode={this.state.gradeMode} 
                             criteria={this.state.rubric.criteria} 
                             weighted={this.state.rubric.weighted}
-                            gradeScale={gradeScale} 
+                            gradeScale={gradeScale}
+                            calculateAverageScore={this.calculateAverageScore}
                         />
                     </tbody>
                     

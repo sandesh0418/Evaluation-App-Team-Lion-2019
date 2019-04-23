@@ -318,7 +318,7 @@ router.get('/subjectList/:id', (req, res) => {
  */
 router.get('/assignmentMeasure/:id', (req, res) => {
     let queryGetAssignment = "" + 
-        "SELECT a.Measure_ID as measureId, m.Description as description " +
+        "SELECT a.Measure_ID as measureId, m.Description as description, m.Measure_Name as measureName " +
         "FROM assignments a JOIN measure m ON a.Measure_ID=m.Measure_ID " +
         "WHERE Assignment_ID='" + req.params.id + "'";
 

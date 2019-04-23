@@ -124,7 +124,7 @@ export default class EvaluateTest extends Component
         return (
             <>
                 <h1>Enter Scores</h1>
-                <p>{this.state.measure ? "for measure: " + this.state.measure.description : null}</p>
+                <p>{this.state.measure ? "for measure: " + this.state.measure.measureName : null}</p>
                 <p>Enter scores as a percent of 100. Example: if 85%, then enter 85.</p>
                 <form onSubmit={this.submitScores}>
                     <StubjectList subjectList={this.state.subjectList} />
