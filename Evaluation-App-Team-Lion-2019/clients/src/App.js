@@ -34,11 +34,13 @@ import ViewCycles from "./components/dashboard/Cycle/viewCycle";
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
+import ViewPastCycle from './components/dashboard/Cycle/viewPastCycle';
 
 
 
 
 import "./App.css";
+import viewPastCycle from "./components/dashboard/Cycle/viewPastCycle";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -90,7 +92,7 @@ class App extends Component {
 
                 {localStorage.getItem("role") === "Administrator" ? 
                 <>
-                  
+                  <PrivateRoute path = "/viewPastCycle/:cycle" component={ViewPastCycle} />
                   <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                   <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />

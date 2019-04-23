@@ -5,6 +5,7 @@ import rubricReducer from './rubricReducer';
 import cycle from './cycleReducer';
 import evaluator from './evaluatorReducer';
 import coordinators from './addCoordinator';
+import outcomes from './outcome';
 
 export default combineReducers({
   auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   rubric: rubricReducer,
   cycles: cycle,
   evaluator: evaluator,
-  coordinators: coordinators 
+  coordinators: coordinators,
+  outcomes: outcomes
 });
