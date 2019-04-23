@@ -28,10 +28,13 @@ router.post('/editProgramSummary', (req, res) => {
     function insertMeasures(outcome)
     {
         outcome.measures.forEach(m => {
-            let queryAddMeasure = "INSERT INTO measure (Measure_ID, Outcome_ID, Description, Percent_to_reach_target," + 
-                    "Target_Score, Tool_Name) VALUES (\'" + m.Measure_ID + "\', \'" + outcome.Outcome_ID +"\', \'" +
-                    m.Description + "\', " + m.Percent_to_reach_target + ", " + m.Target_Score +", '" + m.Tool_Name + "')" +
-                    " ON DUPLICATE KEY UPDATE Measure_ID=\'" + m.Measure_ID + "\'";
+            let queryAddMeasure = "INSERT INTO measure (Measure_ID, Measure_Name, Outcome_ID, Description, " +
+                    "Percent_to_reach_target, Target_Score, Tool_Name) VALUES ('" + m.Measure_ID + "', '" + 
+                    m.Measure_Name + "', '" + outcome.Outcome_ID +"', '" + m.Description + "', '" + 
+                    m.Percent_to_reach_target + "', '" + m.Target_Score + "', '" + m.Tool_Name + "') " +
+                    "ON DUPLICATE KEY UPDATE Measure_Name='" + m.Measure_Name + "', Description='" + 
+                    m.Description + "', Percent_to_reach_target='" + m.Percent_to_reach_target + "', " +
+                    "Target_Score='" + m.Target_Score + "', Tool_Name='" + m.Tool_Name + "'";
 
             connection.query(queryAddMeasure, (error, results, fields) => {
                 if (error)

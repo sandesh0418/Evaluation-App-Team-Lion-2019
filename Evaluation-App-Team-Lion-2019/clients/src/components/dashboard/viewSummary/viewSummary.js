@@ -52,12 +52,18 @@ function Measures(props)
     return props.measures.map(function(currentMeasure, i){
         return (
             <div key={i}>
+                <span className="bold mr-3"><strong>{currentMeasure.Measure_Name}</strong></span>
                 <a href={"/measureReport" /* + currentMeasure.Measure_ID*/}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
                 </a>
-                {currentMeasure.Description ? <p className="ml-3">{"Additional description: " + currentMeasure.Description}</p> : null}
+                {currentMeasure.Description ?  
+                    <details className="ml-3 mb-3">
+                        <summary>Additional description: </summary>
+                        <p className="ml-3">{currentMeasure.Description}</p>
+                    </details>
+                    : null}
                 {props.state.reportMode ? <Statistics state={props.state} measure={currentMeasure} /> : null}
                 <hr/>
             </div>

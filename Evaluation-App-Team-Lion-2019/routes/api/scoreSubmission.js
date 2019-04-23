@@ -69,7 +69,7 @@ router.post('/testScore', passport.authenticate("jwt", { session:false }), (req,
 
     let queryInsertScores = "" + 
         "INSERT INTO subject_score (Measure_ID, User_Email, Criteria_Title, Subject_ID, Score) VALUES " + 
-        scoresToInsert;
+        scoresToInsert + " ON DUPLICATE KEY UPDATE Score=VALUES(Score)";
 
     connection.query(queryInsertScores, function (error, results, fields) {
         if (error) 

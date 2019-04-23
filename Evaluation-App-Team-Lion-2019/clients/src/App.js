@@ -77,90 +77,36 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <div className="container pb-5">
               <Switch>
-                <PrivateRoute
-                  exact
-                  path="/gradeRubric/:rubric/:assignment"
-                  component={ViewRubric}
-                />
-                <PrivateRoute
-                  exact
-                  path="/evaluateTest/:test/:assignment"
-                  component={EvaluateTest}
-                />
-                <PrivateRoute
-                  exact
-                  path="/viewRubric/:rubric"
-                  component={ViewRubric}
-                />
-                <PrivateRoute
-                  exact
-                  path="/viewSummary"
-                  component={ViewSummary}
-                />
-                <PrivateRoute
-                  exact
-                  path="/summaryReport"
-                  component={ViewSummary}
-                />
-                <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                <PrivateRoute
-                  exact
-                  path="/evaluatorDashboard"
-                  component={EvaluatorDashboard}
-                />
-                <PrivateRoute exact path="/rubricList" component={RubricList} />
-                <PrivateRoute
-                  exact
-                  path="/myAssignments"
-                  component={MyAssignments}
-                />
-                <PrivateRoute
-                  exact
-                  path="/editProgramSummary"
-                  component={EditProgramSummary}
-                />
-                <PrivateRoute exact path="/Rubric" component={Rubric} />
-                <PrivateRoute
-                  exact
-                  path="/createRubric"
-                  component={CreateRubric}
-                />
-                <PrivateRoute
-                  exact
-                  path="/createAssignment"
-                  component={CreateAssignment}
-                />
-                <PrivateRoute
-                  exact
-                  path="/viewEvaluator"
-                  component={ViewEvaluator}
-                />
-                <PrivateRoute
-                  exact
-                  path="/addEvaluator"
-                  component={AddEvaluator}
-                />
-                <PrivateRoute
-                  exact
-                  path="/editProfile"
-                  component={EditProfile}
-                />
-                <PrivateRoute exact path="/cycle" component={Cycle} />
+                <PrivateRoute exact path="/gradeRubric/:rubric/:assignment" component={ViewRubric} />
+                <PrivateRoute exact path="/evaluateTest/:test/:assignment" component={EvaluateTest} />
+                <PrivateRoute exact path="/viewRubric/:rubric" component={ViewRubric} />
+                <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/admin" component={Admin} />
-                <PrivateRoute
-                  exact
-                  path="/viewCoordinator"
-                  component={ViewCoordinator}
-                />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                <PrivateRoute exact path="/migrateCycles" component={MigrateCycle} />
-               
+                <PrivateRoute exact path="/editProfile" component={EditProfile} />
+                <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
 
-                <PrivateRoute
-                  exact
-                  path="/measureReport"
-                  component={MeasureReport}
-                />
+                {localStorage.getItem("role") === "Administrator" ? 
+                <>
+                  <PrivateRoute exact path="/migrateCycles" component={MigrateCycle} />
+                  <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
+                  <PrivateRoute exact path="/viewSummary" component={ViewSummary} />
+                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                  <PrivateRoute exact path="/Rubric" component={Rubric} />
+                  <PrivateRoute exact path="/rubricList" component={RubricList} />
+                  <PrivateRoute exact path="/createRubric" component={CreateRubric} />
+                  <PrivateRoute exact path="/evaluatorDashboard" component={EvaluatorDashboard} />
+                  <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
+                  <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />
+                  <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
+                  <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
+                  <PrivateRoute exact path="/cycle" component={Cycle} />
+                  <PrivateRoute exact path="/cycles" component={ViewCycles} />
+                  <PrivateRoute exact path="/measureReport" component={MeasureReport} />
+                </>
+                : null }
+                
+                
               </Switch>
             </div>
           </div>

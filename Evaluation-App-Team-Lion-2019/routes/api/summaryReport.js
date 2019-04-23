@@ -36,8 +36,9 @@ function buildProgramSummary(withStats, req, res, cycleId)
     //      valueName
     let queryGetSummary = "" +
         "SELECT DISTINCT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, o.Outcome_Name as outcomeName, " + 
-            "m.Measure_ID as measureId, m.Description as measureDescription, m.Percent_to_reach_target as " +
-            "percentToReachTarget, m.Target_Score as targetScore, m.Tool_Name as toolName, valueName, Cycle_Name " +
+            "m.Measure_ID as measureId, m.Measure_Name as measureName, m.Description as measureDescription, " +
+            "m.Percent_to_reach_target as percentToReachTarget, m.Target_Score as targetScore, m.Tool_Name as toolName, " +
+            "valueName, Cycle_Name " +
         "FROM outcome o LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
             "(SELECT s.Value_Name as valueName, m.Measure_ID as measureId " + 
             "FROM measure m LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title JOIN scales s ON s.Rubric_Id=r.Rubric_Id " +
@@ -87,6 +88,7 @@ function buildProgramSummary(withStats, req, res, cycleId)
                 {
                     let newMeasure = {
                         Measure_ID: row.measureId,
+                        Measure_Name: row.measureName,
                         Description: (row.measureDescription !== "null" ? row.measureDescription : null),
                         Percent_to_reach_target: row.percentToReachTarget,
                         Target_Score: row.targetScore,
