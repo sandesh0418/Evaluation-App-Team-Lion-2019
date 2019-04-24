@@ -32,9 +32,11 @@ const OutcomeList = props => {
                     key={currentOutcome.Outcome_ID} 
                     outcome={currentOutcome} 
                     handleOutcomeChange={props.handleOutcomeChange}
+                    handleDeleteOutcome={props.handleDeleteOutcome}
                     handleOutcomeNameChange={props.handleOutcomeNameChange}
                     handleAddRubricMeasure={props.handleAddRubricMeasure}
                     handleAddTestMeasure={props.handleAddTestMeasure}
+                    handleDeleteMeasure={props.handleDeleteMeasure}
                 />
     })
 }
@@ -55,15 +57,26 @@ const Outcome = props => {
                     onChange={props.handleOutcomeNameChange}
                 />
                 <textarea 
-                    className="form-control" 
+                    className="form-control mb-3" 
                     rows="7"
                     name={props.outcome.Outcome_ID} 
                     value={props.outcome.Description} 
                     onChange={props.handleOutcomeChange} 
                 />
+                <button 
+                    className="btn btn-danger"
+                    id={props.outcome.Outcome_ID}
+                    onClick={props.handleDeleteOutcome}>
+                    Delete Outcome
+                </button>
             </div>
             <div className="col-8 border p-3">
-                {props.outcome.measures[0] ? <Measures measures={props.outcome.measures} /> : null}
+                {props.outcome.measures[0] ? 
+                    <Measures 
+                        measures={props.outcome.measures} 
+                        outcomeId={props.outcome.Outcome_ID}
+                        handleDeleteMeasure={props.handleDeleteMeasure} /> 
+                    : null}
                 <DropdownButton id="dropdown-basic-button" title="Add Measure">
                     <Dropdown.Item 
                         onSelect={props.handleAddTestMeasure}
@@ -86,6 +99,14 @@ const Measures = props => {
         return (
             <div key={measure.Measure_ID}>
                 <p>
+                    <button 
+                        className="btn btn-sm btn-danger mr-2"
+                        name={props.outcomeId}
+                        id={measure.Measure_ID}
+                        onClick={props.handleDeleteMeasure}
+                        title="delete measure">
+                    X
+                    </button>
                     <span className="bold mr-3"><strong>{measure.Measure_Name}</strong></span>
                     {"At least " + (measure.Percent_to_reach_target * 100) + "% of subjects score " + 
                     (measure.Value_Name ? "'" + measure.Value_Name + "'" : 
@@ -115,6 +136,8 @@ export default class EditProgramSummary extends Component
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleAddOutcome = this.handleAddOutcome.bind(this);
         this.addNewMeasure = this.addNewMeasure.bind(this);  
+        this.handleDeleteMeasure = this.handleDeleteMeasure.bind(this);
+        this.handleDeleteOutcome = this.handleDeleteOutcome.bind(this);
         this.closePopup = this.closePopup.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
@@ -122,6 +145,8 @@ export default class EditProgramSummary extends Component
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
+            deletedOutcomeIds: [],
+            deletedMeasureIds: [],
             //The following values are passed to and manipulated in the addRubricMeasurePopups.
             rubrics: null,
             toolName: null,
@@ -166,6 +191,21 @@ export default class EditProgramSummary extends Component
 
         this.setState({
             programSummary: tempSummary
+        })
+    }
+
+    handleDeleteOutcome(e)
+    {
+        let tempSummary = this.state.programSummary
+        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
+        tempSummary.outcomes.splice(outcomeIndex, 1);
+
+        let tempDeletedOutcomeIds = this.state.deletedOutcomeIds;
+        tempDeletedOutcomeIds.push(e.target.id);
+
+        this.setState({
+            programSummary: tempSummary,
+            deletedOutcomeIds: tempDeletedOutcomeIds
         })
     }
 
@@ -226,7 +266,22 @@ export default class EditProgramSummary extends Component
             alert("There are no rubrics associated with the current cycle. \n\nMigrate or create rubrics before making " +
             "rubric measures.");
         }
-        
+    }
+
+    handleDeleteMeasure(e)
+    {
+        let tempSummary = this.state.programSummary;
+        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.name);
+        let measureIndex = tempSummary.outcomes[outcomeIndex].measures.findIndex(m => m.Measure_ID === e.target.id);
+        tempSummary.outcomes[outcomeIndex].measures.splice(measureIndex, 1);
+
+        let tempDeletedMeasureIds = this.state.deletedMeasureIds;
+        tempDeletedMeasureIds.push(e.target.id);
+
+        this.setState({
+            programSummary: tempSummary,
+            deletedMeasureIds: tempDeletedMeasureIds
+        })
     }
 
     closePopup(e)
@@ -287,6 +342,18 @@ export default class EditProgramSummary extends Component
             .then(res => {
                 this.props.history.push("/viewSummary");
             })
+
+        if (this.state.deletedOutcomeIds.length > 0)
+        {
+            axios.post('/editProgramSummary/deleteOutcomes', this.state.deletedOutcomeIds)
+                .then(res => {})
+        }
+
+        if (this.state.deletedMeasureIds.length > 0)
+        {
+            axios.post('/editProgramSummary/deleteMeasures', this.state.deletedMeasureIds)
+                .then(res => {})
+        }
     }
 
     render()
@@ -302,12 +369,14 @@ export default class EditProgramSummary extends Component
             <OutcomeList 
                  outcomes={outcomes}
                  handleOutcomeNameChange={this.handleOutcomeNameChange}
+                 handleDeleteOutcome={this.handleDeleteOutcome}
                  handleOutcomeChange={this.handleOutcomeChange}
                  handleAddRubricMeasure={this.handleAddRubricMeasure}
-                 handleAddTestMeasure={this.handleAddTestMeasure} 
+                 handleAddTestMeasure={this.handleAddTestMeasure}
+                 handleDeleteMeasure={this.handleDeleteMeasure} 
             />
             <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
-            <div><button className="btn btn-danger mb-4" onClick={this.handleSave}>Save Changes</button></div>
+            <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>
             {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                         closePopup={this.closePopup} 
                                                         submit={this.addNewMeasure}

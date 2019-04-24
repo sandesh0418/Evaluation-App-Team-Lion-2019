@@ -30,8 +30,7 @@ import EvaluateTest from "./components/dashboard/evaluateTest";
 import EditProfile from "./components/dashboard/editProfile";
 import Cycle from "./components/dashboard/Cycle/cycle";
 import ViewCycles from "./components/dashboard/Cycle/viewCycle";
-
-import MeasureReport from './components/dashboard/measureReport'
+import MeasureReport from './components/dashboard/measureReport';
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
 import ViewPastCycle from './components/dashboard/Cycle/viewPastCycle';
@@ -85,8 +84,6 @@ class App extends Component {
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                
-               
                 <PrivateRoute exact path="/editProfile" component={EditProfile} />
                 <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
 
@@ -106,7 +103,7 @@ class App extends Component {
                   <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
                   <PrivateRoute exact path="/cycle" component={Cycle} />
                   <PrivateRoute exact path="/cycles" component={ViewCycles} />
-                  <PrivateRoute exact path="/measureReport" component={MeasureReport} />
+                  <PrivateRoute exact path="/measureReport/:measureId" component={MeasureReport} />
                 </>
                 : null }
                 
