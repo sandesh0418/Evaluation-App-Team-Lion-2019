@@ -34,6 +34,7 @@ import ViewCycles from "./components/dashboard/Cycle/viewCycle";
 import MeasureReport from './components/dashboard/measureReport'
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
+import ViewDepartments from './components/dashboard/admin/viewDepartments';
 import ViewPastCycle from './components/dashboard/Cycle/viewPastCycle';
 
 
@@ -83,6 +84,7 @@ class App extends Component {
                 <PrivateRoute exact path="/evaluateTest/:test/:assignment" component={EvaluateTest} />
                 <PrivateRoute exact path="/viewRubric/:rubric" component={ViewRubric} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
+                <PrivateRoute exact path="/departments" component={ViewDepartments} />
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
                 
