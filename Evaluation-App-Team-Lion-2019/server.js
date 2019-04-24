@@ -14,6 +14,7 @@ const editProgramSummary = require('./routes/api/editProgramSummary');
 const cycle = require('./routes/api/cycle');
 const coordinator = require('./routes/api/Coordinator');
 const outcome = require('./routes/api/outcome');
+const measureReport = require('./routes/api/measureReport');
 
 
 const app = express();
@@ -45,6 +46,7 @@ app.use('/api/editProgramSummary', editProgramSummary);
 app.use('/api/cycle', cycle);
 app.use('/api/Coordinator', coordinator);
 app.use('/api/outcome', outcome);
+app.use('/api/measureReport', measureReport);
 
 
 const port = process.env.PORT || 5000;
