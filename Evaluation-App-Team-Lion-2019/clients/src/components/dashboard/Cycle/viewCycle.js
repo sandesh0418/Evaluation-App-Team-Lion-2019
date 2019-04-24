@@ -3,7 +3,7 @@ import {  GetPreviousCycle, CyclesInProgress, EndCycle } from '../../../actions/
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
-
+import { Link } from 'react-router-dom';
 
 
 
@@ -53,7 +53,7 @@ class ViewCycle extends Component {
                   <h5 className="card-title">{singleCycle.Cycle_Name}</h5>
                   <p className="card-text"><span style={{fontWeight: "bold"}}>Start Date:</span> {singleCycle.Start_Date} &nbsp; <span style={{fontWeight: "bold"}}>End Date: </span>{singleCycle.End_Date}</p>
                   
-                  <a href="#" style={{float: "center"}} className="btn btn-primary">View Cycle</a>
+                  <Link to={'/viewPastCycle/'+singleCycle.Cycle_Id} style={{float: "center"}} className="btn btn-primary">View Cycle</Link>
                 </div>
               </div>
             

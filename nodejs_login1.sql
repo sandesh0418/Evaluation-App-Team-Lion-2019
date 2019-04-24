@@ -24,6 +24,29 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+
+CREATE TABLE `users` (
+  `CWID` int(11) NOT NULL,
+  `firstName` text,
+  `lastName` text,
+  `email` varchar(60),
+  `password` text,
+  `role` text,
+  `Dept_Id` varchar(30) NOT NULL,
+  PRIMARY KEY(`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`CWID`, `firstName`, `lastName`, `email`, `password`, `role`, `Dept_Id`) VALUES
+
+(30000000, 'Lon', 'Smith', 'lonsmith@gmail.com', '$2a$10$wHFInz86hIlzVEJ4xejzwuA0Td4j6VEnizoP1cLIWC9LUCLOKaDeS', 'Admin', '962vkjugbg5be'),
+(30057229, 'Ryan', 'Blomquist', 'blomqurw@warhawks.ulm.edu', '$2a$10$tcEzRyfw53s0oJg43rMqQOOO4F/2xH1y5JpgWYyiKHma5XZO2aoCK', 'Administrator', '962vkjugbg5be'),
+(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '', 'Administrator', '962vkjugbg5be'),
+(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', '962vkjugbg5be');
+
 --
 -- Table structure for table `assignments`
 --
@@ -299,26 +322,6 @@ CREATE TABLE `subject_score` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `CWID` int(11) NOT NULL,
-  `firstName` text,
-  `lastName` text,
-  `email` varchar(60) DEFAULT NULL,
-  `password` text,
-  `role` text,
-  `Dept_Id` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`CWID`, `firstName`, `lastName`, `email`, `password`, `role`, `Dept_Id`) VALUES
-(0, 'Joe', 'Blo', 'joeblo@yaa.com', NULL, NULL, NULL),
-(30000000, 'Lon', 'Smith', 'lonsmith@gmail.com', '$2a$10$wHFInz86hIlzVEJ4xejzwuA0Td4j6VEnizoP1cLIWC9LUCLOKaDeS', 'Admin', '962vkjugbg5be'),
-(30057229, 'Ryan', 'Blomquist', 'blomqurw@warhawks.ulm.edu', '$2a$10$tcEzRyfw53s0oJg43rMqQOOO4F/2xH1y5JpgWYyiKHma5XZO2aoCK', 'Administrator', '962vkjugbg5be'),
-(30071170, 'Sandesh', 'Bhandari', 'sbhandari0418@gmail.com', '', 'Administrator', '962vkjugbg5be'),
-(30071430, 'Dipiksha', 'Shrestha', 'dipiksha.shrestha11@gmail.com', '$2a$10$dGtEEYCXdyjLhpwPsxT3MuoUhYX1yQB1zhp43.vJH1wp/780HCrjy', 'Evaluator', '962vkjugbg5be');
 
 --
 -- Indexes for dumped tables
@@ -396,12 +399,7 @@ ALTER TABLE `subject_score`
   ADD PRIMARY KEY (`Measure_ID`,`Subject_ID`,`User_Email`,`Criteria_Title`),
   ADD KEY `User_Email` (`User_Email`);
 
---
--- Indexes for table `users`
---
--- ALTER TABLE `users`
---   ADD PRIMARY KEY (`CWID`),
---   ADD UNIQUE KEY `email` (`email`);
+
 
 --
 -- Constraints for dumped tables
