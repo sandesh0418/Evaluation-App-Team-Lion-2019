@@ -84,7 +84,7 @@ function calculateUnweightedAverage(scores)
             totalScore = totalScore + parseInt(s.score);
             numberOfCriteria++;
     });
-    return (totalScore / numberOfCriteria);
+    return Math.round((totalScore / numberOfCriteria) * 100000) / 100000;
 }
 
 function calculateWeightedAverage(scores)
@@ -92,8 +92,34 @@ function calculateWeightedAverage(scores)
     let totalScore = 0;
     scores.forEach(s => {
         totalScore = totalScore + (s.score * (s.weight / 100))
-    })
-    return totalScore;
+    });
+    
+    return Math.round(totalScore * 100000) / 100000;
+}
+
+function mapAverageScoreToValueName(criteria, averageScore)
+{
+    console.log(averageScore);
+    let description = criteria.descriptions.find(d => d.value_number === Math.floor(averageScore));
+    return description.value_name
+}
+
+function setScores(subjectList, subjectId, criteria)
+{
+    let subjectIndex = subjectList.findIndex(s => s.subjectId === subjectId);
+        if (subjectList[subjectIndex].scores[0].score !== null)
+        {
+            subjectList[subjectIndex].scores.forEach(s => {
+                console.log(s.criteriaTitle);
+                document.getElementById(s.criteriaTitle).value = s.score;
+            })
+        }
+        else
+        {
+            criteria.forEach(c => {
+                document.getElementById(c.criteria_title).value = 1;
+            })
+        }
 }
 
 export default class ViewRubric extends Component
@@ -110,7 +136,7 @@ export default class ViewRubric extends Component
             Rubric_Id: '',
             scale: '',
             rubric: {
-                criteria:[{descriptions : []}]
+                criteria:[{descriptions : [{value_number: 1, value_name: 0}]}]
             },
             gradeMode: false,
             measureId: '',
@@ -146,7 +172,6 @@ export default class ViewRubric extends Component
                     Rubric_Id: res.data.rubric.Rubric_Id,
                     rubric: res.data.rubric
                 })
-                
             })
 
         if(window.location.pathname.includes('/gradeRubric/'))
@@ -157,6 +182,8 @@ export default class ViewRubric extends Component
                     subjectList: res.data.subjectList,
                     subjectId: res.data.subjectList[0].subjectId
                 })
+                setScores(res.data.subjectList, res.data.subjectList[0].subjectId, this.state.rubric.criteria);
+                this.calculateAverageScore();
             })
             axios.get('/assignments/assignmentMeasure/' + this.props.match.params.assignment)
                 .then(res => {
@@ -189,7 +216,7 @@ export default class ViewRubric extends Component
         });
     }
 
-    calculateAverageScore(e)
+    calculateAverageScore()
     {
         let scores = this.state.rubric.criteria.map(c => {
             return {
@@ -226,20 +253,8 @@ export default class ViewRubric extends Component
             subjectId: e.target.value
         });
 
-        let subjectIndex = this.state.subjectList.findIndex(s => s.subjectId === e.target.value);
-        if (this.state.subjectList[subjectIndex].scores[0].score !== null)
-        {
-            this.state.subjectList[subjectIndex].scores.forEach(s => {
-                console.log(s.criteriaTitle + " " + s.score);
-                document.getElementById(s.criteriaTitle).value = s.score;
-            })
-        }
-        else
-        {
-            this.state.rubric.criteria.forEach(c => {
-                document.getElementById(c.criteria_title).value = 1;
-            })
-        }
+        setScores(this.state.subjectList, e.target.value, this.state.rubric.criteria);
+        this.calculateAverageScore();
     }
 
     onChangeScale(e){
@@ -272,7 +287,8 @@ export default class ViewRubric extends Component
                     <option value="3">Three Decimals</option>
                 </select>
                 <span>The average score is: 
-                    {" " + this.state.averageScore.toFixed(this.state.calcAverage)}
+                    {" " + this.state.averageScore.toFixed(this.state.calcAverage) + "  or '" + 
+                        mapAverageScoreToValueName(this.state.rubric.criteria[0], this.state.averageScore) + "'"}
                 </span>
             </div>
         }

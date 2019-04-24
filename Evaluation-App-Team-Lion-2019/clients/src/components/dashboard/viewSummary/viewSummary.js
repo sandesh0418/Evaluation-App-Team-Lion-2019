@@ -90,14 +90,14 @@ function Statistics(props)
     else {
         colorToBe="warning";
     }
-    return <p>
+    return <div>
             {props.measure.totalEvaluated !== 0 ? 
                 <Alert color={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                 evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
                     (props.measure.Target_Score * 100) + "%")}.</span></Alert> : null}
             <Alert color="info"> {props.measure.totalEvaluated} subjects have been evaluated.</Alert>
-            </p>
+            </div>
 }
 
 export default class ViewSummary extends Component 

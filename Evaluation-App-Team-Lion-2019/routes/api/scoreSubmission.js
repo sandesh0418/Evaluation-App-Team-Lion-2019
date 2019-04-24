@@ -25,7 +25,7 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
 
     let queryInsertScores = "" + 
         "INSERT INTO subject_score (Measure_ID, Subject_ID, User_Email, Criteria_Title, Score) VALUES " + 
-            scoresToInsert;
+            scoresToInsert + " ON DUPLICATE KEY UPDATE Score=VALUES(Score)";
 
     connection.query("USE nodejs_login1");
 
