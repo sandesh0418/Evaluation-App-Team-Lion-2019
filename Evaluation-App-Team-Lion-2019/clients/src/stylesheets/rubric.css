@@ -14,3 +14,7 @@ td, th {
     vertical-align: middle;
     border-radius: 2px;
 }
+
+textarea {
+    resize: none;
+}

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
+
 
 var dummyMeasure = {
     Description: '',
@@ -53,7 +55,7 @@ function Measures(props)
         return (
             <div key={i}>
                 <span className="bold mr-3"><strong>{currentMeasure.Measure_Name}</strong></span>
-                <a href={"/measureReport" /* + currentMeasure.Measure_ID*/}>
+                <a href={"/measureReport/" + currentMeasure.Measure_ID}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
@@ -90,14 +92,14 @@ function Statistics(props)
     else {
         colorToBe="warning";
     }
-    return <p>
+    return <div>
             {props.measure.totalEvaluated !== 0 ? 
                 <Alert color={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                 evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
                     (props.measure.Target_Score * 100) + "%")}.</span></Alert> : null}
             <Alert color="info"> {props.measure.totalEvaluated} subjects have been evaluated.</Alert>
-            </p>
+            </div>
 }
 
 export default class ViewSummary extends Component 
@@ -162,13 +164,20 @@ export default class ViewSummary extends Component
     render()
     {
         var programSum= '';
+       
+        
         if(this.state.programSummary){
                 programSum = this.state.programSummary.title;
+                
+            
+                
         }
+        
 
         return (
+
             <div>
-                
+               <div>
                 <h1>{programSum}</h1>
             
                 <table className="table table-bordered">
@@ -183,6 +192,7 @@ export default class ViewSummary extends Component
                     </tbody>
                 </table>
                 <Link to="/editProgramSummary" className="btn btn-primary">Edit Program Summary</Link>
+                </div>
             </div>
         );
     }
