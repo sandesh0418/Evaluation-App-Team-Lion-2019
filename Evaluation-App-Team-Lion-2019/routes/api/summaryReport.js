@@ -135,14 +135,20 @@ function getMeasureStatisticsV2(req, res, programSummary)
 {
     //Get: Subject_ID, measureId, Average, outcomeId
     let queryMeasureStatistics = "" + 
-        "SELECT Subject_ID, s.Measure_ID as measureId, AVG(Score) as Average, o.Outcome_ID as outcomeId " +
-        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN subject_score s ON s.Measure_ID=m.Measure_ID " +
-        "WHERE o.Cycle_Id='" + programSummary.cycleId + "' " +
-        "GROUP BY Subject_ID, s.Measure_ID";
+        "SELECT o.Outcome_ID as outcomeId, m.Measure_ID as measureId, ss.User_Email, ss.Subject_ID, ss.Criteria_Title, " +
+            "ss.Score, r.weight, r.weighted " +
+        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN subject_score ss ON " +
+            "ss.Measure_ID=m.Measure_ID " +
+            "LEFT JOIN (SELECT r.Rubric_Title, r.weight as weighted, c.Criteria_Title, c.weight " +
+                    "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id " +
+                    "WHERE r.Cycle_Id='" + programSummary.cycleId + "') as r " +
+            "ON r.Rubric_Title=m.Tool_Name AND r.Criteria_Title=ss.Criteria_Title " +
+        "WHERE o.Cycle_Id='" + programSummary.cycleId + "'";
 
     connection.query(queryMeasureStatistics, (error, results, fields) => {
         if (error) 
         {
+            console.log(error);
             res.json({
               status:false,
               error: error,
@@ -151,18 +157,104 @@ function getMeasureStatisticsV2(req, res, programSummary)
         }
         else
         {
+            let summaryWithFullScores = programSummary;
             let data = Object.values(JSON.parse(JSON.stringify(results)));
             data.forEach(row => {
-                let outcomeIndex = programSummary.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
-                console.log(outcomeIndex);
-                let measureIndex = programSummary.outcomes[outcomeIndex].measures.findIndex(m => m.Measure_ID === row.measureId);
+                let outcomeIndex = summaryWithFullScores.outcomes.findIndex(o => o.Outcome_ID === row.outcomeId);
+                let measureIndex = summaryWithFullScores.outcomes[outcomeIndex].
+                    measures.findIndex(m => m.Measure_ID === row.measureId);
 
-                if (row.Average >= programSummary.outcomes[outcomeIndex].measures[measureIndex].Target_Score)
-                {
-                    programSummary.outcomes[outcomeIndex].measures[measureIndex].metTarget++;
+                let newScore = {
+                    criteriaTitle: row.Criteria_Title,
+                    weight: row.weight,
+                    score: row.Score
                 }
-                programSummary.outcomes[outcomeIndex].measures[measureIndex].totalEvaluated++;
+
+                let weighted;
+                if (row.weighted === 1)
+                {
+                    weighted = true;
+                }
+                else if (row.weighted === 0)
+                {
+                    weighted = false;
+                }
+                else
+                {
+                    weighted = null;
+                }
+
+                if (summaryWithFullScores.outcomes[outcomeIndex].measures[measureIndex].subjectList)
+                {
+                    let subjectIndex = summaryWithFullScores.outcomes[outcomeIndex].measures[measureIndex].
+                        subjectList.findIndex(s => s.Subject_ID === row.Subject_ID && s.User_Email === row.User_Email);
+
+                    if (subjectIndex === -1)
+                    {
+                        summaryWithFullScores.outcomes[outcomeIndex].measures[measureIndex].subjectList.
+                            push({
+                                Subject_ID: row.Subject_ID,
+                                User_Email: row.User_Email,
+                                weighted: weighted,
+                                scores: [newScore]
+                            })
+                    }
+                    else
+                    {
+                        summaryWithFullScores.outcomes[outcomeIndex].measures[measureIndex].subjectList[subjectIndex].
+                            scores.push(newScore);
+                    }
+                }
+                else
+                {
+                    summaryWithFullScores.outcomes[outcomeIndex].measures[measureIndex].subjectList =
+                        [{
+                            Subject_ID: row.Subject_ID,
+                            User_Email: row.User_Email,
+                            weighted: weighted,
+                            scores: [newScore]
+                        }] 
+                }
             })
+
+            for (let i = 0; i < summaryWithFullScores.outcomes.length; i++)
+            {
+                for (let j = 0; j < summaryWithFullScores.outcomes[i].measures.length; j++)
+                {
+                    if (summaryWithFullScores.outcomes[i].measures[j].subjectList)
+                    {
+                        for (let k = 0; k < summaryWithFullScores.outcomes[i].measures[j].subjectList.length; k++)
+                        {
+                            let subject = summaryWithFullScores.outcomes[i].measures[j].subjectList[k];
+                            let averageScore;
+                            if (subject.weighted === true)
+                            {
+                                averageScore = calculateWeightedAverage(subject);
+                            }
+                            else if (subject.weighted === false)
+                            {
+                                averageScore = calculateUnweightedAverage(subject);
+                            }
+                            else if (subject.weighted === null)
+                            {
+                                averageScore = subject.scores[0].score
+                            }
+
+                            console.log(subject);
+
+                            console.log(averageScore);
+                            console.log(programSummary.outcomes[i].measures[j].Target_Score);
+
+                            if (averageScore >= programSummary.outcomes[i].measures[j].Target_Score)
+                            {
+                                programSummary.outcomes[i].measures[j].metTarget++;
+                            }
+                            programSummary.outcomes[i].measures[j].totalEvaluated++;
+                        }
+                    }
+                }
+            }
+
             res.json({
                 status:true,
                 message:'Outcomes and statistics were retrieved.',
@@ -170,6 +262,27 @@ function getMeasureStatisticsV2(req, res, programSummary)
             })
         }
     })
+}
+
+function calculateUnweightedAverage(subject)
+{
+    let totalScore = 0;
+    let numberOfCriteria = 0;
+    subject.scores.forEach(s => {
+            totalScore = totalScore + parseInt(s.score);
+            numberOfCriteria++;
+    });
+    return Math.round((totalScore / numberOfCriteria) * 100000) / 100000;
+}
+
+function calculateWeightedAverage(subject)
+{
+    let totalScore = 0;
+    subject.scores.forEach(s => {
+        totalScore = totalScore + (s.score * (s.weight / 100))
+    });
+    
+    return Math.round(totalScore * 100000) / 100000;
 }
 
 module.exports = router;

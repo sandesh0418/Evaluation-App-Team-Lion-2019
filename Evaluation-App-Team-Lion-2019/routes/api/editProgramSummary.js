@@ -50,4 +50,96 @@ router.post('/editProgramSummary', (req, res) => {
     }
 })
 
+router.post('/deleteOutcomes', (req, res) => {
+    let deletedOutcomeIds = req.body;
+
+    let stringifiedOutcomeIds = "";
+
+    for (let i = 0; i < deletedOutcomeIds.length; i++)
+    {
+        if (i === deletedOutcomeIds.length - 1)
+        {
+            stringifiedOutcomeIds += "'" + deletedOutcomeIds[i] + "'";
+        }
+        else
+        {
+            stringifiedOutcomeIds += "'" + deletedOutcomeIds[i] + "', ";
+        }
+    }
+
+    let queryDeleteFromMeasures = "DELETE FROM measure WHERE Outcome_ID IN (" + stringifiedOutcomeIds + ")";
+    connection.query(queryDeleteFromMeasures, (error, results, field) => {
+        if (error)
+        {
+            res.status(400).json({
+                status:false,
+                error: error,
+                message:'Measures associated with deleted outcomes could not be deleted.  ' + 
+                    'Therefore, the outcomes and measures were not deleted.'
+            })
+        }
+        else
+        {
+            deleteOutcomeIds(req, res, stringifiedOutcomeIds);
+        }
+    })
+
+    function deleteOutcomeIds(req, res, stringifiedOutcomeIds)
+    {
+        let queryDeleteFromMeasures = "DELETE FROM outcome WHERE Outcome_ID IN (" + stringifiedOutcomeIds + ")";
+        connection.query(queryDeleteFromMeasures, (error, results, field) => {
+            if (error)
+            {
+                res.status(400).json({
+                    status:false,
+                    error: error,
+                    message:'The outcomes could not be deleted.'
+                })
+            }
+            else
+            {
+                
+            }
+        })
+    }
+})
+
+router.post('/deleteMeasures', (req, res) => {
+    let deletedMeasureIds = req.body;
+
+    let stringifiedMeasureIds = "";
+
+    for (let i = 0; i < deletedMeasureIds.length; i++)
+    {
+        if (i === deletedMeasureIds.length - 1)
+        {
+            stringifiedMeasureIds += "'" + deletedMeasureIds[i] + "'";
+        }
+        else
+        {
+            stringifiedMeasureIds += "'" + deletedMeasureIds[i] + "', ";
+        }
+    }
+
+    let queryDeleteFromMeasures = "DELETE FROM measure WHERE Measure_ID IN (" + stringifiedMeasureIds + ")";
+    connection.query(queryDeleteFromMeasures, (error, results, field) => {
+        if (error)
+        {
+            res.status(400).json({
+                status:false,
+                error: error,
+                message:'Measures could not be deleted.'
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                status:true,
+                message:'Measures were deleted.'
+            })
+        }
+    })
+    
+})
+
 module.exports = router;
