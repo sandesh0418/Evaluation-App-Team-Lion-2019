@@ -320,7 +320,6 @@ else{
 router.get('/getViewRubric/:id/:cycleId', (req, res) => {
     let rubricId = req.params.id;
     let cycleId = req.params.cycleId;
-    
 
     let rubric = {
         rubric_title: '',
