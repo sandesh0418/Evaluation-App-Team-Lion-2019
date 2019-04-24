@@ -1,8 +1,9 @@
-import { GET_ALL_OUTCOMES} from '../actions/types';
+import { GET_ALL_OUTCOMES, GET_MEASURES} from '../actions/types';
 
 
 const initialState = {
-    outcome: null
+    outcome: null,
+    measure: null
 }
 
 
@@ -12,6 +13,11 @@ export default function (state= initialState, action){
             return{
                 ...state,
                 outcome: action.payload
+            }
+        case  GET_MEASURES:
+            return{
+                ...state,
+                measure: action.payload
             }
         default:
             return state

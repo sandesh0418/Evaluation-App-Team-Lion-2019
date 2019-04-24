@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
+
 
 var dummyMeasure = {
     Description: '',
@@ -162,13 +164,20 @@ export default class ViewSummary extends Component
     render()
     {
         var programSum= '';
+       
+        
         if(this.state.programSummary){
                 programSum = this.state.programSummary.title;
+                
+            
+                
         }
+        
 
         return (
+
             <div>
-                
+               <div>
                 <h1>{programSum}</h1>
             
                 <table className="table table-bordered">
@@ -183,6 +192,7 @@ export default class ViewSummary extends Component
                     </tbody>
                 </table>
                 <Link to="/editProgramSummary" className="btn btn-primary">Edit Program Summary</Link>
+                </div>
             </div>
         );
     }

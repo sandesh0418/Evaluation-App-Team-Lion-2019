@@ -5,6 +5,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import uuid from 'uuid/v1';
 import AddRubricMeasurePopup from './addRubricMeasurePopup';
 import AddTestMeasurePopup from './addTestMeasurePopup';
+import Loader from 'react-loader-spinner';
+
 
 var dummyMeasure = {
     Measure_ID: '',
@@ -135,6 +137,7 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
+        
         axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
@@ -285,17 +288,20 @@ export default class EditProgramSummary extends Component
     {
         axios.post('/editProgramSummary/editProgramSummary', this.state.programSummary)
             .then(res => {
-                this.props.history.push("/viewSummary");
+                window.location.replace("/viewSummary");
             })
     }
 
     render()
     {
         var outcomes = '';
+        
         if(this.state.programSummary){
             outcomes=this.state.programSummary.outcomes 
             
         }
+
+       
         return (
             <>
             <h1>Edit Program Summary</h1>

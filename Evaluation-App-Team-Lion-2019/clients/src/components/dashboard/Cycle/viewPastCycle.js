@@ -1,19 +1,29 @@
 import React, { Component } from 'react'
 import {getAllRubric} from '../../../actions/rubric';
-import { getOutcome} from '../../../actions/outcome';
+import { getOutcome, getMeasure} from '../../../actions/outcome';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import '../../../stylesheets/spinner.css';
-import { Collapse, Button, CardBody, Card } from 'reactstrap';
+
+
 
 
 
 
 class viewPastCycle extends Component {
-
+    constructor(props, context) {
+        super(props, context);
+    
+        this.state = {
+          open: false,
+        };
+      }
    
-     
+     onClick(e){
+         this.props.getMeasure(e.target.id)
+         this.setState({ open: !this.state.open })
+     }
 
 
     componentDidMount(){
@@ -21,7 +31,7 @@ class viewPastCycle extends Component {
         this.props.getOutcome(this.props.match.params.cycle);
     }
   render() {
-
+    const { open } = this.state;
     const {rubric} = this.props;
     const { outcomes } = this.props;
     var rubricDisplay;
@@ -61,31 +71,33 @@ class viewPastCycle extends Component {
 
     if(outcomes.outcome != null){
         if(outcomes.outcome.length>0){
-            outcomeDisplay = <div className="card" style={{width: "18rem"}}>
-                                <div className="card-header">
+            outcomeDisplay = <div className="card">
+                                <div className="card-header" style={{textAlign: "center"}}>
                                     Outcomes
                                 </div>
-                            <ul className="list-group list-group-flush">
-                                
-                            {outcomes.outcome.map((single, index) =>(
-                                <div key={index}>
-                            <span className="list-group-item" >{single.Outcome_Name} 
-                             
-                                 
-                                 <Card>
-                                     <span style={{fontWeight: "bold"}}>Description</span>
-                                    <CardBody>
-                                       {single.Description}
-                                    </CardBody>
-                                </Card>
-                                 
-                                
-                                 </span>
-                                 </div>
+
+
+                                <table className="table-bordered">
+
+                                    {
+                                        outcomes.outcome.map((single, index) =>(
+                                            <tbody key={index}>
+                                            <tr >
+                                            <td style={{padding: "2px", width: "2rem", textAlign: "center"}}><a 
+                                                                                                                onClick={this.onClick.bind(this)}
+                                                                                                                id={single.Outcome_ID}
+                                                                                                                name={single.Outcome_Name}
+                                                                                                                >{single.Outcome_Name}</a>
+                                                                                                                                                                                </td>
+                                            <td style={{padding: "8px", width: "4rem", textAlign: "justify"}}>{single.Description}
+                                            
+        </td>
+                    
+                                            </tr></tbody>
+                                        ))
+                                    }
+                                </table>
                            
-                                ))}
-              
-                            </ul>
                             </div>}
     }
 
@@ -93,10 +105,10 @@ class viewPastCycle extends Component {
       <div>
 
           <div className ="row justify-content-md-center container">
-            <div className="col-sm-6">
+            <div className="col-sm-4">
                 {rubricDisplay}
                 </div>
-            <div className="col-sm-6">
+            <div className="col-sm-8">
                 {outcomeDisplay}
                 </div>
         </div>
@@ -110,6 +122,7 @@ viewPastCycle.propTypes={
     rubric: PropTypes.object.isRequired,
     getOutcome: PropTypes.func.isRequired,
     outcomes: PropTypes.object.isRequired,
+    getMeasure: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 }
 
@@ -121,4 +134,4 @@ const mapPropsToState = state =>({
 
 
 
-export default connect(mapPropsToState, {getAllRubric, getOutcome})(viewPastCycle);
+export default connect(mapPropsToState, {getAllRubric, getOutcome, getMeasure})(viewPastCycle);
