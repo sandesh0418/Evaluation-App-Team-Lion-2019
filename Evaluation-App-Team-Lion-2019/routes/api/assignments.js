@@ -30,7 +30,19 @@ router.post('/createAssignment/', (req,res) => {
         else
         {
             let lines = req.body.studentList;
-            insertSubjectList(req, res, lines, Assignment_ID, true);
+            if (lines == "Name,ID\n")
+            {
+                res.status(200).json({
+                    status:true,
+                    error: error,
+                    message:'The assignment has been added.'
+                })
+            }
+            else
+            {
+                insertSubjectList(req, res, lines, Assignment_ID, true);
+            }
+            
         }
     });
 

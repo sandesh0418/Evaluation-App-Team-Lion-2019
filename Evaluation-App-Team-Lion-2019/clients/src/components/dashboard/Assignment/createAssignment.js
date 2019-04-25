@@ -207,13 +207,10 @@ export default class CreateAssignment extends Component
                 
                 axios.post('/assignments/createAssignment', assignment)
                     .then(res =>  {
+                        alert(res.data.message);
                         if (res.data.status)
                         {
-                            alert(res.data.message);
-                            this.setState({
-                                selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
-                                selectedEvaluator: this.state.evaluatorList[0].email
-                            })
+                            window.location.reload();
                         }
                     });
             }
@@ -229,13 +226,10 @@ export default class CreateAssignment extends Component
 
             axios.post('/assignments/createAssignment', assignment)
                 .then(res =>  {
+                    alert(res.data.message);
                     if (res.data.status)
                     {
-                        alert(res.data.message);
-                        this.setState({
-                            selectedMeasure: this.state.outcomeList[0].measures[0].Measure_ID,
-                            selectedEvaluator: this.state.evaluatorList[0].email
-                        })
+                        window.location.reload();
                     }
                 });
         }

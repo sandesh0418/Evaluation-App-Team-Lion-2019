@@ -288,7 +288,7 @@ export default class ViewRubric extends Component
                 </select>
                 <span>The average score is: 
                     {" " + this.state.averageScore.toFixed(this.state.calcAverage) + "  or '" + 
-                        mapAverageScoreToValueName(this.state.rubric.criteria[0], Math.round(this.state.averageScore)) + "'"}
+                        mapAverageScoreToValueName(this.state.rubric.criteria[0], this.state.averageScore) + "'"}
                 </span>
             </div>
         }

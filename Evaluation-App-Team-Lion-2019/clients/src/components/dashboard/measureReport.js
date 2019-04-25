@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Axios from 'axios';
+import { O_RDONLY } from 'constants';
 
 function CriteriaTitles(props)
 {
@@ -11,27 +12,50 @@ function CriteriaTitles(props)
 function Row(props)
 {
     return props.subjectList.map(s => {
-        return <Evaluation weighted={props.weighted} scale={props.scale} subject={s} />
+        return <Evaluation 
+                    key={s.subjectId} 
+                    weighted={props.weighted} 
+                    scale={props.scale} 
+                    subject={s}/>
     })
 }
 
 function Evaluation(props)
 {
+    let totalScore = 0;
+    let totalEvaluations = props.subject.evaluators.length;
+
+    let averageTotalScore;
+
     return props.subject.evaluators.map(e => {
+        let score = getAverage(e.scores, props.weighted);
+        totalScore += score;
+        averageTotalScore = (totalScore / totalEvaluations);
         return (
-            <tr>
-                <th scope="row">{props.subject.subjectName}</th>
+            <tr key={e.evaluatorEmail}>
+
+                {e.evaluatorEmail === props.subject.evaluators[0].evaluatorEmail ? 
+                    <th scope="row" rowSpan={totalEvaluations}>{props.subject.subjectName}</th>
+                : null}
+
                 <td>{e.evaluatorName}</td>
                 <Scores scores={e.scores} />
+
                 {props.scale[0].valueName ? 
-                    <td>{getAverage(e.scores, props.scale, props.weighted)}</td>
+                    <td>{score + " - " + mapAverageScoreToValueName(props.scale, score)}</td>
                 : null }
+
+                {e.evaluatorEmail === props.subject.evaluators[props.subject.evaluators.length - 1].evaluatorEmail && props.scale[0].valueName ? 
+                    <td>{averageTotalScore + " - " + 
+                    mapAverageScoreToValueName(props.scale, averageTotalScore)}</td>
+                : null}
+        
            </tr>
         )
     })
 }
 
-function getAverage(scores, scale, weighted)
+function getAverage(scores, weighted)
 {
     let score;
     if(weighted)
@@ -43,7 +67,7 @@ function getAverage(scores, scale, weighted)
         score = calculateUnweightedAverage(scores);
     }
 
-    return score + " - " + mapAverageScoreToValueName(scale, Math.round(score));
+    return score;
 }
 
 function calculateUnweightedAverage(scores)
@@ -69,7 +93,14 @@ function calculateWeightedAverage(scores)
 
 function mapAverageScoreToValueName(scale, averageScore)
 {
-    let description = scale.find(s => s.valueNumber === Math.floor(averageScore));
+    console.log(scale);
+    let score = averageScore;
+    if (score < 1)
+    {
+        score = 1;
+    }
+
+    let description = scale.find(s => s.valueNumber === Math.floor(score));
     return description.valueName;
 }
 
@@ -77,10 +108,28 @@ function Scores(props)
 {
     return props.scores.map(s => {
         return (
-            <>
-                <td>{s.valueName ? s.valueName : (s.score * 100)}</td>
-            </>
+                <td key={s.criteriaTitle}>{s.valueName ? s.score + " " + s.valueName : (s.score * 100)}</td>
         )
+    })
+}
+
+function CriteriaAverages(props)
+{
+    return props.criteria.map(c => {
+        let totalScore = 0;
+        let totalSubjects = 0;
+
+        props.subjectList.forEach(s => {
+            s.evaluators.forEach(e => {
+                totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
+                totalSubjects++;
+            })
+        })
+
+        let averageScore = (totalScore / totalSubjects);
+
+        return <td key={c.criteriaTitle}>{averageScore.toFixed(2) + " - " + 
+                mapAverageScoreToValueName(props.scale, averageScore)}</td>
     })
 }
 
@@ -89,8 +138,12 @@ export default class CreateAssignment extends Component
     constructor(props)
     {
         super(props);
+        this.calculateOverallAverage = this.calculateOverallAverage.bind(this);
         this.state={
-            measure: null
+            measure: null,
+            evaluationsMetTarget: 0,
+            totalEvaluations: 0,
+            overallAverage: 0
         }
     }
 
@@ -102,7 +155,47 @@ export default class CreateAssignment extends Component
                 this.setState({
                     measure: res.data.measure
                 })
+                this.calculateOverallAverage();
+                console.log(this.state.overallAverage);
+                console.log("just logged it");
             })
+    }
+
+    calculateOverallAverage()
+    {
+        let classTotalScore = 0;
+        let totalEvaluations = 0;
+        let metTarget = 0;
+
+        this.state.measure.subjectList.forEach(s => {
+            s.evaluators.forEach(e => {
+                let score;
+                 
+                if (this.state.measure.scale[0].valueName)
+                {
+                    score = getAverage(e.scores, this.state.measure.weighted);
+                }
+                else
+                {
+                    score = e.scores[0].score
+                }
+
+                if (score >= this.state.measure.targetScore)
+                {
+                    metTarget++;
+                }
+                classTotalScore += score;
+                totalEvaluations++;
+            })
+        })
+
+        let classAverage = classTotalScore / totalEvaluations
+
+        this.setState({
+            evaluationsMetTarget: metTarget,
+            totalEvaluations: totalEvaluations,
+            overallAverage: classAverage
+        }) 
     }
 
     render()
@@ -145,8 +238,44 @@ export default class CreateAssignment extends Component
                                 subjectList={this.state.measure.subjectList} 
                                 weighted={this.state.measure.weighted}
                                 scale={this.state.measure.scale}/>
+                            <tr>
+                                <th scope="row" colSpan="2">Group Averages</th>
+                                {this.state.measure.scale[0].valueName ?
+                                    <CriteriaAverages 
+                                        criteria={this.state.measure.subjectList[0].evaluators[0].scores}
+                                        subjectList={this.state.measure.subjectList}
+                                        scale={this.state.measure.scale}
+                                    />
+                                : null}
+                                <td colSpan="2">
+                                    {(this.state.measure.scale[0].valueName ? this.state.overallAverage.toFixed(2) + " - " + 
+                                    mapAverageScoreToValueName(this.state.measure.scale, this.state.overallAverage)
+                                    : (this.state.overallAverage * 100).toFixed(2))}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+
+                    <p className="h3">Summary</p>
+                    <p>
+                        {this.state.evaluationsMetTarget + " evaluations of " + this.state.totalEvaluations + " met " +
+                        "the target score of " + (this.state.measure.scale[0].valueName ?
+                        "'" + mapAverageScoreToValueName(this.state.measure.scale, this.state.measure.targetScore) + "'"
+                        : this.state.measure.targetScore * 100)}
+                    </p>
+                    <p>
+                        {"Percent passing: " + 
+                        (this.state.evaluationsMetTarget / this.state.totalEvaluations).toFixed(2) * 100 
+                        + "%"}
+                    </p>
+                    <p>
+                        {"Target pass rate: " + this.state.measure.percentToReachTarget * 100 + "%"}
+                    </p>
+                    <p>
+                        {"Status: " + 
+                        ((this.state.evaluationsMetTarget / this.state.totalEvaluations) >= 
+                            this.state.measure.percentToReachTarget ? "Passing" : "Failing")}
+                    </p>
                 </>
             )
         }
