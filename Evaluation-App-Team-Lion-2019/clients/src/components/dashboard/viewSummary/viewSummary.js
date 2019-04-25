@@ -191,7 +191,7 @@ export default class ViewSummary extends Component
                         <ProgramSummaryBody state={this.state} />
                     </tbody>
                 </table>
-                <Link to="/editProgramSummary" className="btn btn-primary">Edit Program Summary</Link>
+                <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
                 </div>
             </div>
         );
