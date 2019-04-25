@@ -62,7 +62,7 @@ class Cycle extends Component {
 
         }
 
-        console.log(obj);
+        
         this.props.MigrateCycle(obj);
         window.location.reload('/cycles');
         

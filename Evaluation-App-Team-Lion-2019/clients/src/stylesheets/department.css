@@ -1,0 +1,20 @@
+div#top{
+    border: 1px solid grey !important;
+   
+ 
+    box-shadow: 1px 1.5px grey !important;
+}
+
+label{
+    text-align: center;
+}
+
+input[type=text], #department{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }

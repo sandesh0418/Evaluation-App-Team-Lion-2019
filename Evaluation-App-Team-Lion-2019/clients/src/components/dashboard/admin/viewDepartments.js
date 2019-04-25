@@ -6,6 +6,7 @@ import Axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { Form } from "react-bootstrap";
 import classnames from "classnames";
+import '../../../stylesheets/department.css';
 
 class ViewDepartments extends Component {
   constructor(props) {
@@ -88,24 +89,24 @@ class ViewDepartments extends Component {
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <h2 style={{ textAlign: "center" }}>Add Department</h2>
 
-            <Form style={{ border: "1px solid grey" }} onSubmit={this.onSubmit}>
-              <div style={{ padding: "20px" }}>
-                <div className="input-field col s12">
+            <Form  onSubmit={this.onSubmit}>
+            
+            
+                <div className="input-field col s12" style={{ padding: "20px" }} id="top">
+                <label for="department"  style={{padding: "30px" }}>Department's Name</label>
                   <input
                     onChange={this.onChange}
                     value={this.state.department}
-                    // error={errors.department}
+                    
                     id="department"
-                    type="department"
-                    // className={classnames("", {
-                    //   invalid: errors.department
-                    // })}
+                    type="text"
+                    
                     required
                   />
 
-                  <label htmlFor="email">Department Name</label>
-                  <span className="red-text" />
-                </div>
+                 
+                  
+                
 
                 <div>
                   <a

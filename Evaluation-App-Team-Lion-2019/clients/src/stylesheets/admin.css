@@ -1,0 +1,55 @@
+#main{
+    border: 1px solid grey;
+    width: 50%;
+    margin: 0 auto;
+    box-shadow: 1px 1.5px grey;
+}
+
+input[type=text], #email{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+.btn-success{
+    background-color: #2979ff;
+    padding-top: 15px;
+    margin-top: 20px;
+
+}
+
+.btn{
+    padding: 8px !important;
+    color: aliceblue;
+}
+
+#email{
+    margin-bottom: 20px;
+}
+
+h2{
+    font-weight: 800;
+}
+
+select{
+    padding: 0 !important;
+}
+label{
+    text-align: center;
+}
+
+.input-field.col label {
+    left: .75rem;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+
+    #main{
+        width: 100%;
+    }
+}

@@ -9,23 +9,17 @@ import {
   getDepartment
 } from "../../../actions/addCoordinator";
 import classnames from "classnames";
+import '../../../stylesheets/admin.css';
 
-// function DisplayDepartment(props) {
-//   return props.getDepartment.map((singleValue, index) => {
-//     return (
-//       <option>
-//         key={singleValue.department_Id} value={singleValue.department_Name}
-//       </option>
-//     );
-//   });
-// }
+
 
 class Admin extends Component {
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
+   this.onChange=this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
+      open: false,
       email: "",
       department: "",
       errors: {},
@@ -41,6 +35,8 @@ class Admin extends Component {
     this.setState({ [e.target.id]: [e.target.value] });
   }
 
+  
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors.errors) {
       this.setState({ errors: nextProps.errors.errors });
@@ -51,20 +47,29 @@ class Admin extends Component {
 
     const obj = {
       email: this.state.email,
-      department: this.state.department
+      department: this.state.selectedDepartment
     };
+
+    console.log(obj)
 
     this.props.addCoordinator(obj);
   }
 
   render() {
+    const { open } = this.state;
     let { coordinators } = this.props;
     var display = " ";
 
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
-        <option>{singleValue.department_Name}</option>
+        
+
+        <option key={index} 
+                value={singleValue.department_Id}>{singleValue.department_Name}</option>
+        
       ));
+      
+      
     }
     const { errors } = this.state;
     return (
@@ -72,7 +77,8 @@ class Admin extends Component {
         <span>
           <h2>Add Coordinator</h2>
         </span>
-        <Form style={{ border: "1px solid grey" }} onSubmit={this.onSubmit}>
+        <div id="main">
+        <Form onSubmit={this.onSubmit}>
           <div style={{ padding: "20px" }}>
             <div className="input-field col s12">
               <input
@@ -91,26 +97,19 @@ class Admin extends Component {
               <span className="red-text">{errors.email}</span>
             </div>
             <div className="input-field col s12">
-              <select
-                className="form-control"
-                value={this.state.department}
-                name="department"
-                onChange={this.onChange}
-                onClick={this.onChange}
-              >
-                <option value="default">Select Department: </option>
+             
+                <select style={{display: "flex", border: "1px solid #9e9e9e", width: "75%"}} 
+                    onChange={this.onChange} value={this.state.selectedDepartment} id="selectedDepartment">
+                    <option>-- Select a department--</option>
                 {display}
-              {/* <displayDepartment departmentList={coordinators.getDept } /> */}
+              
               </select>
             </div>
             
-                {/* {display}
-                <div>
-                <DisplayDepartment/>
-                </div> */}
+               
 
             <div>
-              <a
+              <a id="button"
                 href="/admin"
                 className="btn btn-success mb-4"
                 id={this.state.email}
@@ -122,6 +121,7 @@ class Admin extends Component {
             </div>
           </div>
         </Form>
+        </div>
       </div>
     );
   }

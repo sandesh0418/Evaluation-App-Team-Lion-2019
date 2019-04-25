@@ -11,11 +11,18 @@ router.post(
   "/addCoordinator",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    var email = req.body.email;
-    var department = req.body.department;
+    var email = req.body.email[0];
+    var department = req.body.department[0];
 
     var errors = {};
-    var dept_id = uniqid();
+   if(email.length === 0){
+    errors.email = "Email field cannot be empty";
+    return res.status(400).json({ errors, status: false });
+   }
+   if(!email.includes("@")){
+    errors.email = "Please enter a valid email";
+    return res.status(400).json({ errors, status: false });
+   }
     connection.query("SELECT * from `users` where email = ?", email, function(
       err,
       result,
@@ -28,15 +35,11 @@ router.post(
         return res.status(400).json({ errors, status: false });
       }
 
-      // connection.query(
-      //   "INSERT INTO  `department`(department_Id , department_Name) Values(?,?)",
-      //   [dept_id, department],
-      //   function(err, result, fields) {
-      //     if (err) throw err;
+   
 
           connection.query(
             "INSERT INTO `users`( `email`, `Dept_Id`, `role`) VALUES(?,?,?)",
-            [email, dept_id, "Administrator"],
+            [email, department, "Administrator"],
             function(err, result, fields) {
               if (err) throw err;
 
