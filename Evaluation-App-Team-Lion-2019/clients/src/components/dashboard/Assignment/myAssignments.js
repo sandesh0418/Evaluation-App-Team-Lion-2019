@@ -49,9 +49,13 @@ function ListDisplay(props)
                 </div>
             )
         }
+        else
+        {
+            return null;
+        }
     });
 
-    if(list.length > 0)
+    if(list[0] !== null)
     {
         let type = props.finished ? "Complete" : "Incomplete"
         return (
@@ -98,7 +102,7 @@ export default class RubricList extends Component
         this.handleEvaluateClick = this.handleEvaluateClick.bind(this);
         this.removeSubject = this.removeSubject.bind(this);
         this.state = {
-            assignments: []
+            assignments: null
         }
     }
 
@@ -155,29 +159,36 @@ export default class RubricList extends Component
 
     render()
     {
-        return(
-            <div>
-                <h1>My Assignments</h1>
-                {this.state.assingments !== [] ? 
-                    <>
-                        {/* show incomplete assignments */}
-                        <ListDisplay
-                            finished={false} 
-                            assignments={this.state.assignments} 
-                            onClick={this.handleEvaluateClick}
-                            removeSubject={this.removeSubject} 
-                        />
-                        {/* show complete assignments */}
-                        <ListDisplay
-                            finished={true} 
-                            assignments={this.state.assignments} 
-                            onClick={this.handleEvaluateClick}
-                            removeSubject={this.removeSubject} 
-                        /> 
-                    </>
-                    : <p>You have no assignments.</p>
-                }
-            </div>
-        );
+        if (this.state.assignments === null)
+        {
+            return <p>loading...</p>
+        }
+        else
+        {
+            return(
+                <div>
+                    <h1>My Assignments</h1>
+                    {this.state.assingments !== [] ? 
+                        <>
+                            {/* show incomplete assignments */}
+                            <ListDisplay
+                                finished={false} 
+                                assignments={this.state.assignments} 
+                                onClick={this.handleEvaluateClick}
+                                removeSubject={this.removeSubject} 
+                            />
+                            {/* show complete assignments */}
+                            <ListDisplay
+                                finished={true} 
+                                assignments={this.state.assignments} 
+                                onClick={this.handleEvaluateClick}
+                                removeSubject={this.removeSubject} 
+                            /> 
+                        </>
+                        : <p>You have no assignments.</p>
+                    }
+                </div>
+            );
+        }
     }
 }

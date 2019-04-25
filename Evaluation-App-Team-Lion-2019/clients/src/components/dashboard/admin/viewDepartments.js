@@ -40,13 +40,13 @@ class ViewDepartments extends Component {
     const obj = {
       department: this.state.department
     };
-    console.log(obj);
+    
     this.props.addDepartment(obj);
-    window.location.replace("/departments");
+    
   }
 
   removeDepartment(e) {
-    console.log(e.target.id);
+ 
     Axios.post("/Coordinator/removeDepartment", {
       department: e.target.id
     }).then(res => {});
@@ -55,7 +55,7 @@ class ViewDepartments extends Component {
   render() {
     let { coordinators } = this.props;
     var display = " ";
-    var load = "";
+    
 
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
@@ -103,6 +103,7 @@ class ViewDepartments extends Component {
                 />
                 <label for="department">Department's Name</label>
                 <span className="red-text">{errors.email}</span>
+        
 
                 <div>
                   <a
@@ -115,10 +116,9 @@ class ViewDepartments extends Component {
                   >
                     Add Department
                   </a>
-                </div>
-              </div>
+                
             </Form>
-          </div>
+          </>
 
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="card">
