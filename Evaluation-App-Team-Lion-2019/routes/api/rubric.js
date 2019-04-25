@@ -127,17 +127,18 @@ router.get("/getRubric/:title", (req, res)=>{
     
     var topRow = [];
     var Rubric =[];
-    
+    var Rubric_Title = "";
     var score = 0;
     var row = 0;
     var weight = 0;
-    connection.query("SELECT `scores`,`weight`,`Rows` from `rubric` where `Rubric_Id` = ?", Rubric_Id, function(err, result, fields){
+    connection.query("SELECT `scores`,`weight`,`Rows`,`Rubric_Title` from `rubric` where `Rubric_Id` = ?", Rubric_Id, function(err, result, fields){
         if (err) throw err;
 
         if(result.length > 0){
             score = result[0].scores;
             row = result[0].Rows;
              weight = result[0].weight;  
+             Rubric_Title=result[0].Rubric_Title;
         }
        
          
@@ -149,6 +150,7 @@ router.get("/getRubric/:title", (req, res)=>{
         for(var i = 0 ;i<result.length;i++){
             topRow[i]={
                 Rubric_Id: Rubric_Id,
+                Rubric_Title: Rubric_Title,
                 Value_Number: `${result[i].Value_Number}`,
                 Value_Name: `${result[i].Value_Name}`
             }
@@ -241,6 +243,21 @@ router.get("/getRubric/:title", (req, res)=>{
 
 })
 })
+})
+
+router.put("/updateTitle/", passport.authenticate("jwt", {session: false}), (req, res)=>{
+    var Rubric_Title = req.body.Rubric_Title;
+    var Rubric_Id = req.body.Rubric_Id;
+
+    connection.query("UPDATE `rubric` SET `Rubric_Title` = ? where `Rubric_Id` = ?",[Rubric_Title, Rubric_Id], function(err, result, fields){
+        if (err) throw err;
+
+        else{
+            res.send("All good")
+        }
+    })
+
+
 })
 
 

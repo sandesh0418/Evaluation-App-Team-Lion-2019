@@ -73,4 +73,19 @@ export const updateRubric = (obj) => dispatch => {
                 
 }
 
+export const updateTitle= (obj) => dispatch => {
+    Axios.put(`/rubric/updateTitle/`, obj)
+            .then(res => {
+               
+            })
+            .catch(err =>{
+                dispatch({
+                    type: GET_RUBRIC,
+                    payload: err
+                })
+            })
+
+                
+                
+}
 

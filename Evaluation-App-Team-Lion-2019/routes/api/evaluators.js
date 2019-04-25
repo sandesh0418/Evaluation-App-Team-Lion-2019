@@ -94,7 +94,7 @@ router.get('/evaluatorList/:deptId', (req, res) => {
         }
         else
         {
-            console.log(results)
+           
             if (results.length > 0)
             {
                 evaluatorList = Object.values(JSON.parse(JSON.stringify(results)))

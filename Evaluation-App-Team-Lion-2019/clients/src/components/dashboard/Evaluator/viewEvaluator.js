@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { GetAllEvaluator, AddNewEvaluator, deleteEvaluator } from '../../../actions/evaluator';
 import { connect } from "react-redux";
 import classnames from "classnames";
-
+import Loader from 'react-loader-spinner';
 
 class ViewEvaluator extends Component
 {
@@ -99,7 +99,13 @@ class ViewEvaluator extends Component
             ))
         }
         else{
-            console.log("Loading");
+          display = <Loader 
+          type="Oval"
+          
+          color="black"
+          height="100"	
+          width="100"
+       />
         }
 
         return(
