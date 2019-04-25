@@ -4,7 +4,8 @@ var connection = require("../../models/User");
 const passport = require("passport");
 var nodeMailer = require("nodemailer");
 const bodyParser = require("body-parser");
-
+const isEmpty = require("is-empty");
+const Validator = require("validator");
 var uniqid = require("uniqid");
 
 router.post(
@@ -13,16 +14,31 @@ router.post(
   (req, res) => {
     var email = req.body.email[0];
     var department = req.body.department[0];
+    email = !isEmpty(email) ? email : "";
+    department = !isEmpty(department) ? department : "";
 
     var errors = {};
-   if(email.length === 0){
-    errors.email = "Email field cannot be empty";
-    return res.status(400).json({ errors, status: false });
-   }
-   if(!email.includes("@")){
+
+    if(Validator.isEmpty(email)){
+      errors.email = "Email field cannot be empty";
+    
+    }
+
+    else if(!email.includes("@")){
     errors.email = "Please enter a valid email";
-    return res.status(400).json({ errors, status: false });
+    
    }
+
+   if(Validator.isEmpty(department)){
+    errors.department = "Department field cannot be empty";
+
+  }
+
+  
+
+  if(errors.length>0){
+    return res.status(400).json({ errors, status: false });
+  }
     connection.query("SELECT * from `users` where email = ?", email, function(
       err,
       result,
@@ -86,10 +102,23 @@ router.post(
   "/addDepartment",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    var department = req.body.department;
-
+    var department = req.body.department[0];
     var errors = {};
+    department = !isEmpty(department) ? department : "";
+    if(Validator.isEmpty(department)){
+      errors.department = "Department field cannot be empty";
+      return res.status(400).json({ errors, status: false });
+  
+    }
+    
+    
+      
+    
+   
+    
     var dept_id = uniqid();
+
+
     connection.query("SELECT * from `department` where department_Name = ?", department, function(
       err,
       result,
@@ -107,6 +136,7 @@ router.post(
         [dept_id, department],
         function(err, result, fields) {
           if (err) throw err;
+          res.status(200).json({ errors, status: true });
         }
       );
     }
@@ -123,8 +153,8 @@ router.get(
       "SELECT * from users where role =? and password!='deleted' ",
       "Administrator",
       function(err, result, fields) {
-        //
-        console.log(result);
+        
+       
         if (err) throw err;
 
         if (result.length > 0) {
@@ -152,10 +182,9 @@ router.get(
       "SELECT * from users where role =? and password='deleted'",
       "Administrator",
       function(err, result, fields) {
-        //
-        //
+        
         if (err) throw err;
-        console.log(result);
+        
         if (result.length > 0) {
           for (var i = 0; i < result.length; i++) {
             Coordinator[i] = {
@@ -177,7 +206,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     var email = req.body.email;
-    console.log(email);
+    
     connection.query("SELECT * from users where email = ?", [email], function(
       err,
       result,
@@ -229,7 +258,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     var department = req.body.department;
-    console.log(department);
+    
     connection.query("SELECT * from department where department_Name = ?", [department], function(
       err,
       result,

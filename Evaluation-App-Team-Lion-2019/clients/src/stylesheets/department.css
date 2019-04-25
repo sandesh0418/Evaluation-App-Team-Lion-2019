@@ -1,13 +1,9 @@
-div#top{
-    border: 1px solid grey !important;
-   
- 
-    box-shadow: 1px 1.5px grey !important;
-}
+
 
 label{
     text-align: center;
 }
+
 
 input[type=text], #department{
     width: 100%;

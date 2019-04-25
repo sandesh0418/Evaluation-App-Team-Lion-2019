@@ -50,7 +50,7 @@ class Admin extends Component {
       department: this.state.selectedDepartment
     };
 
-    console.log(obj)
+   
 
     this.props.addCoordinator(obj);
   }
@@ -74,10 +74,11 @@ class Admin extends Component {
     const { errors } = this.state;
     return (
       <div>
+        
+        <div id="main">
         <span>
           <h2>Add Coordinator</h2>
         </span>
-        <div id="main">
         <Form onSubmit={this.onSubmit}>
           <div style={{ padding: "20px" }}>
             <div className="input-field col s12">
@@ -99,11 +100,19 @@ class Admin extends Component {
             <div className="input-field col s12">
              
                 <select style={{display: "flex", border: "2px solid #ccc"}} 
-                    onChange={this.onChange} value={this.state.selectedDepartment} id="selectedDepartment">
-                    <option>-- Select a department--</option>
+                    onChange={this.onChange} 
+                    value={this.state.selectedDepartment} 
+                    id="selectedDepartment" 
+                    error={errors.department}  
+                    className={classnames("", {
+                      invalid: errors.department
+                    })}>
+                    <option>-- Select a department --</option>
+                    
                 {display}
               
               </select>
+              <span className="red-text">{errors.department}</span>
             </div>
             
                
