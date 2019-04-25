@@ -102,10 +102,23 @@ router.post(
   "/addDepartment",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    var department = req.body.department;
-
+    var department = req.body.department[0];
     var errors = {};
+    department = !isEmpty(department) ? department : "";
+    if(Validator.isEmpty(department)){
+      errors.department = "Department field cannot be empty";
+      return res.status(400).json({ errors, status: false });
+  
+    }
+    
+    
+      
+    
+   
+    
     var dept_id = uniqid();
+
+
     connection.query("SELECT * from `department` where department_Name = ?", department, function(
       err,
       result,
@@ -123,6 +136,7 @@ router.post(
         [dept_id, department],
         function(err, result, fields) {
           if (err) throw err;
+          res.status(200).json({ errors, status: true });
         }
       );
     }

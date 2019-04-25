@@ -40,13 +40,13 @@ class ViewDepartments extends Component {
     const obj = {
       department: this.state.department
     };
-    console.log(obj);
+    
     this.props.addDepartment(obj);
-    window.location.replace("/departments");
+    
   }
 
   removeDepartment(e) {
-    console.log(e.target.id);
+ 
     Axios.post("/Coordinator/removeDepartment", {
       department: e.target.id
     }).then(res => {});
@@ -55,7 +55,7 @@ class ViewDepartments extends Component {
   render() {
     let { coordinators } = this.props;
     var display = " ";
-    var load = "";
+    
 
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
@@ -104,14 +104,14 @@ class ViewDepartments extends Component {
                     
                     id="department"
                     type="text"
-                    error={errors.email}
+                    error={errors.department}
                     className={classnames("", {
                       invalid: errors.email
                     })}
                     required
                   />
               <label for="department"  >Department's Name</label>
-              <span className="red-text">{errors.email}</span>
+              <span className="red-text">{errors.department}</span>
                  
                   
                 
