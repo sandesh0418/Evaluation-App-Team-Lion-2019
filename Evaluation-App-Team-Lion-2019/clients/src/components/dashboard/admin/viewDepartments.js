@@ -88,9 +88,9 @@ class ViewDepartments extends Component {
     return (
       <div class="container">
         <div class="row">
-        <div id="main">
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            
+        
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="main">
+      
             
             <h2 style={{ textAlign: "center" }}>Add Department</h2>
             <Form  onSubmit={this.onSubmit}>
@@ -128,7 +128,7 @@ class ViewDepartments extends Component {
                 </div>
               </div>
             </Form>
-            </div>
+            
           </div>
 
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
