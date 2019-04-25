@@ -5,7 +5,7 @@ import { O_RDONLY } from 'constants';
 function CriteriaTitles(props)
 {
     return props.criteria.map(c => {
-        return <th key={c.criteriaTitle} scope="col">{c.criteriaTitle + " score"}</th>
+        return <th className="p-2" key={c.criteriaTitle} scope="col">{c.criteriaTitle + " score"}</th>
     })
 }
 
@@ -35,18 +35,18 @@ function Evaluation(props)
             <tr key={e.evaluatorEmail}>
 
                 {e.evaluatorEmail === props.subject.evaluators[0].evaluatorEmail ? 
-                    <th scope="row" rowSpan={totalEvaluations}>{props.subject.subjectName}</th>
+                    <th className="p-2" scope="row" rowSpan={totalEvaluations}>{props.subject.subjectName}</th>
                 : null}
 
-                <td>{e.evaluatorName}</td>
+                <td className="p-2">{e.evaluatorName}</td>
                 <Scores scores={e.scores} />
 
                 {props.scale[0].valueName ? 
-                    <td>{score + " - " + mapAverageScoreToValueName(props.scale, score)}</td>
+                    <td className="p-2">{score + " - " + mapAverageScoreToValueName(props.scale, score)}</td>
                 : null }
 
                 {e.evaluatorEmail === props.subject.evaluators[props.subject.evaluators.length - 1].evaluatorEmail && props.scale[0].valueName ? 
-                    <td>{averageTotalScore + " - " + 
+                    <td className="p-2">{averageTotalScore + " - " + 
                     mapAverageScoreToValueName(props.scale, averageTotalScore)}</td>
                 : null}
         
@@ -108,7 +108,7 @@ function Scores(props)
 {
     return props.scores.map(s => {
         return (
-                <td key={s.criteriaTitle}>{s.valueName ? s.score + " " + s.valueName : (s.score * 100)}</td>
+                <td className="p-2" key={s.criteriaTitle}>{s.valueName ? s.score + " " + s.valueName : (s.score * 100)}</td>
         )
     })
 }
@@ -128,7 +128,7 @@ function CriteriaAverages(props)
 
         let averageScore = (totalScore / totalSubjects);
 
-        return <td key={c.criteriaTitle}>{averageScore.toFixed(2) + " - " + 
+        return <td className="p-2" key={c.criteriaTitle}>{averageScore.toFixed(2) + " - " + 
                 mapAverageScoreToValueName(props.scale, averageScore)}</td>
     })
 }
@@ -219,16 +219,16 @@ export default class CreateAssignment extends Component
                             <p>{this.state.measure.measureDescription}</p>
                         </details>
                     : null}
-                    <table className="table table-bordered">
+                    <table className="table table-bordered" cellpadding="14">
                         <thead>
                             <tr id="criteria"> 
-                                <th scope="col">Subject Name</th>
-                                <th scope="col">Evaluator</th>
+                                <th className="p-2" scope="col">Subject Name</th>
+                                <th className="p-2" scope="col">Evaluator</th>
                                 <CriteriaTitles criteria={this.state.measure.subjectList[0].evaluators[0].scores} />
                                 {this.state.measure.scale[0].valueName ?
                                     <>
-                                        <th scope="col">Overall Score</th>
-                                        <th scope="col">Average Score</th>
+                                        <th className="p-2" scope="col">Overall Score</th>
+                                        <th className="p-2" scope="col">Average Score</th>
                                     </>
                                 : null }
                             </tr>
@@ -239,7 +239,7 @@ export default class CreateAssignment extends Component
                                 weighted={this.state.measure.weighted}
                                 scale={this.state.measure.scale}/>
                             <tr>
-                                <th scope="row" colSpan="2">Group Averages</th>
+                                <th className="p-2" scope="row" colSpan="2">Group Averages</th>
                                 {this.state.measure.scale[0].valueName ?
                                     <CriteriaAverages 
                                         criteria={this.state.measure.subjectList[0].evaluators[0].scores}
@@ -247,7 +247,7 @@ export default class CreateAssignment extends Component
                                         scale={this.state.measure.scale}
                                     />
                                 : null}
-                                <td colSpan="2">
+                                <td className="p-2" colSpan="2">
                                     {(this.state.measure.scale[0].valueName ? this.state.overallAverage.toFixed(2) + " - " + 
                                     mapAverageScoreToValueName(this.state.measure.scale, this.state.overallAverage)
                                     : (this.state.overallAverage * 100).toFixed(2))}

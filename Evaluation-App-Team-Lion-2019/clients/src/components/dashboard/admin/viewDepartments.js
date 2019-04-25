@@ -3,10 +3,10 @@ import { addDepartment, getDepartment } from "../../../actions/addCoordinator";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Axios from "axios";
-import Loader from 'react-loader-spinner';
+import Loader from "react-loader-spinner";
 import { Form } from "react-bootstrap";
 import classnames from "classnames";
-import '../../../stylesheets/department.css';
+import "../../../stylesheets/department.css";
 
 class ViewDepartments extends Component {
   constructor(props) {
@@ -59,65 +59,56 @@ class ViewDepartments extends Component {
 
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
-        <div class="col-sm-8" style={{ margin: "auto", padding: "20px" }} key={index}>
-          
-              <h5>Department: {singleValue.department_Name}</h5>
-              <a
-                href="/departments"
-                className="btn btn-danger"
-                style={{ height: "100%" }}
-                id={singleValue.department_Name}
-                onClick={this.removeDepartment}
-              >
-                Remove this Department
-              </a>
-              <hr/>
-            </div>
-          
+        <div
+          class="col-sm-8"
+          style={{ margin: "auto", padding: "20px" }}
+          key={index}
+        >
+          <h5>Department: {singleValue.department_Name}</h5>
+          <a
+            href="/departments"
+            className="btn btn-danger"
+            style={{ height: "100%" }}
+            id={singleValue.department_Name}
+            onClick={this.removeDepartment}
+          >
+            Remove this Department
+          </a>
+          <hr />
+        </div>
       ));
     } else {
-      display = <Loader 
-          type="Oval"
-          
-          color="black"
-          height="100"	
-          width="100"
-       />
+      display = <Loader type="Oval" color="black" height="100" width="100" />;
     }
     const { errors } = this.state;
     return (
       <div class="container">
         <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="kush">
+            <h2 style={{ textAlign: "center", paddingBottom: "10px" }}>
+              Add Department
+            </h2>
+            <Form onSubmit={this.onSubmit}>
+              <div className="input-field col s12" id="middle">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.department}
+                  id="department"
+                  type="text"
+                  error={errors.email}
+                  className={classnames("", {
+                    invalid: errors.email
+                  })}
+                  required
+                />
+                <label for="department">Department's Name</label>
+                <span className="red-text">{errors.email}</span>
         
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="main">
-      
-            
-            <h2 style={{ textAlign: "center" }}>Add Department</h2>
-            <Form  onSubmit={this.onSubmit}>
-            
-            
-                <div className="input-field col s12">
-                
-                  <input
-                    onChange={this.onChange}
-                    value={this.state.department}
-                    
-                    id="department"
-                    type="text"
-                    error={errors.department}
-                    className={classnames("", {
-                      invalid: errors.email
-                    })}
-                    required
-                  />
-              <label for="department"  >Department's Name</label>
-              <span className="red-text">{errors.department}</span>
-                 
-                  
-                
 
                 <div>
-                  <a id="button"
+                  <a
+                    id="button"
+                    id="dept_name"
                     href="/departments"
                     className="btn btn-secondary mb-4"
                     type="submit"
@@ -125,23 +116,25 @@ class ViewDepartments extends Component {
                   >
                     Add Department
                   </a>
-                </div>
-              </div>
+                  </div>
+                  </div>
             </Form>
-            
-          </div>
+            </div>
+          
 
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-          <div class="card">
-            <div class="card-body">
-            <h2 style={{ textAlign: "center" }}>List of Departments</h2>
+            <div class="card">
+              <div class="card-body">
+                <h2 style={{ textAlign: "center" }}>List of Departments</h2>
 
-            {display}
+                {display}
+              </div>
+            </div>
           </div>
           </div>
           </div>
-        </div>
-      </div>
+          
+      
     );
   }
 }

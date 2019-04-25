@@ -41,11 +41,11 @@ const ProgramSummaryBody = props =>
 
 const Outcome = props => (
     <tr>
-        <th scope="row">
+        <th className="p-2" scope="row">
             <p className="h4">{props.outcome.Outcome_Name}</p>
             <p>{props.outcome.Description}</p>
         </th>
-        <td><Measures measures={props.outcome.measures} state={props.state}  /></td>
+        <td className="p-2"><Measures measures={props.outcome.measures} state={props.state}  /></td>
     </tr>
 )
 
@@ -183,8 +183,8 @@ export default class ViewSummary extends Component
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col" className="outcome-width">Learning Outcomes</th>
-                            <th scope="col" className="measure-width">Measures of Performace</th>
+                            <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
+                            <th className="p-2" scope="col" className="measure-width">Measures of Performace</th>
                         </tr>
                     </thead>
                     <tbody>
