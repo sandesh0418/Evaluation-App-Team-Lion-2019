@@ -1,4 +1,4 @@
-import {GET_ALL_EVALUATOR } from '../actions/types';
+import {GET_ALL_EVALUATOR} from '../actions/types';
 
 const initialState = {
     evaluator: null
@@ -12,7 +12,7 @@ export default function(state = initialState, action ){
                 ...state,
                 evaluator: action.payload
             }
-
+        
         default:
             return{
                 ...state

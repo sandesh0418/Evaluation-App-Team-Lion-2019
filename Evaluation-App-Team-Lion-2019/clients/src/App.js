@@ -25,7 +25,6 @@ import Rubric from "./components/dashboard/Rubric/Rubric";
 import CreateRubric from "./components/dashboard/Rubric/createRubric";
 import CreateAssignment from "./components/dashboard/Assignment/createAssignment.js";
 import ViewEvaluator from "./components/dashboard/Evaluator/viewEvaluator";
-import AddEvaluator from "./components/dashboard/Evaluator/addEvaluator";
 import EvaluateTest from "./components/dashboard/evaluateTest";
 import EditProfile from "./components/dashboard/editProfile";
 import Cycle from "./components/dashboard/Cycle/cycle";
@@ -33,6 +32,7 @@ import ViewCycles from "./components/dashboard/Cycle/viewCycle";
 import MeasureReport from './components/dashboard/measureReport';
 import Admin from './components/dashboard/admin/admin';
 import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
+import ViewDepartments from './components/dashboard/admin/viewDepartments';
 import ViewPastCycle from './components/dashboard/Cycle/viewPastCycle';
 
 
@@ -82,6 +82,7 @@ class App extends Component {
                 <PrivateRoute exact path="/evaluateTest/:test/:assignment" component={EvaluateTest} />
                 <PrivateRoute exact path="/viewRubric/:rubric" component={ViewRubric} />
                 <PrivateRoute exact path="/viewCoordinator" component={ViewCoordinator} />
+                <PrivateRoute exact path="/departments" component={ViewDepartments} />
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
                 <PrivateRoute exact path="/editProfile" component={EditProfile} />
@@ -100,7 +101,6 @@ class App extends Component {
                   <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
                   <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />
                   <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
-                  <PrivateRoute exact path="/addEvaluator" component={AddEvaluator} />
                   <PrivateRoute exact path="/cycle" component={Cycle} />
                   <PrivateRoute exact path="/cycles" component={ViewCycles} />
                   <PrivateRoute exact path="/measureReport/:measureId" component={MeasureReport} />
