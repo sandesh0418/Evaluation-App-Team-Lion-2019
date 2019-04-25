@@ -28,11 +28,11 @@ router.post(
         return res.status(400).json({ errors, status: false });
       }
 
-      connection.query(
-        "INSERT INTO  `department`(department_Id , department_Name) Values(?,?)",
-        [dept_id, department],
-        function(err, result, fields) {
-          if (err) throw err;
+      // connection.query(
+      //   "INSERT INTO  `department`(department_Id , department_Name) Values(?,?)",
+      //   [dept_id, department],
+      //   function(err, result, fields) {
+      //     if (err) throw err;
 
           connection.query(
             "INSERT INTO `users`( `email`, `Dept_Id`, `role`) VALUES(?,?,?)",
@@ -73,9 +73,41 @@ router.post(
               res.status(200).json({ errors, status: true });
             }
           );
+      //   }
+      // );
+    });
+  }
+);
+
+router.post(
+  "/addDepartment",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    var department = req.body.department;
+
+    var errors = {};
+    var dept_id = uniqid();
+    connection.query("SELECT * from `department` where department_Name = ?", department, function(
+      err,
+      result,
+      fields
+    ) {
+      if (err) throw err;
+
+      if (result.length > 0) {
+        errors.department = "Department already exists";
+        return res.status(400).json({ errors, status: false });
+      }
+
+      connection.query(
+        "INSERT INTO  `department`(department_Id , department_Name) Values(?,?)",
+        [dept_id, department],
+        function(err, result, fields) {
+          if (err) throw err;
         }
       );
-    });
+    }
+    );
   }
 );
 
@@ -172,7 +204,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     var Departments = [];
-    connection.query("SELECT * from department", function(err, result, fields) {
+    connection.query("SELECT * from department order by department_Name", function(err, result, fields) {
       if (err) throw err;
 
       if (result.length > 0) {
@@ -189,4 +221,33 @@ router.get(
   }
 );
 
+router.post(
+  "/removeDepartment",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    var department = req.body.department;
+    console.log(department);
+    connection.query("SELECT * from department where department_Name = ?", [department], function(
+      err,
+      result,
+      fields
+    ) {
+      if (err) throw err;
+
+      if (result.length <= 0) {
+         return res.status(400).json( "Department doesn't exist" );
+      }
+
+      connection.query(
+        "DELETE FROM department where department_Name = ?",
+        [department],
+        function(err, result, fields) {
+          if (err) throw err;
+
+          res.send("Department has been removed");
+        }
+      );
+    });
+  }
+);
 module.exports = router;
