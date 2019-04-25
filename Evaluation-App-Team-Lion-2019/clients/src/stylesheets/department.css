@@ -1,16 +1,32 @@
-
-
-label{
-    text-align: center;
+label {
+  text-align: center;
 }
 
+input[type="text"],
+#department {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding-bottom: 10px;
+}
+#kush {
+  border: 1px solid grey;
+  width: 50%;
+  margin: 0 auto;
+  box-shadow: 1px 1.5px grey;
+  border-radius: 10px;
+  padding: 20px 40px;
+  height: 50%;
+  margin-top: 10px;
+}
 
-input[type=text], #department{
+@media only screen and (max-width: 600px) {
+  #kush {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    margin-bottom: 50px;
   }
+}
