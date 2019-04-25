@@ -12,6 +12,14 @@ h4 {
 .green.accent-3 {
   background-color: #1a73e8 !important;
 }
+
+.landing {
+  width: 600px;
+  height: 325px;
+  margin: 0 auto;
+  bottom: 5rem;
+  position: relative;
+}
 #background {
   position: fixed;
   left: 0;

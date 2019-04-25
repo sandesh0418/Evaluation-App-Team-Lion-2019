@@ -11,7 +11,7 @@ class Landing extends Component {
           style={{ margin: "25vh auto" }}
           className="container"
         >
-          <div className="row">
+          <div className="row landing">
             <div id="main" className="col s12 center-align">
               <h4>
                 <b>ULM's Department Evaluation App</b>

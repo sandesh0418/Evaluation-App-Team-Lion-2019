@@ -109,9 +109,9 @@ class ViewDepartments extends Component {
                 
 
                 <div>
-                  <a
+                  <a id="button"
                     href="/departments"
-                    className="btn btn-success mb-4"
+                    className="btn btn-secondary mb-4"
                     type="submit"
                     onClick={this.onSubmit}
                   >

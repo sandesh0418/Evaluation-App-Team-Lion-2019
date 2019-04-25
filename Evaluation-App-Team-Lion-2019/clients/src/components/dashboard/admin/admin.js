@@ -98,7 +98,7 @@ class Admin extends Component {
             </div>
             <div className="input-field col s12">
              
-                <select style={{display: "flex", border: "1px solid #9e9e9e", width: "75%"}} 
+                <select style={{display: "flex", border: "2px solid #ccc"}} 
                     onChange={this.onChange} value={this.state.selectedDepartment} id="selectedDepartment">
                     <option>-- Select a department--</option>
                 {display}
@@ -111,8 +111,8 @@ class Admin extends Component {
             <div>
               <a id="button"
                 href="/admin"
-                className="btn btn-success mb-4"
-                id={this.state.email}
+                className="btn btn-secondary mb-4"
+                
                 type="submit"
                 onClick={this.onSubmit}
               >
