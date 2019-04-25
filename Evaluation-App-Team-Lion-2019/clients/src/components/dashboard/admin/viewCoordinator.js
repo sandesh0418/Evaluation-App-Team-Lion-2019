@@ -3,7 +3,7 @@ import { viewCoordinator,viewCoordinatorDeleted } from '../../../actions/addCoor
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { ClipLoader } from 'react-spinners';
+import Loader from 'react-loader-spinner';
 
 
 
@@ -38,37 +38,43 @@ class ViewCoordinator extends Component {
             
             display = coordinators.coordinators.map((singleValue, index) =>(
                 // <div class="row" key={index}>
-                <div class="col-sm-8" style={{margin: "auto"}} key={index}>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
-                      <p  class="card-text">Email: {singleValue.email}</p>
-                      <a href="/viewCoordinator" className="btn btn-danger" style={{height : "100%"}}
+                <div className="col-sm-8" style={{margin: "auto"}} key={index}>
+                  
+                      <p  className="card-text">Name: {singleValue.firstName} {singleValue.lastName}</p>
+                      <p  className="card-text">Email: {singleValue.email}</p>
+                      <a href="/viewCoordinator" className="btn btn-danger" style={{height : "100%", margin: "0 auto"}}
                                 id={singleValue.email}
-                      onClick= {this.removeCoordinator}>Remove this coordinator</a>
-
+                      onClick= {this.removeCoordinator}>Delete Coordinator</a>
+                      <hr/>
                     </div>
-                  </div>
-                </div>
+                    
+                 
                 
               //</div>
             )
             )
+        }
+        else{
+          display = <Loader 
+          type="Oval"
+          
+          color="black"
+          height="100"	
+          width="100"
+       />
         }
 
         if(coordinators.deleted != null){
             
             displayDeleted = coordinators.deleted.map((singleValue, index) =>(
                 
-                <div  class="col-sm-8" style={{margin: "auto"}} key={index}>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Name: {singleValue.firstName} {singleValue.lastName}</h5>
-                      <p  class="card-text">Email: {singleValue.email}</p>
+                <div  className="col-sm-8" style={{margin: "auto"}} key={index}>
+                  
+                      <p className="card-text">Name: {singleValue.firstName} {singleValue.lastName}</p>
+                      <p  className="card-text">Email: {singleValue.email}</p>
                       
 
-                    </div>
-                  </div>
+                   
                 </div>
                 
              
@@ -78,35 +84,40 @@ class ViewCoordinator extends Component {
 
         else{
           
-                load = <div className='sweet-loading'>
-                <ClipLoader
-                 
-                  sizeUnit={"px"}
-                  size={150}
-                  color={'#123abc'}
-                  
-                />
-              </div>;
+          displayDeleted = <Loader 
+          type="Oval"
+          
+          color="black"
+          height="100"	
+          width="100"
+       />
                    
                }
         
         return (
-            <div class="container">
-            <div class="row">
-               <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-                <h2 style={{textAlign: "center"}}>List of the coordinators</h2>
+            <div className="container">
+            <div className="row">
+               <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+               <div className="card">
+                    <div className="card-body">
+                    <h2 className="card-title text-success" style={{textAlign: "center", padding: "20px", textShadow: "none", fontSize: "30px"}}>Active coordinators</h2>
+                
 
                 {display}
-
+                </div>
+                </div>
                 </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-                <h2 style={{textAlign: "center"}}>List of removed coordinators</h2>
+                <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div className="card">
+                    <div className="card-body">
+                    <h2 className="card-title text-danger" style={{textAlign: "center", padding: "20px", textShadow: "none", fontSize: "30px"}}>Deleted coordinators</h2>
+                
 
                 {displayDeleted}
 
+                </div>
+                </div>
                 </div>
             </div>
             </div>

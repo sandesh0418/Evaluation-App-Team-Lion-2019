@@ -6,6 +6,7 @@ body {
 
 .navbar {
   border-bottom: 1px solid #BBBBBB;
+
 }
 
 .nav-link {
@@ -13,7 +14,7 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   text-decoration: none;
-  color: #031D44;
+  
   padding:  0 5px !important;
   margin: 0px 8px;
   display: inline-block;
@@ -49,6 +50,9 @@ body {
   opacity: 1;
  
 } */
+.navbar-dark .navbar-nav .nav-link {
+  color: ghostwhite !important;
+}
 
 .dropdown-menu {
     position: absolute;
@@ -76,4 +80,55 @@ body {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+
+
+@media only screen and (max-width: 991px) {
+.navbar-collapse{
+  color: black !important;
+    padding: 20px !important;
+    width: 35%;
+    margin-left: 65%;
+    background-color: #343a40!important;
+    /* margin-top: 0; */
+    /* top: 10px; */
+    position: relative;
+    bottom: 20px;
+    z-index: 1;
+}
+/* .container{
+  width: 100%;
+  z-index: -1 !important;
+  position: relative;
+} */
+
+}
+
+@media only screen and (max-width: 550px) {
+  .navbar-collapse{
+    color: black !important;
+      padding: 20px !important;
+      width: 100%;
+      margin-left:0;
+      
+     
+      /* margin-top: 0; */
+      /* top: 10px; */
+      position: relative;
+      bottom: 5px;
+      z-index: 1;
+  }
+  
+
+
+}
+
+/* .ml-auto, .mx-auto {
+ 
+  background: slategrey;
+  z-index: 5 !important;
+  width: 35%;
+  align-self: end !important;
+  margin-left: 65%;
+} */
 

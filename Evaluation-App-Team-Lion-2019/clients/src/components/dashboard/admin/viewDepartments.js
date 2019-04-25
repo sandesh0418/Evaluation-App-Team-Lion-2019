@@ -3,9 +3,10 @@ import { addDepartment, getDepartment } from "../../../actions/addCoordinator";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Axios from "axios";
-import { ClipLoader } from "react-spinners";
+import Loader from 'react-loader-spinner';
 import { Form } from "react-bootstrap";
 import classnames from "classnames";
+import '../../../stylesheets/department.css';
 
 class ViewDepartments extends Component {
   constructor(props) {
@@ -39,13 +40,13 @@ class ViewDepartments extends Component {
     const obj = {
       department: this.state.department
     };
-    console.log(obj);
+    
     this.props.addDepartment(obj);
-    window.location.replace("/departments");
+    
   }
 
   removeDepartment(e) {
-    console.log(e.target.id);
+ 
     Axios.post("/Coordinator/removeDepartment", {
       department: e.target.id
     }).then(res => {});
@@ -54,13 +55,12 @@ class ViewDepartments extends Component {
   render() {
     let { coordinators } = this.props;
     var display = " ";
-    var load = "";
+    
 
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
-        <div class="col-sm-8" style={{ margin: "auto" }} key={index}>
-          <div class="card">
-            <div class="card-body">
+        <div class="col-sm-8" style={{ margin: "auto", padding: "20px" }} key={index}>
+          
               <h5>Department: {singleValue.department_Name}</h5>
               <a
                 href="/departments"
@@ -71,46 +71,55 @@ class ViewDepartments extends Component {
               >
                 Remove this Department
               </a>
+              <hr/>
             </div>
-          </div>
-        </div>
+          
       ));
     } else {
-      load = (
-        <div className="sweet-loading">
-          <ClipLoader sizeUnit={"px"} size={150} color={"#123abc"} />
-        </div>
-      );
+      display = <Loader 
+          type="Oval"
+          
+          color="black"
+          height="100"	
+          width="100"
+       />
     }
+    const { errors } = this.state;
     return (
       <div class="container">
         <div class="row">
+        <div id="main">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            
+            
             <h2 style={{ textAlign: "center" }}>Add Department</h2>
-
-            <Form style={{ border: "1px solid grey" }} onSubmit={this.onSubmit}>
-              <div style={{ padding: "20px" }}>
+            <Form  onSubmit={this.onSubmit}>
+            
+            
                 <div className="input-field col s12">
+                
                   <input
                     onChange={this.onChange}
                     value={this.state.department}
-                    // error={errors.department}
+                    
                     id="department"
-                    type="department"
-                    // className={classnames("", {
-                    //   invalid: errors.department
-                    // })}
+                    type="text"
+                    error={errors.department}
+                    className={classnames("", {
+                      invalid: errors.email
+                    })}
                     required
                   />
-
-                  <label htmlFor="email">Department Name</label>
-                  <span className="red-text" />
-                </div>
+              <label for="department"  >Department's Name</label>
+              <span className="red-text">{errors.department}</span>
+                 
+                  
+                
 
                 <div>
-                  <a
+                  <a id="button"
                     href="/departments"
-                    className="btn btn-success mb-4"
+                    className="btn btn-secondary mb-4"
                     type="submit"
                     onClick={this.onSubmit}
                   >
@@ -119,12 +128,17 @@ class ViewDepartments extends Component {
                 </div>
               </div>
             </Form>
+            </div>
           </div>
 
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="card-body">
             <h2 style={{ textAlign: "center" }}>List of Departments</h2>
 
             {display}
+          </div>
+          </div>
           </div>
         </div>
       </div>
