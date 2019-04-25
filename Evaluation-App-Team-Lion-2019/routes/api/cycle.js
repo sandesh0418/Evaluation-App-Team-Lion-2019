@@ -48,69 +48,46 @@ router.get("/getCyclesInProgress/:id",passport.authenticate("jwt", {session: fal
     
 })
 
-router.post("/migrateCycle", passport.authenticate("jwt", {session: false}), (req, res) =>{
+router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (req, res) =>{
     var OldCycleId = req.body.migrate_Id;
     var Cycle_Name = req.body.Cycle_Name;
     var Cycle_Start_Date = req.body.Start_Date;
     var Dept_Id = req.body.deptId;
 
     var newCycleId = uniqid();
-    var Rubric_Id = uniqid();
-    var OldRubricId = "";
+    
+    
+    var myMap = new Map();
+    var key ;
 
 
-    connection.query("INSERT INTO `cycle`(`Cycle_Id`, `Cycle_Name`, `Start_Date`, `End_Date`, `Dept_Id`, `status`) VALUES(?,?,?,?,?,?)",[newCycleId,Cycle_Name,Cycle_Start_Date,"",Dept_Id,"In Progress"], function(err, result, fields){
-        if (err) throw err;
-
-
-    connection.query("Select * from `rubric` where `Cycle_Id` = ? ",OldCycleId, function(err, result, fields){
-        if (err) throw err;
-            OldRubricId = result[0].Rubric_Id;
-        if(result.length> 0){
-            for(var i =0 ; i<result.length;i++){
-                connection.query("INSERT INTO `rubric`(`Rubric_Id`, `Rubric_Title`, `Rows`, `scores`, `weight`, `Cycle_Id`) VALUES(?,?,?,?,?,?)",
-                [Rubric_Id, result[i].Rubric_Title,result[i].Rows,result[i].scores, result[i].weight, newCycleId], function(err, result, fields){
-                    if(err) throw err;
-
-                })
-            }
-        }
-
-        connection.query("SELECT * from `scales` where `Rubric_Id` = ?", OldRubricId, function(err, result, fields){
+    function scales(Rubric_Id, newRubricId){
+        console.log(Rubric_Id + " " + newRubricId)
+        connection.query("SELECT * from `scales` where `Rubric_Id` = ?", Rubric_Id, function(err, results, fields){
             if (err) throw err;
 
-            if(result.length>0){
-                for(var i =0 ; i<result.length;i++){
-
-                    connection.query("INSERT INTO `scales`(`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES(?, ?, ?)",
-                    [Rubric_Id, result[i].Value_Name, result[i].Value_Number], function(err, result, fields){
+            if(results.length>0){
+                for(var j = 0 ; j<results.length;j++){
+                    
+                    connection.query("INSERT INTO `scales`(`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES(?,?,?)",
+                    [newRubricId, results[j].Value_Name, results[j].Value_Number], function(err, result, fields){
                         if (err) throw err;
                     })
 
                 }
             }
         })
+    }
 
-        connection.query("Select * from `criteria` where `Rubric_Id` = ? ", OldRubricId, function(err, result, fields){
+    function data(Rubric_Id, newRubricId){
+        console.log(Rubric_Id + " " + newRubricId)
+        connection.query("Select * from `data` where `Rubric_Id` = ?",Rubric_Id,function(err, results, fields){
             if(err) throw err;
 
-            if(result.length>0){
-                for(var i = 0; i<result.length;i++){
-                    connection.query("INSERT INTO `criteria`(`Rubric_Id`, `Criteria_Title`, `weight`, `Row_Id`) VALUES(?,?,?,?)",
-                    [Rubric_Id, result[i].Criteria_Title,result[i].weight, result[i].Row_Id], function(err, result, fields){
-                        if(err) throw err;
-                    })
-                }
-            }
-        })
-
-        connection.query("Select * from `data` where `Rubric_Id` = ?",OldRubricId,function(err, result, fields){
-            if(err) throw err;
-
-            if(result.length>0){
-                for(var i = 0;i<result.length;i++){
+            if(results.length>0){
+                for(var l = 0;l<results.length;l++){
                     connection.query("INSERT INTO `data`(`Rubric_Id`, `Row_Id`, `Data`, `index`) VALUES(?,?,?,?)",
-                    [Rubric_Id, result[i].Row_Id,result[i].Data, result[i].index], function(err, result, fields){
+                    [newRubricId, results[l].Row_Id,results[l].Data, results[l].index], function(err, result, fields){
                         if(err) throw err;
                     })
                 }
@@ -119,49 +96,110 @@ router.post("/migrateCycle", passport.authenticate("jwt", {session: false}), (re
             
         })
 
-        connection.query("Select * from `outcome` where `Cycle_Id` = ?", OldCycleId, function(err, result, fields){
-            if (err) throw err;
+    }
 
-            var outcomeId = [];
+    function criteria(Rubric_Id, newRubricId){
+        console.log(Rubric_Id + " " + newRubricId)
+        connection.query("Select * from `criteria` where `Rubric_Id` = ? ", Rubric_Id, function(err, results, fields){
+            if(err) throw err;
 
-            if(result.length>0){
-                for(var i = 0; i<result.length;i++){
-                    let Outcome_ID = uuidv1();
-                    outcomeId[i] = Outcome_ID;
-                    connection.query("INSERT INTO `outcome`(`Outcome_ID`, `Description`, `Outcome_Name`, `Cycle_Id`) VALUES(?,?,?,?)",
-                    [Outcome_ID, result[i].Description,result[i].Outcome_Name, newCycleId], function(err, result, fields){
-                        if (err) throw err; 
+            if(results.length>0){
+                for(var k = 0; k<results.length;k++){
+                    connection.query("INSERT INTO `criteria`(`Rubric_Id`, `Criteria_Title`, `weight`, `Row_Id`) VALUES(?,?,?,?)",
+                    [newRubricId, results[k].Criteria_Title,results[k].weight, results[k].Row_Id], function(err, result, fields){
+                        if(err) throw err;
                     })
                 }
             }
+        })
+    }
+
+    function measure(oldOutcomeId, Outcome_ID){
+        connection.query("Select * from `measure` where `Outcome_ID` = ?",oldOutcomeId, function(err, results, fields){
+            if (err) throw err;
+
+            console.log(results)
+
+            if(results.length>0){
+                for(var k = 0; k<results.length;k++){
+                    var measureId = uuidv1();
+                    connection.query("INSERT INTO `measure`(`Measure_ID`, `Outcome_ID`, `Description`, `Percent_to_reach_target`, `Target_Score`, `Tool_Name`, `Measure_Name`) VALUES(?,?,?,?,?,?,?)",
+                    [measureId, Outcome_ID, results[k].Description, results[k].Percent_to_reach_target, results[k].Target_Score, results[k].Tool_Name,results[k].Measure_Name], function(err, result, fields){
+                        if (err) throw err;
+                    })
+                }
+            }
+        })
+    }
+
+    connection.query("INSERT INTO `cycle`(`Cycle_Id`, `Cycle_Name`, `Start_Date`, `End_Date`, `Dept_Id`, `status`) VALUES(?,?,?,?,?,?)",
+    [newCycleId,Cycle_Name,Cycle_Start_Date,"",Dept_Id,"In Progress"], function(err, result, fields){
+        
+        if (err) throw err;
+
+    })
 
 
-            for(var j = 0; j<outcomeId.length;j++){
-                connection.query("Select * from `measure` where `Outcome_ID` = ?",outcomeId[j], function(err, result, fields){
-                    if (err) throw err;
+    connection.query("Select * from `rubric` where `Cycle_Id` = ? ",OldCycleId, function(err, results, fields){
+        if (err) throw err;
 
-                    if(result.length>0){
-                        for(var k = 0; k<result.length;k++){
-                            var measureId = uuidv1();
-                            connection.query("INSERT INTO `measure`(`Measure_ID`, `Outcome_ID`, `Description`, `Percent_to_reach_target`, `Target_Score`, `Tool_Name`, `Measure_Name`) VALUES(?,?,?,?,?,?,?)",
-                            [measureId, outcomeId[j], result[k].Description, result[k].Percent_to_react_target, result[k].Target_Score, result[k].Tool_Name,result[k].Measure_Name], function(err, result, fields){
-                                if (err) throw err;
-                            })
-                        }
-                    }
-                })
+        
+            
+        if(results.length> 0){
+           
+            for(var i =0; i<results.length;i++){
+                myMap.set(results[i].Rubric_Id, uniqid());
             }
 
+           
+            key = Array.from(myMap.keys());
+            
+            for(var i = 0 ; i<key.length;i++){
+                
+                
+                
+                connection.query("INSERT INTO `rubric`(`Rubric_Id`, `Rubric_Title`, `Rows`, `scores`, `weight`, `Cycle_Id`) VALUES(?,?,?,?,?,?)",
+                [myMap.get(key[i]), results[i].Rubric_Title,results[i].Rows,results[i].scores, results[i].weight, newCycleId], function(err, result, fields){
+                    if(err) throw err;
 
+                })
 
+                criteria(key[i], myMap.get(key[i]))
+                scales(key[i], myMap.get(key[i]))
+                data(key[i], myMap.get(key[i]))
 
-
-        })
+            }
+            connection.query("Select * from `outcome` where `Cycle_Id` = ?", OldCycleId, function(err, result, fields){
+                if (err) throw err;
+            
+                
+            
+                if(result.length>0){
+                    for(var i = 0; i<result.length;i++){
+                        let Outcome_ID = uuidv1();
+                        measure(result[i].Outcome_ID, Outcome_ID)
+                        connection.query("INSERT INTO `outcome`(`Outcome_ID`, `Description`, `Outcome_Name`, `Cycle_Id`) VALUES(?,?,?,?)",
+                        [Outcome_ID, result[i].Description,result[i].Outcome_Name, newCycleId], function(err, result, fields){
+                            if (err) throw err; 
+                        })
+            
+                        
+                    }
+                }
+            
+            
+            
+            })
+    
+        }
+       
 
 
     })
 
-})
+
+
+
 })
 
 

@@ -1,4 +1,4 @@
-import {GET_ERRORS, GET_ALL_EVALUATOR } from './types';
+import {GET_ERRORS, GET_ALL_EVALUATOR, DELETE_EVALUATOR } from './types';
 import Axios from 'axios';
 
 
@@ -25,6 +25,19 @@ export const GetAllEvaluator = () => dispatch => {
         })
         .catch(err => {
 
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
+
+export const deleteEvaluator = (obj) => dispatch =>{
+    Axios.post("/evaluators/deleteEvaluator", obj)
+        .then(res => {
+            
+        })
+        .catch(err =>{
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data

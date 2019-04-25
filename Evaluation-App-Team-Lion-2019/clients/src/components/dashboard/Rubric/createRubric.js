@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getRubric, updateRubric} from '../../../actions/rubric';
+import { getRubric, updateRubric, updateTitle} from '../../../actions/rubric';
 import { Table, FormControl, Form } from 'react-bootstrap';
-import { ClipLoader } from 'react-spinners';
+
 import '../../../stylesheets/rubric.css';
+import Loader from 'react-loader-spinner';
 
 class createRubric extends Component{
 
@@ -13,7 +14,9 @@ class createRubric extends Component{
         this.onSubmit= this.onSubmit.bind(this);
         this.state = {
             saveRubric: [],
-            weight: true
+            weight: true,
+            rubricTitle: "",
+            title: true
         }
 
         
@@ -31,13 +34,20 @@ class createRubric extends Component{
     onSubmit(e){
         e.preventDefault();
         
-        if(this.props.rubric.rubric[2].weight === true){
+        if(this.props.rubric.rubric[2].weight === true && this.state.title === true){
            
             window.location.replace("/rubricList");
         }
 
         else{
-            this.setState({weight: false});
+            if(this.props.rubric.rubric[2].weight  === false){
+                this.setState({weight: false});
+            }
+            if(!this.state.title){
+                this.setState({
+                    title: false
+                })
+            }
             
         }
 
@@ -46,6 +56,29 @@ class createRubric extends Component{
         
     }
 
+    titleChange(e){
+        const obj ={
+            Rubric_Id: e.target.name,
+            Rubric_Title: e.target.value
+        }
+        this.setState({
+            rubricTitle: e.target.value
+        })
+
+        if(!e.target.value){
+            this.setState({
+                title: false
+            }) 
+        }
+        else{
+            this.setState({
+                title: true
+            }) 
+        }
+        this.props.updateTitle(obj)
+        
+        this.props.getRubric(localStorage.getItem("Rubric_Id"), localStorage.getItem("Cycle_Id"))
+    }
     
 
 
@@ -79,14 +112,14 @@ class createRubric extends Component{
         var row;
         var weight = 0;
         var load;
-       
+        var Rubric_Id = "";
         
         let { rubric } = this.props.rubric;
         
 
        if(rubric){
-           
-        
+           this.state.rubricTitle=rubric[0][0].Rubric_Title;
+            Rubric_Id = rubric[0][0].Rubric_Id;
             
                 display = rubric[0].map((singleValue, index) => (
                     <th key ={index} className="borderedCell" style = {{padding: "0", textAlign: "center"}} >
@@ -206,15 +239,14 @@ class createRubric extends Component{
     }
        else{
           
-        load = <tbody><tr className='sweet-loading' >
-        <ClipLoader
-         
-          sizeUnit={"px"}
-          size={150}
-          color={'#36D7B7'}
-          
-          
-        />
+        load = <tbody><tr>
+        <Loader 
+        type="Oval"
+        
+        color="black"
+        height="100"	
+        width="100"
+     />
       </tr></tbody>;
 
 
@@ -228,8 +260,13 @@ class createRubric extends Component{
            
            
            <Form onSubmit={this.onSubmit}>
-            
-            {this.state.weight ? null: <p className = "alert alert-danger text-center">Rubric has not been saved!!! Total weight is not 100% !!</p>}
+           {this.state.title ? null:  <p className = "alert alert-danger text-center"><i style={{paddingRight: "10px", fontSize: "20px"}}class="fas fa-exclamation-triangle"></i>Rubric title cannot be empty</p>}
+           <input type="text" 
+                    defaultValue ={this.state.rubricTitle}
+                    name={Rubric_Id}
+                    onChange={this.titleChange.bind(this)}
+                    style={{width: "25%", margin: "30px 37.5%", border: "2px solid #dee2e6", textAlign: "center"}}/> 
+            {this.state.weight ? null: <p className = "alert alert-danger text-center"><i style={{paddingRight: "10px", fontSize: "20px"}}class="fas fa-exclamation-triangle"></i>Rubric has not been saved!!! Total weight is not 100% !!</p>}
             <Table bordered striped>
             {load} 
             <thead>
@@ -266,6 +303,7 @@ class createRubric extends Component{
 createRubric.propTypes = {
     getRubric: PropTypes.func.isRequired,
     updateRubric: PropTypes.func.isRequired,
+    updateTitle: PropTypes.func.isRequired,
     rubric: PropTypes.object.isRequired
 }
 
@@ -274,4 +312,4 @@ const mapStateToProps = state => ({
         rubric: state.rubric
 })
 
-export default connect (mapStateToProps, { getRubric, updateRubric })(createRubric);
+export default connect (mapStateToProps, { getRubric, updateTitle, updateRubric})(createRubric);

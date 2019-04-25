@@ -67,12 +67,21 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
 
 })
 
+router.post("/deleteEvaluator", passport.authenticate("jwt", {session: false}), (req, res) =>{
+    var email = req.body.email;
+
+    connection.query("UPDATE `users` SET `password`= 'deleted' where `email` = ?", email, function(err, result, fields){
+        if(err) throw err;
+
+    })
+})
+
 
 router.get('/evaluatorList/:deptId', (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND NOT role='Admin'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email, password FROM users WHERE `password` != 'deleted' and Dept_Id='" + departmentId + "' AND NOT role='Admin'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
@@ -85,7 +94,7 @@ router.get('/evaluatorList/:deptId', (req, res) => {
         }
         else
         {
-            console.log(results)
+           
             if (results.length > 0)
             {
                 evaluatorList = Object.values(JSON.parse(JSON.stringify(results)))

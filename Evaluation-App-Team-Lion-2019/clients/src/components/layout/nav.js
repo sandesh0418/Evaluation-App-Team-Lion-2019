@@ -26,6 +26,7 @@ render()
                 <Nav className="ml-auto" >
                     <Nav.Link href="/admin">Add Coordinator</Nav.Link>
                     <Nav.Link href="/viewCoordinator">View Coordinators</Nav.Link>
+                    <Nav.Link href="/departments">Departments</Nav.Link>
                     <NavDropdown title={User()}>
                         <Nav.Link href="/editProfile">Edit Profile</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>

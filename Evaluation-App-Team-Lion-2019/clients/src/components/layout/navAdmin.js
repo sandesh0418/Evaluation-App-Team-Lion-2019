@@ -33,14 +33,15 @@ class NavAdmin extends Component {
                 Create Assignment
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Evaluators">
+            <Nav.Link href="/viewEvaluator">Evaluators</Nav.Link>
+            {/* <NavDropdown title="Evaluators">
               <NavDropdown.Item href="/addEvaluator">
                 Add Evaluator
               </NavDropdown.Item>
               <NavDropdown.Item href="/viewEvaluator">
                 View Evaluator
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
             <NavDropdown title="Rubrics">
               <NavDropdown.Item href="/rubricList">
                 Rubric List
