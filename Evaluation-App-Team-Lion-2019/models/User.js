@@ -44,16 +44,16 @@ var mysql = require("mysql");
 // handleDisconnect();
 
 var connection = mysql.createPool({
-  connectionLimit: 10,
+  /* connectionLimit: 10,
   host: "us-cdbr-iron-east-02.cleardb.net",
   user: "b3a43daee9a0e7",
   password: "f0da0ad1",
-  database: "heroku_b0a7ce9feea42fe"
+  database: "heroku_b0a7ce9feea42fe" */
 
-  // host : 'localhost',
-  // user : 'root',
-  // password : '',
-  // database : 'nodejs_login1'
+  host : 'localhost',
+  user : 'root',
+  password : '',
+  database : 'nodejs_login1'
 });
 connection.on("connection", function(connection) {
   console.log("Server is connected to database");

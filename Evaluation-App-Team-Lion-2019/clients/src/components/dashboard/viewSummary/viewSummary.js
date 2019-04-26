@@ -142,7 +142,7 @@ export default class ViewSummary extends Component
     {
         axios.get("/api/summaryReport/measureStatistics/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
-                //console.log(res.data);
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
