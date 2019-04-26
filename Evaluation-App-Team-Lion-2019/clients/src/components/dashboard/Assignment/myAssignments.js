@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import axios from "axios";
 import AddSubjects from './addSubjects';
 import './myAssignments.css';
-import Loader from 'react-loader-spinner';
-import { isNullOrUndefined } from 'util';
 
+<<<<<<< HEAD
 
 function ListDisplay(props)
 {
@@ -57,12 +56,76 @@ function ListDisplay(props)
     if(props.assignments.length > 0)
     {
         display = list
+=======
+
+function ListDisplay(props)
+{
+    let list = props.assignments.map(a => {
+        if (a.finished === props.finished)
+        {
+            return (
+                <div className="m-3 p-3 border rounded" key={a.assignmentId}>
+                    <p className="h5">{"Outcome name: " + a.outcomeName}</p>
+                    <div>{"Outcome description: " + a.outcomeDescription}</div>
+                    <p className="h5">{"Measure name: " + a.measureName}</p>
+                    {a.subjects[0] && a.subjects[0].subjectId !== null ? 
+                        <>
+                            <button 
+                                type="button" 
+                                className="btn btn-primary mt-2 mb-2" 
+                                id={a.rubricId + "/" + a.assignmentId}
+                                onClick={props.onClick}>
+                                {"Evaluate " + a.toolName}
+                            </button>
+                            <details>
+                                <summary>Subjects:</summary>
+                                <table className="table table-bordered p-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Id</th> 
+                                            <th>Graded?</th>
+                                            <th>Remove Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <SubjectList 
+                                            assignmentId={a.assignmentId} 
+                                            subjects={a.subjects}
+                                            removeSubject={props.removeSubject} 
+                                        />
+                                    </tbody>
+                                </table>
+                            </details>
+                        </>
+                    : <p>There are no subjects in this assignments yet. Add subjects to evaluate.</p> }
+                    <AddSubjects assignmentId={a.assignmentId} />
+                </div>
+            )
+        }
+        else
+        {
+            return null;
+        }
+    });
+
+    if(list[0] !== null)
+    {
+        let type = props.finished ? "Complete" : "Incomplete"
+        return (
+            <div>
+                <h2>{type + " Assignments"}</h2>
+                {list}
+            </div>
+        )
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
     }
     else
     {
         display = <p>There are no {id} assignments.</p>
     }
 
+<<<<<<< HEAD
     let id = (props.finished ? "complete" : "incomplete");
         
     return (
@@ -73,6 +136,8 @@ function ListDisplay(props)
     )
 }
 
+=======
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
 function SubjectList(props)
 {
     return props.subjects.map(s => {
@@ -181,18 +246,23 @@ export default class RubricList extends Component
     {
         if (this.state.assignments === null)
         {
+<<<<<<< HEAD
             return <Loader 
                 type="Oval"
                 color="black"
                 height="100"	
                 width="100"
             />
+=======
+            return <p>loading...</p>
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
         }
         else
         {
             return(
                 <div>
                     <h1>My Assignments</h1>
+<<<<<<< HEAD
                     <div className="row">
                         {this.state.assignments !== [] ? 
                             <>
@@ -217,6 +287,27 @@ export default class RubricList extends Component
                             : <p>You have no assignments.</p>
                         }
                      </div>
+=======
+                    {this.state.assingments !== [] ? 
+                        <>
+                            {/* show incomplete assignments */}
+                            <ListDisplay
+                                finished={false} 
+                                assignments={this.state.assignments} 
+                                onClick={this.handleEvaluateClick}
+                                removeSubject={this.removeSubject} 
+                            />
+                            {/* show complete assignments */}
+                            <ListDisplay
+                                finished={true} 
+                                assignments={this.state.assignments} 
+                                onClick={this.handleEvaluateClick}
+                                removeSubject={this.removeSubject} 
+                            /> 
+                        </>
+                        : <p>You have no assignments.</p>
+                    }
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
                 </div>
             );
         }
