@@ -256,6 +256,33 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                 }
             })
 
+            var completedAssignment= [];
+
+            var inCompleteAssignment = [];
+            var count1= 0;
+            var count2 = 0;
+
+         
+
+            for(var i = 0; i<assignments.length;i++){
+                
+                if(assignments[i].finished === false){
+                        inCompleteAssignment[count1]= assignments[i];
+                        count1++;
+                }
+                else{
+                    completedAssignment[count2] = assignments[i];
+                    count2++;
+                }
+            }
+
+            assignments = [];
+            assignments[0] = completedAssignment;
+            assignments[1] = inCompleteAssignment;
+
+            console.log(assignments)
+            
+
 
             res.status(200).json({
                 assignments: assignments
