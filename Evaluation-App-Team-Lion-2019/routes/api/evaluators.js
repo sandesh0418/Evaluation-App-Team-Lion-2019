@@ -81,7 +81,7 @@ router.get('/evaluatorList/:deptId', (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND NOT role='Admin' AND NOT `password` = 'deleted'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND role='Evaluator' AND NOT `password` = 'deleted'";
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
