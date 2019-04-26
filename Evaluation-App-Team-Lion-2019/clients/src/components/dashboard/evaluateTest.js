@@ -52,14 +52,14 @@ export default class EvaluateTest extends Component
     componentDidMount()
     {
         console.log(this.props.match.params.assignment);
-        axios.get('/assignments/subjectList/'+this.props.match.params.assignment)
+        axios.get("/api/assignments/subjectList/"+this.props.match.params.assignment)
             .then(res => {
                 this.setState({
                     subjectList: res.data.subjectList,
                     subjectId: res.data.subjectList[0]
                 })
             })
-        axios.get('/assignments/assignmentMeasure/' + this.props.match.params.assignment)
+        axios.get("/assignments/assignmentMeasure/" + this.props.match.params.assignment)
             .then(res => {
                 this.setState({
                     measure: res.data.measure
@@ -106,7 +106,7 @@ export default class EvaluateTest extends Component
             scores: scores
         }
 
-        axios.post('/scoreSubmission/testScore', scoreData)
+        axios.post("/api/scoreSubmission/testScore", scoreData)
             .then(res => {
                 if (res.data.inserted)
                 {

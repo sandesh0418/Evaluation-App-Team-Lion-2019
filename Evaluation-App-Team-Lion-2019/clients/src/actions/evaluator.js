@@ -3,7 +3,7 @@ import Axios from 'axios';
 
 
 export const AddNewEvaluator= (obj, history) => dispatch => {
-    Axios.post("/evaluators/addEvaluator", obj)
+    Axios.post("/api/evaluators/addEvaluator", obj)
         .then(res => {
             history.push("/viewEvaluator")
         })
@@ -16,7 +16,7 @@ export const AddNewEvaluator= (obj, history) => dispatch => {
 }
 
 export const GetAllEvaluator = () => dispatch => {
-    Axios.get("/evaluators/evaluatorList/"+`${localStorage.getItem("dept_Id")}`)
+    Axios.get("/api/evaluators/evaluatorList/"+`${localStorage.getItem("dept_Id")}`)
         .then(res => {
             dispatch({
                 type: GET_ALL_EVALUATOR,
@@ -33,7 +33,7 @@ export const GetAllEvaluator = () => dispatch => {
 }
 
 export const deleteEvaluator = (obj) => dispatch =>{
-    Axios.post("/evaluators/deleteEvaluator", obj)
+    Axios.post("/api/evaluators/deleteEvaluator", obj)
         .then(res => {
             
         })

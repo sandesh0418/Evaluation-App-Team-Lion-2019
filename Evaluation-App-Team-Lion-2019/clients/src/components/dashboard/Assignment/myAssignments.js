@@ -178,7 +178,7 @@ export default class RubricList extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/myAssignments/' + localStorage.getItem("email") + "/" + localStorage.getItem("Cycle_Id"))
+        axios.get("/api/assignments/myAssignments/" + localStorage.getItem("email") + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     assignments: res.data.assignments
@@ -206,7 +206,7 @@ export default class RubricList extends Component
             assignmentId: assignmentId
         }
 
-        axios.post('/assignments/deleteSubject', data)
+        axios.post("/api/assignments/deleteSubject", data)
             .then(res => {
                 if (!res.data.deleted)
                 {

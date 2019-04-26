@@ -163,13 +163,13 @@ export default class EditProgramSummary extends Component
     componentDidMount()
     {
         
-        axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
+        axios.get("/api/summaryReport/getSummary/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     programSummary: res.data.programSummary
                 })
         })
-        axios.get('/rubric/getListWithScale/' + localStorage.getItem("Cycle_Id"))
+        axios.get("/api/rubric/getListWithScale/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 if(res.data.status)
                 {
@@ -341,20 +341,20 @@ export default class EditProgramSummary extends Component
 
     handleSave()
     {
-        axios.post('/editProgramSummary/editProgramSummary', this.state.programSummary)
+        axios.post("/api/editProgramSummary/editProgramSummary", this.state.programSummary)
             .then(res => {
                 window.location.replace("/viewSummary");
             })
 
         if (this.state.deletedOutcomeIds.length > 0)
         {
-            axios.post('/editProgramSummary/deleteOutcomes', this.state.deletedOutcomeIds)
+            axios.post("/api/editProgramSummary/deleteOutcomes", this.state.deletedOutcomeIds)
                 .then(res => {})
         }
 
         if (this.state.deletedMeasureIds.length > 0)
         {
-            axios.post('/editProgramSummary/deleteMeasures', this.state.deletedMeasureIds)
+            axios.post("/api/editProgramSummary/deleteMeasures", this.state.deletedMeasureIds)
                 .then(res => {})
         }
     }

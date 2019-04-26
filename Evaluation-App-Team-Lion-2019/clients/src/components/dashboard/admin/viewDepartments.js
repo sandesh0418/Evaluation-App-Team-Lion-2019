@@ -47,7 +47,7 @@ class ViewDepartments extends Component {
 
   removeDepartment(e) {
  
-    Axios.post("/Coordinator/removeDepartment", {
+    Axios.post("/api/Coordinator/removeDepartment", {
       department: e.target.id
     }).then(res => {});
   }
