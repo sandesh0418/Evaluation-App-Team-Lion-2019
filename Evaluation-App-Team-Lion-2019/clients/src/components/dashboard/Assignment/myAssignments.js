@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from "axios";
 import AddSubjects from './addSubjects';
 import './myAssignments.css';
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 
@@ -58,6 +59,10 @@ function ListDisplay(props)
         display = list
 =======
 
+=======
+
+
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
 function ListDisplay(props)
 {
     let list = props.assignments.map(a => {
@@ -126,6 +131,7 @@ function ListDisplay(props)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     let id = (props.finished ? "complete" : "incomplete");
         
     return (
@@ -136,6 +142,8 @@ function ListDisplay(props)
     )
 }
 
+=======
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
 =======
 >>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
 function SubjectList(props)
@@ -247,6 +255,7 @@ export default class RubricList extends Component
         if (this.state.assignments === null)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             return <Loader 
                 type="Oval"
                 color="black"
@@ -256,12 +265,16 @@ export default class RubricList extends Component
 =======
             return <p>loading...</p>
 >>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
+=======
+            return <p>loading...</p>
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
         }
         else
         {
             return(
                 <div>
                     <h1>My Assignments</h1>
+<<<<<<< HEAD
 <<<<<<< HEAD
                     <div className="row">
                         {this.state.assignments !== [] ? 
@@ -288,6 +301,8 @@ export default class RubricList extends Component
                         }
                      </div>
 =======
+=======
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
                     {this.state.assingments !== [] ? 
                         <>
                             {/* show incomplete assignments */}
@@ -307,6 +322,9 @@ export default class RubricList extends Component
                         </>
                         : <p>You have no assignments.</p>
                     }
+<<<<<<< HEAD
+>>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
+=======
 >>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
                 </div>
             );
