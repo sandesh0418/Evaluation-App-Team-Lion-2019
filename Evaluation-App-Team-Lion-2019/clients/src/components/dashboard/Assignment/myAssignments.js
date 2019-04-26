@@ -5,7 +5,6 @@ import './myAssignments.css';
 import Loader from 'react-loader-spinner';
 import { isNullOrUndefined } from 'util';
 
-
 function ListDisplay(props)
 {
     let type = (props.finished ? "Complete" : "Incomplete");

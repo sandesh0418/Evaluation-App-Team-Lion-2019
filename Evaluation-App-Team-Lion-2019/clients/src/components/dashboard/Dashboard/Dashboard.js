@@ -9,6 +9,9 @@ class Dashboard extends Component {
   componentDidMount(){
       this.props.CyclesInProgress();
   }
+  onClickNewCycle(e){
+    window.location.replace("/cycle");
+  }
   
 
   render() {
@@ -20,11 +23,16 @@ class Dashboard extends Component {
     if(cycles.inProgressCycles != null){
 
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
-        <p className="card-text" key={index}>
+        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
           {singleCycle.Cycle_Name}
-
+            <button type="button" className="btn btn-secondary" style={{float: "right", display:"inline", position: "relative", bottom: "20px", marginRight: "5px"}}>Edit cycle</button>
+        <hr/>
         </p>
       ))
+
+      if(displayCycle===''){
+        displayCycle = <span>You do not have any active cycle</span>
+      }
 
     }
     else{
@@ -41,11 +49,26 @@ class Dashboard extends Component {
         <div className="row">
 
         <div className="col-sm-6">
-        <div className="card">
-        <h2 className="card-title bg-info" style={{padding: "20px"}}>Cycles</h2>
+        <div className="card" style={{borderRadius: "10px"}}>
+        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Cycles</h2>
         {displayCycle}
-        
+        <p style={{textAlign: "center", color: "red", fontWeight: "800", fontSize: "20px"}}> OR </p>
+
+        <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    margin: "1rem auto"
+                  }}
+                 onClick={this.onClickNewCycle.bind(this)}
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                  Create a new Cycle
+                </button>        
         </div>
+
+        
         
         
         </div>
