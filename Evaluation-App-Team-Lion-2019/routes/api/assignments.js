@@ -256,7 +256,6 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                 }
             })
 
-<<<<<<< HEAD
             var completeAssignments= [];
 
             var incompleteAssignments = [];
@@ -281,8 +280,6 @@ router.get('/myAssignments/:email/:cycleId', (req, res) => {
                 complete: completeAssignments,
                 incomplete: incompleteAssignments
             };
-=======
->>>>>>> parent of 1cee733... incomplete assignments and complete assignments are in different column
 
             res.status(200).json({
                 assignments: assignments
