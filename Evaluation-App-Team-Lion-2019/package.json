@@ -10,7 +10,6 @@
     "client": "cd clients && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix clients && npm run build --prefix clients"
-
   },
   "author": "",
   "license": "",
