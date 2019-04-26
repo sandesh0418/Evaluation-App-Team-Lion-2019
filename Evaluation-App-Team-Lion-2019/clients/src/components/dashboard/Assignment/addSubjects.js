@@ -140,7 +140,7 @@ export default class CreateAssignment extends Component
                     subjectList: fileReader.result
                 }
                 
-                axios.post("/api/assignments/addSubjects", subjectList)
+                axios.post('/assignments/addSubjects', subjectList)
                     .then(res =>  {
                         if (res.data.status)
                         {
@@ -158,7 +158,7 @@ export default class CreateAssignment extends Component
                 subjectList: "Name,ID\n" + manualStudentEntryToString(this.state.manualStudentEntry)
             }
 
-            axios.post("/api/assignments/addSubjects", subjectList)
+            axios.post('/assignments/addSubjects', subjectList)
                 .then(res =>  {
                     if (res.data.status)
                     {
