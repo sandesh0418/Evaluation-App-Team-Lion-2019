@@ -59,7 +59,8 @@ class ViewEvaluator extends Component
       }
      
       this.props.AddNewEvaluator(obj, this.props.history);
-      
+
+      window.location.replace("/viewEvaluator");
   
       
     };
