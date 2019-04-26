@@ -1,17 +1,19 @@
 {
-  "name": "mern-auth",
+  "name": "team-lion-app",
   "version": "1.0.0",
-  "description": "Mern Auth Example",
+  "description": "Department Evaluation App Team Lion",
   "main": "server.js",
   "scripts": {
-    "client-install": "npm install --prefix client",
+    "client-install": "npm install --prefix clients",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "cd clients && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix clients && npm run build --prefix clients"
+
   },
   "author": "",
-  "license": "MIT",
+  "license": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -28,6 +30,7 @@
     "nodemon": "^1.18.11",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "serve": "^11.0.0",
     "uniqid": "^5.0.3",
     "uuid": "^3.3.2",
     "validator": "^10.9.0"

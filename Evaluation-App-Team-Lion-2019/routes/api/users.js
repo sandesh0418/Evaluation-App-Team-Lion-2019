@@ -124,12 +124,12 @@ router.post("/login", (req, res) => {
   const password = req.body.password;
   
   config.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
-  if(results.length<0){
+  if(undefined !== results && results.length<=0){
     return res.status(404).json({ emailnotfound: "Email not found" });
  
   }
 
-  else{
+  else if (results){
     bcrypt.compare(password, results[0].password, function(err, response) {
     if(response === true){
       // User matched
