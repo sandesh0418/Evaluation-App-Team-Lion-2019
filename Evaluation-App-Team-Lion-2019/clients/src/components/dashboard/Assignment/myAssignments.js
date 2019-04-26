@@ -52,21 +52,24 @@ function ListDisplay(props)
         )
     });
 
+    let display;
     if(props.assignments.length > 0)
     {
-        let id = (props.finished ? "complete" : "incomplete")
-        
-        return (
-            <div id={id}>
-                <h2>{type + " Assignments"}</h2>
-                {list}
-            </div>
-        )
+        display = list
     }
     else
     {
-        return null;
+        display = <p>There are no {id} assignments.</p>
     }
+
+    let id = (props.finished ? "complete" : "incomplete");
+        
+    return (
+        <div id={id}>
+            <h2>{type + " Assignments"}</h2>
+            {display}
+        </div>
+    )
 }
 
 function SubjectList(props)
