@@ -7,61 +7,58 @@ import { isNullOrUndefined } from 'util';
 
 function ListDisplay(props)
 {
+    let type = (props.finished ? "Complete" : "Incomplete");
+
     let list = props.assignments.map(a => {
-        if (a.finished === true)
-        {
-            return (
-                <div className="m-3 p-3 border rounded" key={a.assignmentId}>
-                    <p className="h5">{"Outcome name: " + a.outcomeName}</p>
-                    <div>{"Outcome description: " + a.outcomeDescription}</div>
-                    <p className="h5">{"Measure name: " + a.measureName}</p>
-                    {a.subjects[0] && a.subjects[0].subjectId !== null ? 
-                        <>
-                            <button 
-                                type="button" 
-                                className="btn btn-primary mt-2 mb-2" 
-                                id={a.rubricId + "/" + a.assignmentId}
-                                onClick={props.onClick}>
-                                {"Evaluate " + a.toolName}
-                            </button>
-                            <details>
-                                <summary>Subjects:</summary>
-                                <table className="table table-bordered p-3">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Id</th> 
-                                            <th>Graded?</th>
-                                            <th>Remove Subject</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <SubjectList 
-                                            assignmentId={a.assignmentId} 
-                                            subjects={a.subjects}
-                                            removeSubject={props.removeSubject} 
-                                        />
-                                    </tbody>
-                                </table>
-                            </details>
-                        </>
-                    : <p>There are no subjects in this assignments yet. Add subjects to evaluate.</p> }
-                    <AddSubjects assignmentId={a.assignmentId} />
-                </div>
-            )
-        }
-        else
-        {
-            return null;
-        }
+        return (
+            <div className="m-3 p-3 border rounded" key={a.assignmentId}>
+                <p className="h5">{"Outcome name: " + a.outcomeName}</p>
+                <div>{"Outcome description: " + a.outcomeDescription}</div>
+                <p className="h5">{"Measure name: " + a.measureName}</p>
+                {a.subjects[0] && a.subjects[0].subjectId !== null ? 
+                    <>
+                        <button 
+                            type="button" 
+                            className="btn btn-primary mt-2 mb-2" 
+                            id={a.rubricId + "/" + a.assignmentId}
+                            onClick={props.onClick}>
+                            {"Evaluate " + a.toolName}
+                        </button>
+                        <details>
+                            <summary>Subjects:</summary>
+                            <table className="table table-bordered p-3">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Id</th> 
+                                        <th>Graded?</th>
+                                        <th>Remove Subject</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <SubjectList 
+                                        assignmentId={a.assignmentId} 
+                                        subjects={a.subjects}
+                                        removeSubject={props.removeSubject} 
+                                        type={type}
+                                    />
+                                </tbody>
+                            </table>
+                        </details>
+                    </>
+                : <p>There are no subjects in this assignments yet. Add subjects to evaluate.</p> }
+                <AddSubjects assignmentId={a.assignmentId} />
+            </div>
+        )
     });
 
-    if(props.assignments.length >0)
+    if(props.assignments.length > 0)
     {
+        let id = (props.finished ? "complete" : "incomplete")
         
         return (
-            <div id="complete">
-                <h2>{"Complete" + " Assignments"}</h2>
+            <div id={id}>
+                <h2>{type + " Assignments"}</h2>
                 {list}
             </div>
         )
@@ -71,75 +68,6 @@ function ListDisplay(props)
         return null;
     }
 }
-
-
-function ListIncomplete(props)
-{
-    let list = props.assignments.map(a => {
-        if (a.finished === false)
-        {
-            return (
-                <div className="m-3 p-3 border rounded" key={a.assignmentId}>
-                    <p className="h5">{"Outcome name: " + a.outcomeName}</p>
-                    <div>{"Outcome description: " + a.outcomeDescription}</div>
-                    <p className="h5">{"Measure name: " + a.measureName}</p>
-                    {a.subjects[0] && a.subjects[0].subjectId !== null ? 
-                        <>
-                            <button 
-                                type="button" 
-                                className="btn btn-primary mt-2 mb-2" 
-                                id={a.rubricId + "/" + a.assignmentId}
-                                onClick={props.onClick}>
-                                {"Evaluate " + a.toolName}
-                            </button>
-                            <details>
-                                <summary>Subjects:</summary>
-                                <table className="table table-bordered p-3">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Id</th> 
-                                            <th>Graded?</th>
-                                            <th>Remove Subject</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <SubjectList 
-                                            assignmentId={a.assignmentId} 
-                                            subjects={a.subjects}
-                                            removeSubject={props.removeSubject} 
-                                        />
-                                    </tbody>
-                                </table>
-                            </details>
-                        </>
-                    : <p>There are no subjects in this assignments yet. Add subjects to evaluate.</p> }
-                    <AddSubjects assignmentId={a.assignmentId} />
-                </div>
-            )
-        }
-        else
-        {
-            return null;
-        }
-    });
-
-    if(props.assignments.length >0)
-    {
-      
-        return (
-            <div id="incomplete">
-                <h2>{"Incomplete" + " Assignments"}</h2>
-                {list}
-            </div>
-        )
-    }
-    else
-    {
-        return null;
-    }
-}
-
 
 function SubjectList(props)
 {
@@ -153,7 +81,7 @@ function SubjectList(props)
                 <td className="p-2">
                     <button 
                         className="btn btn-sm btn-danger"
-                        id={s.subjectId}
+                        id={s.subjectId + "/" + props.type}
                         name={props.assignmentId}
                         onClick={props.removeSubject}>
                         X
@@ -189,20 +117,38 @@ export default class RubricList extends Component
 
     removeSubject(e)
     {
-        let subjectId = e.target.id;
+        let subjectId_type = e.target.id.split("/");
         let assignmentId = e.target.name;
         let tempAssignments = this.state.assignments;
-        let assignmentIndex = tempAssignments.findIndex(a => a.assignmentId === assignmentId);
-        let subjectIndex = tempAssignments[assignmentIndex].subjects.findIndex(s => s.subjectId === subjectId);
+        let assignmentIndex;
+        let subjectIndex;
 
-        tempAssignments[assignmentIndex].subjects.splice(subjectIndex, 1);
+        if (subjectId_type[1] === "Complete")
+        {
+            assignmentIndex = tempAssignments.complete.findIndex(a => a.assignmentId === assignmentId);
+            subjectIndex = tempAssignments.complete[assignmentIndex].subjects.
+                findIndex(s => s.subjectId === subjectId_type[0]);
+            tempAssignments.complete[assignmentIndex].subjects.splice(subjectIndex, 1);
+            if (tempAssignments.complete[assignmentIndex].subjects.length < 1)
+            {
+                tempAssignments.incomplete.push(tempAssignments.complete[assignmentIndex]);
+                tempAssignments.complete.splice(assignmentIndex, 1);
+            }
+        }
+        else
+        {
+            assignmentIndex = tempAssignments.incompelete.findIndex(a => a.assignmentId === assignmentId);
+            subjectIndex = tempAssignments.incomplete[assignmentIndex].subjects.
+                findIndex(s => s.subjectId === subjectId_type[0]);
+            tempAssignments.incomplete[assignmentIndex].subjects.splice(subjectIndex, 1);
+        }
 
         this.setState({
             assignments: tempAssignments
         })
 
         let data = {
-            subjectId: subjectId,
+            subjectId: subjectId_type[0],
             assignmentId: assignmentId
         }
 
@@ -232,12 +178,11 @@ export default class RubricList extends Component
         if (this.state.assignments === null)
         {
             return <Loader 
-            type="Oval"
-            
-            color="black"
-            height="100"	
-            width="100"
-         />
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
+            />
         }
         else
         {
@@ -245,30 +190,28 @@ export default class RubricList extends Component
                 <div>
                     <h1>My Assignments</h1>
                     <div className="row">
-                   
-                    {this.state.assignments !== [] ? 
-                        <>
-                            {/* show incomplete assignments */}
-                            <div className="col-sm-6">
-                            <ListIncomplete
-                                finished={false} 
-                                assignments={this.state.assignments[1]} 
-                                onClick={this.handleEvaluateClick}
-                                removeSubject={this.removeSubject} 
-                            />
-                            </div>
-                            {/* show complete assignments */}
-                            <div className="col-sm-6">
-                            <ListDisplay
-                                finished={true} 
-                                assignments={this.state.assignments[0]} 
-                                onClick={this.handleEvaluateClick}
-                                removeSubject={this.removeSubject} 
-                            /> </div>
-                        </>
-                        : <p>You have no assignments.</p>
-                    }
-                    
+                        {this.state.assignments !== [] ? 
+                            <>
+                                {/* show incomplete assignments */}
+                                <div className="col-sm-6">
+                                <ListDisplay
+                                    finished={false} 
+                                    assignments={this.state.assignments.incomplete} 
+                                    onClick={this.handleEvaluateClick}
+                                    removeSubject={this.removeSubject} 
+                                />
+                                </div>
+                                {/* show complete assignments */}
+                                <div className="col-sm-6">
+                                <ListDisplay
+                                    finished={true} 
+                                    assignments={this.state.assignments.complete} 
+                                    onClick={this.handleEvaluateClick}
+                                    removeSubject={this.removeSubject} 
+                                /> </div>
+                            </>
+                            : <p>You have no assignments.</p>
+                        }
                      </div>
                 </div>
             );
