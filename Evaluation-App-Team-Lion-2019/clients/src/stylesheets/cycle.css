@@ -17,4 +17,13 @@
    
     }
      */
-   
+
+.card {
+  background-color: #fc0202f8;
+}
+
+.jumbotro{
+    width: 100%;
+    padding: 40px;
+    background-color: transparent;
+}
