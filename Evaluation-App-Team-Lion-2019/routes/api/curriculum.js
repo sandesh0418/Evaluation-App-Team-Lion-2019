@@ -68,4 +68,56 @@ router.post('/editCurriculum', (req,res) => {
     })
 })
 
+router.post('/deleteCourses', (req, res) => {
+    let deletedIds = req.body;
+    let formattedIds = [];
+
+    deletedIds.forEach(id => {
+        formattedIds.push("'" + id + "'");
+    })
+
+    let queryDeleteCurriculumOutcomeMapping = "" +
+        "DELETE FROM curriculum_outcome_mapping WHERE Course_ID IN (" + formattedIds.join() + ")";
+
+    connection.query(queryDeleteCurriculumOutcomeMapping, (error, results, fields) => {
+        if (error)
+        {
+            res.status(400).json({
+                status: false,
+                error: error,
+                message: "The courses could not be deleted."
+            })
+        }
+        else
+        {
+            deleteCurriculumCourses(req, res, formattedIds);
+        }
+    })
+
+    function deleteCurriculumCourses(req, res, formattedIds)
+    {
+        let queryDeleteCurriculumCourses = "" + 
+            "DELETE FROM curriculum WHERE Course_ID IN (" + formattedIds.join() + ")";
+
+        connection.query(queryDeleteCurriculumCourses, (error, results, fields) => {
+            if (error)
+            {
+                res.status(400).json({
+                    status: false,
+                    error: error,
+                    message: "The courses could not be deleted."
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    status: true,
+                    error: error,
+                    message: "The courses were deleted."
+                })
+            }
+        })
+    }
+})
+
 module.exports = router;

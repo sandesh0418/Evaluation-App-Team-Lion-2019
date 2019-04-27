@@ -7,41 +7,24 @@ import AddRubricMeasurePopup from './addRubricMeasurePopup';
 import AddTestMeasurePopup from './addTestMeasurePopup';
 import Loader from 'react-loader-spinner';
 
-
-var dummyMeasure = {
-    Measure_ID: '',
-    Description: '',
-    Percent_to_reach_target: 0,
-    Target_Score: 0
-}
-
-var dummyOutcome = {
-    Outcome_ID: 0,
-    Description: '',
-    measures: [dummyMeasure]
-}
-
-var dummySummary = {
-    title: "",
-    outcomes: [dummyOutcome]
-};
-
 const OutcomeList = props => {
 
     if(props.outcomes){
-    return props.outcomes.map(function(currentOutcome) {
-        return <Outcome 
-                    key={currentOutcome.Outcome_ID} 
-                    outcome={currentOutcome} 
-                    handleOutcomeChange={props.handleOutcomeChange}
-                    handleDeleteOutcome={props.handleDeleteOutcome}
-                    handleOutcomeNameChange={props.handleOutcomeNameChange}
-                    handleAddRubricMeasure={props.handleAddRubricMeasure}
-                    handleAddTestMeasure={props.handleAddTestMeasure}
-                    handleDeleteMeasure={props.handleDeleteMeasure}
-                />
-    })
-}
+        return props.outcomes.map(function(currentOutcome) {
+            return <Outcome 
+                        key={currentOutcome.Outcome_ID} 
+                        outcome={currentOutcome} 
+                        handleOutcomeChange={props.handleOutcomeChange}
+                        handleDeleteOutcome={props.handleDeleteOutcome}
+                        handleOutcomeNameChange={props.handleOutcomeNameChange}
+                        handleAddRubricMeasure={props.handleAddRubricMeasure}
+                        handleAddTestMeasure={props.handleAddTestMeasure}
+                        handleDeleteMeasure={props.handleDeleteMeasure}
+                        selectCourseList={props.selectCourseList}
+                        addCourse={props.addCourse}
+                    />
+        })
+    }
     else{
         return null;
     }
@@ -79,7 +62,7 @@ const Outcome = props => {
                         outcomeId={props.outcome.Outcome_ID}
                         handleDeleteMeasure={props.handleDeleteMeasure} /> 
                     : null}
-                <DropdownButton id="dropdown-basic-button" title="Add Measure">
+                <DropdownButton id="dropdown-basic-button" className="mb-3" title="Add Measure">
                     <Dropdown.Item 
                         onSelect={props.handleAddTestMeasure}
                         eventKey={props.outcome.Outcome_ID}>
@@ -91,6 +74,14 @@ const Outcome = props => {
                         Add Rubric Measure
                     </Dropdown.Item>
                 </DropdownButton>
+                <details>
+                    <summary>Outcome's Curriculum Elements</summary>
+                    <OutcomeCurriculum 
+                        courses={props.outcome.courses} 
+                        outcomeId={props.outcome.Outcome_ID}
+                        selectCourseList={props.selectCourseList}
+                        addCourse={props.addCourse}/>
+                </details>
             </div>
         </div>
     )
@@ -125,6 +116,63 @@ const Measures = props => {
     })
 }
 
+const OutcomeCurriculum = props => {
+    let allIds = props.selectCourseList.map(c => {
+        return c.courseId;
+    })
+
+    let usedIds = props.courses.map(c => {
+        return c.courseId;
+    })
+
+    let selectableIds = allIds.filter(c => {
+        return !usedIds.includes(c);
+    })
+
+    let selectableCourses = props.selectCourseList.filter(c => {
+        return selectableIds.includes(c.courseId);
+    })
+    
+    let selectCourseList = selectableCourses.map(c => {
+        return <option value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
+    })
+
+    let outcomeCourses = props.courses.map((c, i) => {
+        return (
+            <div key={i} className="row">
+                <div className="col-3">
+                    {c.courseId !== "" ?
+                        c.departmentCode + " " + c.courseCode + " " + c.name
+                    :
+                    <select className="form-control" value={}>
+                        {selectCourseList}
+                    </select>}
+                </div>
+                <div className="col-2">
+                    <input type="number" min="0" max="99" value={c.relevantHours}
+                        title="Enter the number of hours in this course relevant to this outcome." />
+                </div>
+                <div className="col">
+                    <button type="button" className="btn btn-danger" onClick={props.deleteCourseMapping}
+                        id={props.outcomeId} name={c.courseId}>
+                        Delete Element
+                    </button>
+                </div>
+            </div>
+        )
+    })
+
+    return (
+        <div className="mt-3">
+            {outcomeCourses}
+            <button type="button" className="btn btn-primary" onClick={props.addCourse}
+                id={props.outcomeId}>
+                Add another course
+            </button>
+        </div>
+    )
+}
+
 export default class EditProgramSummary extends Component
 {
 
@@ -141,9 +189,11 @@ export default class EditProgramSummary extends Component
         this.handleDeleteMeasure = this.handleDeleteMeasure.bind(this);
         this.handleDeleteOutcome = this.handleDeleteOutcome.bind(this);
         this.closePopup = this.closePopup.bind(this);
+        this.addCourse = this.addCourse.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
-            programSummary: dummySummary,
+            programSummary: null,
+            curriculum: null,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
@@ -179,6 +229,13 @@ export default class EditProgramSummary extends Component
                     })
                 }
         })
+        axios.get('/curriculum/getCurriculum/' + localStorage.getItem("Cycle_Id"))
+            .then(res => {
+                console.log(res.data.curriculum);
+                this.setState({
+                    curriculum: res.data.curriculum
+                })
+            })
     }
 
     handleAddOutcome()
@@ -339,6 +396,24 @@ export default class EditProgramSummary extends Component
         })
     }
 
+    addCourse(e)
+    {
+        let tempSummary = this.state.programSummary;
+        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
+
+        tempSummary.outcomes[outcomeIndex].courses.push({
+            departmentCode: "",
+            courseCode: "",
+            name: "",
+            relevantHours: 0,
+            courseId: ""
+        })
+
+        this.setState({
+            programSummary: tempSummary
+        })
+    }
+    
     handleSave()
     {
         axios.post('/editProgramSummary/editProgramSummary', this.state.programSummary)
@@ -361,51 +436,67 @@ export default class EditProgramSummary extends Component
 
     render()
     {
-        var outcomes = '';
-        
-        if(this.state.programSummary){
-            outcomes=this.state.programSummary.outcomes 
-            
-        }
-
-       
-        return (
-            <>
-            <h1>Edit Program Summary</h1>
-            <OutcomeList 
-                 outcomes={outcomes}
-                 handleOutcomeNameChange={this.handleOutcomeNameChange}
-                 handleDeleteOutcome={this.handleDeleteOutcome}
-                 handleOutcomeChange={this.handleOutcomeChange}
-                 handleAddRubricMeasure={this.handleAddRubricMeasure}
-                 handleAddTestMeasure={this.handleAddTestMeasure}
-                 handleDeleteMeasure={this.handleDeleteMeasure} 
+        if (this.state.programSummary === null || this.state.curriculum === null || this.state.rubrics === null)
+        {
+            return <Loader 
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
             />
-            <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
-            <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>
-            {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
-                                                        closePopup={this.closePopup} 
-                                                        submit={this.addNewMeasure}
-                                                        rubrics={this.state.rubrics}
-                                                        handleInputChange={this.handleInputChange}
-                                                        rubric={this.state.toolName}
-                                                        measureName={this.state.measureName}
-                                                        description={this.state.description}
-                                                        targetScore={this.state.targetScore}
-                                                        percentToReachTarget={this.state.percentToReachTarget}
-                                                    /> : null}
-            {this.state.showAddTestMeasurePopup ? <AddTestMeasurePopup
-                                                        closePopup={this.closePopup}
-                                                        submit={this.addNewMeasure}
-                                                        handleInputChange={this.handleInputChange}
-                                                        testName={this.state.toolName}
-                                                        measureName={this.state.measureName}
-                                                        description={this.state.description}
-                                                        targetScore={this.state.targetScore}
-                                                        percentToReachTarget={this.state.percentToReachTarget}
-                                                    /> : null}
-            </>
-        )
+        }
+        else
+        {
+            var outcomes = '';
+        
+            if(this.state.programSummary){
+                outcomes=this.state.programSummary.outcomes 
+            }
+
+            let selectCourseList = this.state.curriculum.map(c => {
+                return <option value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
+            })
+        
+            return (
+                <>
+                <h1>Edit Program Summary</h1>
+                <OutcomeList 
+                    outcomes={outcomes}
+                    handleOutcomeNameChange={this.handleOutcomeNameChange}
+                    handleDeleteOutcome={this.handleDeleteOutcome}
+                    handleOutcomeChange={this.handleOutcomeChange}
+                    handleAddRubricMeasure={this.handleAddRubricMeasure}
+                    handleAddTestMeasure={this.handleAddTestMeasure}
+                    handleDeleteMeasure={this.handleDeleteMeasure}
+                    selectCourseList={this.state.curriculum} 
+                    addCourse={this.addCourse}
+                />
+                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
+                <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>
+                {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
+                                                            closePopup={this.closePopup} 
+                                                            submit={this.addNewMeasure}
+                                                            rubrics={this.state.rubrics}
+                                                            handleInputChange={this.handleInputChange}
+                                                            rubric={this.state.toolName}
+                                                            measureName={this.state.measureName}
+                                                            description={this.state.description}
+                                                            targetScore={this.state.targetScore}
+                                                            percentToReachTarget={this.state.percentToReachTarget}
+                                                        /> : null}
+                {this.state.showAddTestMeasurePopup ? <AddTestMeasurePopup
+                                                            closePopup={this.closePopup}
+                                                            submit={this.addNewMeasure}
+                                                            handleInputChange={this.handleInputChange}
+                                                            testName={this.state.toolName}
+                                                            measureName={this.state.measureName}
+                                                            description={this.state.description}
+                                                            targetScore={this.state.targetScore}
+                                                            percentToReachTarget={this.state.percentToReachTarget}
+                                                        /> : null}
+                </>
+            )
+        }
     }
 }
 

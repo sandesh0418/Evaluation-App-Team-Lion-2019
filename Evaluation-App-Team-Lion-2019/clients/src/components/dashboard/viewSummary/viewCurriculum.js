@@ -61,6 +61,7 @@ function CurriculumList(props)
                 {props.editMode?
                 <button 
                     type="button" 
+                    id={c.courseId}
                     name="delete"
                     className="btn btn-danger btn-sm" 
                     onClick={props.editCourse}>
@@ -182,10 +183,11 @@ export default class ViewSummary extends Component
                 window.location.reload();
             })
 
-        /* axios.post('/curriculum/deleteCourses', this.state.deletedIds)
-            .then(res => {
-
-            }) */
+        if (this.state.deletedIds.length > 0)
+        {
+            axios.post('/curriculum/deleteCourses', this.state.deletedIds)
+            .then(res => {})
+        }
     }
 
     render()

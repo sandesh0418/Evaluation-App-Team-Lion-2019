@@ -13,15 +13,26 @@ const ProgramSummaryBody = props =>
     });
 }
 
-const Outcome = props => (
-    <tr>
-        <th className="p-2" scope="row">
-            <p className="h4">{props.outcome.Outcome_Name}</p>
-            <p>{props.outcome.Description}</p>
-        </th>
-        <td className="p-2"><Measures measures={props.outcome.measures} state={props.state}  /></td>
-    </tr>
-)
+function Outcome(props)
+{
+    let curriculumElements = props.outcome.courses.map(c => {
+        return <p>{c.departmentCode + " " + c.courseCode + " - " + c.name + ". " + c.relevantHours + " hours."}</p>
+    })
+
+    return (
+        <tr>
+            <th className="p-2" scope="row">
+                <p className="h4">{props.outcome.Outcome_Name}</p>
+                <p>{props.outcome.Description}</p>
+                <details>
+                    <summary>Curriculum Elements</summary>
+                    {curriculumElements}
+                </details>
+            </th>
+            <td className="p-2"><Measures measures={props.outcome.measures} state={props.state}  /></td>
+        </tr>
+    )
+}
 
 function Measures(props)
 {
@@ -145,6 +156,10 @@ export default class ViewSummary extends Component
                 height="100"	
                 width="100"
             />
+        }
+        else if (this.state.programSummary === undefined)
+        {
+            return <p>There was an error getting the program summary.</p>
         }
         else
         {
