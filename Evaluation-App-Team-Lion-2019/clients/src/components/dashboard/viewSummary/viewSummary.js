@@ -6,37 +6,11 @@ import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 
-
-var dummyMeasure = {
-    Description: '',
-    Percent_to_reach_target: 0,
-    Target_Score: 0
-}
-
-var dummyOutcome = {
-    Outcome_ID: 3,
-    Outcome_Name: '',
-    Description: '',
-    measures: [dummyMeasure]
-}
-
-var dummySummary = {
-    title: "Assessment 2019",
-    outcomes: [dummyOutcome]
-};
-
 const ProgramSummaryBody = props =>
 {
-    if(props.state.programSummary !== undefined)
-    {
-        return props.state.programSummary.outcomes.map(function(currentOutcome, i){
-            return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
-        });
-    }
-    else
-    {
-        return null;
-    }
+    return props.state.programSummary.outcomes.map(function(currentOutcome, i){
+        return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
+    });
 }
 
 const Outcome = props => (
@@ -110,7 +84,7 @@ export default class ViewSummary extends Component
         this.setView = this.setView.bind(this);
         this.state = {
             reportMode: false,
-            programSummary: dummySummary,
+            programSummary: null,
             total: 0,
             metTarget: 0
         };
@@ -163,38 +137,38 @@ export default class ViewSummary extends Component
 
     render()
     {
-        var programSum= '';
-       
-        
-        if(this.state.programSummary){
-                programSum = this.state.programSummary.title;
-                
-            
-                
+        if(this.state.programSummary === null)
+        {
+            return <Loader 
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
+            />
         }
-        
-
-        return (
-
-            <div>
-               <div>
-                <h1>{programSum}</h1>
-            
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
-                            <th className="p-2" scope="col" className="measure-width">Measures of Performace</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ProgramSummaryBody state={this.state} />
-                    </tbody>
-                </table>
-                <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
+        else
+        {
+            return (
+                <div>
+                   <div>
+                    <h1>{this.state.programSummary.title}</h1>
+                
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
+                                <th className="p-2" scope="col" className="measure-width">Measures of Performace</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ProgramSummaryBody state={this.state} />
+                        </tbody>
+                    </table>
+                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
+                    </div>
                 </div>
-            </div>
-        );
+            )
+        }
     }
 }
 
