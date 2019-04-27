@@ -4,7 +4,7 @@ import { GET_RUBRIC, GET_ERRORS, GET_ALL_RUBRICS} from './types';
 
 export const getRubric = (title) => dispatch => {
     
-    Axios.get("/api//rubric/getRubric/${title}")
+    Axios.get("/api/rubric/getRubric/${title}")
             .then(res => {
                 dispatch({
                     type: GET_RUBRIC,
@@ -24,7 +24,7 @@ export const getRubric = (title) => dispatch => {
 
 export const getAllRubric = (CycleId) => dispatch => {
     
-    Axios.get(`/rubric/getList/${CycleId}`)
+    Axios.get(`/api/rubric/getList/${CycleId}`)
             .then(res => {
                 dispatch({
                     type: GET_ALL_RUBRICS,
@@ -43,7 +43,7 @@ export const getAllRubric = (CycleId) => dispatch => {
 }
 
 export const createRubric = (obj) =>dispatch =>{
-    Axios.post('/rubric/createRubric', obj)
+    Axios.post('/api/rubric/createRubric', obj)
         .then(res => {
             
             dispatch(getRubric(res.data.Rubric_Id))
@@ -58,7 +58,7 @@ export const createRubric = (obj) =>dispatch =>{
 
 
 export const updateRubric = (obj) => dispatch => {
-    Axios.put(`/rubric/updateRubric/`, obj)
+    Axios.put(`/api/rubric/updateRubric/`, obj)
             .then(res => {
                
             })
@@ -74,7 +74,7 @@ export const updateRubric = (obj) => dispatch => {
 }
 
 export const updateTitle= (obj) => dispatch => {
-    Axios.put(`/rubric/updateTitle/`, obj)
+    Axios.put(`/api/rubric/updateTitle/`, obj)
             .then(res => {
                
             })
