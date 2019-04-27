@@ -14,7 +14,6 @@ class EditProfile extends Component {
       cwid: '',
       firstName: '',
       lastName: '',
-      email: '',
       password: '',
       currentEmail:localStorage.email,
       errors: {}
