@@ -11,7 +11,6 @@ module.exports = function validateRegisterInput(data) {
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
-  data.role = !isEmpty(data.role) ? (data.role) : "";
 
 
   if (Validator.isEmpty(data.cwid)) {
@@ -53,9 +52,7 @@ module.exports = function validateRegisterInput(data) {
     errors.password2 = "Passwords must match";
   }
 
-  if (Validator.isEmpty(data.role)) {
-    errors.role = "Role field is required";
-  }
+ 
 
   return {
     errors,

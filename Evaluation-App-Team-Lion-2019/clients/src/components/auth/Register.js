@@ -50,8 +50,7 @@ class Register extends Component {
       lastName: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2,
-      role: this.state.role
+      password2: this.state.password2
     };
 
     this.props.registerUser(obj, this.props.history);
@@ -127,21 +126,7 @@ class Register extends Component {
                   <label htmlFor="cwid">Please enter your CWID</label>
                   <span className="red-text">{errors.cwid}</span>
                 </div>
-                <div className="input-field col s12">
-                  <input
-                    onChange={this.onChange}
-                    value={this.state.role}
-                    error={errors.role}
-                    id="role"
-                    type="text"
-                    className={classnames("", {
-                      invalid: errors.role
-                    })}
-                  />
-
-                  <label htmlFor="role">Please enter your Role</label>
-                  <span className="red-text">{errors.role}</span>
-                </div>
+                
                 <div className="input-field col s12">
                   <input
                     onChange={this.onChange}
