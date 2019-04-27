@@ -1,0 +1,29 @@
+/* select {
+    background-image: url('https://sunshinecoastvet.com/wp-content/uploads/2017/09/77788-down-arrow-inside-circle-300x300.png');
+    background-repeat:no-repeat;
+    background-position: 99%;
+    background-size: 5%;
+    width:353px;
+    padding:6px 8px;
+    margin-top:8px;
+    font-family: inherit;
+    line-height:1;
+    border-radius:5px;
+    
+    font-size:20px;
+    -webkit-appearance:none;
+    
+    outline:none;
+   
+    }
+     */
+
+.card {
+  background-color: #fc0202f8;
+}
+
+.jumbotro{
+    width: 100%;
+    padding: 40px;
+    background-color: transparent;
+}
