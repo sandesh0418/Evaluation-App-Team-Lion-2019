@@ -262,9 +262,8 @@ export default class ViewRubric extends Component
     }
 
     EditRubric(e){
-        localStorage.removeItem("Rubric_Id");
-        localStorage.setItem("Rubric_Id", e.target.id);
-        window.location.replace('/createRubric');
+        
+        window.location.replace('/createRubric/'+e.target.id);
     }
 
     render()

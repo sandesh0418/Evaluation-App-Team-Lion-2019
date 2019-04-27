@@ -246,7 +246,7 @@ export default class RubricList extends Component
                     <h1>My Assignments</h1>
                     <div className="row">
                    
-                    {this.state.assignments !== [] ? 
+                    {this.state.assignments[0].length>0 || this.state.assignments[1].length>0 ? 
                         <>
                             {/* show incomplete assignments */}
                             <div className="col-sm-6">

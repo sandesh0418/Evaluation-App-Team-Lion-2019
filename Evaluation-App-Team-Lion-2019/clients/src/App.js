@@ -96,7 +96,7 @@ class App extends Component {
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />
                   <PrivateRoute exact path="/Rubric" component={Rubric} />
                   <PrivateRoute exact path="/rubricList" component={RubricList} />
-                  <PrivateRoute exact path="/createRubric" component={CreateRubric} />
+                  <PrivateRoute exact path="/createRubric/:rubricId" component={CreateRubric} />
                   <PrivateRoute exact path="/evaluatorDashboard" component={EvaluatorDashboard} />
                   <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
                   <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />

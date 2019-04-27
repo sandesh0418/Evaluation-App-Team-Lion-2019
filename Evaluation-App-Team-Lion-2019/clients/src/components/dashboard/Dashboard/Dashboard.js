@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { CyclesInProgress } from '../../../actions/cycle';
+import { GetAllEvaluator} from '../../../actions/evaluator';
 import Loader from 'react-loader-spinner';
 
 class Dashboard extends Component {
 
   componentDidMount(){
       this.props.CyclesInProgress();
+      this.props.GetAllEvaluator(localStorage.getItem("dept_Id"))
   }
   onClickNewCycle(e){
     window.location.replace("/cycle");
@@ -16,8 +18,10 @@ class Dashboard extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const  {cycles} = this.props;
+    const  {cycles , evaluator} = this.props;
+ 
     var displayCycle;
+    var displayProgressBar;
 
 
     if(cycles.inProgressCycles != null){
@@ -25,7 +29,9 @@ class Dashboard extends Component {
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
         <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
           {singleCycle.Cycle_Name}
-            <button type="button" className="btn btn-secondary" style={{float: "right", display:"inline", position: "relative", bottom: "20px", marginRight: "5px"}}>Edit cycle</button>
+            <button type="button" className="btn btn-secondary" 
+            style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}>
+            Edit cycle</button>
         <hr/>
         </p>
       ))
@@ -44,6 +50,25 @@ class Dashboard extends Component {
       width="100"
    />
     }
+
+    if(evaluator.evaluator != null){
+      displayProgressBar = evaluator.evaluator.map((single, index) =>(
+        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
+          {single.firstName} { single.lastName}
+        <hr/>
+        </p>
+      ))
+    }
+
+    else{
+      displayProgressBar=  <Loader 
+      type="Oval"
+      
+      color="black"
+      height="100"	
+      width="100"
+   />
+    }
     return (
       <div>
         <div className="row">
@@ -52,7 +77,7 @@ class Dashboard extends Component {
         <div className="card" style={{borderRadius: "10px"}}>
         <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Cycles</h2>
         {displayCycle}
-        <p style={{textAlign: "center", color: "red", fontWeight: "800", fontSize: "20px"}}> OR </p>
+        <p style={{textAlign: "center", color: "red", fontSize: "30px"}}> OR </p>
 
         <button
                   style={{
@@ -72,6 +97,12 @@ class Dashboard extends Component {
         
         
         </div>
+        <div className="col-sm-6">
+        <div className="card" style={{borderRadius: "10px"}}>
+        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h2>
+        {displayProgressBar}
+        </div>
+        </div>
         </div>
       </div>
     );
@@ -81,12 +112,15 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
  CyclesInProgress: PropTypes.func.isRequired,
  cycles: PropTypes.object.isRequired,
+ GetAllEvaluator: PropTypes.func.isRequired,
+ evaluator: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  cycles: state.cycles
+  cycles: state.cycles,
+  evaluator: state.evaluator
 });
 
-export default connect(mapStateToProps, {CyclesInProgress})(Dashboard);
+export default connect(mapStateToProps, {CyclesInProgress, GetAllEvaluator})(Dashboard);

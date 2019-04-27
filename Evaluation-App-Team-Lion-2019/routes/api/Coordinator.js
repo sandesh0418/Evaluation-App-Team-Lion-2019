@@ -24,7 +24,7 @@ router.post(
     
     }
 
-    else if(!email.includes("@")){
+   else if(!email.includes("@")){
     errors.email = "Please enter a valid email";
     
    }
@@ -36,18 +36,22 @@ router.post(
 
   
 
-  if(errors.length>0){
+  if(!isEmpty(errors)){
+    
     return res.status(400).json({ errors, status: false });
   }
+  
+  else{
     connection.query("SELECT * from `users` where email = ?", email, function(
       err,
       result,
       fields
     ) {
       if (err) throw err;
-
+      
       if (result.length > 0) {
         errors.email = "Coordinator already exists";
+        
         return res.status(400).json({ errors, status: false });
       }
 
@@ -95,6 +99,7 @@ router.post(
       //   }
       // );
     });
+  }
   }
 );
 

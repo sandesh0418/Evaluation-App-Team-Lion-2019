@@ -77,7 +77,7 @@ router.post("/deleteEvaluator", passport.authenticate("jwt", {session: false}), 
 })
 
 
-router.get('/evaluatorList/:deptId', (req, res) => {
+router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: false}), (req, res) => {
     departmentId = req.params.deptId;
     let evaluatorList;
 
@@ -112,6 +112,85 @@ router.get('/evaluatorList/:deptId', (req, res) => {
             }
         }
     })
+})
+
+
+router.post("/evaluatorProgressBar/:id", (req, res) =>{
+var Dept_Id = req.params.id;
+let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + Dept_Id + "' AND NOT role='Admin' AND NOT `password` = 'deleted'";
+
+
+
+connection.query(queryGetEvaluators, function(errors, results, fields){
+    if (errors) throw errors;
+    var progressBar = [];
+    if(results.length>0){
+
+        var email = '';
+        
+        for(var i = 0; i<results.length;i++){
+            email = results[i].email
+            
+           var graded = 0;
+           var total = 0;
+                    
+                         connection.query("SELECT COUNT(`Score`) as score from `subject_score` where `User_Email` = ?",
+                         email, function(err, result, fields){
+                            if (err) throw err;
+                            
+                            graded = result[0].score;
+                            
+                        })
+                           
+
+                            connection.query("Select COUNT(*) as count from `assignments` as a left join `subject_list` as s on a.Assignment_ID = s.Assignment_ID where `User_Email` = ?",
+                            email , function(err, resultss, fields){
+                                if (err) throw err;
+                                
+
+                                total = resultss[0].count;
+                                if(total !== 0){
+                                progressBar[i]={
+                                    
+                                    progress: `${total/graded}`
+
+                                }
+                            }
+                            else{
+                                progressBar[i]={
+                                    
+                                    progress: "false"
+                                    
+                            }
+                        }
+
+                        
+
+                            })
+
+
+                            
+                           
+
+
+                            
+                          
+
+
+
+                        
+                    
+            
+
+            
+        }
+
+
+
+    }
+    res.send(progressBar); 
+    
+})
 })
 
 module.exports = router;
