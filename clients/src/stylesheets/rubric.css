@@ -1,20 +1,93 @@
-.table-bordered td, .table-bordered th {
+@media only screen and (min-width: 769px) {
+  /* .table-bordered td, .table-bordered th {
     border: 1px solid #dee2e6;
-}
-
-.table td, .table th {
-     padding: 0; 
+} */
+  .h2,
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+    color: #2c2216;
+    text-decoration: wavy;
+  }
+  .table {
+    scroll-behavior: auto;
+    overflow-x: auto !important;
+  }
+  .table td,
+  .table th{
+    padding: 15px;
+    letter-spacing: 2px;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
-}
-td, th {
-     padding: 0; 
+    margin: 20px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  td,
+  th {
+    padding: 0;
     display: table-cell;
     text-align: left;
     vertical-align: middle;
     border-radius: 2px;
-}
+  }
 
-textarea {
+  textarea {
     resize: none;
+    display: flex !important;
+    white-space: normal;
+    text-align: center;
+    border-radius: 0px !important;
+    padding: 3px !important;
+    box-sizing: border-box !important;
+  }
 }
+@media only screen and (max-width: 768px) {
+  /* .table-bordered td, .table-bordered th {
+        border: 1px solid #dee2e6;
+    } */
+  .h2,
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+    color: #2c2216;
+    text-decoration: wavy;
+  }
+
+  .table td,
+  .table th {
+    padding: 7px;
+    letter-spacing: 1px;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  td,
+  th {
+    padding: 0px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
+  textarea {
+    resize: none;
+    size: 20px !important;
+    font-size: .5rem;
+    display: flex !important;
+    text-align: center;
+    border-radius: 0px !important;
+    padding: 3px !important;
+    box-sizing: border-box !important;
+  }
+}
+/* textarea {
+  resize: none;
+  display: flex !important;
+  white-space: normal;
+  text-align: center;
+  border-radius: 0px !important;
+  padding: 3px !important;
+  box-sizing: border-box !important;
+} */

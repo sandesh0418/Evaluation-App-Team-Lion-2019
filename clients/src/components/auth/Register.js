@@ -61,14 +61,14 @@ class Register extends Component {
 
     return (
       <div id="main_container">
-        <div id="arrow_button">
+        <div id="arrow_button1">
           <Link to="/" className="btn-flat waves-effect">
             <i className="material-icons left">keyboard_backspace</i> Back to
             home
           </Link>
         </div>
 
-        <div id="regcontent" className="container">
+        <div id="regcontent1">
           <div className="row">
             <div className="col s8 offset-s2">
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
+import Table from 'react-bootstrap/Table'
 
 
 var dummyMeasure = {
@@ -180,7 +181,14 @@ export default class ViewSummary extends Component
                <div>
                 <h1>{programSum}</h1>
             
-                <table className="table table-bordered">
+                <Table bordered
+          striped
+          hover
+          responsive="sm"
+          responsive="md"
+        //   responsive="lg"
+        //   responsive="xl"
+          id="viewSummary">
                     <thead>
                         <tr>
                             <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
@@ -190,7 +198,7 @@ export default class ViewSummary extends Component
                     <tbody>
                         <ProgramSummaryBody state={this.state} />
                     </tbody>
-                </table>
+                </Table>
                 <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
                 </div>
             </div>

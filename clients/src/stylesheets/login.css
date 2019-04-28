@@ -13,14 +13,23 @@
 }
 */
 #arrow_button {
-  margin-left: 25%;
+    position: relative !important;
+  margin-left: 30%;
   color: #007bff;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 995px) {
   #regcontent {
-    width: 75%;
-    margin: 0 auto;
+    width: 100% !important;
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  #arrow_button {
+    right: 20% !important;
+    position: relative !important;
+    margin-left: 25%;
+    white-space: nowrap;
+    color: #007bff;
   }
   i {
     margin-left: 5%;

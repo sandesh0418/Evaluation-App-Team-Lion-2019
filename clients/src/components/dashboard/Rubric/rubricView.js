@@ -3,6 +3,7 @@ import axios from "axios";
 import '../../../stylesheets/rubricView.css';
 import { ClipLoader } from 'react-spinners';
 import { Spinner } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table'
 
 
 function TopRowGradeScale(props)
@@ -301,7 +302,9 @@ export default class ViewRubric extends Component
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                     marginTop: "1rem",
-                    padding: "15px"
+                    padding: "15px",
+                    textAlign: "center",
+                    align: "center"
                 }}
                 id ={this.state.Rubric_Id}
                 onClick={this.EditRubric}
@@ -320,9 +323,9 @@ export default class ViewRubric extends Component
 
         return (
             <div>
-                <h1>Rubric</h1>
+                {/* <h1>Rubric</h1> */}
                 <div>
-                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null} {this.state.rubric.rubric_title}</h2>
+                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null}Viewing Rubric: {this.state.rubric.rubric_title}</h2>
                     {this.state.gradeMode ? 
                         <SubjectSelector 
                             subjectList={this.state.subjectList} 
@@ -331,8 +334,8 @@ export default class ViewRubric extends Component
                             className="bg-danger" />
                         : null}
                 </div>
-                
-                <table className="table table-bordered">
+                {/* className="table table-bordered" */}
+                <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl" id="viewTable">
                     <thead>
                         <tr id ="criteria"> 
                             <th scope="col" className="outcome-width" >Criteria</th>
@@ -351,7 +354,7 @@ export default class ViewRubric extends Component
                         />
                     </tbody>
                     
-                </table>
+                </Table>
                 {rubricAverage}
                 {saveGradeButton}
                 {editRubricButton}

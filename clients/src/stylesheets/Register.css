@@ -1,34 +1,40 @@
-#regcontent {
+#regcontent1 {
   z-index: 1;
-
+  margin-left: 25%;
   border: 4px solid whitesmoke;
   border-radius: 15px;
   padding: 30px;
   width: 50%;
+  background-color: #9e9e9e26;
 }
 
 .row .col.offset-s2 {
   margin-left: 6.6666666667% !important;
 }
-#arrow_button {
-  margin-left: 25%;
+#arrow_button1 {
+  position: relative !important;
+  margin-left: 30% !important;
   color: #007bff;
+  white-space: nowrap;
 }
 .green.accent-3 {
   background-color: #1a73e8 !important;
   padding-top: 15px !important;
 }
 
-@media only screen and (max-width: 768x) {
-  #regcontent {
-    width: 75%;
-    margin: 0 auto;
+@media only screen and (max-width: 985px) {
+  #regcontent1 {
+    width: 100% !important;
+    margin: 0 auto !important;
   }
+  
   .btn-flat {
-    font-size: 10px;
+    font-size: 20px;
   }
-  #arrow_button {
-    margin-left: 12.5%;
-    font-size: 1rem;
+  #arrow_button1 {
+    right: 30%;
+    font-size: 2rem;
+    
+    
   }
 }

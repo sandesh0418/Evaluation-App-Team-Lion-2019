@@ -1,4 +1,8 @@
 var mysql = require("mysql");
+var keys = require("./keys");
+
+
+
 // var connection = mysql.createConnection({
 // host     : 'localhost',
 // user     : 'root',
@@ -43,25 +47,28 @@ var mysql = require("mysql");
 
 // handleDisconnect();
 
-var connection = mysql.createPool({
-  connectionLimit: 100,
-  // host: "us-cdbr-iron-east-02.cleardb.net",
-  // user: "b3a43daee9a0e7",
-  // password: "f0da0ad1",
-  // database: "heroku_b0a7ce9feea42fe",
+ var connection = mysql.createPool(keys);
 
-  host : 'localhost',
-  user : 'root',
-  password : '',
-  database : 'nodejs_login1',
-  multipleStatements: true
-});
+  
+//   connectionLimit: 512,
+//   queueLimit : 25,
+//   host: "us-cdbr-iron-east-02.cleardb.net",
+//   user: "b3a43daee9a0e7",
+//   password: "f0da0ad1",
+//   database: "heroku_b0a7ce9feea42fe"
+
+//   // host : 'localhost',
+//   // user : 'root',
+//   // password : '',
+//   // database : 'nodejs_login1'
+// }
+
 connection.on("connection", function(connection) {
   console.log("Server is connected to database through connection %d", connection.threadId);
 });
-// connection.on('release', function (connection) {
-//   console.log('Connection %d released', connection.threadId);
-// });
+connection.on('release', function (connection) {
+  console.log('Connection %d released', connection.threadId);
+});
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',
@@ -83,6 +90,14 @@ connection.on("connection", function(connection) {
 // } else {
 //     console.log("Error while connecting with database");
 // }
+// });
+
+
+// var connection = mysql.createConnection(keys);
+
+// connection.connect(function(err) {
+// if (err) throw err;
+// console.log("Database connection has been established");
 // });
 
 module.exports = connection;

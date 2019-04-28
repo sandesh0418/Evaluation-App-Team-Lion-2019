@@ -87,7 +87,7 @@ body {
 .navbar-collapse{
   color: black !important;
     padding: 20px !important;
-    width: 35%;
+    width: 100%;
     margin-left: 65%;
     background-color: #343a40!important;
     /* margin-top: 0; */
