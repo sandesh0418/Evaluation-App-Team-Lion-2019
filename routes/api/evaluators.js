@@ -28,7 +28,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
         
                 }
 
-                
+
             let transporter = nodeMailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -40,7 +40,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                 }
             });
             let mailOptions = {
-                from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
+                from: '"ULM Evaluation Application 2019" <emailtester845@gmail.com>', // sender address
                 to: email, // list of receivers
                 subject: "Evaluator Assignment", // Subject line
                 html: "<p>Please <a href='https://team-lion-evaluation.herokuapp.com/register'>Click here</a> to register as an evaluator.</p>" // plain text body
