@@ -1,4 +1,4 @@
-.width-200 {
+/* .width-200 {
   width: 9rem !important;
 }
 
@@ -12,38 +12,40 @@
   color: #999;
 } */
 
-table,
-tbody th,
-tbody td,
-tr {
+/* .table{
+    padding: 25px !important
+} */
+
+/* .table td,
+.table th {
   text-align: center;
-  padding: 40 px;
+  padding: 15 px !important;
   margin: 20px;
   box-sizing: border-box;
-  font-weight: unset;
-  min-width: 50%;
-}
-tbody tr:nth-child(odd) {
+  /* font-weight: unset;
+  min-width: 50%; */
+/* } */ 
+/* .tbody tr:nth-child(odd) {
   background: #eee;
-}
+} */
 
-tbody {
+/* .tbody {
   overflow: auto;
-}
-tbody td {
-  padding: 40px;
-  text-align: left;
+} */
+/* .td {
+  /* padding: 40px;
+  text-align: left; 
   letter-spacing: 1px;
-}
-tbody th {
+} */
+/* .tbody th {
   text-align: left;
   letter-spacing: 2px;
-}
-table {
+} */
+/*.table {
   table-layout: auto;
   width: 100%;
   border-collapse: separate;
-  border: 3px solid purple;
+  border-bottom: 3px solid blue;
   overflow-x: scroll;
   position: relative;
 }
@@ -56,5 +58,18 @@ h2 {
   font-size: 2rem;
   text-align: center;
   color: #886036;
-  /* text-decoration: underline; */
+  /* text-decoration: underline; 
+} */
+#createRubric td, #createRubric th {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    text-align: center !important;
+    overflow-x: auto !important;
+;
+}
+
+#createRubric{
+    overflow-x: auto !important;
 }
