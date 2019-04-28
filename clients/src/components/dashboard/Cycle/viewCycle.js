@@ -20,7 +20,7 @@ class ViewCycle extends Component {
     const obj = {
       Cycle_Id: e.target.id
     };
-    console.log(obj);
+    localStorage.removeItem("Cycle_Id");
     this.props.EndCycle(obj);
     window.location.reload("/cycles");
   }

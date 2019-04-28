@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { CyclesInProgress } from '../../../actions/cycle';
-import { GetAllEvaluator} from '../../../actions/evaluator';
+import { ProgressBar } from '../../../actions/evaluator';
 import Loader from 'react-loader-spinner';
+import { Progress } from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
+
 
 class Dashboard extends Component {
 
   componentDidMount(){
       this.props.CyclesInProgress();
-      this.props.GetAllEvaluator(localStorage.getItem("dept_Id"))
+      this.props.ProgressBar(localStorage.getItem("dept_Id"))
   }
   onClickNewCycle(e){
     window.location.replace("/cycle");
@@ -22,6 +25,7 @@ class Dashboard extends Component {
  
     var displayCycle;
     var displayProgressBar;
+    var noProgressBar;
 
 
     if(cycles.inProgressCycles != null){
@@ -51,14 +55,38 @@ class Dashboard extends Component {
    />
     }
 
-    if(evaluator.evaluator != null){
-      displayProgressBar = evaluator.evaluator.map((single, index) =>(
-        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
+    if(evaluator.progressBar != null){
+      
+       
+     
+        displayProgressBar = evaluator.progressBar[0].map((single, index) =>(
+          <span key={index} >
+          {console.log(single.firstName)}
+          <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
+            {single.firstName} { single.lastName}
+          
+          </p>
+          <p>
+          <Progress percent={Number(single.progress)}/>
+          </p>
+          </span>
+        ))
+      
+     
+      noProgressBar = evaluator.progressBar[1].map((single, index) =>(
+        <span key={index} >
+        <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
           {single.firstName} { single.lastName}
-        <hr/>
+        
         </p>
+        <p>
+          
+          No assignment has been assigned
+        </p>
+        </span>
       ))
-    }
+      }
+    
 
     else{
       displayProgressBar=  <Loader 
@@ -101,6 +129,9 @@ class Dashboard extends Component {
         <div className="card" style={{borderRadius: "10px"}}>
         <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h2>
         {displayProgressBar}
+
+        <hr />
+        {noProgressBar}
         </div>
         </div>
         </div>
@@ -112,7 +143,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
  CyclesInProgress: PropTypes.func.isRequired,
  cycles: PropTypes.object.isRequired,
- GetAllEvaluator: PropTypes.func.isRequired,
+ ProgressBar: PropTypes.func.isRequired,
  evaluator: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -123,4 +154,4 @@ const mapStateToProps = state => ({
   evaluator: state.evaluator
 });
 
-export default connect(mapStateToProps, {CyclesInProgress, GetAllEvaluator})(Dashboard);
+export default connect(mapStateToProps, {CyclesInProgress, ProgressBar})(Dashboard);

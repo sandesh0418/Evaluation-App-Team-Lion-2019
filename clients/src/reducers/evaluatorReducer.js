@@ -1,7 +1,8 @@
-import {GET_ALL_EVALUATOR} from '../actions/types';
+import {GET_ALL_EVALUATOR, FOR_PROGRESS_BAR} from '../actions/types';
 
 const initialState = {
-    evaluator: null
+    evaluator: null,
+    progressBar: null
 }
 
 
@@ -11,6 +12,13 @@ export default function(state = initialState, action ){
             return{
                 ...state,
                 evaluator: action.payload
+            }
+
+        case FOR_PROGRESS_BAR:
+            return{
+                ...state,
+                progressBar: action.payload
+                
             }
         
         default:

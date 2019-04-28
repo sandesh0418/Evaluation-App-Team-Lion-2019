@@ -115,61 +115,81 @@ router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: fals
 })
 
 
-router.post("/evaluatorProgressBar/:id", (req, res) =>{
+router.get("/evaluatorProgressBar/:id", (req, res) =>{
 var Dept_Id = req.params.id;
-let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + Dept_Id + "' AND NOT role='Admin' AND NOT `password` = 'deleted'";
 
 
 
-connection.query(queryGetEvaluators, function(errors, results, fields){
+
+connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + Dept_Id + "' AND NOT role='Admin' AND NOT `password` = 'deleted' order by firstName asc; ", function(errors, results, fields){
     if (errors) throw errors;
-    var progressBar = [];
+    
     if(results.length>0){
 
-        var email = '';
         
-        for(var i = 0; i<results.length;i++){
-            email = results[i].email
+        var progressBar = [];
+        var noProgress = [];
+        var count = 0;
+        
+        results.forEach(function(progres, i){
+            var email = results[i].email
+            var firstName=results[i].firstName
+            var lastName=results[i].lastName
             
-           var graded = 0;
-           var total = 0;
+           
+           
                     
-                         connection.query("SELECT COUNT(`Score`) as score from `subject_score` where `User_Email` = ?",
-                         email, function(err, result, fields){
+            connection.query("SELECT distinct Assignment_ID from `subject_score` where `User_Email` = ?; Select distinct Assignment_ID from subject_list natural join assignments as a where a.`User_Email` = ?; Select Rubric_Id from rubric as r right join measure as m on r.`Rubric_Title` = m.`Tool_Name`;" ,
+                [email,email], function(err, result, fields){
                             if (err) throw err;
+                            count++;
                             
-                            graded = result[0].score;
-                            
-                        })
-                           
+                            console.log(result[0])
+                            if(result[1].length>0){
+                                var average = (result[0].length/result[1].length)*100;
 
-                            connection.query("Select COUNT(*) as count from `assignments` as a left join `subject_list` as s on a.Assignment_ID = s.Assignment_ID where `User_Email` = ?",
-                            email , function(err, resultss, fields){
-                                if (err) throw err;
-                                
+                           const obj ={
+                                firstName: `${firstName}`,
+                                lastName: `${lastName}`,
+                                progress: `${average}`
 
-                                total = resultss[0].count;
-                                if(total !== 0){
-                                progressBar[i]={
-                                    
-                                    progress: `${total/graded}`
-
-                                }
                             }
-                            else{
-                                progressBar[i]={
-                                    
-                                    progress: "false"
-                                    
-                            }
+                            noProgress.push(obj)
                         }
 
+                        else{
+                            const obj ={
+                                firstName: `${firstName}`,
+                                lastName: `${lastName}`,
+                                progress: 'false'
+
+                            }
+                            progressBar.push(obj)
+                        }
+
+                        if(count === results.length){
+                            var resu = []
+                            resu[0] = noProgress;
+                            resu[1] = progressBar;
+                            res.send(resu)
+                        }
+                       
+
+                    
+                            
+                            
+                            
+                    
+
+
+                   
+
+                           
+                        })
+
+                        
                         
 
-                            })
-
-
-                            
                            
 
 
@@ -181,14 +201,16 @@ connection.query(queryGetEvaluators, function(errors, results, fields){
                         
                     
             
-
+                        
             
-        }
+        })
+        
+      
 
 
-
+        
     }
-    res.send(progressBar); 
+    
     
 })
 })

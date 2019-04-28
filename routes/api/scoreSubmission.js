@@ -7,7 +7,8 @@ const secret = require('../../config/keys');
 
 router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (req, res) => {
 
-    let standardIds = "'" + req.body.measureId + "', '" + req.body.subjectId + "', '" + req.body.userEmail + "'";
+    let standardIds = "'" + req.body.measureId + "', '" + req.body.subjectId + "', '" + req.body.userEmail + "', '" +req.body.Assignment_ID +"'";
+    
     let scoresToInsert = "";
     for (let i = 0; i < req.body.scores.length; i++)
     {
@@ -24,7 +25,7 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
     }
 
     let queryInsertScores = "" + 
-        "INSERT INTO subject_score (Measure_ID, Subject_ID, User_Email, Criteria_Title, Score) VALUES " + 
+        "INSERT INTO subject_score (Measure_ID, Subject_ID, User_Email, Assignment_ID, Criteria_Title, Score) VALUES " + 
             scoresToInsert + " ON DUPLICATE KEY UPDATE Score=VALUES(Score)";
 
     connection.query("USE nodejs_login1");
@@ -49,8 +50,9 @@ router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (re
 })
 
 router.post('/testScore', passport.authenticate("jwt", { session:false }), (req, res) => {
-    let standardData = "'" + req.body.measureId + "', '" + req.body.userEmail + "', '" + req.body.criteriaTitle + "'";
-    
+    console.log(req.body)
+    let standardData = "'" + req.body.measureId + "', '" + req.body.userEmail + "', '" + req.body.criteriaTitle + "', '" +req.body.Assignment_ID +"'";
+    console.log(standardData)
     let scoresToInsert = "";
 
     for (let i = 0; i < req.body.scores.length; i++)
@@ -68,7 +70,7 @@ router.post('/testScore', passport.authenticate("jwt", { session:false }), (req,
     }
 
     let queryInsertScores = "" + 
-        "INSERT INTO subject_score (Measure_ID, User_Email, Criteria_Title, Subject_ID, Score) VALUES " + 
+        "INSERT INTO subject_score (Measure_ID, User_Email, Criteria_Title, Assignment_ID, Subject_ID , Score) VALUES " + 
         scoresToInsert + " ON DUPLICATE KEY UPDATE Score=VALUES(Score)";
 
     connection.query(queryInsertScores, function (error, results, fields) {

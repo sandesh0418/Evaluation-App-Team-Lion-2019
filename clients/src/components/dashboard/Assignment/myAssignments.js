@@ -114,7 +114,7 @@ export default class RubricList extends Component
                 this.setState({
                     assignments: res.data.assignments
                 })
-                console.log(res.data.assignments);
+               
             })
     }
 
