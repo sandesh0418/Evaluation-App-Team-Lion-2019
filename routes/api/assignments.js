@@ -369,6 +369,7 @@ router.get('/assignmentMeasure/:id', (req, res) => {
         }
         else
         {
+            
             res.status(200).json({
                 measure: Object.values(JSON.parse(JSON.stringify(results)))[0]
             })

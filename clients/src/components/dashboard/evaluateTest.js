@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import axios from "axios";
 
-const StubjectList = props => {
-    return props.subjectList.map(s => {
+const SubjectList = props => {
+    return props.subjectList.map((s, index) => {
         return (
-            <div className="row no-gutters">
+            <div className="row no-gutters" key={{index}}>
                 <div className="col-2">
                     <span>{s.subjectName + ":"}</span>
                 </div>
@@ -51,20 +51,22 @@ export default class EvaluateTest extends Component
 
     componentDidMount()
     {
-        console.log(this.props.match.params.assignment);
         axios.get("/api/assignments/subjectList/"+this.props.match.params.assignment)
             .then(res => {
+                
                 this.setState({
                     subjectList: res.data.subjectList,
                     subjectId: res.data.subjectList[0]
                 })
             })
-        axios.get("/assignments/assignmentMeasure/" + this.props.match.params.assignment)
+        axios.get("/api/assignments/assignmentMeasure/" + this.props.match.params.assignment)
             .then(res => {
-                this.setState({
-                    measure: res.data.measure
-                })
+               this.setState({
+                   measure: res.data.measure
+               })
             })
+
+            
     }
 
     changeFile(e)
@@ -103,7 +105,8 @@ export default class EvaluateTest extends Component
             measureId: this.state.measure.measureId,
             userEmail: localStorage.getItem("email"),
             criteriaTitle: "Test",
-            scores: scores
+            scores: scores,
+            Assignment_ID: this.props.match.params.assignment
         }
 
         axios.post("/api/scoreSubmission/testScore", scoreData)
@@ -127,7 +130,7 @@ export default class EvaluateTest extends Component
                 <p>{this.state.measure ? "for measure: " + this.state.measure.measureName : null}</p>
                 <p>Enter scores as a percent of 100. Example: if 85%, then enter 85.</p>
                 <form onSubmit={this.submitScores}>
-                    <StubjectList subjectList={this.state.subjectList} />
+                    <SubjectList subjectList={this.state.subjectList} />
                     <div className="form-group">
                         <label>Select List of Subjects as .csv file: </label>
                         <input type="file" className="form-control-file" ref={this.fileInput} onChange={this.changeFile} />
