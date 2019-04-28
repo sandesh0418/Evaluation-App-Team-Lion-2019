@@ -147,20 +147,26 @@ router.get("/getRubric/:title", (req, res)=>{
     connection.query("SELECT * from `scales` where `Rubric_Id` = ? ORDER BY `Value_Number` ASC", Rubric_Id, function(err, result, fields){
         if (err) throw err;
 
-        
+        var decider = true;
         for(var i = 0 ;i<result.length;i++){
-            topRow[i]={
-                Rubric_Id: Rubric_Id,
-                Rubric_Title: Rubric_Title,
-                Value_Number: `${result[i].Value_Number}`,
-                Value_Name: `${result[i].Value_Name}`
-            }
+           
+           
+                topRow[i] ={
+                
+                    Rubric_Title: Rubric_Title,
+                    Value_Number: `${result[i].Value_Number}`,
+                    Value_Name: `${result[i].Value_Name}`
+                }
+             
+
+            
+            
         }
 
         Rubric[0] = topRow;
         
        if((Number) (weight) === 1){
-        connection.query("Select * from `data` NATURAL JOIN `criteria` where data.Rubric_Id = ? ORDER BY data.Row_Id ASC", Rubric_Id, function(err, result, field){
+        connection.query("Select d.Row_Id, d.Data, d.index, c.Criteria_Title,c.weight from `data` as d NATURAL JOIN `criteria` as c where d.Rubric_Id = ? ORDER BY d.Row_Id ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
 
             var r = [];
@@ -212,7 +218,7 @@ router.get("/getRubric/:title", (req, res)=>{
     })
     }
     else{
-        connection.query("Select d.Rubric_Id, d.Row_Id,d.Data, d.index, c.Criteria_Title from `data` as d NATURAL JOIN `criteria` as c where d.Rubric_Id = ? ORDER BY `Row_Id` ASC", Rubric_Id, function(err, result, field){
+        connection.query("Select d.Row_Id,d.Data, d.index, c.Criteria_Title from `data` as d NATURAL JOIN `criteria` as c where d.Rubric_Id = ? ORDER BY `Row_Id` ASC", Rubric_Id, function(err, result, field){
             if (err) throw err;
 
             var r = [];
