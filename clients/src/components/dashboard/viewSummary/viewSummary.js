@@ -26,7 +26,7 @@ function Outcome(props)
                 <p className="h4">{props.outcome.Outcome_Name}</p>
                 <p>{props.outcome.Description}</p>
                 <details>
-                    <summary>Curriculum Elements</summary>
+                    <summary>Curriculum Elements</summary><br/>
                     {curriculumElements}
                 </details>
             </th>
@@ -169,7 +169,7 @@ export default class ViewSummary extends Component
                    <div>
                     <h1>{this.state.programSummary.title}</h1>
                 
-                    <table className="mb-3"
+                    <Table 
                         bordered
                         striped
                         hover
@@ -187,8 +187,8 @@ export default class ViewSummary extends Component
                         <tbody>
                             <ProgramSummaryBody state={this.state} />
                         </tbody>
-                    </table>
-                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
+                    </Table>
+                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}><i class="fas fa-edit"> Edit Program Summary</i></a></button>
                     </div>
                 </div>
             )
