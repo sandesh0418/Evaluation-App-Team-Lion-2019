@@ -1,7 +1,7 @@
 module.exports = {
-    host: process.env.HOST,
-    user: process.env.USER_NAME,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
+    host: "teamlion.corhcthpryw4.us-east-2.rds.amazonaws.com",
+    user: "teamlion128",
+    password: "teamlion128",
+    database: "teamlion128",
     multipleStatements: true
   };
