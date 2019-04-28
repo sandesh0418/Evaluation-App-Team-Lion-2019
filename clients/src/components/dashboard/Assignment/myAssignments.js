@@ -123,6 +123,7 @@ export default class RubricList extends Component
         let subjectId_type = e.target.id.split("/");
         let assignmentId = e.target.name;
         let tempAssignments = this.state.assignments;
+        console.log(tempAssignments);
         let assignmentIndex;
         let subjectIndex;
 

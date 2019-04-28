@@ -12,7 +12,7 @@ router.post("/", passport.authenticate("jwt", {session: false}), (req,res) => {
     
     
 
-    connection.query("INSERT INTO Cycle(`Dept_ID`,`Cycle_Id`, `Cycle_Name`,`Start_Date`,`End_Date`,`status`) Values(?,?,?,?,?,?)",[req.body.deptId,cycleId,req.body.Cycle_Name,req.body.Start_Date," ","In Progress"], function(err, result, fields){
+    connection.query("INSERT INTO `cycle`(`Dept_ID`,`Cycle_Id`, `Cycle_Name`,`Start_Date`,`End_Date`,`status`) Values(?,?,?,?,?,?)",[req.body.deptId,cycleId,req.body.Cycle_Name,req.body.Start_Date," ","In Progress"], function(err, result, fields){
         if (err) throw err;
         else{
             res.send("Data added");
@@ -25,8 +25,10 @@ router.post("/", passport.authenticate("jwt", {session: false}), (req,res) => {
 
 router.get("/getPreviousCycles/:id",passport.authenticate("jwt", {session: false}),  (req, res) =>{
  var deptId = req.params.id;
- connection.query("Select * from Cycle where Dept_Id = ? and End_Date != '' and status = ?",[deptId, "done"], function(err, result, fields){
+ connection.query("Select * from `cycle` where Dept_Id = ? and End_Date != '' and status = ?",[deptId, "done"], function(err, result, fields){
     if (err) throw err;
+
+    
     else{
         res.send(result);
     }
@@ -38,7 +40,7 @@ router.get("/getCyclesInProgress/:id",passport.authenticate("jwt", {session: fal
     var deptId = req.params.id;
     
 
-    connection.query("SELECT * from Cycle where Dept_Id = ? and status =?", [deptId, "In Progress"], function(err, result, fields){
+    connection.query("SELECT * from `cycle` where Dept_Id = ? and status =?", [deptId, "In Progress"], function(err, result, fields){
         if (err) throw err;
 
         else{

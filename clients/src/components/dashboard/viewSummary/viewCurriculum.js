@@ -92,7 +92,7 @@ export default class ViewSummary extends Component
 
     componentDidMount()
     {
-        axios.get('/curriculum/getCurriculum/' + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/curriculum/getCurriculum/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -177,7 +177,7 @@ export default class ViewSummary extends Component
             cycleId: localStorage.getItem("Cycle_Id")
         }
 
-        axios.post('/curriculum/editCurriculum', editCurriculum)
+        axios.post('/api/curriculum/editCurriculum', editCurriculum)
             .then(res => {
                 alert(res.data.message);
                 window.location.reload();
@@ -185,7 +185,7 @@ export default class ViewSummary extends Component
 
         if (this.state.deletedIds.length > 0)
         {
-            axios.post('/curriculum/deleteCourses', this.state.deletedIds)
+            axios.post('/api/curriculum/deleteCourses', this.state.deletedIds)
             .then(res => {})
         }
     }

@@ -9,7 +9,7 @@ import {
 
 export const addCoordinator = obj => dispatch => {
   axios
-    .post("/coordinator/addCoordinator", obj)
+    .post("/api/coordinator/addCoordinator", obj)
     .then(res => {
       window.location.replace("/viewCoordinator");
     })
@@ -23,7 +23,7 @@ export const addCoordinator = obj => dispatch => {
 
 export const addDepartment = obj => dispatch => {
   axios
-    .post("/coordinator/addDepartment", obj)
+    .post("/api/coordinator/addDepartment", obj)
     .then(res => {
       window.location.replace("/departments");
     })
@@ -37,7 +37,7 @@ export const addDepartment = obj => dispatch => {
 
 export const getDepartment = () => dispatch => {
   axios
-    .get("/coordinator/getDepartment")
+    .get("/api/coordinator/getDepartment")
     .then(res => {
       dispatch({
         type: GET_DEPARTMENT,
@@ -54,7 +54,7 @@ export const getDepartment = () => dispatch => {
 
 export const viewCoordinator = () => dispatch => {
   axios
-    .get("/coordinator/viewCoordinator")
+    .get("/api/coordinator/viewCoordinator")
     .then(res => {
       dispatch({
         type: VIEW_COORDINATOR,
@@ -71,7 +71,7 @@ export const viewCoordinator = () => dispatch => {
 
 export const viewCoordinatorDeleted = () => dispatch => {
   axios
-    .get("/coordinator/viewCoordinatorDeleted")
+    .get("/api/coordinator/viewCoordinatorDeleted")
     .then(res => {
       dispatch({
         type: DELETED_COORDINATOR,

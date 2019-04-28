@@ -7,7 +7,7 @@ import { GET_ERRORS, SET_CURRENT_USER} from "./types";
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post("/users/register", userData)
+    .post("/api/users/register", userData)
     .then(res => history.push("/login"))
     .catch(err =>
       dispatch({
@@ -19,7 +19,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 //Update user info
 export const updateUser = (userData, history) => dispatch => {
-  axios.post("/users/update", userData)
+  axios.post("/api/users/update", userData)
   .then(res => history.push("/update"))
   .catch(err =>
     dispatch({
@@ -32,7 +32,7 @@ export const updateUser = (userData, history) => dispatch => {
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
-    .post("/users/login", userData)
+    .post("/api/users/login", userData)
     .then(res => {
       // Save to localStorage
 
