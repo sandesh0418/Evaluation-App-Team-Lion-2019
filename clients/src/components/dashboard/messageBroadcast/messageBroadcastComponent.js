@@ -14,7 +14,11 @@ export default class MessageBroadcastComponent extends Component
     render()
     {
         return(
-            <CreateMessage />
+            <>
+                <h1>Create Message</h1>
+                <CreateMessage />
+                <h1>Sent Messages</h1>
+            </>
         )
     }
 }

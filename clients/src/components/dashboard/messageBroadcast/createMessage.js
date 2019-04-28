@@ -68,7 +68,31 @@ export default class CreateMessage extends Component
 
     onSubmit(e)
     {
+        e.preventDefault();
 
+        let recipients;
+
+        if (this.state.recipients.includes("all"))
+        {
+            recipients = this.state.evaluatorList;
+        }
+        else
+        {
+            recipients = this.state.recipients
+        }
+
+        let newMessage = {
+            senderEmail: localStorage.getItem("email"),
+            dateTime: new Date(),
+            messageSubject: this.state.messageSubject,
+            message: this.state.message,
+            recipients: recipients
+        }
+
+        axios.post('/api/messageBroadcast/postMessage', newMessage)
+            .then(res => {
+                alert(res.data.message);
+            })
     }
 
     render()
@@ -89,7 +113,7 @@ export default class CreateMessage extends Component
         else
         {
             return(
-                <form>
+                <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Select Recipients</label>
                         <select className="form-control" multiple required value={this.state.recipients}
