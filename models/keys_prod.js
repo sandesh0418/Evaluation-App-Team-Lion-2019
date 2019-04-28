@@ -1,4 +1,5 @@
 module.exports = {
+    connectionLimit: 512,
     host: "teamlion.corhcthpryw4.us-east-2.rds.amazonaws.com",
     user: "teamlion128",
     password: "teamlion128",
