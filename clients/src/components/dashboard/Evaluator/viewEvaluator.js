@@ -31,10 +31,14 @@ class ViewEvaluator extends Component {
         errors: nextProps.errors
       });
     }
+
     else{
-      window.location.replace("/viewEvaluator");
+       window.location.replace("/viewEvaluator");
     }
   }
+
+
+  
 
   componentWillMount() {
     this.props.GetAllEvaluator();
@@ -47,6 +51,9 @@ class ViewEvaluator extends Component {
   delete(e) {
     const obj = {
       email: e.target.id
+     
+  
+      
     };
 
     this.props.deleteEvaluator(obj);

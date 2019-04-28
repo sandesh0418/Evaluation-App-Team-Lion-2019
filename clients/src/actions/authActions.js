@@ -43,6 +43,7 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("email", res.data.email);
+      
       localStorage.setItem("dept_Id", res.data.department);
       localStorage.setItem("name", res.data.name);
       // Decode token to get user data
@@ -50,6 +51,10 @@ export const loginUser = userData => dispatch => {
       
       // Set current user
       dispatch(setCurrentUser(decoded));
+
+      
+      
+        
     })
     .catch(err =>
       dispatch({
@@ -60,10 +65,11 @@ export const loginUser = userData => dispatch => {
 };
 
 // Set logged in user
-export const setCurrentUser = decoded => {
+export const setCurrentUser = (decoded) => {
   return {
     type: SET_CURRENT_USER,
-    payload: decoded
+    payload: 
+      decoded
   };
 };
 
@@ -78,7 +84,9 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("name");
   localStorage.removeItem("dept_Id");
   localStorage.removeItem("Rubric_Id");
+  localStorage.removeItem("Cycle_Id");
   localStorage.removeItem("email");
+  window.location.replace("/login")
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
