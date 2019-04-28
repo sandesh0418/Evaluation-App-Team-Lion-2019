@@ -1,0 +1,28 @@
+#cyclecuriculum, h2{
+    margin: 0 auto !important;
+}
+.testColums{
+    width: 20% !important;
+    text-align: center;
+    color: #a78002;
+    letter-spacing: 2px;
+}
+#button1,#button2,#button4,#button5{
+    margin: 10px auto !important;
+    text-align: center;
+}
+.button3{
+    margin-left: 8px;
+    vertical-align: middle;
+    margin-top: 5px;
+}
+#button2{
+    margin-top: 10px ;
+}
+
+input{
+    border: 1px solid #9e9e9e !important;
+
+}
+
+/* #dropdow */

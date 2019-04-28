@@ -6,6 +6,10 @@ import { Spinner } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 
 
+const width150 = {
+    width: '150px'
+}
+
 function TopRowGradeScale(props)
 {
     return props.oneCriteria.descriptions.map(function(currentDescription)
@@ -64,7 +68,7 @@ const SubjectSelector = props => {
     return (
         <div className="form-group">
             <label className="mr-2">Select Subject:</label>
-            <select className="form-control width-200" value={props.value} onChange={props.onChange} onClick={props.onChange}>
+            <select className="form-control" style={width150} value={props.value} onChange={props.onChange} onClick={props.onChange}>
                 <SubjectList subjectList={props.subjectList} />
             </select>
         </div>
@@ -118,7 +122,10 @@ function setScores(subjectList, subjectId, criteria)
         else
         {
             criteria.forEach(c => {
-                document.getElementById(c.criteria_title).value = 1;
+                if (document.getElementById(c.criteria_title))
+                {
+                    document.getElementById(c.criteria_title).value = 1;
+                }
             })
         }
 }
@@ -280,7 +287,7 @@ export default class ViewRubric extends Component
 
             rubricAverage = <div className="mb-2">
                 <label className="pr-1">Decimal Places in Average</label>
-                <select defaultValue="2" className="form-control width-200" name="calcAverage" 
+                <select defaultValue="2" className="form-control" style={width150} name="calcAverage" 
                     onChange={this.handleInput} onClick={this.handleInput}>
                     <option value="0">No Decimal</option>
                     <option value="1">One Decimal</option>

@@ -62,6 +62,7 @@ class NavAdmin extends Component {
               </NavDropdown.Item>
               <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link href="/messageBroadcast">Messages</Nav.Link>
             <NavDropdown
               title={User()} 
             >

@@ -17,6 +17,7 @@ const coordinator = require('./routes/api/Coordinator');
 const outcome = require('./routes/api/outcome');
 const measureReport = require('./routes/api/measureReport');
 const curriculum = require('./routes/api/curriculum');
+const messageBroadcast = require('./routes/api/messageBroadcast');
 
 
 const app = express();
@@ -52,6 +53,7 @@ app.use('/api/Coordinator', coordinator);
 app.use('/api/outcome', outcome);
 app.use('/api/measureReport', measureReport);
 app.use('/api/curriculum', curriculum);
+app.use('/api/messageBroadcast', messageBroadcast);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("clients/build"));

@@ -121,7 +121,7 @@ export default class CreateAssignment extends Component {
         });
       });
     axios
-      .get("/api/evaluators/evaluatorList/" + localStorage.getItem("dept_Id"))
+      .get("/api/evaluators/memberList/" + localStorage.getItem("dept_Id") + "/" + localStorage.getItem("email"))
       .then(res => {
         this.setState({
           evaluatorList: res.data.evaluatorList,
@@ -282,6 +282,7 @@ export default class CreateAssignment extends Component {
               onClick={this.handleInputChange}
             >
               <SelectEvaluator evaluatorList={this.state.evaluatorList} />
+              <option value={localStorage.getItem("email")}>Assign to yourself</option>
             </select>
           </div>
           <div className="form-group">
