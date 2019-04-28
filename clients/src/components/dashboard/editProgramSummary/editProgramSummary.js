@@ -158,7 +158,8 @@ export default class EditProgramSummary extends Component
 
     componentDidMount()
     {
-        axios.get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id") + "/" + 
+            localStorage.getItem("dept_Id"))
             .then(res => {
                 this.setState({
                     programSummary: res.data.programSummary
@@ -323,13 +324,20 @@ export default class EditProgramSummary extends Component
 
     addNewMeasure(e)
     {
+        e.preventDefault();
+
         let newId = uuid();
 
-        let rubricIndex = this.state.rubrics.findIndex(r => r.Rubric_Title === this.state.toolName);
+        let rubricIndex = -2;
+        if (this.state.rubrics)
+        {
+            rubricIndex = this.state.rubrics.findIndex(r => r.Rubric_Title === this.state.toolName);
+        }
+
         let valueName = null;
         let targetScore = this.state.targetScore;
 
-        if (rubricIndex > -1)
+        if (rubricIndex === -1)
         {
             valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore - 1].Value_Name;
         }
@@ -390,7 +398,7 @@ export default class EditProgramSummary extends Component
 
     render()
     {
-        if (this.state.programSummary === null || this.state.curriculum === null || this.state.rubrics === null)
+        if (this.state.programSummary === null || this.state.curriculum === null)
         {
             return <Loader 
                 type="Oval"

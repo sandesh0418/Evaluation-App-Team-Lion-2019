@@ -11,20 +11,22 @@ var connection = require('../../models/User');
 // @route GET summaryReport/measureStatistics
 // @desc retrieve statistics on the measure.
 // @access Private
-router.get('/measureStatistics/:cycleId', passport.authenticate("jwt",{ session:false }), (req, res) => {
+router.get('/measureStatistics/:cycleId/:deptId', passport.authenticate("jwt",{ session:false }), (req, res) => {
     let cycleId = req.params.cycleId;
-    buildProgramSummary(true, req, res, cycleId);
+    let deptId = req.params.deptId;
+    buildProgramSummary(true, req, res, cycleId, deptId);
 })
 
 // @route GET summaryReport/getSummary
 // @desc retrieve the program summary.
 // @access Private
-router.get('/getSummary/:cycleId', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get('/getSummary/:cycleId/:deptId', passport.authenticate("jwt", { session: false }), (req, res) => {
     let cycleId = req.params.cycleId;
-    buildProgramSummary(false, req, res, cycleId);
+    let deptId = req.params.deptId;
+    buildProgramSummary(false, req, res, cycleId, deptId);
 })
 
-function buildProgramSummary(withStats, req, res, cycleId)
+function buildProgramSummary(withStats, req, res, cycleId, deptId)
 {
     let programSummary = {
         title: '',
@@ -38,13 +40,13 @@ function buildProgramSummary(withStats, req, res, cycleId)
         "SELECT DISTINCT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, o.Outcome_Name as outcomeName, " + 
             "m.Measure_ID as measureId, m.Measure_Name as measureName, m.Description as measureDescription, " +
             "m.Percent_to_reach_target as percentToReachTarget, m.Target_Score as targetScore, m.Tool_Name as toolName, " +
-            "valueName, Cycle_Name " +
-        "FROM outcome o LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
+            "valueName, cy.Cycle_Name " +
+        "FROM cycle cy JOIN outcome o ON cy.Cycle_Id=o.Cycle_Id LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
             "(SELECT s.Value_Name as valueName, m.Measure_ID as measureId " + 
             "FROM measure m LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title JOIN scales s ON s.Rubric_Id=r.Rubric_Id " +
             "WHERE m.Target_Score=s.Value_Number) as rubricScore " +
             "ON m.Measure_ID=rubricScore.measureId JOIN cycle c ON o.Cycle_Id=c.Cycle_Id " +
-        "WHERE o.Cycle_Id='" + cycleId + "' " +
+        "WHERE o.Cycle_Id='" + cycleId + "' AND cy.Dept_Id='"  + deptId + "' " +
         "ORDER BY o.Outcome_Name ASC, m.Measure_Name ASC";
 
     connection.query(queryGetSummary, (error, results, fields) => {
