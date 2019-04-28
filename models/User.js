@@ -45,6 +45,7 @@ var mysql = require("mysql");
 
 var connection = mysql.createPool({
   connectionLimit: 512,
+  queueLimit : 25,
   host: "us-cdbr-iron-east-02.cleardb.net",
   user: "b3a43daee9a0e7",
   password: "f0da0ad1",
