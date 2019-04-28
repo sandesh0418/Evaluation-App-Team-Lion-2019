@@ -9,8 +9,7 @@
     "start": "npx nodemon server.js",
     "client": "npm start --prefix clients",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
-    "heroku-prebuild": "npm install && cd clients && npm install && cd ..",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm install --prefix clients && npm run build --prefix clients"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix clients && npm run build --prefix clients"
   },
   "author": "",
   "license": "",

@@ -1,5 +1,15 @@
-var mysql = require("mysql");
-var keys = require("./keys");
+// var mysql = require("mysql");
+// var keys = require("./keys");
+const { Client } = require('pg');
+
+const connection = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+connection.connect();
+
+
 // var connection = mysql.createConnection({
 // host     : 'localhost',
 // user     : 'root',
@@ -44,8 +54,8 @@ var keys = require("./keys");
 
 // handleDisconnect();
 
- var connection = mysql.createPool(keys);
- 
+//  var connection = mysql.createPool(keys);
+
   
 //   connectionLimit: 512,
 //   queueLimit : 25,
@@ -60,12 +70,12 @@ var keys = require("./keys");
 //   // database : 'nodejs_login1'
 // }
 
-connection.on("connection", function(connection) {
-  console.log("Server is connected to database through connection %d", connection.threadId);
-});
-connection.on('release', function (connection) {
-  console.log('Connection %d released', connection.threadId);
-});
+// connection.on("connection", function(connection) {
+//   console.log("Server is connected to database through connection %d", connection.threadId);
+// });
+// connection.on('release', function (connection) {
+//   console.log('Connection %d released', connection.threadId);
+// });
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',
