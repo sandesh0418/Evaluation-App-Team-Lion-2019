@@ -109,7 +109,7 @@ export default class EvaluateTest extends Component
             Assignment_ID: this.props.match.params.assignment
         }
 
-        axios.post("/api/scoreSubmission/testScore", scoreData)
+        axios.post('/scoreSubmission/testScore', scoreData)
             .then(res => {
                 if (res.data.inserted)
                 {

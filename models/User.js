@@ -1,8 +1,6 @@
 var mysql = require("mysql");
 var keys = require("./keys");
 
-
-
 // var connection = mysql.createConnection({
 // host     : 'localhost',
 // user     : 'root',
@@ -62,13 +60,13 @@ var keys = require("./keys");
 //   // password : '',
 //   // database : 'nodejs_login1'
 // }
-
 connection.on("connection", function(connection) {
   console.log("Server is connected to database through connection %d", connection.threadId);
 });
 connection.on('release', function (connection) {
   console.log('Connection %d released', connection.threadId);
 });
+
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',

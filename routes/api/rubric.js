@@ -45,6 +45,7 @@ router.post("/createRubric",  (req,res) =>{
 
                 Scale();
             }
+
         })
         
         function Scale(){

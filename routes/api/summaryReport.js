@@ -80,7 +80,8 @@ function buildProgramSummary(withStats, req, res, cycleId)
                         Outcome_ID: row.outcomeId,
                         Outcome_Name: row.outcomeName,
                         Description: row.outcomeDescription,
-                        measures: []
+                        measures: [],
+                        courses: []
                     }
                     programSummary.outcomes.push(newOutcome);
                 }
@@ -104,7 +105,8 @@ function buildProgramSummary(withStats, req, res, cycleId)
                             Outcome_ID: row.outcomeId,
                             Description: row.outcomeDescription,
                             Outcome_Name: row.outcomeName,
-                            measures: [newMeasure]
+                            measures: [newMeasure],
+                            courses: []
                         }
                         programSummary.outcomes.push(newOutcome);
                     }
@@ -114,7 +116,53 @@ function buildProgramSummary(withStats, req, res, cycleId)
                     }
                 }
             })
-            
+
+            getOutcomeCourses(req, res, programSummary, withStats);
+        }
+    })
+}
+
+function getOutcomeCourses(req, res, programSummary, withStats)
+{
+    let outcomeIds = [];
+    programSummary.outcomes.forEach(o => {
+        outcomeIds.push("'" + o.Outcome_ID + "'");
+    })
+
+    let queryGetOutcomeCourses = "" + 
+        "SELECT o.Outcome_ID as outcomeId, cu.Department_Code as departmentCode, cu.Course_Code as courseCode, " + 
+            "cu.Credit_Hours as creditHours, cu.Name as name, cu.Course_ID as courseId, com.Relevant_Hours as " + 
+            "relevantHours " +
+        "FROM outcome o JOIN curriculum_outcome_mapping com ON o.Outcome_ID=com.Outcome_ID JOIN " + 
+            "curriculum cu ON com.Course_ID=cu.Course_ID " +
+        "WHERE o.Outcome_ID IN (" + outcomeIds.join() + ") AND cu.Cycle_Id='" + programSummary.cycleId + "'";
+
+    connection.query(queryGetOutcomeCourses, (error, results, fields) => {
+        if (error)
+        {
+            res.status(400).json({
+                status: false,
+                error: error,
+                message: "The curriculum for the summary could not be retrieved."
+            })
+        }
+        else
+        {
+            let data = Object.values(JSON.parse(JSON.stringify(results)));
+            data.forEach(r => {
+                let outcomeIndex = programSummary.outcomes.findIndex(o => o.Outcome_ID === r.outcomeId);
+
+                let newOutcomeCourse = {
+                    departmentCode: r.departmentCode,
+                    courseCode: r.courseCode,
+                    name: r.name,
+                    relevantHours: r.relevantHours,
+                    courseId: r.courseId
+                }
+
+                programSummary.outcomes[outcomeIndex].courses.push(newOutcomeCourse);
+            })
+
             if (withStats)
             {
                 getMeasureStatisticsV2(req, res, programSummary);

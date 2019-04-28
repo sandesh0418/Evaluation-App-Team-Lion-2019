@@ -7,48 +7,33 @@ import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 import Table from 'react-bootstrap/Table'
 
-
-var dummyMeasure = {
-    Description: '',
-    Percent_to_reach_target: 0,
-    Target_Score: 0
-}
-
-var dummyOutcome = {
-    Outcome_ID: 3,
-    Outcome_Name: '',
-    Description: '',
-    measures: [dummyMeasure]
-}
-
-var dummySummary = {
-    title: "Assessment 2019",
-    outcomes: [dummyOutcome]
-};
-
 const ProgramSummaryBody = props =>
 {
-    if(props.state.programSummary !== undefined)
-    {
-        return props.state.programSummary.outcomes.map(function(currentOutcome, i){
-            return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
-        });
-    }
-    else
-    {
-        return null;
-    }
+    return props.state.programSummary.outcomes.map(function(currentOutcome, i){
+        return <Outcome outcome={currentOutcome} state={props.state} key={currentOutcome.Outcome_ID} />;
+    });
 }
 
-const Outcome = props => (
-    <tr>
-        <th className="p-2" scope="row">
-            <p className="h4">{props.outcome.Outcome_Name}</p>
-            <p>{props.outcome.Description}</p>
-        </th>
-        <td className="p-2"><Measures measures={props.outcome.measures} state={props.state}  /></td>
-    </tr>
-)
+function Outcome(props)
+{
+    let curriculumElements = props.outcome.courses.map(c => {
+        return <p>{c.departmentCode + " " + c.courseCode + " - " + c.name + ". " + c.relevantHours + " hours."}</p>
+    })
+
+    return (
+        <tr>
+            <th className="p-2" scope="row">
+                <p className="h4">{props.outcome.Outcome_Name}</p>
+                <p>{props.outcome.Description}</p>
+                <details>
+                    <summary>Curriculum Elements</summary>
+                    {curriculumElements}
+                </details>
+            </th>
+            <td className="p-2"><Measures measures={props.outcome.measures} state={props.state}  /></td>
+        </tr>
+    )
+}
 
 function Measures(props)
 {
@@ -111,7 +96,7 @@ export default class ViewSummary extends Component
         this.setView = this.setView.bind(this);
         this.state = {
             reportMode: false,
-            programSummary: dummySummary,
+            programSummary: null,
             total: 0,
             metTarget: 0
         };
@@ -141,9 +126,9 @@ export default class ViewSummary extends Component
 
     getSummaryWithStatistics()
     {
-        axios.get("/api/summaryReport/measureStatistics/" + localStorage.getItem("Cycle_Id"))
+        axios.get('/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
-                //console.log(res.data);
+                console.log(res.data);
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -153,7 +138,7 @@ export default class ViewSummary extends Component
     getSummary()
     {
         console.log(localStorage.getItem("Cycle_Id"));
-        axios.get("/api/summaryReport/getSummary/" + localStorage.getItem("Cycle_Id"))
+        axios.get('/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -164,45 +149,49 @@ export default class ViewSummary extends Component
 
     render()
     {
-        var programSum= '';
-       
-        
-        if(this.state.programSummary){
-                programSum = this.state.programSummary.title;
-                
-            
-                
+        if(this.state.programSummary === null)
+        {
+            return <Loader 
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
+            />
         }
-        
-
-        return (
-
-            <div>
-               <div>
-                <h1>{programSum}</h1>
-            
-                <Table bordered
-          striped
-          hover
-          responsive="sm"
-          responsive="md"
-        //   responsive="lg"
-        //   responsive="xl"
-          id="viewSummary">
-                    <thead>
-                        <tr>
-                            <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
-                            <th className="p-2" scope="col" className="measure-width">Measures of Performace</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ProgramSummaryBody state={this.state} />
-                    </tbody>
-                </Table>
-                <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
+        else if (this.state.programSummary === undefined)
+        {
+            return <p>There was an error getting the program summary.</p>
+        }
+        else
+        {
+            return (
+                <div>
+                   <div>
+                    <h1>{this.state.programSummary.title}</h1>
+                
+                    <table bordered
+                        striped
+                        hover
+                        responsive="sm"
+                        responsive="md"
+                        //   responsive="lg"
+                        //   responsive="xl"
+                        id="viewSummary">
+                        <thead>
+                            <tr>
+                                <th className="p-2" scope="col" className="outcome-width">Learning Outcomes</th>
+                                <th className="p-2" scope="col" className="measure-width">Measures of Performace</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ProgramSummaryBody state={this.state} />
+                        </tbody>
+                    </table>
+                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}>Edit Program Summary</a></button>
+                    </div>
                 </div>
-            </div>
-        );
+            )
+        }
     }
 }
 

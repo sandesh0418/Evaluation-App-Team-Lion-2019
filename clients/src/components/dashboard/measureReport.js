@@ -149,7 +149,7 @@ export default class CreateAssignment extends Component
 
     componentDidMount()
     {
-        Axios.get("/api/measureReport/measureReport/" + this.props.match.params.measureId)
+        Axios.get('/measureReport/measureReport/' + this.props.match.params.measureId)
             .then(res => {
                 console.log(res.data);
                 this.setState({
