@@ -27,6 +27,8 @@ router.get("/getPreviousCycles/:id",passport.authenticate("jwt", {session: false
  var deptId = req.params.id;
  connection.query("Select * from `cycle` where Dept_Id = ? and End_Date != '' and status = ?",[deptId, "done"], function(err, result, fields){
     if (err) throw err;
+
+    
     else{
         res.send(result);
     }

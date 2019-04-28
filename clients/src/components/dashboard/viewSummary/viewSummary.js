@@ -169,7 +169,8 @@ export default class ViewSummary extends Component
                    <div>
                     <h1>{this.state.programSummary.title}</h1>
                 
-                    <table bordered
+                    <table className="mb-3"
+                        bordered
                         striped
                         hover
                         responsive="sm"

@@ -114,7 +114,7 @@ class Cycle extends Component {
                 <label> Cycle Start Date</label>
                 <br/>
 
-         {this.state.migrate?<section> 
+         {this.state.migrate ? <section> 
            <label>Past Cycles</label>
            
           <select style={{display: "flex", border: "1px solid #9e9e9e", width: "75%"}} onChange={this.handleChange.bind(this)} value={this.state.migrate_Cycle_Id} name="migrate_Cycle_Id">

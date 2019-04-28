@@ -123,6 +123,7 @@ export default class RubricList extends Component
         let subjectId_type = e.target.id.split("/");
         let assignmentId = e.target.name;
         let tempAssignments = this.state.assignments;
+        console.log(tempAssignments);
         let assignmentIndex;
         let subjectIndex;
 
@@ -140,7 +141,7 @@ export default class RubricList extends Component
         }
         else
         {
-            assignmentIndex = tempAssignments.incompelete.findIndex(a => a.assignmentId === assignmentId);
+            assignmentIndex = tempAssignments.incomplete.findIndex(a => a.assignmentId === assignmentId);
             subjectIndex = tempAssignments.incomplete[assignmentIndex].subjects.
                 findIndex(s => s.subjectId === subjectId_type[0]);
             tempAssignments.incomplete[assignmentIndex].subjects.splice(subjectIndex, 1);
