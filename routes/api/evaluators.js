@@ -121,13 +121,14 @@ var Dept_Id = req.params.id;
 
 
 
-connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + Dept_Id + "' AND NOT role='Admin' AND NOT `password` = 'deleted'; ", function(errors, results, fields){
+connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + Dept_Id + "' AND NOT role='Admin' AND NOT `password` = 'deleted' order by firstName asc; ", function(errors, results, fields){
     if (errors) throw errors;
     
     if(results.length>0){
 
         
         var progressBar = [];
+        var noProgress = [];
         var count = 0;
         
         results.forEach(function(progres, i){
@@ -138,14 +139,14 @@ connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" 
            
            
                     
-            connection.query("SELECT distinct Measure_ID from `subject_score` where `User_Email` = ?; Select * from subject_list natural join assignments as a where a.`User_Email` = ?; Select Rubric_Id from rubric as r right join measure as m on r.`Rubric_Title` = m.`Tool_Name`;" ,
+            connection.query("SELECT distinct Assignment_ID from `subject_score` where `User_Email` = ?; Select distinct Assignment_ID from subject_list natural join assignments as a where a.`User_Email` = ?; Select Rubric_Id from rubric as r right join measure as m on r.`Rubric_Title` = m.`Tool_Name`;" ,
                 [email,email], function(err, result, fields){
                             if (err) throw err;
                             count++;
                             
-                            console.log(results)
+                            console.log(result[0])
                             if(result[1].length>0){
-                                var average = result[0].length/result[1].length;
+                                var average = (result[0].length/result[1].length)*100;
 
                            const obj ={
                                 firstName: `${firstName}`,
@@ -153,21 +154,24 @@ connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" 
                                 progress: `${average}`
 
                             }
-                            progressBar.push(obj)
+                            noProgress.push(obj)
                         }
 
                         else{
                             const obj ={
                                 firstName: `${firstName}`,
                                 lastName: `${lastName}`,
-                                progress: false
+                                progress: 'false'
 
                             }
                             progressBar.push(obj)
                         }
 
                         if(count === results.length){
-                            res.send(progressBar)
+                            var resu = []
+                            resu[0] = noProgress;
+                            resu[1] = progressBar;
+                            res.send(resu)
                         }
                        
 
