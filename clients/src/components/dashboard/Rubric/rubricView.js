@@ -14,7 +14,7 @@ function TopRowGradeScale(props)
                     key={currentDescription.value_number}
                     as="textarea"
                     aria-label="With textarea">
-                    {currentDescription.value_name === "" ? "Undefined value name." : currentDescription.value_name}
+                    {currentDescription.value_name}
                 </th>
     });
 }

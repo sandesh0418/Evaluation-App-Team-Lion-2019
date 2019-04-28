@@ -45,7 +45,7 @@ function buildProgramSummary(withStats, req, res, cycleId)
             "WHERE m.Target_Score=s.Value_Number) as rubricScore " +
             "ON m.Measure_ID=rubricScore.measureId JOIN cycle c ON o.Cycle_Id=c.Cycle_Id " +
         "WHERE o.Cycle_Id='" + cycleId + "' " +
-        "ORDER BY o.Outcome_ID DESC";
+        "ORDER BY o.Outcome_Name ASC, m.Measure_Name ASC";
 
     connection.query(queryGetSummary, (error, results, fields) => {
         if (error)
