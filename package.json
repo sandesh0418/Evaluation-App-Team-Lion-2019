@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix clients",
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "cd clients && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon server.js",
+    "client": "npm start --prefix clients",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix clients && npm run build --prefix clients"
   },
   "author": "",

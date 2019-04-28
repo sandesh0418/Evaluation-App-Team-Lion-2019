@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var keys = require("./keys");
 // var connection = mysql.createConnection({
 // host     : 'localhost',
 // user     : 'root',
@@ -43,7 +44,9 @@ var mysql = require("mysql");
 
 // handleDisconnect();
 
-// var connection = mysql.createPool({
+ var connection = mysql.createPool(keys);
+ 
+  
 //   connectionLimit: 512,
 //   queueLimit : 25,
 //   host: "us-cdbr-iron-east-02.cleardb.net",
@@ -55,13 +58,14 @@ var mysql = require("mysql");
 //   // user : 'root',
 //   // password : '',
 //   // database : 'nodejs_login1'
-// });
-// connection.on("connection", function(connection) {
-//   console.log("Server is connected to database through connection %d", connection.threadId);
-// });
-// connection.on('release', function (connection) {
-//   console.log('Connection %d released', connection.threadId);
-// });
+// }
+
+connection.on("connection", function(connection) {
+  console.log("Server is connected to database through connection %d", connection.threadId);
+});
+connection.on('release', function (connection) {
+  console.log('Connection %d released', connection.threadId);
+});
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',
@@ -85,12 +89,12 @@ var mysql = require("mysql");
 // }
 // });
 
-keys = require("./keys"),
-connection = mysql.createConnection(keys);
 
-connection.connect(function(err) {
-if (err) throw err;
-console.log("Database connection has been established");
-});
+// var connection = mysql.createConnection(keys);
+
+// connection.connect(function(err) {
+// if (err) throw err;
+// console.log("Database connection has been established");
+// });
 
 module.exports = connection;
