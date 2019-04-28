@@ -313,7 +313,7 @@ export default class CreateAssignment extends Component {
           <div>
             {/* <p className="h3">Summary</p> */}
             <Button color="primary" id="button5" onClick={this.toggle}>
-              View Summary
+              <i class="fas fa-eye"> View Summary</i>
             </Button>
             <Fade in={this.state.fadeIn} tag="h5" className="mt-3">
               <p>
