@@ -1,13 +1,6 @@
-// var mysql = require("mysql");
-// var keys = require("./keys");
-const { Client } = require('pg');
+var mysql = require("mysql");
+var keys = require("./keys");
 
-const connection = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-
-connection.connect();
 
 
 // var connection = mysql.createConnection({
@@ -54,7 +47,7 @@ connection.connect();
 
 // handleDisconnect();
 
-//  var connection = mysql.createPool(keys);
+ var connection = mysql.createPool(keys);
 
   
 //   connectionLimit: 512,
@@ -70,12 +63,12 @@ connection.connect();
 //   // database : 'nodejs_login1'
 // }
 
-// connection.on("connection", function(connection) {
-//   console.log("Server is connected to database through connection %d", connection.threadId);
-// });
-// connection.on('release', function (connection) {
-//   console.log('Connection %d released', connection.threadId);
-// });
+connection.on("connection", function(connection) {
+  console.log("Server is connected to database through connection %d", connection.threadId);
+});
+connection.on('release', function (connection) {
+  console.log('Connection %d released', connection.threadId);
+});
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',
