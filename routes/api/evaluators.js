@@ -34,7 +34,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                 from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
                 to: email, // list of receivers
                 subject: "Evaluator Assignment", // Subject line
-                html: "<p>Please <a href='https://team-lion-evaluation.herokuapp.com/register'>Click here</a> to register as an evaluator".</p> // plain text body
+                html: "<p>Please <a href='https://team-lion-evaluation.herokuapp.com/register'>Click here</a> to register as an evaluator.</p>" // plain text body
                // html: '<b>NodeJS Email Tutorial</b>' // html body
             };
         
