@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { NEW_CYCLE, GET_ERRORS, PREVIOUS_CYCLES, CYCLES_IN_PROGRESS } from './types';
 
 export const CreateNewCycle = (obj) => dispatch =>{
-    Axios.post(`/cycle/`,
+    Axios.post(`/api/cycle/`,
     obj )
     .then(res => {
         dispatch({
@@ -53,7 +53,7 @@ export const CyclesInProgress = () => dispatch => {
 }
 
 export const MigrateCycle= (obj) => dispatch => {
-    Axios.post('/cycle/migrateCycle', obj)
+    Axios.post('/api/cycle/migrateCycle', obj)
          .then(res => {
 
          })
@@ -66,7 +66,7 @@ export const MigrateCycle= (obj) => dispatch => {
 }
 
 export const EndCycle= (obj) => dispatch => {
-    Axios.post('/cycle/endCycle', obj)
+    Axios.post('/api/cycle/endCycle', obj)
          .then(res => {
 
          })

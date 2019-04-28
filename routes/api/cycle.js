@@ -62,7 +62,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
 
 
     function scales(Rubric_Id, newRubricId){
-        console.log(Rubric_Id + " " + newRubricId)
+       
         connection.query("SELECT * from `scales` where `Rubric_Id` = ?", Rubric_Id, function(err, results, fields){
             if (err) throw err;
 
@@ -80,7 +80,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
     }
 
     function data(Rubric_Id, newRubricId){
-        console.log(Rubric_Id + " " + newRubricId)
+        
         connection.query("Select * from `data` where `Rubric_Id` = ?",Rubric_Id,function(err, results, fields){
             if(err) throw err;
 
@@ -99,7 +99,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
     }
 
     function criteria(Rubric_Id, newRubricId){
-        console.log(Rubric_Id + " " + newRubricId)
+        
         connection.query("Select * from `criteria` where `Rubric_Id` = ? ", Rubric_Id, function(err, results, fields){
             if(err) throw err;
 
@@ -118,7 +118,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
         connection.query("Select * from `measure` where `Outcome_ID` = ?",oldOutcomeId, function(err, results, fields){
             if (err) throw err;
 
-            console.log(results)
+           
 
             if(results.length>0){
                 for(var k = 0; k<results.length;k++){

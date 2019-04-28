@@ -44,7 +44,7 @@ var mysql = require("mysql");
 // handleDisconnect();
 
 var connection = mysql.createPool({
-  connectionLimit: 10,
+  connectionLimit: 100,
   host: "us-cdbr-iron-east-02.cleardb.net",
   user: "b3a43daee9a0e7",
   password: "f0da0ad1",

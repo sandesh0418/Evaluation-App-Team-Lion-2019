@@ -60,7 +60,7 @@ class ViewDepartments extends Component {
     if (coordinators.getDept != null) {
       display = coordinators.getDept.map((singleValue, index) => (
         <div
-          class="col-sm-8"
+        className="col-sm-8"
           style={{ margin: "auto", padding: "20px" }}
           key={index}
         >
@@ -82,9 +82,9 @@ class ViewDepartments extends Component {
     }
     const { errors } = this.state;
     return (
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="kush">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="kush">
             <h2 style={{ textAlign: "center", paddingBottom: "10px" }}>
               Add Department
             </h2>
@@ -97,12 +97,12 @@ class ViewDepartments extends Component {
                   type="text"
                   error={errors.email}
                   className={classnames("", {
-                    invalid: errors.email
+                    invalid: errors.department
                   })}
                   required
                 />
-                <label for="department">Department's Name</label>
-                <span className="red-text">{errors.email}</span>
+                <label htmlFor="department">Department's Name</label>
+                <span className="red-text">{errors.department}</span>
         
 
                 <div>
@@ -122,9 +122,9 @@ class ViewDepartments extends Component {
             </div>
           
 
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="card">
-              <div class="card-body">
+          <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div className="card">
+              <div className="card-body">
                 <h2 style={{ textAlign: "center" }}>List of Departments</h2>
 
                 {display}

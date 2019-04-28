@@ -28,8 +28,8 @@ class CreateRubric extends Component{
 
     componentWillReceiveProps(nextProps){
       if(nextProps.rubric !== this.props.rubric){
-        localStorage.setItem("Rubric_Id", nextProps.rubric.rubric[0][0].Rubric_Id);
-        window.location.replace('/createRubric');
+        
+        window.location.replace('/createRubric/'+`${nextProps.rubric.rubric[0][0].Rubric_Id}`)
         console.log(nextProps.rubric.rubric[0][0].Rubric_Id)
     }
   }

@@ -24,7 +24,7 @@ class createRubric extends Component{
     componentDidMount(){
         
         
-        this.props.getRubric(localStorage.getItem("Rubric_Id"));
+        this.props.getRubric(this.props.match.params.rubricId);
           
       }
     
@@ -77,7 +77,7 @@ class createRubric extends Component{
         }
         this.props.updateTitle(obj)
         
-        this.props.getRubric(localStorage.getItem("Rubric_Id"))
+        this.props.getRubric(this.props.match.params.rubricId)
     }
     
 
@@ -96,7 +96,7 @@ class createRubric extends Component{
         
         this.props.updateRubric(obj);
        
-        this.props.getRubric(localStorage.getItem("Rubric_Id"));
+        this.props.getRubric(this.props.match.params.rubricId);
         
  
 
