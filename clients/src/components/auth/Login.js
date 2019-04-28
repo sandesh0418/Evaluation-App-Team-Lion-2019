@@ -32,11 +32,11 @@ class Login extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       if (localStorage.role === "Administrator") {
-        this.props.history.push("/dashboard");
+        window.location.replace("/dashboard");
       } else if (localStorage.role === "Evaluator") {
-        this.props.history.push("/evaluatorDashboard");
+        window.location.replace("/myAssignments");
       } else {
-        this.props.history.push("/admin");
+        window.location.replace("/admin");
       }
     }
 

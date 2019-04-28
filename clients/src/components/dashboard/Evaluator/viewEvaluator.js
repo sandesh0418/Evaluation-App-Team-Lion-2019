@@ -28,6 +28,10 @@ class ViewEvaluator extends Component
         errors: nextProps.errors
       });
     }
+
+    else{
+       window.location.replace("/viewEvaluator");
+    }
   }
 
     componentWillMount(){
@@ -60,7 +64,7 @@ class ViewEvaluator extends Component
      
       this.props.AddNewEvaluator(obj, this.props.history);
 
-      window.location.replace("/viewEvaluator");
+     
   
       
     };

@@ -19,7 +19,16 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
         
             var email = req.body.email;
             
-            console.log(email);
+            connection.query("Select * from `users` where `email` = ?", req.body.email, function(err, result, fields){
+                if(err) throw err;
+        
+                if(result.length>0){
+                    errors.email = "Evaluator with that email already exist";
+                    return res.status(400).json(errors);
+        
+                }
+
+                
             let transporter = nodeMailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -46,14 +55,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                     
                 })
             
-    connection.query("Select * from `users` where `email` = ?", req.body.email, function(err, result, fields){
-        if(err) throw err;
-
-        if(result.length>0){
-            errors.email = "Evaluator with that email already exist";
-            return res.status(400).json(errors);
-
-        }
+    
     
     connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`,`Dept_Id`,`role`) VALUES(?,?,?,?,?)", [req.body.firstName, req.body.lastName, req.body.email, req.body.Dept_Id, "Evaluator"], function(err, result){
         

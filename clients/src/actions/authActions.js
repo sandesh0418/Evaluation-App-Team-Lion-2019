@@ -51,7 +51,10 @@ export const loginUser = userData => dispatch => {
       
       // Set current user
       dispatch(setCurrentUser(decoded));
-      window.location.replace("/dashboard")
+
+      
+      
+        
     })
     .catch(err =>
       dispatch({
