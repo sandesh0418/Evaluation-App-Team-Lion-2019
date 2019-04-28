@@ -24,7 +24,14 @@ class NavAdmin extends Component {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Link href="/dashboard">Home</Nav.Link>
-            <Nav.Link href="/viewSummary">View Summary</Nav.Link>
+            <NavDropdown title="Program Summary">
+              <NavDropdown.Item href="/viewSummary">
+                View Summary
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/viewCurriculum">
+                Curriculum
+              </NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown title="Assignments">
               <NavDropdown.Item href="/myAssignments">
                 My Assignments
@@ -48,12 +55,7 @@ class NavAdmin extends Component {
               </NavDropdown.Item>
               <NavDropdown.Item href="/Rubric">Create Rubric</NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Reports">
-              <NavDropdown.Item href="/summaryReport">Summary</NavDropdown.Item>
-              <NavDropdown.Item href="/measureReport">
-                By Measure
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link href="/summaryReport">Outcome Summary Report</Nav.Link>
             <NavDropdown title="Cycle">
               <NavDropdown.Item href="/cycle">
                 Start a new Cycle

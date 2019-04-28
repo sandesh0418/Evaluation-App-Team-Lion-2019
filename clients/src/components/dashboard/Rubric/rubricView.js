@@ -166,7 +166,7 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get("/api/rubric/getViewRubric/"+this.props.match.params.rubric + "/" + localStorage.getItem("Cycle_Id"))
+        axios.get('/rubric/getViewRubric/'+this.props.match.params.rubric + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
@@ -177,7 +177,7 @@ export default class ViewRubric extends Component
 
         if(window.location.pathname.includes('/gradeRubric/'))
         {
-            axios.get("/api/assignments/subjectList/"+this.props.match.params.assignment)
+            axios.get('/assignments/subjectList/'+this.props.match.params.assignment)
             .then(res => {
                 this.setState({
                     subjectList: res.data.subjectList,
@@ -186,7 +186,7 @@ export default class ViewRubric extends Component
                 setScores(res.data.subjectList, res.data.subjectList[0].subjectId, this.state.rubric.criteria);
                 this.calculateAverageScore();
             })
-            axios.get("/api/assignments/assignmentMeasure/" + this.props.match.params.assignment)
+            axios.get('/assignments/assignmentMeasure/' + this.props.match.params.assignment)
                 .then(res => {
                     this.setState({
                         measureId: res.data.measure.measureId
@@ -211,7 +211,7 @@ export default class ViewRubric extends Component
                             scores: scores,
                         Assignment_ID: this.props.match.params.assignment};
 
-        axios.post("/api/scoreSubmission/rubricScore", subjectScore)
+        axios.post('/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
             alert("The score has been saved.");
             window.location.reload();

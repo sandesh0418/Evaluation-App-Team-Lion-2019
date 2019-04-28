@@ -1,8 +1,6 @@
 var mysql = require("mysql");
 var keys = require("./keys");
 
-
-
 // var connection = mysql.createConnection({
 // host     : 'localhost',
 // user     : 'root',

@@ -21,7 +21,7 @@ class ViewCoordinator extends Component {
 
     removeCoordinator(e){
         console.log(e.target.id);
-        Axios.post("/api/Coordinator/removeCoordinator", {email : e.target.id})
+        Axios.post("/Coordinator/removeCoordinator", {email : e.target.id})
         .then(res =>{
             
         })
