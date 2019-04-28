@@ -1,0 +1,75 @@
+/* .width-200 {
+  width: 9rem !important;
+}
+
+/* .table-bordered thead td,
+.table-bordered thead th {
+  border-bottom-width: 2px;
+  padding: 20px;
+  text-align: center;
+  letter-spacing: 2px;
+  background-color: #80888042;
+  color: #999;
+} */
+
+/* .table{
+    padding: 25px !important
+} */
+
+/* .table td,
+.table th {
+  text-align: center;
+  padding: 15 px !important;
+  margin: 20px;
+  box-sizing: border-box;
+  /* font-weight: unset;
+  min-width: 50%; */
+/* } */ 
+/* .tbody tr:nth-child(odd) {
+  background: #eee;
+} */
+
+/* .tbody {
+  overflow: auto;
+} */
+/* .td {
+  /* padding: 40px;
+  text-align: left; 
+  letter-spacing: 1px;
+} */
+/* .tbody th {
+  text-align: left;
+  letter-spacing: 2px;
+} */
+/*.table {
+  table-layout: auto;
+  width: 100%;
+  border-collapse: separate;
+  border-bottom: 3px solid blue;
+  overflow-x: scroll;
+  position: relative;
+}
+#criteria td {
+  padding: 40px;
+}
+
+.h2,
+h2 {
+  font-size: 2rem;
+  text-align: center;
+  color: #886036;
+  /* text-decoration: underline; 
+} */
+#createRubric td, #createRubric th {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    text-align: center !important;
+    overflow-x: auto !important;
+;
+}
+
+#createRubric{
+    overflow-x: auto !important;
+}
