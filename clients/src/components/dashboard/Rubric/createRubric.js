@@ -93,7 +93,7 @@ class createRubric extends Component {
 
     let { rubric } = this.props.rubric;
 
-    if (rubric) {
+    if (rubric != null) {
       this.state.rubricTitle = rubric[0][0].Rubric_Title;
       
 

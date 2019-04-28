@@ -36,6 +36,8 @@ router.post("/createRubric",  (req,res) =>{
         else{
             weight = 0;
         }
+
+        
         
 
         connection.query("Insert INTO `rubric`(`Rubric_Id`,`Rubric_Title`,`Rows`,`scores`,`weight`,`Cycle_Id`) VALUES(?,?,?,?,?,?)",[rubric_Id, title,rows, scores, weight, Cycle_Id], function(err, result, fields){
@@ -49,36 +51,61 @@ router.post("/createRubric",  (req,res) =>{
         })
         
         function Scale(){
+            var final= [];
+
+            let sql = "INSERT INTO `scales` (`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES ?";
 
             for(var i = 0 ; i<scores;i++){
+                value = [rubric_Id, " ", i+1];
+              
+                final.push(value);
+
+            }
+            
 
             
-            connection.query("INSERT INTO `scales`(`Rubric_Id`, `Value_Name`, `Value_Number`) VALUES(?,?,?)",[rubric_Id, " ",i+1], function(err, result, field){
+            connection.query(sql, [final], function(err, result, field){
                 if (err) throw err;
                
             })
-        }
+        
         Criteria();
         }
 
         function Criteria(){
+            let sql = "Insert Into `criteria` (`Rubric_Id`, `Criteria_Title`, `Row_Id`, `weight`) VALUES ?";
+
+            var final = []
 
             for(var i = 0; i<rows;i++){
+                value = [rubric_Id, " ",i+1, 0];
+               
+                final.push(value)
+
+
+
+            }
+            
 
                 
-                connection.query("Insert Into `criteria`(`Rubric_Id`, `Criteria_Title`, `Row_Id`, `weight`) VALUES(?,?,?,?)",[rubric_Id," ",i+1,0],function(err, result, field){
+                connection.query(sql, [final],function(err, result, field){
                     if (err) throw err;
 
                 })
                 
                 
 
-                }
+               
                 Data();
             }
 
-            let breakPoint = 0;
+            
+            
+        
             function Data(){
+                let breakPoint = 0;
+                var final = [];
+                let sql = "Insert Into `data` (`Row_Id`,`Rubric_Id`,`Data`,`index`) VALUES ?";
                 for(var j = 0 ; j<rows;j++){
                 
                     if(j<breakPoint){
@@ -86,24 +113,33 @@ router.post("/createRubric",  (req,res) =>{
                     }
                     
                     else{
+                        
                     for(var i = 0; i<scores;i++){
+
+                        value = [j+1, rubric_Id, " ", i+1];
+                        
+
+                        final.push(value)
                         
                         
-                        connection.query("Insert Into `data`(`Row_Id`,`Rubric_Id`,`Data`,`index`) VALUES(?,?,?,?)",[j+1,rubric_Id,"",i+1],function(error, result, fields){
-                            if (error) 
-                            {
-                                console.log(error)
-                            }
-                            else{
-                                console.log("added");
-                            }
-                           
-                        })
+                        
                     }
                 }
                 
                     breakPoint = j;
                 }
+                
+
+                connection.query(sql, [final],function(error, result, fields){
+                    if (error) 
+                    {
+                        console.log(error)
+                    }
+                    else{
+                        console.log("added");
+                    }
+                   
+                })
               
                 return res.send(cycle);
 
@@ -147,21 +183,27 @@ router.get("/getRubric/:title", (req, res)=>{
     connection.query("SELECT * from `scales` where `Rubric_Id` = ? ORDER BY `Value_Number` ASC", Rubric_Id, function(err, result, fields){
         if (err) throw err;
 
-        var decider = true;
+        
         for(var i = 0 ;i<result.length;i++){
            
-           
-                topRow[i] ={
+          
+            topRow[i] ={
                 
-                    Rubric_Title: Rubric_Title,
-                    Value_Number: `${result[i].Value_Number}`,
-                    Value_Name: `${result[i].Value_Name}`
-                }
+                Rubric_Title: Rubric_Title,
+                Value_Number: `${result[i].Value_Number}`,
+                Value_Name: `${result[i].Value_Name}`
+           
+           }
+
+           
+               
+           }
+                
              
 
             
             
-        }
+        
 
         Rubric[0] = topRow;
         
