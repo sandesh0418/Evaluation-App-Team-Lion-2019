@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const connection = require('../../models/User');
 const uuidv1 = require('uuid/v1');
+const format = require('string-format');
 
 router.post('/editProgramSummary', (req, res) => {
     let newProgramSummary = req.body;
@@ -19,6 +20,7 @@ router.post('/editProgramSummary', (req, res) => {
             else
             {
                 insertMeasures(o);
+                addCurriculumMappings(o);
             }
         })
     })
@@ -46,6 +48,26 @@ router.post('/editProgramSummary', (req, res) => {
                     
                 }
             })
+        })
+    }
+
+    function addCurriculumMappings(outcome)
+    {
+        let mappings = [];
+
+        outcome.courses.forEach(c => {
+            mappings.push(format("('" + outcome.Outcome_ID + "', '{courseId}', '{relevantHours}')", c));
+        })
+
+        let queryInsertCurriculumMappings = "" + 
+            "INSERT INTO curriculum_outcome_mapping (Outcome_ID, Course_ID, Relevant_Hours) VALUES " +
+            mappings.join() + " ON DUPLICATE KEY UPDATE Relevant_Hours=VALUES(Relevant_Hours)";
+
+        connection.query(queryInsertCurriculumMappings, (error, results, fields) => {
+            if (error)
+            {
+                console.log(error);
+            }
         })
     }
 })
