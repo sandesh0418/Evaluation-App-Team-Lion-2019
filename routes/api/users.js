@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
             var cwid = newUser.cwid;
 
             if (cwid.length == 8) {
-              config.query("UPDATE users SET  cwid = ?, firstName =?, lastName=?, password=? where email=? and password is NULL", [newUser.cwid, newUser.firstName, newUser.lastName, newUser.password, newUser.email], function(
+              config.query("UPDATE users SET  cwid = ?, firstName =?, lastName=?, password=? where email=? and password = NULL", [newUser.cwid, newUser.firstName, newUser.lastName, newUser.password, newUser.email], function(
                 error,
                 results,
                 fields

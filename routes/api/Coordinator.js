@@ -74,7 +74,7 @@ router.post(
                 }
               });
               let mailOptions = {
-                from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
+                from: '"ULM Department Evaluation App" <emailtester845@gmail.com>', // sender address
                 to: email, // list of receivers
                 subject: "Coordinator Assignment", // Subject line
                 html:

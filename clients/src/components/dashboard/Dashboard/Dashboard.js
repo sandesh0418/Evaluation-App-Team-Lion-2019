@@ -22,10 +22,15 @@ class Dashboard extends Component {
   render() {
     const { user } = this.props.auth;
     const  {cycles , evaluator} = this.props;
+   
  
     var displayCycle;
     var displayProgressBar;
     var noProgressBar;
+
+    
+
+  
 
 
     if(cycles.inProgressCycles != null){
@@ -61,7 +66,7 @@ class Dashboard extends Component {
      
         displayProgressBar = evaluator.progressBar[0].map((single, index) =>(
           <span key={index} >
-          {console.log(single.firstName)}
+          
           <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
             {single.firstName} { single.lastName}
           
@@ -97,6 +102,7 @@ class Dashboard extends Component {
       width="100"
    />
     }
+  
     return (
       <div>
         <div className="row">

@@ -7,6 +7,7 @@ import AddRubricMeasurePopup from './addRubricMeasurePopup';
 import AddTestMeasurePopup from './addTestMeasurePopup';
 import Loader from 'react-loader-spinner';
 import OutcomeCurriculum from './curriculumMapping';
+import Table from 'react-bootstrap/Table';
 
 const OutcomeList = props => {
 
@@ -66,13 +67,16 @@ const Outcome = props => {
                 <DropdownButton id="dropdown-basic-button" className="mb-3" title="Add Measure">
                     <Dropdown.Item 
                         onSelect={props.handleAddTestMeasure}
-                        eventKey={props.outcome.Outcome_ID}>
+                        eventKey={props.outcome.Outcome_ID}><i class="fas fa-plus-circle">
                         Add Test Measure
+                        </i>
                     </Dropdown.Item>
                     <Dropdown.Item 
                         onSelect={props.handleAddRubricMeasure}
                         eventKey={props.outcome.Outcome_ID}>
+                        <i class="fas fa-plus-circle">
                         Add Rubric Measure
+                        </i>
                     </Dropdown.Item>
                 </DropdownButton>
                 {props.curriculumList.length > 0 ?
@@ -433,7 +437,8 @@ export default class EditProgramSummary extends Component
                     curriculumList={this.state.curriculum}
                     changeCurriculum={this.changeCurriculum}
                 />
-                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
+                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i class="fas fa-plus-circle"> 
+Add Outcome</i> </button>
                 <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>
                 {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                             closePopup={this.closePopup} 
