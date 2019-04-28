@@ -44,7 +44,7 @@ var mysql = require("mysql");
 // handleDisconnect();
 
 var connection = mysql.createPool({
-  connectionLimit: 100,
+  connectionLimit: 512,
   host: "us-cdbr-iron-east-02.cleardb.net",
   user: "b3a43daee9a0e7",
   password: "f0da0ad1",
@@ -58,9 +58,9 @@ var connection = mysql.createPool({
 connection.on("connection", function(connection) {
   console.log("Server is connected to database through connection %d", connection.threadId);
 });
-// connection.on('release', function (connection) {
-//   console.log('Connection %d released', connection.threadId);
-// });
+connection.on('release', function (connection) {
+  console.log('Connection %d released', connection.threadId);
+});
 
 // var connection = mysql.createConnection({
 //   host     : 'us-cdbr-iron-east-02.cleardb.net',
