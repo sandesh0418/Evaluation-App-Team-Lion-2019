@@ -28,7 +28,7 @@ router.post("/createRubric",  (req,res) =>{
         let rubric_Id = uniqid();
         let Cycle_Id = req.body.Cycle_Id;
         cycle ={
-            Rubric_Id: ruZzsxdezxxcxzaassaabric_Id
+            Rubric_Id: rubric_Id
         }
         if(req.body.weight){
             weight = 1;
