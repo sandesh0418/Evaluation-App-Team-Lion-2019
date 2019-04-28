@@ -110,26 +110,31 @@ export default class OutcomeCurriculum extends Component
 
     render()
     {
-        let outcomeCourses = this.state.courses.map((c, i) => {
-            return (
-                <div key={i} className="row">
-                    <div className="col-3">
-                        {c.departmentCode + " " + c.courseCode + " " + c.name}
+        let outcomeCourses;
+        
+        if (this.state.courses.length > 0)
+        {
+            outcomeCourses = this.state.courses.map((c, i) => {
+                return (
+                    <div key={i} className="row">
+                        <div className="col-3">
+                            {c.departmentCode + " " + c.courseCode + " " + c.name}
+                        </div>
+                        <div className="col-2">
+                            <input type="number" min="0" max="99" value={c.relevantHours}
+                                id={c.courseId} onChange={this.handleRelevantHoursChange}
+                                title="Enter the number of hours in this course relevant to this outcome." />
+                        </div>
+                        <div className="col">
+                            <button type="button" className="btn btn-danger" onClick={this.deleteCourseMapping}
+                                id={c.courseId}>
+                                Delete Element
+                            </button>
+                        </div>
                     </div>
-                    <div className="col-2">
-                        <input type="number" min="0" max="99" value={c.relevantHours}
-                            id={c.courseId} onChange={this.handleRelevantHoursChange}
-                            title="Enter the number of hours in this course relevant to this outcome." />
-                    </div>
-                    <div className="col">
-                        <button type="button" className="btn btn-danger" onClick={this.deleteCourseMapping}
-                            id={c.courseId}>
-                            Delete Element
-                        </button>
-                    </div>
-                </div>
-            )
-        })
+                )
+            })
+        }
     
         return (
             <div className="mt-3">
