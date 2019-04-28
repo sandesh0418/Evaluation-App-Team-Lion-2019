@@ -126,7 +126,8 @@ export default class ViewSummary extends Component
 
     getSummaryWithStatistics()
     {
-        axios.get('/api/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id") + "/" + 
+            localStorage.getItem("dept_Id"))
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -138,7 +139,8 @@ export default class ViewSummary extends Component
     getSummary()
     {
         console.log(localStorage.getItem("Cycle_Id"));
-        axios.get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id") + "/" + 
+            localStorage.getItem("dept_Id"))
             .then(res => {
                 console.log(res.data);
                 this.setState({

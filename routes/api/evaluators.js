@@ -79,11 +79,30 @@ router.post("/deleteEvaluator", passport.authenticate("jwt", {session: false}), 
 })
 
 
+router.get('/memberList/:deptId/:email', passport.authenticate("jwt", {session: false}), (req, res) => {
+    let departmentId = req.params.deptId;
+
+    let whereCondition = "AND NOT role='admin' AND NOT email='" + req.params.email + "'";
+
+    getEvaluators(req, res, whereCondition, departmentId);
+
+})
+
 router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: false}), (req, res) => {
-    departmentId = req.params.deptId;
+    let departmentId = req.params.deptId;
+
+    let whereCondition = "AND role='Evaluator'";
+
+    getEvaluators(req, res, whereCondition, departmentId);
+
+})
+
+function getEvaluators(req, res, whereCondition, departmentId)
+{
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND role='Evaluator' AND NOT `password` = 'deleted'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + 
+        "' AND NOT `password` = 'deleted' " + whereCondition;
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
@@ -114,7 +133,7 @@ router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: fals
             }
         }
     })
-})
+}
 
 
 router.get("/evaluatorProgressBar/:id", (req, res) =>{
@@ -175,45 +194,9 @@ connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" 
                             resu[1] = progressBar;
                             res.send(resu)
                         }
-                       
-
-                    
-                            
-                            
-                            
-                    
-
-
-                   
-
-                           
                         })
-
-                        
-                        
-
-                           
-
-
-                            
-                          
-
-
-
-                        
-                    
-            
-                        
-            
         })
-        
-      
-
-
-        
     }
-    
-    
 })
 })
 
