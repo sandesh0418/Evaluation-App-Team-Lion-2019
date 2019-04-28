@@ -109,7 +109,7 @@ export default class RubricList extends Component
 
     componentDidMount()
     {
-        axios.get('/assignments/myAssignments/' + localStorage.getItem("email") + "/" + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/assignments/myAssignments/' + localStorage.getItem("email") + "/" + localStorage.getItem("Cycle_Id"))
             .then(res => {
                 this.setState({
                     assignments: res.data.assignments
@@ -140,7 +140,7 @@ export default class RubricList extends Component
         }
         else
         {
-            assignmentIndex = tempAssignments.incompelete.findIndex(a => a.assignmentId === assignmentId);
+            assignmentIndex = tempAssignments.incomplete.findIndex(a => a.assignmentId === assignmentId);
             subjectIndex = tempAssignments.incomplete[assignmentIndex].subjects.
                 findIndex(s => s.subjectId === subjectId_type[0]);
             tempAssignments.incomplete[assignmentIndex].subjects.splice(subjectIndex, 1);
@@ -155,7 +155,7 @@ export default class RubricList extends Component
             assignmentId: assignmentId
         }
 
-        axios.post('/assignments/deleteSubject', data)
+        axios.post('/api/assignments/deleteSubject', data)
             .then(res => {
                 if (!res.data.deleted)
                 {
