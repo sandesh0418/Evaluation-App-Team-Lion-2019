@@ -172,17 +172,21 @@ export default class ViewSummary extends Component
     {
         e.preventDefault();
 
-        let editCurriculum = {
-            curriculum: this.state.curriculum,
-            cycleId: localStorage.getItem("Cycle_Id")
+        if (this.state.curriculum.length > 0)
+        {
+            let editCurriculum = {
+                curriculum: this.state.curriculum,
+                cycleId: localStorage.getItem("Cycle_Id")
+            }
+
+            axios.post('/api/curriculum/editCurriculum', editCurriculum)
+                .then(res => {
+                    alert(res.data.message);
+                    window.location.reload();
+                })
         }
 
-        axios.post('/api/curriculum/editCurriculum', editCurriculum)
-            .then(res => {
-                alert(res.data.message);
-                window.location.reload();
-            })
-
+        
         if (this.state.deletedIds.length > 0)
         {
             axios.post('/api/curriculum/deleteCourses', this.state.deletedIds)

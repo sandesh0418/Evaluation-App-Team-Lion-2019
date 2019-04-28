@@ -87,10 +87,11 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
             else if (results.length < 1)
             {
                 console.log("in low length");
-                res.status(400).json({
-                    status: false,
+                res.status(200).json({
+                    status: true,
                     error: error,
-                    message: "There is data on this measure."
+                    message: "There is no data on this measure.",
+                    measure: measure
                 })
             }
             else
