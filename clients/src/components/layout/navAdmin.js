@@ -65,7 +65,7 @@ class NavAdmin extends Component {
             <NavDropdown
               title={User()} 
             >
-              <NavDropdown.Item href="/editProfile">Edit Profile</NavDropdown.Item>
+              <NavDropdown.Item href="/editProfile">Change password</NavDropdown.Item>
               <NavDropdown.Item href ="/" onClick={this.onLogOut.bind(this)}>
                 Logout
               </NavDropdown.Item>

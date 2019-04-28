@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { updateUser } from "../../actions/authActions";
+import { updateUser, logoutUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 class EditProfile extends Component {
@@ -11,28 +11,27 @@ class EditProfile extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      cwid: '',
-      firstName: '',
-      lastName: '',
+      currentpassword: '',
       password: '',
-      currentEmail:localStorage.email,
+      message: false,
+      password2: '',
       errors: {}
     };
   }
 
-  // componentDidMount() {
-  //   // If logged in and user navigates to Register page, should redirect them to dashboard
-  //   if (this.props.auth.isAuthenticated) {
-  //     this.props.history.push("/viewEvaluator");
-  //   }
-  // }
 
   componentWillReceiveProps(nextProps) {
+   
+    
     if (nextProps.errors) {
       this.setState({
-        errors: nextProps.errors
+        errors: nextProps.errors.errors
       });
     }
+    else{
+      this.props.logoutUser();
+    }
+   
   }
 
   onChange = e => {
@@ -41,86 +40,77 @@ class EditProfile extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    const obj ={
+      currentpassword: this.state.currentpassword,
+      password: this.state.password,
+      password2:this.state.password2,
+      email: localStorage.email
+    }
 
    
 
-    this.props.updateUser(this.state, this.props.history);
+    this.props.updateUser(obj);
   };
 
   render() {
     const { errors } = this.state;
+    
+
+    var m;
+
+    if(this.state.message === true){
+      m = <div className="alert alert-success" role="alert">
+      Your password has been updated
+    </div>
+    }
 
     return (
-      <div className="container">
+      <div className="container" id="regcontent">
+      {m}
         <div className="row">
           <div className="col s8 offset-s2">
             <div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <h4>
-                <b>Update your profile</b> below
+                <b>Change you password</b> below
               </h4>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.firstname}
-                  error={errors.firstName}
-                  id="firstName"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.firstName
-                  })}
-                />
-
-                <label htmlFor="firstName">Please enter your first name</label>
-                <span className="red-text">{errors.firstName}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.lastName}
-                  error={errors.lastName}
-                  id="lastName"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.lastName
-                  })}
-                />
-
-                <label htmlFor="lastName">Please enter your last name</label>
-                <span className="red-text">{errors.lastName}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.cwid}
-                  error={errors.cwid}
-                  id="cwid"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.cwid
-                  })}
-                />
-                <label htmlFor="cwid">Please enter your CWID</label>
-                <span className="red-text">{errors.cwid}</span>
-              </div>
+              
+             
+              
 
               <div className="input-field col s12">
                 <input
-                  onChange={this.onChange}
-                  value={this.state.email}
+                  
+                  defaultValue={localStorage.email}
                   error={errors.email}
                   id="email"
                   type="email"
                   className={classnames("", {
                     invalid: errors.email
                   })}
+                  readOnly = "readOnly"
                 />
 
 
                 
-                <label htmlFor="email">Enter your new Email</label>
+                <label htmlFor="email">Your Email</label>
                 <span className="red-text">{errors.email}</span>
+              </div>
+
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.currentpassword}
+                  error={errors.currentpassword}
+                  id="currentpassword"
+                  type="password"
+                  className={classnames("", {
+                    invalid: errors.currentpassword
+                  })}
+                />
+                <label htmlFor="currentpassword">Enter your current password</label>
+                <span className="red-text">{errors.currentpassword}</span>
               </div>
 
               <div className="input-field col s12">
@@ -134,7 +124,7 @@ class EditProfile extends Component {
                     invalid: errors.password
                   })}
                 />
-                <label htmlFor="password">Enter your new Password</label>
+                <label htmlFor="password">Enter a new password</label>
                 <span className="red-text">{errors.password}</span>
               </div>
 
@@ -164,7 +154,7 @@ class EditProfile extends Component {
                   type="submit"
                   className="btn btn-large waves-effect waves-light hoverable blue accent-3"
                 >
-                  Register
+                  Update
                 </button>
               </div>
             </form>
@@ -188,5 +178,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updateUser }
+  { updateUser, logoutUser }
 )(withRouter(EditProfile));
