@@ -21,7 +21,7 @@ export const CreateNewCycle = (obj) => dispatch =>{
 
 
 export const GetPreviousCycle = () => dispatch =>{
-    Axios.get("/cycle/getPreviousCycles/"+localStorage.getItem("dept_Id"))
+    Axios.get("/api/cycle/getPreviousCycles/"+localStorage.getItem("dept_Id"))
         .then(res => {
             dispatch({
                 type: PREVIOUS_CYCLES,
@@ -37,7 +37,7 @@ export const GetPreviousCycle = () => dispatch =>{
 }
 
 export const CyclesInProgress = () => dispatch => {
-    Axios.get("/cycle/getCyclesInProgress/"+localStorage.getItem("dept_Id"))
+    Axios.get("/api/cycle/getCyclesInProgress/"+localStorage.getItem("dept_Id"))
     .then(res => {
         dispatch({
             type: CYCLES_IN_PROGRESS,

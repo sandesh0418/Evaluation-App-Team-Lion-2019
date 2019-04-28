@@ -4,7 +4,7 @@ import { GET_ALL_OUTCOMES, GET_ERRORS,GET_MEASURES } from './types';
 
 
 export const getOutcome = (CycleId) => dispatch => {
-    Axios.get('/outcome/'+`${CycleId}`)
+    Axios.get('/api/outcome/'+`${CycleId}`)
         .then(res =>{
             dispatch({
                 type:  GET_ALL_OUTCOMES,
@@ -23,7 +23,7 @@ export const getOutcome = (CycleId) => dispatch => {
 }
 
 export const getMeasure = (OutcomeId) => dispatch => {
-    Axios.get('/outcome/measure/'+`${OutcomeId}`)
+    Axios.get('/api/outcome/measure/'+`${OutcomeId}`)
         .then(res =>{
             dispatch({
                 type:  GET_MEASURES,
