@@ -120,4 +120,26 @@ router.post('/deleteCourses', (req, res) => {
     }
 })
 
+router.post('/deleteOutcomeCurriculumMappings', (req, res) => {
+    let deletedOutcomeCurriculumMappings = req.body;
+
+    let deletedIds = [];
+
+    deletedOutcomeCurriculumMappings.forEach(d => {
+        deletedIds.push(format("('{outcomeId}', '{deletedCourseId}')", d));
+    })
+
+    let queryDeleteCurriculumMappings = "" + 
+        "DELETE FROM curriculum_outcome_mapping WHERE (Outcome_ID, Course_ID) IN (" + 
+        deletedIds.join() + ")";
+
+    connection.query(queryDeleteCurriculumMappings, (error, results, fields) => {
+        if (error)
+        {
+            console.log("curriculum/deleteOutcomeCurriculumMappings -- queryDeleteCurriculumMappings");
+            console.log(error);
+        }
+    })
+})
+
 module.exports = router;

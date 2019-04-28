@@ -6,6 +6,7 @@ import uuid from 'uuid/v1';
 import AddRubricMeasurePopup from './addRubricMeasurePopup';
 import AddTestMeasurePopup from './addTestMeasurePopup';
 import Loader from 'react-loader-spinner';
+import OutcomeCurriculum from './curriculumMapping';
 
 const OutcomeList = props => {
 
@@ -20,11 +21,8 @@ const OutcomeList = props => {
                         handleAddRubricMeasure={props.handleAddRubricMeasure}
                         handleAddTestMeasure={props.handleAddTestMeasure}
                         handleDeleteMeasure={props.handleDeleteMeasure}
-                        selectCourseList={props.selectCourseList}
-                        addCourse={props.addCourse}
-                        handleInputChange={props.handleInputChange}
-                        deleteCourseMapping={props.deleteCourseMapping}
-                        handleRelevantHoursChange={props.handleRelevantHoursChange}
+                        curriculumList={props.curriculumList}
+                        changeCurriculum={props.changeCurriculum}
                     />
         })
     }
@@ -82,11 +80,8 @@ const Outcome = props => {
                     <OutcomeCurriculum 
                         courses={props.outcome.courses} 
                         outcomeId={props.outcome.Outcome_ID}
-                        selectCourseList={props.selectCourseList}
-                        addCourse={props.addCourse}
-                        handleInputChange={props.handleInputChange}
-                        deleteCourseMapping={props.deleteCourseMapping}
-                        handleRelevantHoursChange={props.handleRelevantHoursChange} />
+                        curriculumList={props.curriculumList}
+                        changeCurriculum={props.changeCurriculum} />
                 </details>
             </div>
         </div>
@@ -122,62 +117,6 @@ const Measures = props => {
     })
 }
 
-const OutcomeCurriculum = props => {
-    let allIds = props.selectCourseList.map(c => {
-        return c.courseId;
-    })
-
-    let usedIds = props.courses.map(c => {
-        return c.courseId;
-    })
-
-    let selectableIds = allIds.filter(c => {
-        return !usedIds.includes(c);
-    })
-
-    let selectableCourses = props.selectCourseList.filter(c => {
-        return selectableIds.includes(c.courseId);
-    })
-    
-    let selectCourseList = selectableCourses.map(c => {
-        return <option value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
-    })
-
-    let outcomeCourses = props.courses.map((c, i) => {
-        return (
-            <div key={i} className="row">
-                <div className="col-3">
-                    {c.departmentCode + " " + c.courseCode + " " + c.name}
-                </div>
-                <div className="col-2">
-                    <input type="number" min="0" max="99" value={c.relevantHours}
-                        id={props.outcomeId} name={c.courseId}
-                        title="Enter the number of hours in this course relevant to this outcome." 
-                        onChange={props.handleRelevantHoursChange} />
-                </div>
-                <div className="col">
-                    <button type="button" className="btn btn-danger" onClick={props.deleteCourseMapping}
-                        id={props.outcomeId} name={c.courseId}>
-                        Delete Element
-                    </button>
-                </div>
-            </div>
-        )
-    })
-
-    return (
-        <div className="mt-3">
-            {outcomeCourses}
-            <label>Add Another Course</label>
-            <select className="form-control mb-2" name="courseChoice" onClick={props.handleInputChange} 
-                onChange={props.handleInputChange}>
-                {selectCourseList}
-            </select>
-            <button type="button" className="btn btn-primary" id={props.outcomeId} onClick={props.addCourse}>Add</button>
-        </div>
-    )
-}
-
 export default class EditProgramSummary extends Component
 {
     constructor(props)
@@ -192,15 +131,12 @@ export default class EditProgramSummary extends Component
         this.addNewMeasure = this.addNewMeasure.bind(this);  
         this.handleDeleteMeasure = this.handleDeleteMeasure.bind(this);
         this.handleDeleteOutcome = this.handleDeleteOutcome.bind(this);
+        this.changeCurriculum = this.changeCurriculum.bind(this);
         this.closePopup = this.closePopup.bind(this);
-        this.addCourse = this.addCourse.bind(this);
-        this.handleRelevantHoursChange = this.handleRelevantHoursChange.bind(this);
-        this.deleteCourseMapping = this.deleteCourseMapping.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.state = {
             programSummary: null,
             curriculum: null,
-            courseChoice: null,
             showAddRubricMeasurePopup: false,
             showAddTestMeasurePopup: false,
             outcomeIdOfNewMeasure: "hello",
@@ -351,6 +287,28 @@ export default class EditProgramSummary extends Component
         })
     }
 
+    changeCurriculum(newCourses, deletedIds, outcomeId)
+    {
+        let tempSummary = this.state.programSummary;
+        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === outcomeId);
+        tempSummary.outcomes[outcomeIndex].courses = newCourses;
+
+        let tempDeletedCourseMappings = this.state.deletedCourseMappings;
+        deletedIds.forEach(d => {
+            tempDeletedCourseMappings.push({
+                outcomeId: outcomeId,
+                deletedCourseId: d
+            })
+        })
+
+        console.log(tempDeletedCourseMappings);
+
+        this.setState({
+            programSummary: tempSummary,
+            deletedCourseMappings: tempDeletedCourseMappings
+        })
+    }
+
     closePopup(e)
     {
         this.setState({
@@ -402,57 +360,6 @@ export default class EditProgramSummary extends Component
             percentToReachTarget: 0
         })
     }
-
-    addCourse(e)
-    {
-        let tempSummary = this.state.programSummary;
-        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
-        let course = this.state.curriculum.find(c => c.courseId === this.state.courseChoice);
-
-        tempSummary.outcomes[outcomeIndex].courses.push({
-            departmentCode: course.departmentCode,
-            courseCode: course.courseCode,
-            name: course.name,
-            relevantHours: 0,
-            courseId: course.courseId
-        })
-
-        this.setState({
-            programSummary: tempSummary
-        })
-    }
-
-    deleteCourseMapping(e)
-    {
-        let tempSummary = this.state.programSummary;
-        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
-        let courseIndex = tempSummary.outcomes[outcomeIndex].courses.findIndex(c => c.courseId === e.target.name);
-        tempSummary.outcomes[outcomeIndex].courses.splice(courseIndex, 1);
-
-        let tempDeletedCourseMappings = this.state.deletedCourseMappings;
-        tempDeletedCourseMappings.push({
-            outcomeId: e.target.id,
-            courseId: e.target.name
-        })
-
-        this.setState({
-            programSummary: tempSummary,
-            deletedCourseMappings: tempDeletedCourseMappings
-        })
-    }
-
-    handleRelevantHoursChange(e)
-    {
-        let tempSummary = this.state.programSummary;
-        let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
-        let courseIndex = tempSummary.outcomes[outcomeIndex].courses.findIndex(c => c.courseId === e.target.name);
-
-        tempSummary.outcomes[outcomeIndex].courses[courseIndex].relevantHours = e.target.value;
-
-        this.setState({
-            programSummary: tempSummary
-        })
-    }
     
     handleSave()
     {
@@ -471,6 +378,11 @@ export default class EditProgramSummary extends Component
         {
             axios.post('/editProgramSummary/deleteMeasures', this.state.deletedMeasureIds)
                 .then(res => {})
+        }
+
+        if (this.state.deletedCourseMappings.length > 0)
+        {
+            axios.post('/curriculum/deleteOutcomeCurriculumMappings', this.state.deletedCourseMappings)
         }
     }
 
@@ -493,7 +405,7 @@ export default class EditProgramSummary extends Component
                 outcomes=this.state.programSummary.outcomes 
             }
 
-            let selectCourseList = this.state.curriculum.map(c => {
+            let curriculumList = this.state.curriculum.map(c => {
                 return <option value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
             })
         
@@ -508,11 +420,8 @@ export default class EditProgramSummary extends Component
                     handleAddRubricMeasure={this.handleAddRubricMeasure}
                     handleAddTestMeasure={this.handleAddTestMeasure}
                     handleDeleteMeasure={this.handleDeleteMeasure}
-                    selectCourseList={this.state.curriculum} 
-                    addCourse={this.addCourse}
-                    handleInputChange={this.handleInputChange}
-                    deleteCourseMapping={this.deleteCourseMapping}
-                    handleRelevantHoursChange={this.handleRelevantHoursChange}
+                    curriculumList={this.state.curriculum}
+                    changeCurriculum={this.changeCurriculum}
                 />
                 <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>Add Outcome</button>
                 <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>

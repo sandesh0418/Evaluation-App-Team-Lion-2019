@@ -20,7 +20,11 @@ router.post('/editProgramSummary', (req, res) => {
             else
             {
                 insertMeasures(o);
-                addCurriculumMappings(o);
+                if (o.courses.length > 0)
+                {
+                    addCurriculumMappings(o);
+                }
+                
             }
         })
     })
