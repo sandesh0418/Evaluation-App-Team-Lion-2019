@@ -112,7 +112,7 @@ export default class CreateAssignment extends Component {
   componentDidMount() {
     axios
       .get(
-        "/assignments/outcomesAndMeasures/" + localStorage.getItem("Cycle_Id")
+        "/api/assignments/outcomesAndMeasures/" + localStorage.getItem("Cycle_Id")
       )
       .then(res => {
         this.setState({
@@ -121,7 +121,7 @@ export default class CreateAssignment extends Component {
         });
       });
     axios
-      .get("/evaluators/evaluatorList/" + localStorage.getItem("dept_Id"))
+      .get("/api/evaluators/evaluatorList/" + localStorage.getItem("dept_Id"))
       .then(res => {
         this.setState({
           evaluatorList: res.data.evaluatorList,
@@ -207,7 +207,7 @@ export default class CreateAssignment extends Component {
                 manualStudentEntryToString(this.state.manualStudentEntry))
         };
 
-        axios.post("/assignments/createAssignment", assignment).then(res => {
+        axios.post("/api/assignments/createAssignment", assignment).then(res => {
           if (res.data.status) {
             alert(res.data.message);
             this.setState({
@@ -227,7 +227,7 @@ export default class CreateAssignment extends Component {
           manualStudentEntryToString(this.state.manualStudentEntry)
       };
 
-      axios.post("/assignments/createAssignment", assignment).then(res => {
+      axios.post("/api/assignments/createAssignment", assignment).then(res => {
         if (res.data.status) {
           alert(res.data.message);
           this.setState({
