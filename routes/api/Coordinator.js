@@ -78,7 +78,7 @@ router.post(
                 to: email, // list of receivers
                 subject: "Coordinator Assignment", // Subject line
                 html:
-                  <p>Please <a href="https://team-lion-evaluation.herokuapp.com/register">Click here</a> to register as a coordinator</p> // plain text body
+                  "<p>Please <a href='https://team-lion-evaluation.herokuapp.com/register'>Click here</a> to register as a coordinator</p>" // plain text body
                 // html: '<b>NodeJS Email Tutorial</b>' // html body
               };
 
