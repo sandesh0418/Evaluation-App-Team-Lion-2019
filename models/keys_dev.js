@@ -6,8 +6,6 @@ module.exports = {
     password: '',
     database: 'nodejs_login1',
 
- 
-
   // host: "teamlion.corhcthpryw4.us-east-2.rds.amazonaws.com",
   //   user: "teamlion128",
   //   password: "teamlion128",
