@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Axios from 'axios';
+import Loader from 'react-loader-spinner';
 import { O_RDONLY } from 'constants';
 
 function CriteriaTitles(props)
@@ -151,7 +152,6 @@ export default class CreateAssignment extends Component
     {
         Axios.get('/api/measureReport/measureReport/' + this.props.match.params.measureId)
             .then(res => {
-                console.log(res.data);
                 this.setState({
                     measure: res.data.measure
                 })
@@ -202,11 +202,16 @@ export default class CreateAssignment extends Component
     {
         if (this.state.measure === null)
         {
-            return <p>loading...</p>
+            return <Loader 
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
+            />
         }
         else if (this.state.measure.subjectList.length === 0)
         {
-            return <p>There is no evaluation data for this measure.</p>
+            return <p>There is no evaluation data for measure '{this.state.measure.measureName}'</p>
         }
         else
         {

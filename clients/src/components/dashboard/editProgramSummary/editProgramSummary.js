@@ -75,14 +75,16 @@ const Outcome = props => {
                         Add Rubric Measure
                     </Dropdown.Item>
                 </DropdownButton>
-                <details>
-                    <summary>Outcome's Curriculum Elements</summary>
-                    <OutcomeCurriculum 
-                        courses={props.outcome.courses} 
-                        outcomeId={props.outcome.Outcome_ID}
-                        curriculumList={props.curriculumList}
-                        changeCurriculum={props.changeCurriculum} />
-                </details>
+                {props.curriculumList.length > 0 ?
+                    <details>
+                        <summary>Outcome's Curriculum Elements</summary>
+                        <OutcomeCurriculum 
+                            courses={props.outcome.courses} 
+                            outcomeId={props.outcome.Outcome_ID}
+                            curriculumList={props.curriculumList}
+                            changeCurriculum={props.changeCurriculum} />
+                    </details>
+                : null}
             </div>
         </div>
     )
