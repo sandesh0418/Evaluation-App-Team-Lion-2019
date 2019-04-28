@@ -2,7 +2,7 @@
   width: 9rem !important;
 }
 
-.table-bordered thead td,
+/* .table-bordered thead td,
 .table-bordered thead th {
   border-bottom-width: 2px;
   padding: 20px;
@@ -10,7 +10,7 @@
   letter-spacing: 2px;
   background-color: #80888042;
   color: #999;
-}
+} */
 
 table,
 tbody th,

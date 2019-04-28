@@ -3,6 +3,7 @@ import axios from "axios";
 import '../../../stylesheets/rubricView.css';
 import { ClipLoader } from 'react-spinners';
 import { Spinner } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table'
 
 
 function TopRowGradeScale(props)
@@ -331,8 +332,8 @@ export default class ViewRubric extends Component
                             className="bg-danger" />
                         : null}
                 </div>
-                
-                <table className="table table-bordered">
+                {/* className="table table-bordered" */}
+                <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl">
                     <thead>
                         <tr id ="criteria"> 
                             <th scope="col" className="outcome-width" >Criteria</th>
@@ -351,7 +352,7 @@ export default class ViewRubric extends Component
                         />
                     </tbody>
                     
-                </table>
+                </Table>
                 {rubricAverage}
                 {saveGradeButton}
                 {editRubricButton}
