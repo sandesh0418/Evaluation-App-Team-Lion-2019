@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getRubric, updateRubric, updateTitle } from "../../../actions/rubric";
 import { FormControl, Form } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import '../../../stylesheets/rubricView.css';
+import "../../../stylesheets/rubricView.css";
 
 import "../../../stylesheets/rubric.css";
 import Loader from "react-loader-spinner";
@@ -251,8 +251,8 @@ class createRubric extends Component {
           hover
           responsive="sm"
           responsive="md"
-        //   responsive="lg"
-        //   responsive="xl"
+          //   responsive="lg"
+          //   responsive="xl"
           id="createRubric"
         >
           {load}
