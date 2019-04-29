@@ -106,8 +106,8 @@ render()
     
 return(
 <Jumbotron fluid id="main">
-  <Container>
-    <h1>Create a new rubric</h1>
+  
+    <h2>Create a new rubric</h2>
     <br />
     <br />
    <form onSubmit={this.onSubmit}>
@@ -149,7 +149,7 @@ return(
               <br />
     
     <div className="input-field col s8">
-                <input
+                <input 
                   onChange={this.onChange}
                   value={this.state.scores}
                   error={errors.scores}
@@ -173,7 +173,7 @@ return(
                      value={this.state.checked}
                      type= "checkbox"
                      id ="weight"
-                     style={{opacity : 1, pointerEvents: "auto"}}
+                     style={{opacity : 1, pointerEvents: "auto", position:"relative", top: "1px", width: "20px"}}
                      />
               <label htmlFor="checkbox" style={{marginLeft: "12px"}}>Do you want a weight column?</label>
             
@@ -196,7 +196,7 @@ return(
                 </button>
               </div>
               </form>
-  </Container>
+  
 </Jumbotron>
 )
 
