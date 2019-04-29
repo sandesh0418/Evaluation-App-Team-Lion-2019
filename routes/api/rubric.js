@@ -398,8 +398,8 @@ router.get('/getViewRubric/:id', (req, res) => {
             "s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
-        "WHERE r.Rubric_Id='" + rubricId + "' AND c.Row_Id=d.Row_Id " +
-            "AND d.index=s.Value_Number";
+        "WHERE r.Rubric_Id='" + rubricId + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number " +
+        "ORDER BY c.Row_Id";
 
     connection.query(queryGetRubric, function(error, results, fields) {
         if (error || results.length < 1) 
