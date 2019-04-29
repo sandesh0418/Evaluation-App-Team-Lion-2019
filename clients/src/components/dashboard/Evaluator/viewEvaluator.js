@@ -122,7 +122,7 @@ class ViewEvaluator extends Component {
                   }}
                 >
                   {" "}
-                  List of Evaluators
+                  Active Evaluators
                 </h2>
 
                 {display}

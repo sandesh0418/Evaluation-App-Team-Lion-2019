@@ -63,9 +63,18 @@ h4 {
    
     
   }
+  #main{
+    padding: 40px !important;
+    position: relative;
+    bottom: 5rem;
+  }
 
   .landing{
     position: fixed;
+  }
+  .col{
+    flex-grow: unset;
+
   }
 }
 
