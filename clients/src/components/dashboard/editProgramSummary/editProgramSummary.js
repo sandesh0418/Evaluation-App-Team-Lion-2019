@@ -51,10 +51,10 @@ const Outcome = props => {
                     onChange={props.handleOutcomeChange} 
                 />
                 <button 
-                    className="btn btn-danger"
+                    className="btn btn-danger dangerButton"
                     id={props.outcome.Outcome_ID}
                     onClick={props.handleDeleteOutcome}>
-                    Delete Outcome
+                   <i className="far fa-trash-alt"> Delete Outcome </i>
                 </button>
             </div>
             <div className="col-8 border p-3">
@@ -64,18 +64,18 @@ const Outcome = props => {
                         outcomeId={props.outcome.Outcome_ID}
                         handleDeleteMeasure={props.handleDeleteMeasure} /> 
                     : null}
-                <Dropdown>
+                <Dropdown id="mainDropdown">
           <Dropdown.Toggle variant="success" id="dropdown-basic1">
             <i class="fas fa-plus-circle"> Add Measure</i>
           </Dropdown.Toggle>
-          <Dropdown.Menu>
-          <Dropdown.Item
+          <Dropdown.Menu id="dropdownMenu">
+          <Dropdown.Item id= "dropdownSize1"
             onSelect={props.handleAddTestMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
             <i class="fas fa-plus-circle"> Add Test Measure</i>
           </Dropdown.Item>
-          <Dropdown.Item
+          <Dropdown.Item id = "dropdownSize2"
             onSelect={props.handleAddRubricMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
@@ -103,7 +103,7 @@ const Measures = props => {
             <div key={measure.Measure_ID}>
                 <p>
                     <button 
-                        className="btn btn-sm btn-danger mr-2"
+                        className="btn btn-sm btn-danger mr-2 dangerButton"
                         name={props.outcomeId}
                         id={measure.Measure_ID}
                         onClick={props.handleDeleteMeasure}
@@ -196,7 +196,8 @@ export default class EditProgramSummary extends Component
             Outcome_ID: newId,
             Outcome_Name: "Outcome #",
             Description: "Enter outcome description.",
-            measures: []
+            measures: [],
+            courses: []
         })
         this.setState({
             programSummary: tempSummary
@@ -408,7 +409,7 @@ export default class EditProgramSummary extends Component
                 />
                 <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i class="fas fa-plus-circle"> 
 Add Outcome</i> </button>
-                <div><button className="btn btn-success mb-4" onClick={this.handleSave}>Save Changes</button></div>
+                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i class="far fa-save"> Save Changes </i></button></div>
                 {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                             closePopup={this.closePopup} 
                                                             submit={this.addNewMeasure}
