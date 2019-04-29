@@ -22,7 +22,7 @@ class Landing extends Component {
   render() {
     return (
       <div>
-        <div id="background" />
+        <div id="background" style={{bottom: "1px"}}/>
         <div
           id="maincontent"
           style={{ margin: "25vh auto" }}
