@@ -35,7 +35,7 @@ const OutcomeList = props => {
 const Outcome = props => {
     return (
         <div className="row">
-            <div className="col border p-3">
+            <div className="col border border-dark p-3">
                 <input 
                     className="form-control"
                     type="text" 
@@ -57,7 +57,7 @@ const Outcome = props => {
                    <i className="far fa-trash-alt"> Delete Outcome </i>
                 </button>
             </div>
-            <div className="col-8 border p-3">
+            <div className="col-8 border border-right border-top border-bottom border-dark p-3">
                 {props.outcome.measures[0] ? 
                     <Measures 
                         measures={props.outcome.measures} 
