@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import { GET_RUBRIC, GET_ERRORS, GET_ALL_RUBRICS} from './types';
+import { GET_RUBRIC, GET_ERRORS, GET_ALL_RUBRICS, RUBRIC} from './types';
 
 export const getRubric = (title) => dispatch => {
     
@@ -45,13 +45,16 @@ export const getAllRubric = (CycleId) => dispatch => {
 export const createRubric = (obj) =>dispatch =>{
     Axios.post('/api/rubric/createRubric', obj)
         .then(res => {
-            
+            dispatch({
+                type: RUBRIC,
+                payload: res.data
+            })
             
         })
         .catch(err =>{
             dispatch({
                 type: GET_ERRORS,
-                payload: err
+                payload: err.response.data
             })
         })
 }

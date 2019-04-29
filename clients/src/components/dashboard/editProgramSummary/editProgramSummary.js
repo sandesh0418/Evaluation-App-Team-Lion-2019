@@ -395,7 +395,7 @@ export default class EditProgramSummary extends Component
         
             return (
                 <>
-                <h1>Edit Program Summary</h1>
+                <h2>Edit Program Summary</h2>
                 <OutcomeList 
                     outcomes={outcomes}
                     handleOutcomeNameChange={this.handleOutcomeNameChange}

@@ -12,10 +12,11 @@
   .table {
     scroll-behavior: auto;
     overflow-x: auto !important;
+   
   }
   .table td,
   .table th{
-    padding: 15px;
+    padding: 7px;
     letter-spacing: 2px;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
@@ -30,6 +31,10 @@
     text-align: left;
     vertical-align: middle;
     border-radius: 2px;
+  }
+  th {
+    background-color: sandybrown !important;
+    padding: 7px;
   }
 
   textarea {
@@ -52,6 +57,7 @@
     text-align: center;
     color: #2c2216;
     text-decoration: wavy;
+    padding: 20px;
   }
 
   .table td,
@@ -70,6 +76,10 @@
     text-align: left;
     vertical-align: middle;
     border-radius: 2px;
+  }
+  th {
+    background-color: palegoldenrod !important;
+    padding: 7px;
   }
   textarea {
     resize: none;

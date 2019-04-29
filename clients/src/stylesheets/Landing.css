@@ -59,7 +59,13 @@ h4 {
   #background{
     background-size: auto;
     background-position: center;
+  
+   
     
+  }
+
+  .landing{
+    position: fixed;
   }
 }
 

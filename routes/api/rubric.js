@@ -138,10 +138,10 @@ router.post("/createRubric",  (req,res) =>{
                     else{
                         console.log("added");
                     }
-                   
+                    return res.send(cycle);
                 })
               
-                return res.send(cycle);
+                
 
             }
 

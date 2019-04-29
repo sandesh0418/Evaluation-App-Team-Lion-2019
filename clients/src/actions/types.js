@@ -19,4 +19,4 @@ export const  GET_ALL_OUTCOMES = " GET_ALL_OUTCOMES";
 export const GET_MEASURES = "GET_MEASURES";
 export const FOR_PROGRESS_BAR = "FOR_PROGRESS_BAR";
 export const PASSWORD_CHANGE = "PASSWORD_CHANGE";
-
+export const RUBRIC = "RUBRIC";

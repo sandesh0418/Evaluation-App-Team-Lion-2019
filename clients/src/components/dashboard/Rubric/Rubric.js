@@ -27,13 +27,35 @@ class CreateRubric extends Component{
         }
     }
 
-  //   componentWillReceiveProps(nextProps){
-  //     if(nextProps.rubric !== this.props.rubric){
+    componentWillReceiveProps(nextProps){
+     
+      if (nextProps.rubric !== this.props.rubric) {
+       
         
-  //       window.location.replace('/createRubric/'+`${nextProps.rubric.rubric[0][0].Rubric_Id}`)
-  //       console.log(nextProps.rubric.rubric[0][0].Rubric_Id)
-  //   }
-  // }
+        
+          window.location.replace("/createRubric/"+this.state.Rubric_Id)
+            
+      
+       
+      }
+
+      else{
+        this.setState({
+          errors: nextProps.errors
+        });
+      }
+
+      
+
+     
+     
+
+
+      
+
+     
+    
+  }
 
  
 
@@ -52,6 +74,7 @@ class CreateRubric extends Component{
           e.preventDefault();
         
          var RubricId = uuid();
+         this.setState({Rubric_Id: RubricId})
           const obj ={
               rows: this.state.rows,
               scores: this.state.scores,
@@ -63,8 +86,7 @@ class CreateRubric extends Component{
 
           this.props.createRubric(obj);
 
-          window.location.replace("/createRubric/"+RubricId)
-          
+         
 
 
           
@@ -78,10 +100,12 @@ class CreateRubric extends Component{
 
 render()
 {
+
+  const { errors } = this.state;
   
     
 return(
-<Jumbotron fluid>
+<Jumbotron fluid id="main">
   <Container>
     <h1>Create a new rubric</h1>
     <br />
@@ -90,17 +114,17 @@ return(
 <div className="input-field col s8">
     <input  onChange={this.onChange}
             value={this.state.Rubric_Title}
-            error={this.state.errors.title}
+            error={errors.title}
             type="text"
             id="Rubric_Title"
             
             className={classnames("", {
-              invalid: this.state.errors.title
+              invalid: errors.title
             })}
             required/>
-            <label htmlFor="text">Rubric Title</label>
+            <label htmlFor="text" style={{fontSize: "1.3rem"}}>Rubric Title</label>
                 <span className="red-text">
-                  {this.state.errors.title}
+                  {errors.title}
                   
                 </span>
 </div>
@@ -109,16 +133,16 @@ return(
                 <input
                   onChange={this.onChange}
                   value={this.state.rows}
-                  error={this.state.errors.rows}
+                  error={errors.rows}
                   id="rows"
                   type="number"
                   className={classnames("", {
-                    invalid: this.state.errors.rows
+                    invalid: errors.rows
                   })}
                 required/>
-                <label htmlFor="number">Number of Criteria</label>
+                <label htmlFor="number" style={{fontSize: "1.3rem"}}>Number of Criteria</label>
                 <span className="red-text">
-                  {this.state.errors.rows}
+                  {errors.rows}
                   
                 </span>
               </div>
@@ -128,17 +152,17 @@ return(
                 <input
                   onChange={this.onChange}
                   value={this.state.scores}
-                  error={this.state.errors.scores}
+                  error={errors.scores}
                   id="scores"
                   type="number"
                   placeholder="A rubric grading Students from Poor, Average and Good will have 3 scores"
                   className={classnames("", {
-                    invalid: this.state.errors.scores
+                    invalid: errors.scores
                   })}
                 required/>
-                <label htmlFor="number">Number of Scores</label>
+                <label htmlFor="number" style={{fontSize: "1.3rem"}}>Number of Scores</label>
                 <span className="red-text">
-                  {this.state.errors.scores}
+                  {errors.scores}
                   
                 </span>
               </div>
@@ -181,13 +205,15 @@ return(
 CreateRubric.propTypes={
  
     rubric: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 
 }
 
 const mapStateToProps = state => ({
     auth: state.auth,
-     rubric: state.rubric
+     rubric: state.rubric,
+     errors: state.errors
      
      
 })
