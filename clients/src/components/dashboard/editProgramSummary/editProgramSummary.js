@@ -177,7 +177,7 @@ export default class EditProgramSummary extends Component {
 
   componentDidMount() {
     axios
-      .get("/api/summaryReport/getSummary/" + localStorage.getItem("Cycle_Id"))
+      .get("/api/summaryReport/getSummary/" + localStorage.getItem("Cycle_Id") + "/" + localStorage.getItem("dept_Id"))
       .then(res => {
         this.setState({
           programSummary: res.data.programSummary
@@ -345,6 +345,8 @@ export default class EditProgramSummary extends Component {
   }
 
   addNewMeasure(e) {
+    e.preventDefault();
+
     let newId = uuid();
 
     let rubricIndex = this.state.rubrics.findIndex(
@@ -427,8 +429,7 @@ export default class EditProgramSummary extends Component {
   render() {
     if (
       this.state.programSummary === null ||
-      this.state.curriculum === null ||
-      this.state.rubrics === null
+      this.state.curriculum === null
     ) {
       return <Loader type="Oval" color="black" height="100" width="100" />;
     } else {
@@ -464,7 +465,7 @@ export default class EditProgramSummary extends Component {
             className="btn btn-primary mb-4"
             onClick={this.handleAddOutcome}
           >
-            <i class="fas fa-plus-circle"> Add Outcome</i>{" "}
+            <i class="fas fa-plus-circle">Add Outcome</i>{" "}
           </button>
           <div>
             <button className="btn btn-success mb-4" onClick={this.handleSave}>
