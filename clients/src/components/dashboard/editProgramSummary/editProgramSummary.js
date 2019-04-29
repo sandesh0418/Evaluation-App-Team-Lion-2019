@@ -250,6 +250,7 @@ export default class EditProgramSummary extends Component
             outcomeIdOfNewMeasure: e
         })
     }
+
     handleAddRubricMeasure(e)
     {
         if (this.state.rubrics)
@@ -275,6 +276,7 @@ export default class EditProgramSummary extends Component
         tempSummary.outcomes[outcomeIndex].measures.splice(measureIndex, 1);
         let tempDeletedMeasureIds = this.state.deletedMeasureIds;
         tempDeletedMeasureIds.push(e.target.id);
+        console.log(tempDeletedMeasureIds);
         this.setState({
             programSummary: tempSummary,
             deletedMeasureIds: tempDeletedMeasureIds
@@ -318,7 +320,7 @@ export default class EditProgramSummary extends Component
         }
         let valueName = null;
         let targetScore = this.state.targetScore;
-        if (rubricIndex === -1)
+        if (rubricIndex > -1)
         {
             valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore - 1].Value_Name;
         }
