@@ -112,7 +112,7 @@ export default class OutcomeCurriculum extends Component
     {
         let outcomeCourses;
         
-        if (this.state.courses.length > 0)
+        if (this.state.courses && this.state.courses.length > 0)
         {
             outcomeCourses = this.state.courses.map((c, i) => {
                 return (

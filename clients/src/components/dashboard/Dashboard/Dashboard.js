@@ -17,6 +17,12 @@ class Dashboard extends Component {
   onClickNewCycle(e){
     window.location.replace("/cycle");
   }
+
+  onClick(e){
+    localStorage.removeItem("Cycle_Id");
+    localStorage.setItem("Cycle_Id", e.target.id);
+    window.location.replace("/dashboard");
+  }
   
 
   render() {
@@ -36,17 +42,22 @@ class Dashboard extends Component {
     if(cycles.inProgressCycles != null){
 
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
-        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
+        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600", fontSize:"2rem"}}>
           {singleCycle.Cycle_Name}
+
+          {singleCycle.Cycle_Id === localStorage.Cycle_Id ? <span style={{color: "green", float: "right"}}>Active Cycle</span> :
             <button type="button" className="btn btn-secondary" 
-            style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}>
-            Edit cycle</button>
+            style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}
+            onClick={this.onClick}
+            id={singleCycle.Cycle_Id}
+            >
+              Enter Cycle</button>}
         <hr/>
         </p>
       ))
 
-      if(displayCycle===''){
-        displayCycle = <span>You do not have any active cycle</span>
+      if(cycles.inProgressCycles.length == 0 ){
+        displayCycle = <span style={{textAlign: "center", color: "grey", fontSize: "2rem"}}>You do not have any active cycle</span>
       }
 
     }
@@ -67,12 +78,12 @@ class Dashboard extends Component {
         displayProgressBar = evaluator.progressBar[0].map((single, index) =>(
           <span key={index} >
           
-          <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
+          <p className="card-text" style={{marginLeft: "10px", fontWeight: "600", fontSize: "2rem"}}>
             {single.firstName} { single.lastName}
           
           </p>
           <p>
-          <Progress percent={Number(single.progress)}/>
+          <Progress percent={Math.round(Number(single.progress))}/>
           </p>
           </span>
         ))
@@ -80,11 +91,11 @@ class Dashboard extends Component {
      
       noProgressBar = evaluator.progressBar[1].map((single, index) =>(
         <span key={index} >
-        <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
+        <p className="card-text" style={{marginLeft: "10px", fontWeight: "600", fontSize: "2rem"}}>
           {single.firstName} { single.lastName}
         
         </p>
-        <p>
+        <p style={{marginLeft: "10px"}} >
           
           No assignment has been assigned
         </p>
@@ -109,7 +120,7 @@ class Dashboard extends Component {
 
         <div className="col-sm-6">
         <div className="card" style={{borderRadius: "10px"}}>
-        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Cycles</h2>
+        <h1 className="card-title" style={{padding: "20px", color:"white", background: "#322348", textAlign: "center"}}>Cycles</h1>
         {displayCycle}
         <p style={{textAlign: "center", color: "red", fontSize: "30px"}}> OR </p>
 
@@ -133,7 +144,7 @@ class Dashboard extends Component {
         </div>
         <div className="col-sm-6">
         <div className="card" style={{borderRadius: "10px"}}>
-        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h2>
+        <h1 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h1>
         {displayProgressBar}
 
         <hr />

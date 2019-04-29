@@ -70,21 +70,21 @@ function Statistics(props)
     console.log(achieved);
     let colorToBe;
     if (achieved > target){
-        colorToBe = "success";
+        colorToBe = "bg-success success";
     }
     else if(achieved < target){
-        colorToBe ="danger";
+        colorToBe ="bg-danger danger";
     }
     else {
-        colorToBe="warning";
+        colorToBe="bg-warning warning";
     }
     return <div>
             {props.measure.totalEvaluated !== 0 ? 
-                <Alert color={colorToBe}>
+                <div class={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                 evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
-                    (props.measure.Target_Score * 100) + "%")}.</span></Alert> : null}
-            <Alert color="info"> {props.measure.totalEvaluated} subjects have been evaluated.</Alert>
+                    (props.measure.Target_Score * 100) + "%")}.</span></div> : null}
+            <div class="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
             </div>
 }
 
@@ -169,7 +169,7 @@ export default class ViewSummary extends Component
             return (
                 <div>
                    <div>
-                    <h1>{this.state.programSummary.title}</h1>
+                    <h2>{this.state.programSummary.title}</h2>
                 
                     <Table 
                         bordered

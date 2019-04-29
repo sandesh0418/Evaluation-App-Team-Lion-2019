@@ -9,3 +9,33 @@
 .italic {
     font-style: italic;
 }
+.danger,.info,.success,.warning {
+    border-radius: 10px !important;
+    margin:8px 0;
+    padding: 5px;
+}
+
+card{
+    box-shadow: 10px 11px 20px 0 hsla(0,0%,80.8%,.75);
+}
+
+#dropdownSize1, #dropdownSize2{
+    padding: 0;
+    font-size: 17px !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px;
+}
+ 
+#dropdownMenu{
+    width:240px !important;
+}
+
+#mainDropdown{
+    padding:7px;
+    margin-bottom: 5px;
+}
+
+.dangerButton{
+    white-space: nowrap;
+}

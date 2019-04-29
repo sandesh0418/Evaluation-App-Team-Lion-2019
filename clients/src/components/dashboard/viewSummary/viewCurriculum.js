@@ -12,6 +12,7 @@ function CurriculumList(props) {
         <div className="col-3" class="testColums">
           {props.editMode ? (
             <input
+            class="curiculumInput"
               type="text"
               id={c.courseId}
               maxLength="4"
@@ -27,6 +28,7 @@ function CurriculumList(props) {
         <div className="col-3" class="testColums">
           {props.editMode ? (
             <input
+            class="curiculumInput"
               type="number"
               id={c.courseId}
               min="0"
@@ -42,7 +44,7 @@ function CurriculumList(props) {
         </div>
         <div className="col-3" class="testColums">
           {props.editMode ? (
-            <input
+            <input class="curiculumInput"
               type="text"
               id={c.courseId}
               min="0"
@@ -57,7 +59,7 @@ function CurriculumList(props) {
         </div>
         <div className="col-3" class="testColums">
           {props.editMode ? (
-            <input
+            <input class="curiculumInput"
               type="number"
               id={c.courseId}
               min="0"

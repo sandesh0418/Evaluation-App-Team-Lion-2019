@@ -92,7 +92,7 @@ class Cycle extends Component {
                         border: "1px solid rgba(128, 128, 128, 0.32)", 
                         borderRadius: "15px", 
                         margin: "150px 0"}} onSubmit={this.onSubmit.bind(this)}
-                         className="container">
+                         className="container" id ="main" style={{margin: "0 auto"}}>
         
         <input onChange={this.onChange.bind(this)}
                 value ={this.state.cycleName}
@@ -132,13 +132,15 @@ class Cycle extends Component {
              
          {this.state.migrate ? " " : <button
                   style={{
-                    width: "150px",
+                    width: "215px",
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
-                    marginTop: "1rem"
+                    marginTop: "1rem",
+                    whiteSpace: "nowrap",
+                    padding: "2px"
                   }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
+                  className="btn btn-primary"
                 >
                   Start as a new cycle
                 </button>}
@@ -151,10 +153,11 @@ class Cycle extends Component {
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                     marginTop: "1rem",
-                    marginLeft: "10px"
+                    marginLeft: "10px",
+                    whiteSpace: "nowrap"
                   }}
                   onClick={this.onClick}
-                  className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
+                  className="btn btn-primary"
                 >
                   Migrate Cycle
                 </button> }
@@ -165,10 +168,11 @@ class Cycle extends Component {
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                     marginTop: "1rem",
-                    marginLeft: "10px"
+                    marginLeft: "10px",
+                    whiteSpace: "nowrap"
                   }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable cornblue accent-3"
+                  className="btn btn-primary"
                 >
                   Submit
                 </button> : " " }
