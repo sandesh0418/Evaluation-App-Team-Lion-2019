@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import CreateMessage from './createMessage.js';
+import DisplayMessages from './displaySentMessages.js';
 
 export default class MessageBroadcastComponent extends Component 
 {
@@ -18,6 +19,7 @@ export default class MessageBroadcastComponent extends Component
                 <h1>Create Message</h1>
                 <CreateMessage />
                 <h1>Sent Messages</h1>
+                <DisplayMessages />
             </>
         )
     }

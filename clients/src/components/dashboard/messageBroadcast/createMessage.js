@@ -74,16 +74,21 @@ export default class CreateMessage extends Component
 
         if (this.state.recipients.includes("all"))
         {
-            recipients = this.state.evaluatorList;
+            recipients = this.state.evaluatorList.map(e => {
+                return e.email;
+            });
         }
         else
         {
             recipients = this.state.recipients
         }
 
+        let d = new Date();
+        d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+
         let newMessage = {
             senderEmail: localStorage.getItem("email"),
-            dateTime: new Date(),
+            dateTime: d,
             messageSubject: this.state.messageSubject,
             message: this.state.message,
             recipients: recipients
@@ -130,7 +135,7 @@ export default class CreateMessage extends Component
                     <div className="form-group">
                         <label>Message</label>
                         <textarea className="form-control" name="message" onChange={this.handleInputChange} value={this.state.message} 
-                        rows="7" style={textareaStyle} required />
+                        rows="7" style={textareaStyle} />
                     </div>
                     <div className="form-group">
                         <input className="btn btn-success" type="submit" value="Send Message" />

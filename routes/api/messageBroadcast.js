@@ -28,13 +28,37 @@ router.post('/postMessage', (req, res) => {
         }
         else
         {
-            /* res.status(200).json({
-                status: true,
-                message: "The message was posted."
-            }) */
             insertMessageRecipients(req, res, message);
         }
     })
+
+    function insertMessageRecipients(req, res, message)
+    {
+        let values = message.recipients.map(r => {
+            return format("('{senderEmail}', '{dateTime}', ", message) + format("'{}')", r);
+        })
+
+        let queryInsertMessageRecipients = "INSERT INTO message_recipients (Sender_Email, Date_Time, Recipient_Email) " + 
+            "VALUES " + values.join();
+
+        connection.query(queryInsertMessageRecipients, (error, results, fields) => {
+            if (error)
+            {
+                res.status(400).json({
+                    status: false,
+                    error: error,
+                    message: "The message could not be posted."
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    status: true,
+                    message: "The message was posted."
+                })
+            }
+        })
+    }
 })
 
 module.exports = router;
