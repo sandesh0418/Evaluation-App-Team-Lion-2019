@@ -92,7 +92,7 @@ class Cycle extends Component {
                         border: "1px solid rgba(128, 128, 128, 0.32)", 
                         borderRadius: "15px", 
                         margin: "150px 0"}} onSubmit={this.onSubmit.bind(this)}
-                         className="container">
+                         className="container" id ="main" style={{margin: "0 auto"}}>
         
         <input onChange={this.onChange.bind(this)}
                 value ={this.state.cycleName}

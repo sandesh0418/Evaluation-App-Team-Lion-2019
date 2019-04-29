@@ -34,21 +34,29 @@ router.post("/register", (req, res) => {
     function (error, results, fields) {
       if (isEmpty(results)) {
         return res.status(400).json({ email: "This email has not been invited. Please contact your supervisor" });
-      } else {
+      } 
+      
+      
+      else {
+
+        if(results[0].password === null){
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(req.body.password, salt, (err, hash) => {
             const newUser = {
-              cwid: req.body.cwid,
+              
               firstName: req.body.firstName,
               lastName: req.body.lastName,
               email: req.body.email,
               password: hash
             };
-            if (err) throw err;
-            var cwid = newUser.cwid;
 
-            if (cwid.length == 8) {
-              config.query("UPDATE users SET  cwid = ?, firstName =?, lastName=?, password=? where email=? and password = NULL", [newUser.cwid, newUser.firstName, newUser.lastName, newUser.password, newUser.email], function(
+            
+            if (err) throw err;
+            
+
+           
+              config.query("UPDATE users SET  firstName = ?, lastName= ?, password= ? where email=?",
+               [newUser.firstName, newUser.lastName, newUser.password, newUser.email], function(
                 error,
                 results,
                 fields
@@ -56,12 +64,17 @@ router.post("/register", (req, res) => {
                 if (error) {
                   console.log(error);
                 } else {
-                  res.json(newUser);
+                  res.json("You have been registered");
                 }
               });
-            }
+            
           });
         });
+      }
+
+      else{
+        return res.status(400).json({ email: "This email has already been registered" });
+      }
       }
     }
   );
