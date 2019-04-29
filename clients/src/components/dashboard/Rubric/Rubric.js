@@ -34,7 +34,8 @@ class CreateRubric extends Component{
           errors: nextProps.errors
         });
       }
-      if(nextProps.rubric){
+     
+      else if(nextProps.rubric !== null){
         
         window.location.replace("/createRubric/"+this.state.Rubric_Id)
           
