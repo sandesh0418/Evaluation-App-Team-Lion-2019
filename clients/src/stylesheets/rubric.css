@@ -33,7 +33,7 @@
     border-radius: 2px;
   }
   th {
-    background-color: sandybrown !important;
+    background-color: #02bebd42 !important ;
     padding: 7px;
   }
 
@@ -78,7 +78,7 @@
     border-radius: 2px;
   }
   th {
-    background-color: palegoldenrod !important;
+    background-color: #02bebd42 !important;
     padding: 7px;
   }
   textarea {
