@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import Table from 'react-bootstrap/Table';
 
 
 function ListDisplay(props)
@@ -9,18 +10,24 @@ function ListDisplay(props)
     var listItems = '';
     
     if(list != null){
-    listItems = list.map((number, index) =>
-        <li key={index}><Link to ={"/viewRubric/"+number.Rubric_Id}>{number.Rubric_Title}</Link></li>
+    return list.map(function(number, index){
+       return ( 
+         <tr key={index}>
+            <td >{number.Rubric_Title}</td>
+            <td ><Link to ={"/viewRubric/"+number.Rubric_Id}><i class="far fa-eye"> View</i></Link></td>
+            </tr>
+       );
+    }
     );
     }
     else{
         
-        listItems = <div className="text-danger">You do not have any rubrics</div>
+        return (<div className="text-danger">You do not have any rubrics</div>);
     }
 
-    return (
-        <ol>{listItems}</ol>
-    )
+    // return (
+    //     {listItems}
+    // )
 }
 
 
@@ -53,7 +60,17 @@ export default class RubricList extends Component
         return(
             <div>
                 <h1>Rubric List</h1>
-                <ListDisplay rubrics = {this.state.rubrics} />
+                <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl" id="viewTable">
+                    <thead>
+                        <tr id ="criteria"> 
+                            <th>Rubric Title</th>
+                            <th>Link to Rubric</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                { <ListDisplay rubrics = {this.state.rubrics} /> }
+                </tbody>
+                </Table>
             </div>
         );
     }
