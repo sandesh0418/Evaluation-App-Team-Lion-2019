@@ -24,10 +24,10 @@ render()
             <Navbar.Toggle aria-controls="basic-navbar-nav"  />
             <Navbar.Collapse id="responsive-navbar-nav" >
                 <Nav className="ml-auto" >
-                    <Nav.Link href="/admin">Add Coordinator</Nav.Link>
-                    <Nav.Link href="/viewCoordinator">View Coordinators</Nav.Link>
-                    <Nav.Link href="/departments">Departments</Nav.Link>
-                    <NavDropdown title={User()}>
+                    <Nav.Link href="/admin" style={{marginRight: "20px"}}>Add Coordinator</Nav.Link>
+                    <Nav.Link href="/viewCoordinator" style={{marginRight: "20px"}}>View Coordinators</Nav.Link>
+                    <Nav.Link href="/departments" style={{marginRight: "20px"}}>Departments</Nav.Link>
+                    <NavDropdown title={User()} style={{marginRight: "50px", width: "100%"}}>
                         <Nav.Link href="/editProfile">Change Password</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
                     </NavDropdown>

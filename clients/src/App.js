@@ -14,7 +14,6 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
-import EvaluatorDashboard from "./components/dashboard/Dashboard/EvaluatorDashboard";
 import NavBar from "../src/components/layout/Navbar";
 import ViewRubric from "./components/dashboard/Rubric/rubricView";
 import ViewSummary from "./components/dashboard/viewSummary/viewSummary.js";
@@ -101,7 +100,7 @@ class App extends Component {
                   <PrivateRoute exact path="/Rubric" component={Rubric} />
                   <PrivateRoute exact path="/rubricList" component={RubricList} />
                   <PrivateRoute exact path="/createRubric/:rubricId" component={CreateRubric} />
-                  <PrivateRoute exact path="/evaluatorDashboard" component={EvaluatorDashboard} />
+                  
                   <PrivateRoute exact path="/editProgramSummary" component={EditProgramSummary} />
                   <PrivateRoute exact path="/createAssignment" component={CreateAssignment} />
                   <PrivateRoute exact path="/viewEvaluator" component={ViewEvaluator} />
