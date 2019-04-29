@@ -8,6 +8,10 @@
  
 }
 
+body{
+    background-color: #d3d3d391
+}
+
 input[type=text], #email, #password, #firstName, #lastName, #cwid,#password2, #currentpassword{
     width: 100%;
     padding: 12px 20px;

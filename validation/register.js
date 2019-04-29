@@ -5,17 +5,14 @@ module.exports = function validateRegisterInput(data) {
   let errors = {};
 
   // Convert empty fields to an empty string so we can use validator functions
-  data.cwid = !isEmpty(data.cwid) ? data.cwid : "";
+
   data.firstName = !isEmpty(data.firstName) ? data.firstName : "";
-  data.lastName = !isEmpty(data.firstName) ? data.lastName : "";
+  data.lastName = !isEmpty(data.lastName) ? data.lastName : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
 
 
-  if (Validator.isEmpty(data.cwid)) {
-    errors.cwid = "CWID is required";
-  }
 
   
 
