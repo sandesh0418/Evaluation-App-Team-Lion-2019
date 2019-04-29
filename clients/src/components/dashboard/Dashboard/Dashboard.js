@@ -95,7 +95,7 @@ class Dashboard extends Component {
           {single.firstName} { single.lastName}
         
         </p>
-        <p style={{marginLeft: "10px"}} >
+        <p style={{marginLeft: "20px"}} >
           
           No assignment has been assigned
         </p>
@@ -126,7 +126,7 @@ class Dashboard extends Component {
 
         <button
                   style={{
-                    width: "150px",
+                    
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                     margin: "1rem auto"

@@ -59,7 +59,7 @@ export default class RubricList extends Component
         
         return(
             <div>
-                <h1>Rubric List</h1>
+                <h2>Rubric List</h2>
                 <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl" id="viewTable">
                     <thead>
                         <tr id ="criteria"> 
