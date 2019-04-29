@@ -28,18 +28,33 @@ class CreateRubric extends Component{
     }
 
     componentWillReceiveProps(nextProps){
+     
+      if (nextProps.rubric !== this.props.rubric) {
+       
+        
+        
+          window.location.replace("/createRubric/"+this.state.Rubric_Id)
+            
+      
+       
+      }
 
-      if (nextProps.errors) {
+      else{
         this.setState({
           errors: nextProps.errors
         });
       }
+
+      
+
      
-      else if(nextProps.rubric !== null){
-        
-        window.location.replace("/createRubric/"+this.state.Rubric_Id)
-          
-    }
+     
+
+
+      
+
+     
+    
   }
 
  
