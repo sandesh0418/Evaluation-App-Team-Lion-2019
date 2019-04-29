@@ -63,9 +63,19 @@ h4 {
    
     
   }
+  #main{
+    padding: 40px !important;
+    position: relative;
+    bottom: 5rem;
+    white-space: nowrap;
+  }
 
   .landing{
     position: fixed;
+  }
+  
+  #title{
+    font-size: 20px;
   }
 }
 

@@ -24,16 +24,18 @@
 
 .jumbotro{
     width: 100%;
-    padding: 40px;
+   
     background-color: transparent;
 }
 
 .complete, .incomplete{
-  border: 5px solid silver !important;
+  border: 2px solid silver !important;
+  
   box-shadow: -1px 11px 20px 0 hsla(0,0%,80.8%,.75) !important;
   padding: 20px;
   
   overflow-y: auto;
+  overflow-x: hidden;
    height: 100vh;
   
 }
@@ -47,4 +49,11 @@
 
 #heading{
   margin-bottom: 20px !important;
+}
+
+
+@media only screen and (max-width: 900px){
+  .card-text{
+    font-size: 1rem !important;
+  }
 }

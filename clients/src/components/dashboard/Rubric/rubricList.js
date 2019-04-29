@@ -14,7 +14,7 @@ function ListDisplay(props)
        return ( 
          <tr key={index}>
             <td >{number.Rubric_Title}</td>
-            <td ><Link to ={"/viewRubric/"+number.Rubric_Id}><i class="far fa-eye"> View</i></Link></td>
+            <td ><Link to ={"/viewRubric/"+number.Rubric_Id}><i className="far fa-eye"> View</i></Link></td>
             </tr>
        );
     }

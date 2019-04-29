@@ -63,6 +63,7 @@ function ListDisplay(props)
     }
 
     let id = (props.finished ? "complete" : "incomplete");
+
         
     return (
         <div id={id}>
@@ -192,7 +193,7 @@ export default class RubricList extends Component
         {
             return(
                 <div>
-                    <h1 style={{textAlign: "center", paddingBottom: "40px"}}>My Assignments</h1>
+                    <h2 >My Assignments</h2>
                     <div className="row">
                         {this.state.assignments !== [] ? 
                             <>
