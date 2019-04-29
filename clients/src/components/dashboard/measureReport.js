@@ -127,8 +127,7 @@ function CriteriaAverages(props) {
 
     props.subjectList.forEach(s => {
       s.evaluators.forEach(e => {
-        totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle)
-          .score;
+        totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
         totalSubjects++;
       });
     });
@@ -163,12 +162,11 @@ export default class CreateAssignment extends Component {
     Axios.get(
       "/api/measureReport/measureReport/" + this.props.match.params.measureId
     ).then(res => {
+      console.log(res.data.measure);
       this.setState({
         measure: res.data.measure
       });
       this.calculateOverallAverage();
-      console.log(this.state.overallAverage);
-      console.log("just logged it");
     });
   }
 
