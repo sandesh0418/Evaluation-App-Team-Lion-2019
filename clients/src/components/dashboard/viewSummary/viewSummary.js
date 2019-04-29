@@ -169,7 +169,7 @@ export default class ViewSummary extends Component
             return (
                 <div>
                    <div>
-                    <h2>{this.state.programSummary.title}</h2>
+                    <h2 id="heading">{this.state.programSummary.title}</h2>
                 
                     <Table 
                         bordered

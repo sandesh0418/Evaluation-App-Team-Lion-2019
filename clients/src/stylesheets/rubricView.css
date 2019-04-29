@@ -67,9 +67,23 @@ h2 {
     border-top: 1px solid #dee2e6;
     text-align: center !important;
     overflow-x: auto !important;
+    border: 3px solid black;
 ;
 }
 
 #createRubric{
     overflow-x: auto !important;
+}
+
+.table-bordered thead td, .table-bordered thead th, tr, tr td {
+ border: 3px solid black !important; 
+}
+
+#unique{
+  margin-bottom: 20px !important;
+}
+
+.editButton{
+  padding-top: 5px !important;
+  
 }

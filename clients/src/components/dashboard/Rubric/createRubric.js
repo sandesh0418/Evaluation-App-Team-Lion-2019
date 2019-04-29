@@ -113,7 +113,7 @@ class createRubric extends Component {
             className="measureTitle centerAlign cells"
             style={{ width: "100%" }}
           />
-          Value- {singleValue.Value_Number}
+          Value: {singleValue.Value_Number}
         </th>
       ));
 
@@ -224,6 +224,7 @@ class createRubric extends Component {
             Rubric title cannot be empty
           </p>
         )}
+       
         <input
           type="text"
           defaultValue={this.state.rubricTitle}
@@ -233,7 +234,8 @@ class createRubric extends Component {
             width: "25%",
             margin: "30px 37.5%",
             border: "2px solid #dee2e6",
-            textAlign: "center"
+            textAlign: "center",
+            border: "2px solid black"
           }}
         />
         {this.state.weight ? null : (
@@ -274,12 +276,12 @@ class createRubric extends Component {
             borderRadius: "3px",
             letterSpacing: "1.5px",
             marginTop: "1rem",
-            padding: "15px"
+            padding: "5px"
           }}
           type="submit"
           className="btn btn-large btn-success waves-effect waves-light hoverable"
         >
-          Save
+          <i class="far fa-save"></i> Save
         </button>
       </Form>
     );

@@ -175,8 +175,7 @@ export default class CreateAssignment extends Component
             <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                     <label>Add additional subjects from .csv file: </label>
-                    <input type="file" className="form-control-file" ref={this.fileInput} onChange={this.changeFile}/>
-                    {this.state.showFileAlert ? <p className="text-danger">Invalid File</p>: null}
+                  <input type="file" className="form-control-file" style={{marginLeft: "20%"}}ref={this.fileInput} onChange={this.changeFile}/>
                 </div>
                 <div className="form-group">
                     <ManualStudentEntry formData={this.state.manualStudentEntry} onChange={this.updateManualStudentEntry} />
