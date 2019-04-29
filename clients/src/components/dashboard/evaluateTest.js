@@ -118,7 +118,9 @@ export default class EvaluateTest extends Component
                 else
                 {
                     alert(res.data.message);
+                   
                 }
+                window.location.replace("/myAssignments")
             });
     }
 
