@@ -42,10 +42,10 @@ class Dashboard extends Component {
     if(cycles.inProgressCycles != null){
 
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
-        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
+        <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600", fontSize:"2rem"}}>
           {singleCycle.Cycle_Name}
 
-          {singleCycle.Cycle_Id === localStorage.Cycle_Id ? "" :
+          {singleCycle.Cycle_Id === localStorage.Cycle_Id ? <span style={{color: "green", float: "right"}}>Active Cycle</span> :
             <button type="button" className="btn btn-secondary" 
             style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}
             onClick={this.onClick}
@@ -56,8 +56,8 @@ class Dashboard extends Component {
         </p>
       ))
 
-      if(displayCycle===''){
-        displayCycle = <span>You do not have any active cycle</span>
+      if(cycles.inProgressCycles.length == 0 ){
+        displayCycle = <span style={{textAlign: "center", color: "grey", fontSize: "2rem"}}>You do not have any active cycle</span>
       }
 
     }
@@ -95,7 +95,7 @@ class Dashboard extends Component {
           {single.firstName} { single.lastName}
         
         </p>
-        <p >
+        <p style={{marginLeft: "10px"}} >
           
           No assignment has been assigned
         </p>
