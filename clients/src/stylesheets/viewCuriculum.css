@@ -26,3 +26,9 @@
     text-align: center;
 }
 
+@media only screen and (max-width: 769px) {
+    .popup1{
+        width:90% !important;
+        left: 5% !important;
+    }
+}
