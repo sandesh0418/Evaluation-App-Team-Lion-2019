@@ -85,8 +85,7 @@ export default class OutcomeCurriculum extends Component
         {
             let tempCourses = this.state.courses;
             let course = this.state.curriculumList.find(c => c.courseId === this.state.chosenCourseId)
-            console.log(this.state.chosenCourseId);
-            console.log(this.state.courses);
+           
             tempCourses.push({
                 departmentCode: course.departmentCode,
                 courseCode: course.courseCode,
