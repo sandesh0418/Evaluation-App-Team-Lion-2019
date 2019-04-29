@@ -228,11 +228,11 @@ export default class CreateAssignment extends Component {
         ) * 100;
       let colorToBe;
       if (achieved > target) {
-        colorToBe = "success";
+        colorToBe = "bg-success";
       } else if (achieved < target) {
-        colorToBe = "danger";
+        colorToBe = "bg-danger";
       } else {
-        colorToBe = "warning";
+        colorToBe = "bg-warning";
       }
       return (
         <>
