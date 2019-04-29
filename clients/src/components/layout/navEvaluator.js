@@ -27,9 +27,9 @@ class NavBar extends Component
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    
+               
                     <Nav.Link href="/myAssignments"  style={{marginRight: "20px"}}>My Assignments</Nav.Link>
-                    <Nav.Link href="/receivedMessages"  style={{marginRight: "20px"}}>Messages</Nav.Link>
+                    <Nav.Link href="/receivedMessages"  style={{marginRight: "20px", top: "5px"}}> <i className="fas fa-bell" style={{color: "white"}}></i></Nav.Link>
                     <NavDropdown title={User()}  style={{marginRight: "20px"}}>
                         <Nav.Link href="/editProfile" >Change Password</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>

@@ -16,7 +16,7 @@ export default class MessageBroadcastComponent extends Component
     {
         return(
             <>
-                <h1>Create Message</h1>
+                <h2>Create Message</h2>
                 <CreateMessage />
                 <DisplayMessages />
             </>
