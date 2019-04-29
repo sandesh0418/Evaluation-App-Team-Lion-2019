@@ -42,6 +42,7 @@ class Dashboard extends Component {
     if(cycles.inProgressCycles != null){
 
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
+        
         <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600", fontSize:"2rem"}}>
           {singleCycle.Cycle_Name}
 
@@ -52,8 +53,9 @@ class Dashboard extends Component {
             id={singleCycle.Cycle_Id}
             >
               Enter Cycle</button>}
-        <hr/>
+              <hr/>
         </p>
+        
       ))
 
       if(cycles.inProgressCycles.length == 0 ){
@@ -82,9 +84,9 @@ class Dashboard extends Component {
             {single.firstName} { single.lastName}
           
           </p>
-          <p>
+          <div>
           <Progress percent={Math.round(Number(single.progress))}/>
-          </p>
+          </div>
           </span>
         ))
       

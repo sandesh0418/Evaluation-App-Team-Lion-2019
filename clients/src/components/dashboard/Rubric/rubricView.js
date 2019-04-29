@@ -319,7 +319,7 @@ export default class ViewRubric extends Component
                 className="btn btn-large waves-effect waves-light hoverable blue accent-3 editButton"
                 >
 
-               <i class="fas fa-edit"></i> Edit 
+               <i className="fas fa-edit"></i> Edit 
                 </a>
             </div>
         }

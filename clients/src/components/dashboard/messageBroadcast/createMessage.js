@@ -9,8 +9,8 @@ const textareaStyle = {
 
 function Evaluators(props)
 {
-    return props.evaluatorList.map(e => {
-        return <option value={e.email}>{e.firstName + " " + e.lastName}</option>
+    return props.evaluatorList.map((e, index) => {
+        return <option value={e.email} key={index}>{e.firstName + " " + e.lastName}</option>
     })
 }
 

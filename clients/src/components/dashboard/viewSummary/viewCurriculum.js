@@ -6,13 +6,13 @@ import uuid from "uuid/v1";
 import "../../../stylesheets/viewCuriculum.css";
 
 function CurriculumList(props) {
-  return props.curriculum.map(c => {
+  return props.curriculum.map((c, index) => {
     return (
-      <div className="row">
-        <div className="col-3" class="testColums">
+      <div className="row" key={index}>
+        <div className="col-3" className="testColums">
           {props.editMode ? (
             <input
-            class="curiculumInput"
+            className="curiculumInput"
               type="text"
               id={c.courseId}
               maxLength="4"
@@ -25,10 +25,10 @@ function CurriculumList(props) {
             c.departmentCode
           )}
         </div>
-        <div className="col-3" class="testColums">
+        <div className="col-3" className="testColums">
           {props.editMode ? (
             <input
-            class="curiculumInput"
+            className="curiculumInput"
               type="number"
               id={c.courseId}
               min="0"
@@ -42,9 +42,9 @@ function CurriculumList(props) {
             c.courseCode
           )}
         </div>
-        <div className="col-3" class="testColums">
+        <div className="col-3" className="testColums">
           {props.editMode ? (
-            <input class="curiculumInput"
+            <input className="curiculumInput"
               type="text"
               id={c.courseId}
               min="0"
@@ -57,9 +57,9 @@ function CurriculumList(props) {
             c.name
           )}
         </div>
-        <div className="col-3" class="testColums">
+        <div className="col-3" className="testColums">
           {props.editMode ? (
-            <input class="curiculumInput"
+            <input className="curiculumInput"
               type="number"
               id={c.courseId}
               min="0"
@@ -80,7 +80,7 @@ function CurriculumList(props) {
             className="btn btn-danger btn-sm button3"
             onClick={props.editCourse}
           >
-            Delete Course
+            <i className="far fa-trash-alt"></i> Delete Course
           </button>
         ) : null}
       </div>
@@ -200,20 +200,20 @@ export default class ViewSummary extends Component {
             <div className="row">
               <h2 id="cyclecuriculum">Cycle Curriculum</h2>
             </div>
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} style={{margin: "0 auto"}}>
               {this.state.curriculum.length > 0 ? (
                 <>
                   <div className="row">
-                    <div className="col-3" class="testColums">
+                    <div className="col-3" className="testColums">
                       Department Code
                     </div>
-                    <div className="col-3" class="testColums">
+                    <div className="col-3" className="testColums">
                       Course Code
                     </div>
-                    <div className="col-3" class="testColums">
+                    <div className="col-3" className="testColums">
                       Course Name
                     </div>
-                    <div className="col-3" class="testColums">
+                    <div className="col-3" className="testColums">
                       Credit Hours
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default class ViewSummary extends Component {
                   />
                 </>
               ) : (
-                <p>There is no curriculum associated with this cycle.</p>
+                <p style={{textAlign: "center"}}>There is no curriculum associated with this cycle.</p>
               )}
 
               {this.state.editMode ? (
@@ -232,21 +232,23 @@ export default class ViewSummary extends Component {
                   <div className="mb-3" id="button1">
                     <button
                       type="button"
-                      className="btn btn-secondary"
+                      className="btn btn-success"
                       onClick={this.addCourse}
                     >
-                      Add Course
+                      <i className="fas fa-plus"></i> New Course
                     </button>
                   </div>
-                  <div id="button2">
+                  <div id="button2" style={{padding: "20px"}}>
                     <input
-                      className="btn btn-success mr-3"
+                      className="btn btn-secondary mr-3"
+                      style={{marginTop: "0"}}
                       type="submit"
                       value="Save Changes"
                     />
                     <button
                       type="button"
                       className="btn btn-danger"
+                      
                       onClick={this.cancel}
                     >
                       Cancel
@@ -263,7 +265,7 @@ export default class ViewSummary extends Component {
                     onClick={this.handleInput}
                     style={{ margin: "0 auto !important" }}
                   >
-                    Edit Curriculum
+                    <i className="fas fa-edit"></i> Edit Curriculum
                   </button>
                 </div>
               )}

@@ -66,20 +66,20 @@ const Outcome = props => {
                     : null}
                 <Dropdown id="mainDropdown">
           <Dropdown.Toggle variant="success" id="dropdown-basic1">
-            <i class="fas fa-plus-circle"> Add Measure</i>
+            <i className="fas fa-plus-circle"> Add Measure</i>
           </Dropdown.Toggle>
           <Dropdown.Menu id="dropdownMenu">
           <Dropdown.Item id= "dropdownSize1"
             onSelect={props.handleAddTestMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
-            <i class="fas fa-plus-circle"> Add Test Measure</i>
+            <i className="fas fa-plus-circle"> Add Test Measure</i>
           </Dropdown.Item>
           <Dropdown.Item id = "dropdownSize2"
             onSelect={props.handleAddRubricMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
-            <i class="fas fa-plus-circle"> Add Rubric Measure</i>
+            <i className="fas fa-plus-circle"> Add Rubric Measure</i>
           </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -409,9 +409,9 @@ export default class EditProgramSummary extends Component
                     curriculumList={this.state.curriculum}
                     changeCurriculum={this.changeCurriculum}
                 />
-                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i class="fas fa-plus-circle"> 
+                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i className="fas fa-plus-circle"> 
 Add Outcome</i> </button>
-                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i class="far fa-save"> Save Changes </i></button></div>
+                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i className="far fa-save"> Save Changes </i></button></div>
                 {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                             closePopup={this.closePopup} 
                                                             submit={this.addNewMeasure}

@@ -205,11 +205,9 @@ class createRubric extends Component {
       }
     } else {
       load = (
-        <tbody>
-          <tr>
+        
             <Loader type="Oval" color="black" height="100" width="100" />
-          </tr>
-        </tbody>
+        
       );
     }
 
@@ -219,7 +217,7 @@ class createRubric extends Component {
           <p className="alert alert-danger text-center">
             <i
               style={{ paddingRight: "10px", fontSize: "20px" }}
-              class="fas fa-exclamation-triangle"
+              className="fas fa-exclamation-triangle"
             />
             Rubric title cannot be empty
           </p>
@@ -242,11 +240,12 @@ class createRubric extends Component {
           <p className="alert alert-danger text-center">
             <i
               style={{ paddingRight: "10px", fontSize: "20px" }}
-              class="fas fa-exclamation-triangle"
+              className="fas fa-exclamation-triangle"
             />
             Rubric has not been saved!!! Total weight is not 100% !!
           </p>
         )}
+        {load}
         <Table
           bordered
           striped
@@ -257,7 +256,7 @@ class createRubric extends Component {
           //   responsive="xl"
           id="createRubric"
         >
-          {load}
+          
           <thead>
             <tr>
               {/* className="centered borderedCell" */}
@@ -281,7 +280,7 @@ class createRubric extends Component {
           type="submit"
           className="btn btn-large btn-success waves-effect waves-light hoverable"
         >
-          <i class="far fa-save"></i> Save
+          <i className="far fa-save"></i> Save
         </button>
       </Form>
     );
