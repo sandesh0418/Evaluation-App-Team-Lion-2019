@@ -216,7 +216,7 @@ export default class ViewRubric extends Component
                             userEmail: localStorage.getItem('email'),
                             subjectId: this.state.subjectId,
                             scores: scores,
-                        Assignment_ID: this.props.match.params.assignment};
+                            Assignment_ID: this.props.match.params.assignment};
 
         axios.post('/api/scoreSubmission/rubricScore', subjectScore)
         .then(res => {

@@ -7,7 +7,7 @@ const secret = require('../../config/keys');
 
 router.post('/rubricScore', passport.authenticate("jwt", { session:false }), (req, res) => {
 
-    let standardIds = "'" + req.body.measureId + "', '" + req.body.subjectId + "', '" + req.body.userEmail + "', '" +req.body.Assignment_ID +"'";
+    let standardIds = "'" + req.body.measureId + "', '" + req.body.subjectId + "', '" + req.body.userEmail + "', '" + req.body.Assignment_ID +"'";
     
     let scoresToInsert = "";
     for (let i = 0; i < req.body.scores.length; i++)

@@ -127,6 +127,7 @@ function CriteriaAverages(props) {
 
     props.subjectList.forEach(s => {
       s.evaluators.forEach(e => {
+        console.log("Score critieria title: " + s.criteriaTitle + " .Criteria title: "  + c.criteriaTitle);
         totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
         totalSubjects++;
       });
