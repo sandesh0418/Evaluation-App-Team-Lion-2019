@@ -303,22 +303,23 @@ export default class ViewRubric extends Component
         else
         {
             editRubricButton = <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <a href="#"
+                <a href="#" 
                 style={{
                     width: "150px",
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                     marginTop: "1rem",
-                    padding: "15px",
+                    paddingTop: "15px",
                     textAlign: "center",
                     align: "center"
                 }}
                 id ={this.state.Rubric_Id}
                 onClick={this.EditRubric}
 
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                className="btn btn-large waves-effect waves-light hoverable blue accent-3 editButton"
                 >
-                Edit 
+
+               <i class="fas fa-edit"></i> Edit 
                 </a>
             </div>
         }
@@ -332,7 +333,7 @@ export default class ViewRubric extends Component
             <div>
                 {/* <h1>Rubric</h1> */}
                 <div>
-                    <h2 className="mr-4">{this.state.gradeMode ? "Grade" : null}Viewing Rubric: {this.state.rubric.rubric_title}</h2>
+                    <h2 className="mr-4" id="unique">{this.state.gradeMode ? "Grade" : null}Viewing Rubric: {this.state.rubric.rubric_title}</h2>
                     {this.state.gradeMode ? 
                         <SubjectSelector 
                             subjectList={this.state.subjectList} 

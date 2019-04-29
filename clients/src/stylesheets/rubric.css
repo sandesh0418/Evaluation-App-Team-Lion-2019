@@ -12,6 +12,7 @@
   .table {
     scroll-behavior: auto;
     overflow-x: auto !important;
+   
   }
   .table td,
   .table th{

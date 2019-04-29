@@ -11,7 +11,7 @@ function ListDisplay(props)
 
     let list = props.assignments.map(a => {
         return (
-            <div className="m-3 p-3 border rounded" key={a.assignmentId}>
+            <div className="m-3 p-3 border rounded" key={a.assignmentId} > 
                 <p className="h5">{"Outcome name: " + a.outcomeName}</p>
                 <div>{"Outcome description: " + a.outcomeDescription}</div>
                 <p className="h5">{"Measure name: " + a.measureName}</p>
@@ -59,14 +59,14 @@ function ListDisplay(props)
     }
     else
     {
-        display = <p>There are no {id} assignments.</p>
+        display = <p style={{padding: "10px", textAlign: "center"}}>There are no {id} assignments.</p>
     }
 
     let id = (props.finished ? "complete" : "incomplete");
         
     return (
         <div id={id}>
-            <h2>{type + " Assignments"}</h2>
+            <h2 style={{paddingBottom: "10px"}}>{type + " Assignments"}</h2>
             {display}
         </div>
     )
@@ -123,7 +123,7 @@ export default class RubricList extends Component
         let subjectId_type = e.target.id.split("/");
         let assignmentId = e.target.name;
         let tempAssignments = this.state.assignments;
-        console.log(tempAssignments);
+        
         let assignmentIndex;
         let subjectIndex;
 
@@ -192,12 +192,12 @@ export default class RubricList extends Component
         {
             return(
                 <div>
-                    <h1>My Assignments</h1>
+                    <h1 style={{textAlign: "center", paddingBottom: "40px"}}>My Assignments</h1>
                     <div className="row">
                         {this.state.assignments !== [] ? 
                             <>
                                 {/* show incomplete assignments */}
-                                <div className="col-sm-6">
+                                <div className="col-sm-6 complete">
                                 <ListDisplay
                                     finished={false} 
                                     assignments={this.state.assignments.incomplete} 
@@ -206,7 +206,7 @@ export default class RubricList extends Component
                                 />
                                 </div>
                                 {/* show complete assignments */}
-                                <div className="col-sm-6">
+                                <div className="col-sm-6 incomplete">
                                 <ListDisplay
                                     finished={true} 
                                     assignments={this.state.assignments.complete} 
