@@ -71,7 +71,7 @@ class EditProfile extends Component {
           <div className="col s8 offset-s2">
             <div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <h4>
-                <b>Change your password below</b> 
+                <b>CHANGE YOUR PASSWORD BELOW!</b> 
               </h4>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
