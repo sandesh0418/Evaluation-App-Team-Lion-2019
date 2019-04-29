@@ -17,6 +17,12 @@ class Dashboard extends Component {
   onClickNewCycle(e){
     window.location.replace("/cycle");
   }
+
+  onClick(e){
+    localStorage.removeItem("Cycle_Id");
+    localStorage.setItem("Cycle_Id", e.target.id);
+    window.location.replace("/dashboard");
+  }
   
 
   render() {
@@ -38,9 +44,14 @@ class Dashboard extends Component {
       displayCycle = cycles.inProgressCycles.map((singleCycle, index) =>(
         <p className="card-text" key={index} style={{marginLeft: "10px", fontWeight: "600"}}>
           {singleCycle.Cycle_Name}
+
+          {singleCycle.Cycle_Id === localStorage.Cycle_Id ? "" :
             <button type="button" className="btn btn-secondary" 
-            style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}>
-            Edit cycle</button>
+            style={{float: "right", display:"inline", position: "relative", bottom: "25px", marginRight: "5px"}}
+            onClick={this.onClick}
+            id={singleCycle.Cycle_Id}
+            >
+              Enter Cycle</button>}
         <hr/>
         </p>
       ))
@@ -67,7 +78,7 @@ class Dashboard extends Component {
         displayProgressBar = evaluator.progressBar[0].map((single, index) =>(
           <span key={index} >
           
-          <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
+          <p className="card-text" style={{marginLeft: "10px", fontWeight: "600", fontSize: "2rem"}}>
             {single.firstName} { single.lastName}
           
           </p>
@@ -80,11 +91,11 @@ class Dashboard extends Component {
      
       noProgressBar = evaluator.progressBar[1].map((single, index) =>(
         <span key={index} >
-        <p className="card-text" style={{marginLeft: "10px", fontWeight: "600"}}>
+        <p className="card-text" style={{marginLeft: "10px", fontWeight: "600", fontSize: "2rem"}}>
           {single.firstName} { single.lastName}
         
         </p>
-        <p>
+        <p >
           
           No assignment has been assigned
         </p>
@@ -109,7 +120,7 @@ class Dashboard extends Component {
 
         <div className="col-sm-6">
         <div className="card" style={{borderRadius: "10px"}}>
-        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Cycles</h2>
+        <h1 className="card-title" style={{padding: "20px", color:"white", background: "#322348", textAlign: "center"}}>Cycles</h1>
         {displayCycle}
         <p style={{textAlign: "center", color: "red", fontSize: "30px"}}> OR </p>
 
@@ -133,7 +144,7 @@ class Dashboard extends Component {
         </div>
         <div className="col-sm-6">
         <div className="card" style={{borderRadius: "10px"}}>
-        <h2 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h2>
+        <h1 className="card-title" style={{padding: "20px", color:"white", background: "#322348"}}>Evaluator Progress Bar</h1>
         {displayProgressBar}
 
         <hr />

@@ -64,6 +64,11 @@ label{
     background-color: #9e9e9e26;
 }
 
+.react-sweet-progress{
+    width: 90%;
+    margin: 0 auto;
+}
+
 @media only screen and (max-width: 600px) {
 
     #main{
