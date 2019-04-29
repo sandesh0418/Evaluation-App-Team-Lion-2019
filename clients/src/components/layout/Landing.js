@@ -31,7 +31,7 @@ class Landing extends Component {
           <div className="row landing">
             <div id="main" className="col s12 center-align">
               <h4>
-                <b>ULM's Department Evaluation App</b>
+                <b id="title">ULM's Department Evaluation App</b>
               </h4>
               <br />
               <div className="col s12">
