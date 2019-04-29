@@ -88,6 +88,41 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
         })
     }
 
+    // function curriculum(Cycle_Id, newCycleId){
+    //     connection.query("Select * from `curriculum` where `Cycle_Id`=?",Cycle_Id, function(err, results, fields){
+    //         if (err) throw err;
+
+    //         if (results.length>0){
+    //             var total =[];
+    //             for (var k=0; k<results.length; k++){
+    //                 newCourseID=uuidv1();
+    //                 value= [newCycleID, results[k].Department_Code, results[k].Course_Code, results[k].Credit_Hours, results[k].newCourseID, results[k].Name];
+    //                 total.push(value);
+    //             }
+    //             connection.query("Insert into `curriculum`(`Department_code`,`Course_Code`,`Credit_Hours`, `Course_Id`, `Name` VALUES ?", [total], function(err, result, fields){
+    //                 if (err) throw err;
+    //             })
+    //         }
+    //     })
+    // }
+    function curriculumOutcome(Course_Id, newCourseId){
+        connection.query("Select * from `curriculum_outcome_mapping` where `Course_Id`=?",Course_Id, function(err, results, fields){
+            if (err) throw err;
+
+            if (results.length>0){
+                var total =[];
+                for (var k=0; k<results.length; k++){
+                    value= [newCourseId, results[k].Outcome_ID, results[k].Relevant_Hours];
+                    total.push(value);
+                }
+                connection.query("Insert into `curriculum_outcome_mapping`(`Course_Id`,`Outcome_ID`, `Relevant_Hours`) VALUES ?", [total], function(err, result, fields){
+                    if (err) throw err;
+                })
+            }
+        })
+    }
+    //cycle id and course id to be changed
+
     function data(Rubric_Id, newRubricId){
         
         connection.query("Select * from `data` where `Rubric_Id` = ?",Rubric_Id,function(err, results, fields){
@@ -161,6 +196,32 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
 
     })
 
+    connection.query("Select * from `curriculum` where `Cycle_Id` = ? ",OldCycleId, function(err, results, fields){
+        if (err) throw err;
+
+        if (results.length>0){
+
+            var total =[];
+            for (var k=0; k<results.length; k++){
+                newCourseID=uuidv1();
+                console.log(newCourseID);
+                value= [ results[k].Department_Code, results[k].Course_Code, newCycleId, results[k].Credit_Hours, newCourseID, results[k].Name];
+                total.push(value);
+
+            }
+            connection.query("INSERT INTO `curriculum`(`Department_Code`, `Course_Code`, `Cycle_Id`, `Credit_Hours`, `Course_ID`, `Name`) VALUES ?",[total], function(err, results){
+                if (err) throw err;
+            })
+            console.log(total);
+            console.log(total[0][4]);
+            // for(var i=0; i<total.length; i++){
+            //     curriculumOutcome(results[i].Course_ID, total[i][4]);
+            // }
+            
+        }
+
+    })
+
 
     connection.query("Select * from `rubric` where `Cycle_Id` = ? ",OldCycleId, function(err, results, fields){
         if (err) throw err;
@@ -199,6 +260,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
                     criteria(key[i], myMap.get(key[i]))
                     scales(key[i], myMap.get(key[i]))
                     data(key[i], myMap.get(key[i]))
+
                 }
             connection.query("Select * from `outcome` where `Cycle_Id` = ?", OldCycleId, function(err, result, fields){
                 if (err) throw err;
@@ -229,6 +291,8 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
             })
     
         }
+
+        //newCycleId
        
 
 
