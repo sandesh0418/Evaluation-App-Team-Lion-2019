@@ -97,6 +97,7 @@ export default class CreateMessage extends Component
         axios.post('/api/messageBroadcast/postMessage', newMessage)
             .then(res => {
                 alert(res.data.message);
+                window.location.reload();
             })
     }
 
@@ -135,7 +136,7 @@ export default class CreateMessage extends Component
                     <div className="form-group">
                         <label>Message</label>
                         <textarea className="form-control" name="message" onChange={this.handleInputChange} value={this.state.message} 
-                        rows="7" style={textareaStyle} />
+                        rows="7" style={textareaStyle} required />
                     </div>
                     <div className="form-group">
                         <input className="btn btn-success" type="submit" value="Send Message" />

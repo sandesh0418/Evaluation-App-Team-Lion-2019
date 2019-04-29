@@ -29,6 +29,7 @@ class NavBar extends Component
                 <Nav className="ml-auto">
                     
                     <Nav.Link href="/myAssignments"  style={{marginRight: "20px"}}>My Assignments</Nav.Link>
+                    <Nav.Link href="/receivedMessages"  style={{marginRight: "20px"}}>Messages</Nav.Link>
                     <NavDropdown title={User()}  style={{marginRight: "20px"}}>
                         <Nav.Link href="/editProfile" >Change Password</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>

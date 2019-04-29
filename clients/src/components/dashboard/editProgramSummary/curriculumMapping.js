@@ -96,7 +96,8 @@ export default class OutcomeCurriculum extends Component
             })
 
             this.setState({
-                courses: tempCourses
+                courses: tempCourses,
+                chosenCourseId: "placeholder"
             })
         }
     }

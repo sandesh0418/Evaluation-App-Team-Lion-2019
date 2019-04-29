@@ -117,7 +117,8 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
         "SELECT o.Outcome_ID, o.Outcome_Name, o.Description as oDescription, m.Measure_ID, m.Measure_Name, " + 
         "m.Description as mDescription " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID " +
-        "WHERE o.Cycle_Id='" + cycleId + "'";   
+        "WHERE o.Cycle_Id='" + cycleId + "' "
+        "ORDER BY o.Outcome_Name ASC";   
 
     connection.query(queryOutcomesWithMeasures, (error, results, fields) => {
         if (error || results.length === 0) 

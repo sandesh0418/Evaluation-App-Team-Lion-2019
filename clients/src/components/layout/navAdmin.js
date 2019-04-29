@@ -50,9 +50,7 @@ class NavAdmin extends Component {
               </NavDropdown.Item>
             </NavDropdown> */}
             <NavDropdown title="Rubrics">
-              <NavDropdown.Item href="/rubricList">
-                Rubric List
-              </NavDropdown.Item>
+              <NavDropdown.Item href="/rubricList">Rubric List</NavDropdown.Item>
               <NavDropdown.Item href="/Rubric">Create Rubric</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/summaryReport">Outcome Summary Report</Nav.Link>
@@ -62,7 +60,10 @@ class NavAdmin extends Component {
               </NavDropdown.Item>
               <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/messageBroadcast">Messages</Nav.Link>
+            <NavDropdown title="Messages">
+              <NavDropdown.Item href="/messageBroadcast">Send Messages</NavDropdown.Item>
+              <NavDropdown.Item href="/receivedMessages">Received Messages</NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown
               title={User()} 
             >
