@@ -1,0 +1,10 @@
+#eval-button{
+    width: 150px;
+    padding: 15px !important;
+      border-radius:3px;
+                      letter-spacing: 1.5px;
+                      margin-top: 1rem;
+                     margin-bottom: 1rem;
+                      margin-left: 30% !important;
+                      text-align: center !important;
+}

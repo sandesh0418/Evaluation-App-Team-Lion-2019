@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getRubric, updateRubric, updateTitle } from "../../../actions/rubric";
 import { FormControl, Form } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import '../../../stylesheets/rubricView.css';
+import "../../../stylesheets/rubricView.css";
 
 import "../../../stylesheets/rubric.css";
 import Loader from "react-loader-spinner";
@@ -46,7 +46,7 @@ class createRubric extends Component {
 
   titleChange(e) {
     const obj = {
-      Rubric_Id: e.target.name,
+      Rubric_Id: this.props.match.params.rubricId,
       Rubric_Title: e.target.value
     };
     this.setState({
@@ -70,7 +70,7 @@ class createRubric extends Component {
   onChange(e) {
     const obj = {
       Row: e.target.id,
-      Rubric_Id: e.target.name,
+      Rubric_Id: this.props.match.params.rubricId,
       value: e.target.value
     };
 
@@ -89,13 +89,13 @@ class createRubric extends Component {
     var row;
     var weight = 0;
     var load;
-    var Rubric_Id = "";
+  
 
     let { rubric } = this.props.rubric;
 
-    if (rubric) {
+    if (rubric != null) {
       this.state.rubricTitle = rubric[0][0].Rubric_Title;
-      Rubric_Id = rubric[0][0].Rubric_Id;
+      
 
       display = rubric[0].map((singleValue, index) => (
         <th
@@ -106,7 +106,7 @@ class createRubric extends Component {
           <FormControl
             as="textarea"
             aria-label="With textarea"
-            name={singleValue.Rubric_Id}
+            
             onChange={this.onChange.bind(this)}
             defaultValue={singleValue.Value_Name}
             id={"scale" + " " + singleValue.Value_Number}
@@ -128,7 +128,7 @@ class createRubric extends Component {
               <FormControl
                 as="textarea"
                 aria-label="With textarea"
-                name={single[0].Rubric_Id}
+                
                 onChange={this.onChange.bind(this)}
                 defaultValue={single[0].Criteria_Title}
                 id={"criteria" + " " + single[0].Row_Id}
@@ -142,7 +142,7 @@ class createRubric extends Component {
                 <FormControl
                   as="textarea"
                   aria-label="With textarea"
-                  name={single[0].Rubric_Id}
+                 
                   onChange={this.onChange.bind(this)}
                   defaultValue={value.Data}
                   id={"data" + " " + value.Row_Id + " " + value.index}
@@ -162,7 +162,7 @@ class createRubric extends Component {
               <FormControl
                 as="textarea"
                 aria-label="With textarea"
-                name={single[0].Rubric_Id}
+                
                 onChange={this.onChange.bind(this)}
                 defaultValue={single[0].Criteria_Title}
                 id={"criteria" + " " + single[0].Row_Id}
@@ -176,7 +176,7 @@ class createRubric extends Component {
                 <FormControl
                   as="textarea"
                   aria-label="With textarea"
-                  name={single[0].Rubric_Id}
+                  
                   onChange={this.onChange.bind(this)}
                   defaultValue={value.Data}
                   id={"data" + " " + value.Row_Id + " " + value.index}
@@ -191,7 +191,7 @@ class createRubric extends Component {
                 <FormControl
                   as="textarea"
                   aria-label="With textarea"
-                  name={single[0].Rubric_Id}
+                  
                   onChange={this.onChange.bind(this)}
                   defaultValue={single[0].weight}
                   id={"weight" + " " + single[0].Row_Id}
@@ -227,7 +227,7 @@ class createRubric extends Component {
         <input
           type="text"
           defaultValue={this.state.rubricTitle}
-          name={Rubric_Id}
+         
           onChange={this.titleChange.bind(this)}
           style={{
             width: "25%",
@@ -251,8 +251,8 @@ class createRubric extends Component {
           hover
           responsive="sm"
           responsive="md"
-        //   responsive="lg"
-        //   responsive="xl"
+          //   responsive="lg"
+          //   responsive="xl"
           id="createRubric"
         >
           {load}

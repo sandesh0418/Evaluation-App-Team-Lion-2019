@@ -35,6 +35,7 @@ import ViewCoordinator from './components/dashboard/admin/viewCoordinator';
 import ViewDepartments from './components/dashboard/admin/viewDepartments';
 import ViewPastCycle from './components/dashboard/Cycle/viewPastCycle';
 import ViewCurriculum from './components/dashboard/viewSummary/viewCurriculum';
+import MessageBroadcast from './components/dashboard/messageBroadcast/messageBroadcastComponent';
 
 
 
@@ -88,10 +89,11 @@ class App extends Component {
                 <PrivateRoute exact path="/cycles" component={ViewCycles} />
                 <PrivateRoute exact path="/editProfile" component={EditProfile} />
                 <PrivateRoute exact path="/myAssignments" component={MyAssignments} />
+                <PrivateRoute exact path="/messageBroadcast" component={MessageBroadcast} />
 
                 {localStorage.getItem("role") === "Administrator" ? 
                 <>
-                  <PrivateRoute path = "/viewPastCycle/:cycle" component={ViewPastCycle} />
+                  <PrivateRoute path="/viewPastCycle/:cycle" component={ViewPastCycle} />
                   <PrivateRoute exact path="/viewCurriculum" component={ViewCurriculum} />
                   <PrivateRoute exact path="/summaryReport" component={ViewSummary} />
                   <PrivateRoute exact path="/viewSummary" component={ViewSummary} />

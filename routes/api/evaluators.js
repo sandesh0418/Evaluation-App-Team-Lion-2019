@@ -19,7 +19,16 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
         
             var email = req.body.email;
             
-            console.log(email);
+            connection.query("Select * from `users` where `email` = ?", req.body.email, function(err, result, fields){
+                if(err) throw err;
+        
+                if(result.length>0){
+                    errors.email = "Evaluator with that email already exist";
+                    return res.status(400).json(errors);
+        
+                }
+
+
             let transporter = nodeMailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -31,7 +40,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                 }
             });
             let mailOptions = {
-                from: '"Nabin Karki" <emailtester845@gmail.com>', // sender address
+                from: '"ULM Evaluation Application 2019" <emailtester845@gmail.com>', // sender address
                 to: email, // list of receivers
                 subject: "Evaluator Assignment", // Subject line
                 html: "<p>Please <a href='https://team-lion-evaluation.herokuapp.com/register'>Click here</a> to register as an evaluator.</p>" // plain text body
@@ -46,14 +55,7 @@ router.post('/addEvaluator', passport.authenticate("jwt", {session: false}), (re
                     
                 })
             
-    connection.query("Select * from `users` where `email` = ?", req.body.email, function(err, result, fields){
-        if(err) throw err;
-
-        if(result.length>0){
-            errors.email = "Evaluator with that email already exist";
-            return res.status(400).json(errors);
-
-        }
+    
     
     connection.query("INSERT INTO `users`(`firstName`, `lastName`, `email`,`Dept_Id`,`role`) VALUES(?,?,?,?,?)", [req.body.firstName, req.body.lastName, req.body.email, req.body.Dept_Id, "Evaluator"], function(err, result){
         
@@ -77,11 +79,30 @@ router.post("/deleteEvaluator", passport.authenticate("jwt", {session: false}), 
 })
 
 
+router.get('/memberList/:deptId/:email', passport.authenticate("jwt", {session: false}), (req, res) => {
+    let departmentId = req.params.deptId;
+
+    let whereCondition = "AND NOT role='admin' AND NOT email='" + req.params.email + "'";
+
+    getEvaluators(req, res, whereCondition, departmentId);
+
+})
+
 router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: false}), (req, res) => {
-    departmentId = req.params.deptId;
+    let departmentId = req.params.deptId;
+
+    let whereCondition = "AND role='Evaluator'";
+
+    getEvaluators(req, res, whereCondition, departmentId);
+
+})
+
+function getEvaluators(req, res, whereCondition, departmentId)
+{
     let evaluatorList;
 
-    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + "' AND role='Evaluator' AND NOT `password` = 'deleted'";
+    let queryGetEvaluators = "SELECT firstName, lastName, email FROM users WHERE Dept_Id='" + departmentId + 
+        "' AND NOT `password` = 'deleted' " + whereCondition;
     
     connection.query(queryGetEvaluators, function(error, results, fields) {
         if (error) 
@@ -112,7 +133,7 @@ router.get('/evaluatorList/:deptId', passport.authenticate("jwt", {session: fals
             }
         }
     })
-})
+}
 
 
 router.get("/evaluatorProgressBar/:id", (req, res) =>{
@@ -173,45 +194,9 @@ connection.query("SELECT firstName, lastName, email FROM users WHERE Dept_Id='" 
                             resu[1] = progressBar;
                             res.send(resu)
                         }
-                       
-
-                    
-                            
-                            
-                            
-                    
-
-
-                   
-
-                           
                         })
-
-                        
-                        
-
-                           
-
-
-                            
-                          
-
-
-
-                        
-                    
-            
-                        
-            
         })
-        
-      
-
-
-        
     }
-    
-    
 })
 })
 

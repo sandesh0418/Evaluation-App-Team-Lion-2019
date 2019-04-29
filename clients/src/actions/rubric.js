@@ -46,7 +46,7 @@ export const createRubric = (obj) =>dispatch =>{
     Axios.post('/api/rubric/createRubric', obj)
         .then(res => {
             
-            dispatch(getRubric(res.data.Rubric_Id))
+            
         })
         .catch(err =>{
             dispatch({

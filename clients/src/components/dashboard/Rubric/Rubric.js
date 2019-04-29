@@ -5,6 +5,7 @@ import { createRubric } from '../../../actions/rubric';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from 'axios';
+import uuid from 'uuid';
 
 
 class CreateRubric extends Component{
@@ -26,13 +27,13 @@ class CreateRubric extends Component{
         }
     }
 
-    componentWillReceiveProps(nextProps){
-      if(nextProps.rubric !== this.props.rubric){
+  //   componentWillReceiveProps(nextProps){
+  //     if(nextProps.rubric !== this.props.rubric){
         
-        window.location.replace('/createRubric/'+`${nextProps.rubric.rubric[0][0].Rubric_Id}`)
-        console.log(nextProps.rubric.rubric[0][0].Rubric_Id)
-    }
-  }
+  //       window.location.replace('/createRubric/'+`${nextProps.rubric.rubric[0][0].Rubric_Id}`)
+  //       console.log(nextProps.rubric.rubric[0][0].Rubric_Id)
+  //   }
+  // }
 
  
 
@@ -50,16 +51,19 @@ class CreateRubric extends Component{
       onSubmit(e){
           e.preventDefault();
         
-
+         var RubricId = uuid();
           const obj ={
               rows: this.state.rows,
               scores: this.state.scores,
               Rubric_Title: this.state.Rubric_Title,
+              Rubric_Id: RubricId,
               Cycle_Id: localStorage.getItem("Cycle_Id"),
               weight: this.state.checked
           }
 
           this.props.createRubric(obj);
+
+          window.location.replace("/createRubric/"+RubricId)
           
 
 
