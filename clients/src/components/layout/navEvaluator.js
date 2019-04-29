@@ -5,6 +5,7 @@ import {connect } from 'react-redux';
 import { logoutUser} from '../../actions/authActions';
 
 import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
+import '../../stylesheets/navAdmin.css';
 
 function User() {
     return(
@@ -26,10 +27,10 @@ class NavBar extends Component
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link href="/evaluatorDashboard">Home</Nav.Link>
-                    <Nav.Link href="/myAssignments">My Assignments</Nav.Link>
-                    <NavDropdown title={User()}>
-                        <Nav.Link href="/editProfile">Change Password</Nav.Link>
+                    
+                    <Nav.Link href="/myAssignments"  style={{marginRight: "20px"}}>My Assignments</Nav.Link>
+                    <NavDropdown title={User()}  style={{marginRight: "20px"}}>
+                        <Nav.Link href="/editProfile" >Change Password</Nav.Link>
                         <Nav.Link href="/" onClick ={this.onLogOut.bind(this)}>Logout</Nav.Link>
                     </NavDropdown>
                 </Nav>
