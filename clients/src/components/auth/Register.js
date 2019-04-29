@@ -12,7 +12,7 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      cwid: "",
+      
       firstName: "",
       lastName: "",
       email: "",
@@ -45,7 +45,7 @@ class Register extends Component {
   onSubmit = e => {
     e.preventDefault();
     const obj = {
-      cwid: this.state.cwid,
+      
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
@@ -111,20 +111,6 @@ class Register extends Component {
 
                   <label htmlFor="lastName">Please enter your last name</label>
                   <span className="red-text">{errors.lastName}</span>
-                </div>
-                <div className="input-field col s12">
-                  <input
-                    onChange={this.onChange}
-                    value={this.state.cwid}
-                    error={errors.cwid}
-                    id="cwid"
-                    type="text"
-                    className={classnames("", {
-                      invalid: errors.cwid
-                    })}
-                  />
-                  <label htmlFor="cwid">Please enter your CWID</label>
-                  <span className="red-text">{errors.cwid}</span>
                 </div>
                 
                 <div className="input-field col s12">
