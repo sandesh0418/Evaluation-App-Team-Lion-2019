@@ -228,11 +228,11 @@ export default class CreateAssignment extends Component {
         ) * 100;
       let colorToBe;
       if (achieved > target) {
-        colorToBe = "bg-success";
+        colorToBe = "bg-success success";
       } else if (achieved < target) {
-        colorToBe = "bg-danger";
+        colorToBe = "bg-danger danger";
       } else {
-        colorToBe = "bg-warning";
+        colorToBe = "bg-warning warning";
       }
       return (
         <>
@@ -317,14 +317,14 @@ export default class CreateAssignment extends Component {
             </Button>
             <Fade in={this.state.fadeIn} tag="h5" className="mt-3">
               <p>
-                <Alert color={colorToBe}>
-                  {"Status: " +
+              <div class={colorToBe}>
+                       {"Status: " +
                     (this.state.evaluationsMetTarget /
                       this.state.totalEvaluations >=
                     this.state.measure.percentToReachTarget
                       ? "Passing"
                       : "Failing")}
-                </Alert>
+                </div>
               </p>
               <p>
                 {this.state.evaluationsMetTarget +
