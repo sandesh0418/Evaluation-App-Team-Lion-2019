@@ -127,6 +127,7 @@ function CriteriaAverages(props) {
 
     props.subjectList.forEach(s => {
       s.evaluators.forEach(e => {
+        console.log("Subject:" + s.subjectName);
         console.log("Evaluator: ")
         console.log(e);
         console.log("Criteria title: "  + c.criteriaTitle);
