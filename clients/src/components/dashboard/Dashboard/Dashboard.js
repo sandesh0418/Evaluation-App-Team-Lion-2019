@@ -83,7 +83,7 @@ class Dashboard extends Component {
           
           </p>
           <p>
-          <Progress percent={Number(single.progress)}/>
+          <Progress percent={Math.round(Number(single.progress))}/>
           </p>
           </span>
         ))
