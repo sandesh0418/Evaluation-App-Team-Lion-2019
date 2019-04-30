@@ -54,7 +54,7 @@ const Outcome = props => {
                     className="btn btn-danger dangerButton"
                     id={props.outcome.Outcome_ID}
                     onClick={props.handleDeleteOutcome}>
-                   <i className="far fa-trash-alt"> Delete Outcome </i>
+                   <i className="far fa-trash-alt" id={props.outcome.Outcome_ID}> Delete Outcome</i>
                 </button>
                 {props.outcome.Outcome_ID}
             </div>
@@ -66,24 +66,24 @@ const Outcome = props => {
                         handleDeleteMeasure={props.handleDeleteMeasure} /> 
                     : null}
                 <Dropdown id="mainDropdown">
-          <Dropdown.Toggle variant="success" id="dropdown-basic1">
-            <i className="fas fa-plus-circle"> Add Measure</i>
-          </Dropdown.Toggle>
-          <Dropdown.Menu id="dropdownMenu">
-          <Dropdown.Item id= "dropdownSize1"
-            onSelect={props.handleAddTestMeasure}
-            eventKey={props.outcome.Outcome_ID}
-          >
-            <i className="fas fa-plus-circle"> Add Test Measure</i>
-          </Dropdown.Item>
-          <Dropdown.Item id = "dropdownSize2"
-            onSelect={props.handleAddRubricMeasure}
-            eventKey={props.outcome.Outcome_ID}
-          >
-            <i className="fas fa-plus-circle"> Add Rubric Measure</i>
-          </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic1">
+                        <i className="fas fa-plus-circle" > Add Measure</i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu id="dropdownMenu">
+                    <Dropdown.Item id= "dropdownSize1"
+                        onSelect={props.handleAddTestMeasure}
+                        eventKey={props.outcome.Outcome_ID}
+                    >
+                        <i className="fas fa-plus-circle"> Add Test Measure</i>
+                    </Dropdown.Item>
+                    <Dropdown.Item id = "dropdownSize2"
+                        onSelect={props.handleAddRubricMeasure}
+                        eventKey={props.outcome.Outcome_ID}
+                    >
+                        <i className="fas fa-plus-circle"> Add Rubric Measure</i>
+                    </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
                 {props.curriculumList.length > 0 ?
                     <details>
                         <summary>Outcome's Curriculum Elements</summary>
@@ -183,7 +183,6 @@ export default class EditProgramSummary extends Component
         })
         axios.get('/api/curriculum/getCurriculum/' + localStorage.getItem("Cycle_Id"))
             .then(res => {
-                console.log(res.data.curriculum);
                 this.setState({
                     curriculum: res.data.curriculum
                 })
@@ -206,7 +205,6 @@ export default class EditProgramSummary extends Component
     }
     handleDeleteOutcome(e)
     {
-        console.log(e.target.id);
         let tempSummary = this.state.programSummary
         let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
         tempSummary.outcomes.splice(outcomeIndex, 1);
@@ -245,6 +243,7 @@ export default class EditProgramSummary extends Component
     }
     handleAddTestMeasure(e)
     {
+        console.log(e);
         this.setState({
             showAddTestMeasurePopup: true,
             targetScore: 0,
@@ -278,7 +277,6 @@ export default class EditProgramSummary extends Component
         tempSummary.outcomes[outcomeIndex].measures.splice(measureIndex, 1);
         let tempDeletedMeasureIds = this.state.deletedMeasureIds;
         tempDeletedMeasureIds.push(e.target.id);
-        console.log(tempDeletedMeasureIds);
         this.setState({
             programSummary: tempSummary,
             deletedMeasureIds: tempDeletedMeasureIds
@@ -296,7 +294,6 @@ export default class EditProgramSummary extends Component
                 deletedCourseId: d
             })
         })
-        console.log(tempDeletedCourseMappings);
         this.setState({
             programSummary: tempSummary,
             deletedCourseMappings: tempDeletedCourseMappings
@@ -411,9 +408,14 @@ export default class EditProgramSummary extends Component
                     curriculumList={this.state.curriculum}
                     changeCurriculum={this.changeCurriculum}
                 />
-                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i className="fas fa-plus-circle"> 
-Add Outcome</i> </button>
-                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i className="far fa-save"> Save Changes </i></button></div>
+                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}>
+                    <i className="fas fa-plus-circle"> Add Outcome</i>
+                </button>
+                <div>
+                    <button className="btn btn-success mb-4" onClick={this.handleSave}>
+                        <i className="far fa-save"> Save Changes</i>
+                    </button>
+                </div>
                 {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                             closePopup={this.closePopup} 
                                                             submit={this.addNewMeasure}
