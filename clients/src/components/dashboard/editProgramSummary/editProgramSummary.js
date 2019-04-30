@@ -56,7 +56,6 @@ const Outcome = props => {
                     onClick={props.handleDeleteOutcome}>
                    <i className="far fa-trash-alt" id={props.outcome.Outcome_ID}> Delete Outcome</i>
                 </button>
-                {props.outcome.Outcome_ID}
             </div>
             <div className="col-8 border border-right border-top border-bottom border-dark p-3">
                 {props.outcome.measures[0] ? 
@@ -243,7 +242,6 @@ export default class EditProgramSummary extends Component
     }
     handleAddTestMeasure(e)
     {
-        console.log(e);
         this.setState({
             showAddTestMeasurePopup: true,
             targetScore: 0,
