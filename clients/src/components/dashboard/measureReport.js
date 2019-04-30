@@ -131,8 +131,8 @@ function CriteriaAverages(props) {
         console.log("Evaluator: ")
         console.log(e);
         console.log("Criteria title: "  + c.criteriaTitle);
+        console.log(e.scores.find(s => s.criteriaTitle === c.criteriaTitle));
         totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
-        console.log(e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score);
         totalSubjects++;
       });
     });
