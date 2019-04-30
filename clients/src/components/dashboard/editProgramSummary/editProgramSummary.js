@@ -58,7 +58,7 @@ const Outcome = props => {
                 </button>
                 {props.outcome.Outcome_ID}
             </div>
-            <div className="col-8 border-top border-right border-bottom border-dark p-3">
+            <div className="col-8 border border-right border-top border-bottom border-dark p-3">
                 {props.outcome.measures[0] ? 
                     <Measures 
                         measures={props.outcome.measures} 
@@ -67,20 +67,20 @@ const Outcome = props => {
                     : null}
                 <Dropdown id="mainDropdown">
           <Dropdown.Toggle variant="success" id="dropdown-basic1">
-            <i class="fas fa-plus-circle"> Add Measure</i>
+            <i className="fas fa-plus-circle"> Add Measure</i>
           </Dropdown.Toggle>
           <Dropdown.Menu id="dropdownMenu">
           <Dropdown.Item id= "dropdownSize1"
             onSelect={props.handleAddTestMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
-            <i class="fas fa-plus-circle"> Add Test Measure</i>
+            <i className="fas fa-plus-circle"> Add Test Measure</i>
           </Dropdown.Item>
           <Dropdown.Item id = "dropdownSize2"
             onSelect={props.handleAddRubricMeasure}
             eventKey={props.outcome.Outcome_ID}
           >
-            <i class="fas fa-plus-circle"> Add Rubric Measure</i>
+            <i className="fas fa-plus-circle"> Add Rubric Measure</i>
           </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -252,6 +252,7 @@ export default class EditProgramSummary extends Component
             outcomeIdOfNewMeasure: e
         })
     }
+
     handleAddRubricMeasure(e)
     {
         if (this.state.rubrics)
@@ -277,6 +278,7 @@ export default class EditProgramSummary extends Component
         tempSummary.outcomes[outcomeIndex].measures.splice(measureIndex, 1);
         let tempDeletedMeasureIds = this.state.deletedMeasureIds;
         tempDeletedMeasureIds.push(e.target.id);
+        console.log(tempDeletedMeasureIds);
         this.setState({
             programSummary: tempSummary,
             deletedMeasureIds: tempDeletedMeasureIds
@@ -320,7 +322,7 @@ export default class EditProgramSummary extends Component
         }
         let valueName = null;
         let targetScore = this.state.targetScore;
-        if (rubricIndex === -1)
+        if (rubricIndex > -1)
         {
             valueName = this.state.rubrics[rubricIndex].scale[this.state.targetScore - 1].Value_Name;
         }
@@ -409,9 +411,9 @@ export default class EditProgramSummary extends Component
                     curriculumList={this.state.curriculum}
                     changeCurriculum={this.changeCurriculum}
                 />
-                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i class="fas fa-plus-circle"> 
+                <button className="btn btn-primary mb-4" onClick={this.handleAddOutcome}><i className="fas fa-plus-circle"> 
 Add Outcome</i> </button>
-                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i class="far fa-save"> Save Changes </i></button></div>
+                <div><button className="btn btn-success mb-4" onClick={this.handleSave}><i className="far fa-save"> Save Changes </i></button></div>
                 {this.state.showAddRubricMeasurePopup ? <AddRubricMeasurePopup 
                                                             closePopup={this.closePopup} 
                                                             submit={this.addNewMeasure}

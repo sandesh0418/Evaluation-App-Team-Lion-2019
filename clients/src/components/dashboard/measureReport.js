@@ -127,8 +127,12 @@ function CriteriaAverages(props) {
 
     props.subjectList.forEach(s => {
       s.evaluators.forEach(e => {
-        totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle)
-          .score;
+        console.log("Subject:" + s.subjectName);
+        console.log("Evaluator: ")
+        console.log(e);
+        console.log("Criteria title: "  + c.criteriaTitle);
+        console.log(e.scores.find(s => s.criteriaTitle === c.criteriaTitle));
+        totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
         totalSubjects++;
       });
     });
@@ -163,12 +167,11 @@ export default class CreateAssignment extends Component {
     Axios.get(
       "/api/measureReport/measureReport/" + this.props.match.params.measureId
     ).then(res => {
+      console.log(res.data.measure);
       this.setState({
         measure: res.data.measure
       });
       this.calculateOverallAverage();
-      console.log(this.state.overallAverage);
-      console.log("just logged it");
     });
   }
 
@@ -228,11 +231,11 @@ export default class CreateAssignment extends Component {
         ) * 100;
       let colorToBe;
       if (achieved > target) {
-        colorToBe = "bg-success";
+        colorToBe = "bg-success success";
       } else if (achieved < target) {
-        colorToBe = "bg-danger";
+        colorToBe = "bg-danger danger";
       } else {
-        colorToBe = "bg-warning";
+        colorToBe = "bg-warning warning";
       }
       return (
         <>
@@ -317,14 +320,14 @@ export default class CreateAssignment extends Component {
             </Button>
             <Fade in={this.state.fadeIn} tag="h5" className="mt-3">
               <p>
-                <Alert color={colorToBe}>
-                  {"Status: " +
+              <div class={colorToBe}>
+                       {"Status: " +
                     (this.state.evaluationsMetTarget /
                       this.state.totalEvaluations >=
                     this.state.measure.percentToReachTarget
                       ? "Passing"
                       : "Failing")}
-                </Alert>
+                </div>
               </p>
               <p>
                 {this.state.evaluationsMetTarget +

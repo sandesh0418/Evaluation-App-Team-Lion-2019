@@ -13,10 +13,11 @@ import './popup.css';
 
 export default class AddTestMeasurePopup extends Component
 {
+
     render() {
         return (
           <div className='popup' >
-            <div className='popup_inner p-4' style={{overflow: "auto", height: "100%"}}>
+            <div className='popup_inner p-4 popup1' style={{overflow: "auto", height: "100%"}}>
               <h1>Define Test Measure </h1>
               <form onSubmit={this.props.submit} className="mb-3">
               <div className="form-group">

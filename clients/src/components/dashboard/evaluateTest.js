@@ -118,16 +118,20 @@ export default class EvaluateTest extends Component
                 else
                 {
                     alert(res.data.message);
+                   
                 }
+                window.location.replace("/myAssignments")
             });
     }
 
     render()
     {
         return (
-            <>
-                <h1>Enter Scores</h1>
-                <p>{this.state.measure ? "for measure: " + this.state.measure.measureName : null}</p>
+            <div className="card" style={{width: "50%", margin: "0 auto"}}>
+            <div className="card-body" >
+                <h2>Enter Scores</h2>
+               
+                <p>{this.state.measure ? "For measure: " + this.state.measure.measureName : null}</p>
                 <p>Enter scores as a percent of 100. Example: if 85%, then enter 85.</p>
                 <form onSubmit={this.submitScores}>
                     <SubjectList subjectList={this.state.subjectList} />
@@ -138,7 +142,9 @@ export default class EvaluateTest extends Component
                     </div>
                     <input className="btn btn-primary" type="submit" />
                 </form>
-            </>
+              
+                </div>
+            </div>
         );
     }
 }

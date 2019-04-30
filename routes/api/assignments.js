@@ -170,20 +170,17 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
  * Get assignments by User_Email for myAssignments
  * PATH: /assignments/myAssignments 
  */
-router.get('/myAssignments/:email/:cycleId', (req, res) => {
+router.get('/myAssignments/:email', (req, res) => {
     let queryGetAssignments = "" + 
         "SELECT DISTINCT o.Outcome_Name as outcomeName, o.Description as outcomeDescription, m.Description " +
             "as measureDescription, a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as " +
-            "rubricTitle, r.Rubric_Id as rubricId, m.Measure_Name as measureName, sl.Subject_Name as subjectName, " +
+            "rubricTitle, r.Rubric_Id as rubricId, m.Measure_Name as measureName, sl.Subject_Name as subjectName, " + 
             "sl.Subject_ID as subjectId, ss.Criteria_Title as criteriaTitle, ss.Score as score " +
-        "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID LEFT JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN " + 
-            "(SELECT Rubric_Title, Rubric_Id " +
-            "FROM measure mm JOIN rubric rr on mm.Tool_Name=rr.Rubric_Title " +
-            "WHERE rr.Cycle_Id='" + req.params.cycleId + "') as r ON " +
-            "m.Tool_Name=r.Rubric_Title LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND " +
+        "FROM cycle c JOIN outcome o ON c.Cycle_Id=o.Cycle_Id JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
+            "a.Measure_ID=m.Measure_ID LEFT JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN rubric r ON " +
+            "m.Tool_Name=r.Rubric_Title AND o.Cycle_Id=r.Cycle_Id LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND " +
             "sl.Subject_ID=ss.Subject_ID AND a.User_Email=ss.User_Email " +
-        "WHERE a.User_Email='" + req.params.email + "' AND o.Cycle_Id='" + req.params.cycleId + "' " + 
+        "WHERE a.User_Email='" + req.params.email + "' AND c.status='In Progress' " +
         "ORDER BY assignmentId";
 
         let assignments = [];

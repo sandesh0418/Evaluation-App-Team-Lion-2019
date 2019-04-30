@@ -383,9 +383,8 @@ else{
 })
 
 
-router.get('/getViewRubric/:id/:cycleId', (req, res) => {
+router.get('/getViewRubric/:id', (req, res) => {
     let rubricId = req.params.id;
-    let cycleId = req.params.cycleId;
 
     let rubric = {
         rubric_title: '',
@@ -399,11 +398,10 @@ router.get('/getViewRubric/:id/:cycleId', (req, res) => {
             "s.Value_Number " +
         "FROM rubric r JOIN criteria c ON r.Rubric_Id=c.Rubric_Id JOIN data d ON r.Rubric_Id=d.Rubric_Id " +
             "JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
-        "WHERE r.Rubric_Id='" + rubricId + "' AND r.Cycle_Id='" + cycleId + "' AND c.Row_Id=d.Row_Id " +
-            "AND d.index=s.Value_Number";
+        "WHERE r.Rubric_Id='" + rubricId + "' AND c.Row_Id=d.Row_Id AND d.index=s.Value_Number " +
+        "ORDER BY c.Row_Id";
 
     connection.query(queryGetRubric, function(error, results, fields) {
-        rubric.rubric_title= results[0].Rubric_Title;
         if (error || results.length < 1) 
         {
             res.status(404).json({

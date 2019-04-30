@@ -65,9 +65,9 @@ function Statistics(props)
     
     var target ;
     target = props.measure.Percent_to_reach_target*100;
-    console.log(target);
+    
     var achieved = ((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2);
-    console.log(achieved);
+   
     let colorToBe;
     if (achieved > target){
         colorToBe = "bg-success success";
@@ -80,11 +80,11 @@ function Statistics(props)
     }
     return <div>
             {props.measure.totalEvaluated !== 0 ? 
-                <div class={colorToBe}>
+                <div className={colorToBe}>
                 <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                 evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
                     (props.measure.Target_Score * 100) + "%")}.</span></div> : null}
-            <div class="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+            <div className="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
             </div>
 }
 
@@ -104,13 +104,13 @@ export default class ViewSummary extends Component
 
     componentDidMount()
     {
-        //console.log("Inside componentDidMount");
+       
         this.setView();
     }
 
     setView()
     {
-       // console.log("Inside setView");
+      
         if (window.location.pathname==="/summaryReport")
         {
             this.getSummaryWithStatistics();
@@ -129,7 +129,7 @@ export default class ViewSummary extends Component
         axios
             .get('/api/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id") + "/" + localStorage.getItem("dept_Id"))
             .then(res => {
-                console.log(res.data);
+               
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -138,11 +138,11 @@ export default class ViewSummary extends Component
 
     getSummary()
     {
-        console.log(localStorage.getItem("Cycle_Id"));
+      
         axios
             .get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id") + "/" + localStorage.getItem("dept_Id"))
             .then(res => {
-                console.log(res.data);
+                
                 this.setState({
                     programSummary: res.data.programSummary
                 })
@@ -190,7 +190,7 @@ export default class ViewSummary extends Component
                             <ProgramSummaryBody state={this.state} />
                         </tbody>
                     </Table>
-                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}><i class="fas fa-edit"> Edit Program Summary</i></a></button>
+                    <button className="btn btn-primary" > <a href="/editProgramSummary"  style={{color: "white"}}><i className="fas fa-edit"> Edit Program Summary</i></a></button>
                     </div>
                 </div>
             )

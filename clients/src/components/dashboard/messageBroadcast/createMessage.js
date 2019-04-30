@@ -9,8 +9,8 @@ const textareaStyle = {
 
 function Evaluators(props)
 {
-    return props.evaluatorList.map(e => {
-        return <option value={e.email}>{e.firstName + " " + e.lastName}</option>
+    return props.evaluatorList.map((e, index) => {
+        return <option value={e.email} key={index}>{e.firstName + " " + e.lastName}</option>
     })
 }
 
@@ -119,8 +119,9 @@ export default class CreateMessage extends Component
         else
         {
             return(
-                <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
+                <form onSubmit={this.onSubmit} className="card" style={{width: "75%", margin: "0 auto", padding: "30px", marginBottom: "20px"}}>
+                    <div className="form-group" >
+                    
                         <label>Select Recipients</label>
                         <select className="form-control" multiple required value={this.state.recipients}
                             onChange={this.handleRecipientSelected} name="recipients">

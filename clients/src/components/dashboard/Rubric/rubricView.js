@@ -173,7 +173,7 @@ export default class ViewRubric extends Component
 
     getData()
     {
-        axios.get('/api/rubric/getViewRubric/'+this.props.match.params.rubric + "/" + localStorage.getItem("Cycle_Id"))
+        axios.get('/api/rubric/getViewRubric/'+this.props.match.params.rubric)
             .then(res => {
                 this.setState({
                     rubricTitle: res.data.rubric.rubric_title,
@@ -216,7 +216,7 @@ export default class ViewRubric extends Component
                             userEmail: localStorage.getItem('email'),
                             subjectId: this.state.subjectId,
                             scores: scores,
-                        Assignment_ID: this.props.match.params.assignment};
+                            Assignment_ID: this.props.match.params.assignment};
 
         axios.post('/api/scoreSubmission/rubricScore', subjectScore)
         .then(res => {
@@ -319,7 +319,7 @@ export default class ViewRubric extends Component
                 className="btn btn-large waves-effect waves-light hoverable blue accent-3 editButton"
                 >
 
-               <i class="fas fa-edit"></i> Edit 
+               <i className="fas fa-edit"></i> Edit 
                 </a>
             </div>
         }
@@ -333,7 +333,7 @@ export default class ViewRubric extends Component
             <div>
                 {/* <h1>Rubric</h1> */}
                 <div>
-                    <h2 className="mr-4" id="unique">{this.state.gradeMode ? "Grade" : null}Viewing Rubric: {this.state.rubric.rubric_title}</h2>
+                    <h2 className="mr-4" id="unique">{this.state.gradeMode ? "Grade " : "Viewing "}Rubric: {this.state.rubric.rubric_title}</h2>
                     {this.state.gradeMode ? 
                         <SubjectSelector 
                             subjectList={this.state.subjectList} 

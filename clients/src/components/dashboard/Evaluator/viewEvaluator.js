@@ -83,7 +83,7 @@ class ViewEvaluator extends Component {
       display = evaluator.evaluator.map((singleEvaluator, index) => (
         <div key={index}>
           <div>
-            <h5 class="card-title">
+            <h5 className="card-title">
               Name: {singleEvaluator.firstName} {singleEvaluator.lastName}
               <i
                 style={{
@@ -94,10 +94,10 @@ class ViewEvaluator extends Component {
                 }}
                 onClick={this.delete.bind(this)}
                 id={singleEvaluator.email}
-                class="far fa-trash-alt"
+                className="far fa-trash-alt"
               />
             </h5>
-            <p class="card-text">Email: {singleEvaluator.email}</p>
+            <p className="card-text">Email: {singleEvaluator.email}</p>
           </div>
           <hr />
         </div>
@@ -122,7 +122,7 @@ class ViewEvaluator extends Component {
                   }}
                 >
                   {" "}
-                  List of Evaluators
+                  Active Evaluators
                 </h2>
 
                 {display}
@@ -194,13 +194,8 @@ class ViewEvaluator extends Component {
                   <button id="eval-button"
                     style={{
                       width: "150px",
-                      padding: "15px !important",
-                      'border-radius':"3px",
-                      'letter-spacing':" 1.5px",
-                      'margin-top':" 1rem",
-                     ' margin-bottom': "1rem",
-                      'margin-left': "30% !important",
-                      'text-align': "center !important"
+                      padding: "15px !important"
+                     
                     }}
                     type="submit"
                     className="btn btn-large waves-effect waves-light hoverable blue accent-3"
@@ -220,8 +215,8 @@ ViewEvaluator.propTypes = {
   AddNewEvaluator: PropTypes.func.isRequired,
   GetAllEvaluator: PropTypes.func.isRequired,
   evaluator: PropTypes.object.isRequired,
-  deleteEvaluator: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
+  deleteEvaluator: PropTypes.func.isRequired,
+  
   errors: PropTypes.object.isRequired
 };
 

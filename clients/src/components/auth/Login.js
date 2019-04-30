@@ -20,11 +20,11 @@ class Login extends Component {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
       if (localStorage.role === "Administrator") {
-        this.props.history.push("/dashboard");
+        window.location.replace("/dashboard");
       } else if (localStorage.role === "Evaluator") {
-        this.props.history.push("/evaluatorDashboard");
+        window.location.replace("/myAssignments");
       } else {
-        this.props.history.push("/admin");
+        window.location.replace("/admin");
       }
     }
   }

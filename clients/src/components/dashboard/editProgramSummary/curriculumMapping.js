@@ -21,8 +21,8 @@ function SelectCourse(props)
         return selectableIds.includes(c.courseId);
     })
     
-    return selectableCourses.map(c => {
-        return <option value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
+    return selectableCourses.map((c, index) => {
+        return <option key ={index} value={c.courseId}>{c.departmentCode + " " + c.courseCode + " " + c.name}</option>
     })
 }
 
@@ -85,8 +85,7 @@ export default class OutcomeCurriculum extends Component
         {
             let tempCourses = this.state.courses;
             let course = this.state.curriculumList.find(c => c.courseId === this.state.chosenCourseId)
-            console.log(this.state.chosenCourseId);
-            console.log(this.state.courses);
+           
             tempCourses.push({
                 departmentCode: course.departmentCode,
                 courseCode: course.courseCode,
