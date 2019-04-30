@@ -56,6 +56,7 @@ const Outcome = props => {
                     onClick={props.handleDeleteOutcome}>
                    <i className="far fa-trash-alt"> Delete Outcome </i>
                 </button>
+                {props.outcome.Outcome_ID}
             </div>
             <div className="col-8 border-top border-right border-bottom border-dark p-3">
                 {props.outcome.measures[0] ? 
@@ -205,6 +206,7 @@ export default class EditProgramSummary extends Component
     }
     handleDeleteOutcome(e)
     {
+        console.log(e.target.id);
         let tempSummary = this.state.programSummary
         let outcomeIndex = tempSummary.outcomes.findIndex(o => o.Outcome_ID === e.target.id);
         tempSummary.outcomes.splice(outcomeIndex, 1);
