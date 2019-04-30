@@ -66,7 +66,8 @@ export default class AddTestMeasurePopup extends Component
                     name="targetScore"
                     value={this.props.targetScore} 
                     onChange={this.props.handleInputChange}
-                    min="0" />
+                    min="0"
+                    required />
                 </div>
                 <div className="form-group">
                   <label>Enter percent to achieve score: </label>
@@ -77,7 +78,8 @@ export default class AddTestMeasurePopup extends Component
                     value={this.props.percentToReachTarget}
                     onChange={this.props.handleInputChange} 
                     min="0" 
-                    max="100" />
+                    max="100" 
+                    required />
                 </div>
               <input
                 type="submit"

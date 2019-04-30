@@ -149,7 +149,7 @@ export default class OutcomeCurriculum extends Component
                             courses={this.state.courses} />
                     </select>
                     <button type="button" className="btn btn-primary mr-3" onClick={this.addCourse}>Add Course</button>
-                    <input className="btn btn-success" type="submit" value="Save" />
+                    <input className="btn btn-success" type="submit" value="Save Elements" />
                 </form>
             </div>
         )

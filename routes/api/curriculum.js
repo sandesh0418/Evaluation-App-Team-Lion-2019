@@ -10,7 +10,7 @@ router.get('/getCurriculum/:cycleId', (req, res) => {
             "Course_ID as courseId, Name as name " +
         "FROM curriculum " +
         "WHERE Cycle_Id='" + req.params.cycleId + "' " +
-        "ORDER BY Department_Code";
+        "ORDER BY Department_Code ASC, Course_Code ASC";
 
     connection.query(queryGetCurriculum, (error, results, fields) => {
         if (error)
