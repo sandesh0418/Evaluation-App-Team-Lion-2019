@@ -132,7 +132,7 @@ function CriteriaAverages(props) {
         console.log(e);
         console.log("Criteria title: "  + c.criteriaTitle);
         console.log(e.scores.find(s => s.criteriaTitle === c.criteriaTitle));
-        totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
+        totalScore += e.scores.find(s => s.criteriaTitle.equals(c.criteriaTitle)).score;
         totalSubjects++;
       });
     });
