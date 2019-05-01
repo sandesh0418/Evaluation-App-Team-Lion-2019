@@ -106,7 +106,8 @@ export default class AddRubricMeasurePopup extends Component
                       value={this.props.percentToReachTarget}
                       onChange={this.props.handleInputChange} 
                       min="0" 
-                      max="100" />
+                      max="100" 
+                      required/>
                   </div>
                 <input
                   type="submit"

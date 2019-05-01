@@ -124,12 +124,8 @@ class Dashboard extends Component {
         <div className="card" style={{borderRadius: "10px"}}>
         <h1 className="card-title" style={{padding: "20px", color:"white", background: "#322348", textAlign: "center"}}>Cycles</h1>
         {displayCycle}
-        {/* <p style={{textAlign: "center", color: "red", fontSize: "30px"}}> OR </p> */}
-        <div style={{ width: "100%", borderTop:"0.5px solid black", borderBottom: "0.5px solid black", textAlign: "center"}}>
-  <span style={{fontSize: "40px", padding: "0 10px"}}>
-     OR 
-  </span>
-</div>
+        {<p style={{textAlign: "center", color: "grey", fontSize: "30px"}}> OR </p>}
+
 
         <button
                   style={{
