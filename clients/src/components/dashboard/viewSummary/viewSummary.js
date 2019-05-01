@@ -44,7 +44,7 @@ function Measures(props)
                 <span className="bold mr-3"><strong>{currentMeasure.Measure_Name}</strong></span>
                 <br/><a href={"/measureReport/" + currentMeasure.Measure_ID}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
-                    (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
+                    (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name.trim() + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
                 </a>
                 {currentMeasure.Description ?  
