@@ -6,7 +6,7 @@ import {
 } from "../../../actions/cycle";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { ClipLoader } from "react-spinners";
+import Loader from 'react-loader-spinner';
 import { Link } from "react-router-dom";
 import '../../../stylesheets/cycle.css';
 
@@ -62,7 +62,13 @@ class ViewCycle extends Component {
     } else {
       previous = (
         <div className="sweet-loading">
-          <ClipLoader sizeUnit={"px"} size={150} color={"#123abc"} />
+          <Loader 
+      type="Oval"
+      
+      color="black"
+      height="100"	
+      width="100"
+   />
         </div>
       );
     }
@@ -105,9 +111,13 @@ class ViewCycle extends Component {
       ));
     } else {
       previous = (
-        <div className="sweet-loading">
-          <ClipLoader sizeUnit={"px"} size={150} color={"#123abc"} />
-        </div>
+        <Loader 
+      type="Oval"
+      
+      color="black"
+      height="100"	
+      width="100"
+   />
       );
     }
     return (

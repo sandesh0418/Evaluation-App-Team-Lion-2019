@@ -42,7 +42,7 @@ function Measures(props)
         return (
             <div key={i}>
                 <span className="bold mr-3"><strong>{currentMeasure.Measure_Name}</strong></span>
-                <a href={"/measureReport/" + currentMeasure.Measure_ID}>
+                <br/><a href={"/measureReport/" + currentMeasure.Measure_ID}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
@@ -83,13 +83,13 @@ function Statistics(props)
             {props.measure.totalEvaluated !== 0 ? 
                 <>
                     <div className={colorToBe}>
-                        <span className="mr-4">Measure statistics: 
+                        <span className="mr-4"  style={{color: "white"}}>Measure statistics: 
                             {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                             evaluations have met the target score of {(props.measure.Value_Name ? "'" + 
                             props.measure.Value_Name + "'" : (props.measure.Target_Score * 100) + "%")}.
                         </span>
                     </div>
-                    <div className="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+                    <div className="bg-info info" style={{color: "white"}}> {props.measure.totalEvaluated} subjects have been evaluated.</div>
                 </>
                 :
                 <div className="bg-dark info text-light"> <Loader 
