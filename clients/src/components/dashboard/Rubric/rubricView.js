@@ -58,7 +58,7 @@ function CriteriaDescription(props)
 function CriteriaGradeInput(props)
 {
     return (
-        <select className="form-control" id={props.currentCriteria.criteria_title} onChange={props.calculateAverageScore}>
+        <select className="form-control" id={props.currentCriteria.criteria_title} onChange={props.calculateAverageScore} style={{width: "inherit"}}>
             <option disabled value> -- select an option -- </option>
             {props.gradeScale}
         </select>
