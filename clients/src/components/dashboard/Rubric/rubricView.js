@@ -303,7 +303,7 @@ export default class ViewRubric extends Component
 
                 rubricAverage = <div className="mb-2">
                     <label className="pr-1">Decimal Places in Average</label>
-                    <select defaultValue="2" className="form-control" style={width250} name="calcAverage" 
+                    <select defaultValue="2" className="form-control" style={{width: "inherit"}} name="calcAverage" 
                         onChange={this.handleInput} onClick={this.handleInput}>
                         <option value="0">No Decimal</option>
                         <option value="1">One Decimal</option>
