@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import '../../../stylesheets/rubricView.css';
-import { ClipLoader } from 'react-spinners';
-import { Spinner } from 'react-bootstrap';
+import Loader from 'react-loader-spinner';
 import Table from 'react-bootstrap/Table'
 
 
-const width150 = {
-    width: '150px'
+const width250 = {
+    width: '250px'
 }
+
+
 
 function TopRowGradeScale(props)
 {
@@ -68,7 +69,7 @@ const SubjectSelector = props => {
     return (
         <div className="form-group">
             <label className="mr-2">Select Subject:</label>
-            <select className="form-control" style={width150} value={props.value} onChange={props.onChange} onClick={props.onChange}>
+            <select className="form-control" style={width250} value={props.value} onChange={props.onChange} onClick={props.onChange}>
                 <SubjectList subjectList={props.subjectList} />
             </select>
         </div>
@@ -77,9 +78,15 @@ const SubjectSelector = props => {
 
 const SubjectList = props => {
     return props.subjectList.map(s => {
-        return <option key={s.subjectId} value={s.subjectId}>{s.subjectName}</option>
+        let graded = s.scores[0].score ? " - graded" : null
+        return (
+            <option key={s.subjectId} value={s.subjectId}>
+                {s.subjectName}{graded}
+            </option>
+        )
     })
 }
+
 
 function calculateUnweightedAverage(scores)
 {
@@ -143,9 +150,7 @@ export default class ViewRubric extends Component
             rubricTitle: '',
             Rubric_Id: '',
             scale: '',
-            rubric: {
-                criteria:[{descriptions : [{value_number: 1, value_name: 0}]}]
-            },
+            rubric: null,
             gradeMode: false,
             measureId: '',
             subjectId: '',
@@ -180,26 +185,26 @@ export default class ViewRubric extends Component
                     Rubric_Id: res.data.rubric.Rubric_Id,
                     rubric: res.data.rubric
                 })
-            })
 
-        if(window.location.pathname.includes('/gradeRubric/'))
-        {
-            axios.get('/api/assignments/subjectList/'+this.props.match.params.assignment)
-            .then(res => {
-                this.setState({
-                    subjectList: res.data.subjectList,
-                    subjectId: res.data.subjectList[0].subjectId
-                })
-                setScores(res.data.subjectList, res.data.subjectList[0].subjectId, this.state.rubric.criteria);
-                this.calculateAverageScore();
-            })
-            axios.get('/api/assignments/assignmentMeasure/' + this.props.match.params.assignment)
-                .then(res => {
-                    this.setState({
-                        measureId: res.data.measure.measureId
+                if(window.location.pathname.includes('/gradeRubric/'))
+                {
+                    axios.get('/api/assignments/subjectList/'+this.props.match.params.assignment)
+                    .then(res => {
+                        this.setState({
+                            subjectList: res.data.subjectList,
+                            subjectId: res.data.subjectList[0].subjectId
+                        })
+                        setScores(res.data.subjectList, res.data.subjectList[0].subjectId, this.state.rubric.criteria);
+                        this.calculateAverageScore();
                     })
-                })
-        }
+                    axios.get('/api/assignments/assignmentMeasure/' + this.props.match.params.assignment)
+                        .then(res => {
+                            this.setState({
+                                measureId: res.data.measure.measureId
+                            })
+                        })
+                }
+            })
     }
 
     handleSaveGradeClick()
@@ -277,96 +282,108 @@ export default class ViewRubric extends Component
 
     render()
     {
-        let saveGradeButton;
-        let rubricAverage;
-        let editRubricButton;
-
-        if (this.state.gradeMode)
+        if (this.state.rubric === null)
         {
-            saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
-
-            rubricAverage = <div className="mb-2">
-                <label className="pr-1">Decimal Places in Average</label>
-                <select defaultValue="2" className="form-control" style={width150} name="calcAverage" 
-                    onChange={this.handleInput} onClick={this.handleInput}>
-                    <option value="0">No Decimal</option>
-                    <option value="1">One Decimal</option>
-                    <option value="2">Two Decimals</option>
-                    <option value="3">Three Decimals</option>
-                </select>
-                <span>The average score is: 
-                    {" " + this.state.averageScore.toFixed(this.state.calcAverage) + "  or '" + 
-                        mapAverageScoreToValueName(this.state.rubric.criteria[0], this.state.averageScore) + "'"}
-                </span>
-            </div>
+            return <Loader 
+                type="Oval"
+                color="black"
+                height="100"	
+                width="100"
+            />
         }
         else
         {
-            editRubricButton = <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <a href="#" 
-                style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem",
-                    paddingTop: "15px",
-                    textAlign: "center",
-                    align: "center"
-                }}
-                id ={this.state.Rubric_Id}
-                onClick={this.EditRubric}
+            let saveGradeButton;
+            let rubricAverage;
+            let editRubricButton;
 
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3 editButton"
-                >
+            if (this.state.gradeMode)
+            {
+                saveGradeButton = <button type="button" className="btn btn-primary" onClick={this.handleSaveGradeClick}>Save Grade</button>
 
-               <i className="fas fa-edit"></i> Edit 
-                </a>
-            </div>
-        }
-
-        let gradeScale = this.state.rubric.criteria[0].descriptions.map(function(currentDescription)
-        {
-            return <option key={currentDescription.value_number} value={currentDescription.value_number}>{currentDescription.value_name}</option>
-        })
-
-        return (
-            <div>
-                {/* <h1>Rubric</h1> */}
-                <div>
-                    <h2 className="mr-4" id="unique">{this.state.gradeMode ? "Grade " : "Viewing "}Rubric: {this.state.rubric.rubric_title}</h2>
-                    {this.state.gradeMode ? 
-                        <SubjectSelector 
-                            subjectList={this.state.subjectList} 
-                            onChange={this.onChangeSubjectId}
-                            value={this.state.subjectId}
-                            className="bg-danger" />
-                        : null}
+                rubricAverage = <div className="mb-2">
+                    <label className="pr-1">Decimal Places in Average</label>
+                    <select defaultValue="2" className="form-control" style={width250} name="calcAverage" 
+                        onChange={this.handleInput} onClick={this.handleInput}>
+                        <option value="0">No Decimal</option>
+                        <option value="1">One Decimal</option>
+                        <option value="2">Two Decimals</option>
+                        <option value="3">Three Decimals</option>
+                    </select>
+                    <span>The average score is: 
+                        {" " + this.state.averageScore.toFixed(this.state.calcAverage) + "  or '" + 
+                            mapAverageScoreToValueName(this.state.rubric.criteria[0], this.state.averageScore) + "'"}
+                    </span>
                 </div>
-                {/* className="table table-bordered" */}
-                <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl" id="viewTable">
-                    <thead>
-                        <tr id ="criteria"> 
-                            <th scope="col" className="outcome-width" >Criteria</th>
-                            <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
-                            {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
-                            {this.state.rubric.weighted ? <th scope="col">Weight</th> : null}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <CriteriaRow 
-                            gradeMode={this.state.gradeMode} 
-                            criteria={this.state.rubric.criteria} 
-                            weighted={this.state.rubric.weighted}
-                            gradeScale={gradeScale}
-                            calculateAverageScore={this.calculateAverageScore}
-                        />
-                    </tbody>
-                    
-                </Table>
-                {rubricAverage}
-                {saveGradeButton}
-                {editRubricButton}
-            </div>
-        );
+            }
+            else
+            {
+                editRubricButton = <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                    <a href="#" 
+                    style={{
+                        width: "150px",
+                        borderRadius: "3px",
+                        letterSpacing: "1.5px",
+                        marginTop: "1rem",
+                        paddingTop: "15px",
+                        textAlign: "center",
+                        align: "center"
+                    }}
+                    id ={this.state.Rubric_Id}
+                    onClick={this.EditRubric}
+
+                    className="btn btn-large waves-effect waves-light hoverable blue accent-3 editButton"
+                    >
+
+                <i className="fas fa-edit"></i> Edit 
+                    </a>
+                </div>
+            }
+
+            let gradeScale = this.state.rubric.criteria[0].descriptions.map(function(currentDescription)
+            {
+                return <option key={currentDescription.value_number} value={currentDescription.value_number}>{currentDescription.value_name}</option>
+            })
+
+            return (
+                <div>
+                    {/* <h1>Rubric</h1> */}
+                    <div>
+                        <h2 className="mr-4" id="unique">{this.state.gradeMode ? "Grade " : "Viewing "}Rubric: {this.state.rubric.rubric_title}</h2>
+                        {this.state.gradeMode ? 
+                            <SubjectSelector 
+                                subjectList={this.state.subjectList} 
+                                onChange={this.onChangeSubjectId}
+                                value={this.state.subjectId}
+                                className="bg-danger" />
+                            : null}
+                    </div>
+                    {/* className="table table-bordered" */}
+                    <Table striped bordered hover responsive="sm" responsive="md" responsive="lg" responsive="xl" id="viewTable">
+                        <thead>
+                            <tr id ="criteria"> 
+                                <th scope="col" className="outcome-width" >Criteria</th>
+                                <TopRowGradeScale oneCriteria={this.state.rubric.criteria[0]} />
+                                {this.state.gradeMode ? <th scope="col" width="150px">Score</th> : null}
+                                {this.state.rubric.weighted ? <th scope="col">Weight</th> : null}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <CriteriaRow 
+                                gradeMode={this.state.gradeMode} 
+                                criteria={this.state.rubric.criteria} 
+                                weighted={this.state.rubric.weighted}
+                                gradeScale={gradeScale}
+                                calculateAverageScore={this.calculateAverageScore}
+                            />
+                        </tbody>
+                        
+                    </Table>
+                    {rubricAverage}
+                    {saveGradeButton}
+                    {editRubricButton}
+                </div>
+            );
+        }
     }
 }

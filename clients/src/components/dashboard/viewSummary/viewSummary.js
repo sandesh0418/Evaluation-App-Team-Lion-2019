@@ -80,11 +80,18 @@ function Statistics(props)
     }
     return <div>
             {props.measure.totalEvaluated !== 0 ? 
-                <div className={colorToBe}>
-                <span className="mr-4">Measure statistics: {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
-                evaluations have met the target score of {(props.measure.Value_Name ? "'" + props.measure.Value_Name + "'" : 
-                    (props.measure.Target_Score * 100) + "%")}.</span></div> : null}
-            <div className="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+                <>
+                    <div className={colorToBe}>
+                        <span className="mr-4">Measure statistics: 
+                            {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
+                            evaluations have met the target score of {(props.measure.Value_Name ? "'" + 
+                            props.measure.Value_Name + "'" : (props.measure.Target_Score * 100) + "%")}.
+                        </span>
+                    </div>
+                    <div className="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+                </>
+                :
+                <div className="bg-dark info text-light">Pending evaluations.</div>}
             </div>
 }
 
