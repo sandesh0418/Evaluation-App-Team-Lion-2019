@@ -31,7 +31,7 @@ function CriteriaRow(props)
         return (
             <tr key={i}>
                 <th scope="row" className="p-3">
-                    {currentCriteria.criteria_title === "" ? "Undefined Critieria" : currentCriteria.criteria_title}
+                    {currentCriteria.criteria_title}
                 </th>
                 <CriteriaDescription criteriaDescriptions={currentCriteria.descriptions} />
                 {props.gradeMode?  
@@ -58,7 +58,7 @@ function CriteriaDescription(props)
 function CriteriaGradeInput(props)
 {
     return (
-        <select className="form-control" id={props.currentCriteria.criteria_title} onChange={props.calculateAverageScore}>
+        <select className="form-control" id={props.currentCriteria.row_id} onChange={props.calculateAverageScore}>
             <option disabled value> -- select an option -- </option>
             {props.gradeScale}
         </select>
@@ -129,9 +129,9 @@ function setScores(subjectList, subjectId, criteria)
         else
         {
             criteria.forEach(c => {
-                if (document.getElementById(c.criteria_title))
+                if (document.getElementById(c.row_id))
                 {
-                    document.getElementById(c.criteria_title).value = 1;
+                    document.getElementById(c.row_id).value = 1;
                 }
             })
         }
@@ -212,8 +212,8 @@ export default class ViewRubric extends Component
         let scores = this.state.rubric.criteria.map(function(currentCriteria)
         {
             return {
-                criteriaTitle: currentCriteria.criteria_title,
-                value: document.getElementById(currentCriteria.criteria_title).value
+                criteriaTitle: currentCriteria.row_id,
+                value: document.getElementById(currentCriteria.row_id).value
             };
         })
 
@@ -234,9 +234,8 @@ export default class ViewRubric extends Component
     {
         let scores = this.state.rubric.criteria.map(c => {
             return {
-                criteriaTitle: c.criteria_title,
                 weight: c.weight,
-                score: document.getElementById(c.criteria_title).value
+                score: document.getElementById(c.row_id).value
             }
         })
 

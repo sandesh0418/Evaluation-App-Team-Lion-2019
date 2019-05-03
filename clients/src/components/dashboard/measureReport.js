@@ -8,8 +8,8 @@ import { Alert, Button, Fade } from "reactstrap";
 function CriteriaTitles(props) {
   return props.criteria.map(c => {
     return (
-      <th className="p-2" key={c.criteriaTitle} scope="col">
-        {c.criteriaTitle + " score"}
+      <th className="p-2" key={c} scope="col">
+        {c}
       </th>
     );
   });
@@ -114,7 +114,7 @@ function Scores(props) {
   return props.scores.map(s => {
     return (
       <td className="p-2" key={s.criteriaTitle}>
-        {s.valueName ? s.score + " " + s.valueName : s.score * 100}
+        {s.valueName ? s.score + " - '" + s.valueName + "'" : s.score * 100}
       </td>
     );
   });
@@ -127,11 +127,6 @@ function CriteriaAverages(props) {
 
     props.subjectList.forEach(s => {
       s.evaluators.forEach(e => {
-        console.log("Subject:" + s.subjectName);
-        console.log("Evaluator: ")
-        console.log(e);
-        console.log("Criteria title: "  + c.criteriaTitle);
-        console.log(e.scores.find(s => s.criteriaTitle === c.criteriaTitle));
         totalScore += e.scores.find(s => s.criteriaTitle === c.criteriaTitle).score;
         totalSubjects++;
       });
@@ -266,7 +261,7 @@ export default class CreateAssignment extends Component {
                 </th>
                 <CriteriaTitles
                   criteria={
-                    this.state.measure.subjectList[0].evaluators[0].scores
+                    this.state.measure.criteria
                   }
                 />
                 {this.state.measure.scale[0].valueName ? (

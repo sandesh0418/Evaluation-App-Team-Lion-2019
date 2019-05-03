@@ -44,7 +44,7 @@ function Measures(props)
                 <a href={"/measureReport/" + currentMeasure.Measure_ID}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
                     (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
-                    (currentMeasure.Target_Score * 100) + "%") +" or higher on " + currentMeasure.Tool_Name + "."}
+                    (currentMeasure.Target_Score * 100) + "%") + " or higher on " + currentMeasure.Tool_Name + "."}
                 </a>
                 {currentMeasure.Description ?  
                     <details className="ml-3 mb-3">
@@ -149,7 +149,7 @@ export default class ViewSummary extends Component
         axios
             .get('/api/summaryReport/getSummary/' + localStorage.getItem("Cycle_Id") + "/" + localStorage.getItem("dept_Id"))
             .then(res => {
-                
+                console.log(res.data.programSummary);
                 this.setState({
                     programSummary: res.data.programSummary
                 })

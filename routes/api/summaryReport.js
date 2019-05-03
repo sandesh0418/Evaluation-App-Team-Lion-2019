@@ -44,7 +44,7 @@ function buildProgramSummary(withStats, req, res, cycleId, deptId)
         "FROM cycle cy JOIN outcome o ON cy.Cycle_Id=o.Cycle_Id LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
             "(SELECT s.Value_Name as valueName, m.Measure_ID as measureId " + 
             "FROM measure m LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title JOIN scales s ON s.Rubric_Id=r.Rubric_Id " +
-            "WHERE m.Target_Score=s.Value_Number) as rubricScore " +
+            "WHERE m.Target_Score=s.Value_Number AND r.Cycle_Id='" + cycleId + "') as rubricScore " +
             "ON m.Measure_ID=rubricScore.measureId JOIN cycle c ON o.Cycle_Id=c.Cycle_Id " +
         "WHERE o.Cycle_Id='" + cycleId + "' AND cy.Dept_Id='"  + deptId + "' " +
         "ORDER BY o.Outcome_Name ASC, m.Measure_Name ASC";

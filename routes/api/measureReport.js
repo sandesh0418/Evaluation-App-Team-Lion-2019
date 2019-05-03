@@ -17,16 +17,19 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
         targetScore: 0,
         weighted: false,
         scale: [],
-        subjectList: []
+        subjectList: [],
+        criteria: []
     }
 
     let queryGetMeasureData = "" +
-        "SELECT m.Tool_Name as toolName, r.Rubric_Title, m.Percent_to_reach_target as percentToReachTarget, " +
+        "SELECT DISTINCT m.Tool_Name as toolName, r.Rubric_Title, m.Percent_to_reach_target as percentToReachTarget, " +
             "m.Target_Score as targetScore, m.Measure_Name as measureName, m.Description as measureDescription, " + 
-            "r.weight as weighted, s.Value_Name as valueName, s.Value_Number as valueNumber  " +
+            "r.weight as weighted, s.Value_Name as valueName, s.Value_Number as valueNumber, c.Criteria_Title as criteriaTitle " +
         "FROM outcome o JOIN measure m ON o.Outcome_ID=m.Outcome_ID LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title " +
-            "AND o.Cycle_Id=r.Cycle_Id LEFT JOIN scales s ON r.Rubric_Id=s.Rubric_Id " +
-        "WHERE m.Measure_ID='" + req.params.measureId + "'";
+            "AND o.Cycle_Id=r.Cycle_Id LEFT JOIN criteria c ON c.Rubric_Id=r.Rubric_Id LEFT JOIN scales s ON " +
+            "r.Rubric_Id=s.Rubric_Id " +
+        "WHERE m.Measure_ID='" + req.params.measureId + "' " + 
+        "ORDER BY c.Row_Id";
 
         connection.query(queryGetMeasureData, (error, results, fields) => {
             if (error)
@@ -52,8 +55,19 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
                         valueName: r.valueName
                     }
 
-                    measure.scale.push(newScale);
+                    if (!measure.scale.find(s => s.valueNumber === r.valueNumber))
+                    {
+                        console.log("adding new scale");
+                        measure.scale.push(newScale);
+                    }
+
+                    if (!measure.criteria.includes(r.criteriaTitle))
+                    {
+                        measure.criteria.push(r.criteriaTitle)
+                    }
                 })
+
+                console.log(measure);
 
                 getMeasureStatistics(req, res, measure, req.params.measureId);
             }
@@ -72,7 +86,8 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
             "o.Cycle_Id=r.Cycle_Id LEFT JOIN criteria c ON r.Rubric_Id=c.Rubric_Id AND " +
             "ss.Criteria_Title=c.Criteria_Title LEFT JOIN scales s ON r.Rubric_Id=s.Rubric_Id AND " +
             "ss.Score=s.Value_Number " +
-        "WHERE m.Measure_ID='" + measureId + "'";
+        "WHERE m.Measure_ID='" + measureId + "' " + 
+        "ORDER BY criteriaTitle";
 
         connection.query(queryGetMeasureStatistics, (error, results, fields) => {
             if (error)
