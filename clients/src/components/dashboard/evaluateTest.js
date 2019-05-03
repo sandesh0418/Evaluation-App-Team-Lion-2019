@@ -5,10 +5,10 @@ const SubjectList = props => {
     return props.subjectList.map((s, index) => {
         return (
             <div className="row no-gutters" key={{index}}>
-                <div className="col-2">
-                    <span>{s.subjectName + ":"}</span>
+                <div className="col-4">
+                    <span id="newspan">{s.subjectName + ":"}</span>
                 </div>
-                <div className="col-1">
+                <div className="col-2" id ="newinput" >
                     <input id={s.subjectId} defaultValue={s.scores[0].score * 100} type="number" min="0" max="100" />
                 </div>
             </div>
@@ -127,7 +127,7 @@ export default class EvaluateTest extends Component
     render()
     {
         return (
-            <div className="card" style={{width: "50%", margin: "0 auto"}}>
+            <div className="card" id = "newcard"style={{width: "50%", margin: "0 auto"}}>
             <div className="card-body" >
                 <h2>Enter Scores</h2>
                

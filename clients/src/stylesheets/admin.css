@@ -92,3 +92,18 @@ hr{
 
 }
 
+@media only screen and (max-width: 1000px) {
+
+    #newcard{
+        width: 100% !important;
+    }
+
+    #newinput{
+        margin-left: 50px !important;
+    }
+    #newspan{
+        width: 100px;
+    }
+}
+
+

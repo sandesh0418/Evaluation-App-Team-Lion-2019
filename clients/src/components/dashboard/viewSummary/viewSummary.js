@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
+
 import Table from 'react-bootstrap/Table'
 
 const ProgramSummaryBody = props =>
@@ -41,9 +42,9 @@ function Measures(props)
         return (
             <div key={i}>
                 <span className="bold mr-3"><strong>{currentMeasure.Measure_Name}</strong></span>
-                <a href={"/measureReport/" + currentMeasure.Measure_ID}>
+                <br/><a href={"/measureReport/" + currentMeasure.Measure_ID}>
                     {"At least " + (currentMeasure.Percent_to_reach_target * 100) + "% of subjects score a " + 
-                    (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name + "'" : 
+                    (currentMeasure.Value_Name ? "'" + currentMeasure.Value_Name.trim() + "'" : 
                     (currentMeasure.Target_Score * 100) + "%") + " or higher on " + currentMeasure.Tool_Name + "."}
                 </a>
                 {currentMeasure.Description ?  
@@ -82,16 +83,22 @@ function Statistics(props)
             {props.measure.totalEvaluated !== 0 ? 
                 <>
                     <div className={colorToBe}>
-                        <span className="mr-4">Measure statistics: 
+                        <span className="mr-4"  style={{color: "white"}}>Measure statistics: 
                             {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
                             evaluations have met the target score of {(props.measure.Value_Name ? "'" + 
-                            props.measure.Value_Name + "'" : (props.measure.Target_Score * 100) + "%")}.
+                            props.measure.Value_Name.trim() + "'" : (props.measure.Target_Score * 100) + "%")}.
                         </span>
                     </div>
-                    <div className="bg-info info"> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+                    <div className="bg-info info" style={{color: "white"}}> {props.measure.totalEvaluated} subjects have been evaluated.</div>
                 </>
                 :
-                <div className="bg-dark info text-light">Pending evaluations.</div>}
+                <div className="bg-dark info text-light"> <Loader 
+                type="ThreeDots"
+                
+                color="white"
+                height="12"	
+                width="12"
+             />Pending evaluations.</div>}
             </div>
 }
 
