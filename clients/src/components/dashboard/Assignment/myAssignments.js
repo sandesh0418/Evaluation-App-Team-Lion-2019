@@ -11,19 +11,31 @@ function ListDisplay(props)
 
     let list = props.assignments.map(a => {
         return (
-            <div className="m-3 p-3 border rounded" key={a.assignmentId} > 
-                <p className="h5">{"Outcome name: " + a.outcomeName}</p>
-                <div>{"Outcome description: " + a.outcomeDescription}</div>
-                <p className="h5">{"Measure name: " + a.measureName}</p>
+            <div className="m-3 p-3 border rounded" key={a.assignmentId} >
+                {props.byUser ?  
+                    <>
+                        <p className="h5">{"Outcome name: " + a.outcomeName}</p>
+                        <div>{"Outcome description: " + a.outcomeDescription}</div>
+                        <p className="h5">{"Measure name: " + a.measureName}</p>
+                    </>
+                :
+                    <> 
+                        <button className="btn btn-danger mb-2" id={a.assignmentId} onClick={props.deleteAssignment}>
+                            Delete Assignment
+                        </button>
+                        <p className="h5">{"Evaluator: " + a.evaluatorName}</p>
+                    </>}
                 {a.subjects[0] && a.subjects[0].subjectId !== null ? 
                     <>
-                        <button 
-                            type="button" 
-                            className="btn btn-primary mt-2 mb-2" 
-                            id={a.rubricId + "/" + a.assignmentId}
-                            onClick={props.onClick}>
-                            {"Evaluate " + a.toolName}
-                        </button>
+                        {props.byUser ?
+                            <button 
+                                type="button" 
+                                className="btn btn-primary mt-2 mb-2" 
+                                id={a.rubricId + "/" + a.assignmentId}
+                                onClick={props.onClick}>
+                                {"Evaluate " + a.toolName}
+                            </button>
+                        : null}
                         <details>
                             <summary>Subjects:</summary>
                             <table className="table table-bordered p-3">
@@ -103,20 +115,39 @@ export default class RubricList extends Component
         super(props);
         this.handleEvaluateClick = this.handleEvaluateClick.bind(this);
         this.removeSubject = this.removeSubject.bind(this);
+        this.deleteAssignment = this.deleteAssignment.bind(this);
         this.state = {
-            assignments: null
+            assignments: null,
+            byUser: null
         }
     }
 
     componentDidMount()
     {
-        axios.get('/api/assignments/myAssignments/' + localStorage.getItem("email"))
+        if (!this.props.measureId)
+        {
+            axios.get('/api/assignments/myAssignments/1/' + localStorage.getItem("email"))
             .then(res => {
                 this.setState({
-                    assignments: res.data.assignments
+                    assignments: res.data.assignments,
+                    byUser: true
                 })
                
             })
+        }
+        else
+        {
+            console.log("getting by measure id");
+            axios.get('/api/assignments/myAssignments/0/' + this.props.measureId)
+            .then(res => {
+                console.log(res.data.assignments);
+                this.setState({
+                    assignments: res.data.assignments,
+                    byUser: false
+                })
+               
+            })
+        }
     }
 
     removeSubject(e)
@@ -166,6 +197,25 @@ export default class RubricList extends Component
             })
     }
 
+    deleteAssignment(e)
+    {
+        let assignmentId = {
+            assignmentId: e.target.id
+        }
+        axios.post('/api/assignments/deleteAssignment', assignmentId)
+            .then(res => {
+                if (res.data.status)
+                {
+                    alert("Deleted assignment");
+                    window.location.reload();
+                }
+                else
+                {
+                    alert(res.data.message);
+                }
+            })
+    }
+
     handleEvaluateClick(e)
     {
         if (e.target.id.includes('null'))
@@ -193,7 +243,7 @@ export default class RubricList extends Component
         {
             return(
                 <div>
-                    <h2 >My Assignments</h2>
+                    <h2>{this.state.byUser ? "My Assignments" : "Measure Assignments"}</h2>
                     <div className="row">
                         {this.state.assignments !== [] ? 
                             <>
@@ -203,7 +253,9 @@ export default class RubricList extends Component
                                     finished={false} 
                                     assignments={this.state.assignments.incomplete} 
                                     onClick={this.handleEvaluateClick}
-                                    removeSubject={this.removeSubject} 
+                                    removeSubject={this.removeSubject}
+                                    byUser={this.state.byUser}
+                                    deleteAssignment={this.deleteAssignment} 
                                 />
                                 </div>
                                 {/* show complete assignments */}
@@ -213,7 +265,10 @@ export default class RubricList extends Component
                                     assignments={this.state.assignments.complete} 
                                     onClick={this.handleEvaluateClick}
                                     removeSubject={this.removeSubject} 
-                                /> </div>
+                                    byUser={this.state.byUser}
+                                    deleteAssignment={this.deleteAssignment}
+                                /> 
+                                </div>
                             </>
                             : <p>You have no assignments.</p>
                         }

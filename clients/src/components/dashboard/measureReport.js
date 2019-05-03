@@ -4,6 +4,7 @@ import Loader from "react-loader-spinner";
 import { O_RDONLY } from "constants";
 import Table from "react-bootstrap/Table";
 import { Alert, Button, Fade } from "reactstrap";
+import MeasureAssignments from './Assignment/myAssignments';
 
 function CriteriaTitles(props) {
   return props.criteria.map(c => {
@@ -100,7 +101,6 @@ function calculateWeightedAverage(scores) {
 }
 
 function mapAverageScoreToValueName(scale, averageScore) {
-  console.log(scale);
   let score = averageScore;
   if (score < 1) {
     score = 1;
@@ -309,7 +309,6 @@ export default class CreateAssignment extends Component {
             </tbody>
           </Table>
           <div>
-            {/* <p className="h3">Summary</p> */}
             <Button color="primary" id="button5" onClick={this.toggle}>
               <i class="fas fa-eye"> View Summary</i>
             </Button>
@@ -354,6 +353,9 @@ export default class CreateAssignment extends Component {
                   "%"}
               </p>
             </Fade>
+          </div>
+          <div>
+            <MeasureAssignments measureId={this.props.match.params.measureId} />
           </div>
         </>
       );

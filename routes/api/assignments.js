@@ -170,17 +170,31 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
  * Get assignments by User_Email for myAssignments
  * PATH: /assignments/myAssignments 
  */
-router.get('/myAssignments/:email', (req, res) => {
+router.get('/myAssignments/:byUser/:email', (req, res) => {
+    
+    let whereClause;
+
+    if(req.params.byUser === '1')
+    {
+        whereClause = "a.User_Email='" + req.params.email + "'";
+    }
+    else
+    {
+        whereClause = "a.Measure_ID='" + req.params.email + "'";
+    }
+
     let queryGetAssignments = "" + 
         "SELECT DISTINCT o.Outcome_Name as outcomeName, o.Description as outcomeDescription, m.Description " +
             "as measureDescription, a.Assignment_ID as assignmentId, m.Tool_Name as toolName, r.Rubric_Title as " +
             "rubricTitle, r.Rubric_Id as rubricId, m.Measure_Name as measureName, sl.Subject_Name as subjectName, " + 
-            "sl.Subject_ID as subjectId, ss.Criteria_Title as criteriaTitle, ss.Score as score " +
+            "sl.Subject_ID as subjectId, ss.Criteria_Title as criteriaTitle, ss.Score as score, " +
+            "CONCAT(u.firstName, ' ', u.lastName) as evaluatorName " +
         "FROM cycle c JOIN outcome o ON c.Cycle_Id=o.Cycle_Id JOIN measure m ON o.Outcome_ID=m.Outcome_ID JOIN assignments a ON " +
-            "a.Measure_ID=m.Measure_ID LEFT JOIN subject_list sl ON a.Assignment_ID=sl.Assignment_ID LEFT JOIN rubric r ON " +
-            "m.Tool_Name=r.Rubric_Title AND o.Cycle_Id=r.Cycle_Id LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND " +
-            "sl.Subject_ID=ss.Subject_ID AND a.User_Email=ss.User_Email " +
-        "WHERE a.User_Email='" + req.params.email + "' AND c.status='In Progress' " +
+            "a.Measure_ID=m.Measure_ID JOIN users u ON a.User_Email=u.email LEFT JOIN subject_list sl ON " + 
+            "a.Assignment_ID=sl.Assignment_ID LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title AND o.Cycle_Id=r.Cycle_Id " +
+            "LEFT JOIN subject_score ss ON m.Measure_ID=ss.Measure_ID AND sl.Subject_ID=ss.Subject_ID AND " + 
+            "a.User_Email=ss.User_Email " +
+        "WHERE " + whereClause + " AND c.status='In Progress' " +
         "ORDER BY assignmentId";
 
         let assignments = [];
@@ -191,7 +205,7 @@ router.get('/myAssignments/:email', (req, res) => {
             res.status(404).json({
             status:false,
             error: error,
-            message:'Could not get assignments for user with email' + req.body
+            message:'Could not get assignments for ' + req.body.email
             })
         }
         else
@@ -199,6 +213,7 @@ router.get('/myAssignments/:email', (req, res) => {
             let data = Object.values(JSON.parse(JSON.stringify(results)));
             data.forEach(r => {
                 let assignmentIndex = assignments.findIndex(a => a.assignmentId === r.assignmentId);
+                
 
                 let newScore = {
                     criteriaTitle: r.criteriaTitle,
@@ -219,6 +234,7 @@ router.get('/myAssignments/:email', (req, res) => {
                         measureName: r.measureName,
                         measureDescription: r.measureDescription,
                         assignmentId: r.assignmentId,
+                        evaluatorName: r.evaluatorName,
                         toolName: r.toolName,
                         rubricTitle: r.rubricTitle,
                         rubricId: r.rubricId,
@@ -427,6 +443,71 @@ router.post('/deleteSubject', (req, res) => {
             })
         }
     })
+})
+
+router.post('/deleteAssignment', (req,res) => {
+    let assignmentId = req.body.assignmentId;
+    console.log(assignmentId);
+
+    let queryDeleteSubjectList = "DELETE FROM subject_list WHERE Assignment_ID='" + assignmentId + "'";
+
+    connection.query(queryDeleteSubjectList, (error, results, fields) => {
+        if (error)
+        {
+            res.status(400).json({
+                status: false,
+                error: error,
+                message: 'Could not delete the subject list associated with the assignment.'
+            })
+        }
+        else
+        {
+            deleteSubjectScores(req, res, assignmentId);
+        }
+    })
+
+    function deleteSubjectScores(req, res, assignmentId)
+    {
+        let queryDeleteSubjectScores = "DELETE FROM subject_score WHERE Assignment_ID='" + assignmentId + "'";
+
+        connection.query(queryDeleteSubjectScores, (error, results, fields) => {
+            if (error)
+            {
+                res.status(400).json({
+                    status: false,
+                    error: error,
+                    message: 'Could not delete the subject scores associated with the assignment.'
+                })
+            }
+            else
+            {
+                deleteAssignment(req, res, assignmentId);
+            }
+        })
+    }
+
+    function deleteAssignment(req, res, assignmentId)
+    {
+        let queryDeleteAssignment = "DELETE FROM assignments WHERE Assignment_ID='" + assignmentId + "'";
+
+        connection.query(queryDeleteAssignment, (error, results, fields) => {
+            if (error)
+            {
+                res.status(400).json({
+                    status: false,
+                    error: error,
+                    message: 'Could not delete the assignment.'
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    status: true,
+                    message: 'Deleted the assignment.'
+                })
+            }
+        })
+    }
 })
 
 module.exports = router;

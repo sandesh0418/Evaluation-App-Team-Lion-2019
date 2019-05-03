@@ -57,7 +57,6 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
 
                     if (!measure.scale.find(s => s.valueNumber === r.valueNumber))
                     {
-                        console.log("adding new scale");
                         measure.scale.push(newScale);
                     }
 
@@ -66,8 +65,6 @@ router.get('/measureReport/:measureId', passport.authenticate("jwt",{ session:fa
                         measure.criteria.push(r.criteriaTitle)
                     }
                 })
-
-                console.log(measure);
 
                 getMeasureStatistics(req, res, measure, req.params.measureId);
             }

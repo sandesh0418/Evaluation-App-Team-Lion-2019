@@ -21,6 +21,7 @@ function ManualStudentEntry(props)
                         value={props.formData[index].subjectName}
                         onChange={props.onChange} 
                         type="text" 
+                        required
                     />
                 </div>
                 <div className="col-5">
@@ -32,6 +33,7 @@ function ManualStudentEntry(props)
                         value={props.formData[index].subjectId}
                         onChange={props.onChange} 
                         type="text" 
+                        required
                     />
                 </div>
             </div>
@@ -186,9 +188,9 @@ export default class CreateAssignment extends Component
                 </div>
                 {this.state.showAddButton ? 
                     <input 
-                        className="btn btn-sm btn-primary" 
+                        className="btn btn-sm btn-success" 
                         type="submit" 
-                        value="Add Subjects" 
+                        value="Save New Subjects"
                     /> 
                     : null}
             </form>
