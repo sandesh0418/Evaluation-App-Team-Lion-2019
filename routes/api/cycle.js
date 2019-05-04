@@ -287,7 +287,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
                         })
                  
                  for(var i = 0 ; i<outcomeId.length;i++){
-                            measure(outcomeId[i], Outcome_ID)
+                            measure(result[i], outcomeId[i])
                         }
 
                 }
