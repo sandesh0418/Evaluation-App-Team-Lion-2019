@@ -152,7 +152,7 @@ export default class CreateAssignment extends Component {
   }
 
   changeFile(e) {
-    if (!(this.fileInput.current.files[0].type === "text/csv")) {
+    if (!(this.fileInput.current.files[0].type)) {
       this.setState({
         showFileAlert: true
       });
@@ -294,7 +294,7 @@ export default class CreateAssignment extends Component {
               type="file"
               className="form-control-file"
               ref={this.fileInput}
-              onChange={this.changeFile}
+              accept="text/csv, .csv"
             />
             {this.state.showFileAlert ? (
               <p className="text-danger">Invalid File</p>
