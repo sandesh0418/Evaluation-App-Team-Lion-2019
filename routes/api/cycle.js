@@ -273,7 +273,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
                     for(var i = 0; i<result.length;i++){
                         let Outcome_ID = uuidv1();
                        outcomeId[i] = Outcome_ID;
-                        
+                        measure(result[i], Outcome_ID);
                         value = [Outcome_ID, result[i].Description,result[i].Outcome_Name, newCycleId];
                         total.push(value)
                         
@@ -286,9 +286,7 @@ router.post("/migrateCycle",passport.authenticate("jwt", {session: false}),  (re
                             if (err) throw err; 
                         })
                  
-                 for(var i = 0 ; i<outcomeId.length;i++){
-                            measure(outcomeId[i], Outcome_ID)
-                        }
+                 
 
                 }
             
