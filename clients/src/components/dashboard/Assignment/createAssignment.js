@@ -106,10 +106,18 @@ export default class CreateAssignment extends Component {
         "/api/assignments/outcomesAndMeasures/" + localStorage.getItem("Cycle_Id")
       )
       .then(res => {
-        this.setState({
-          outcomeList: res.data.outcomeList,
-          selectedMeasure: res.data.outcomeList[0].measures[0].Measure_ID
-        });
+        if (res.data.status)
+        {
+          this.setState({
+            outcomeList: res.data.outcomeList,
+            selectedMeasure: res.data.outcomeList[0].measures[0].Measure_ID
+          });
+        }
+        else
+        {
+          this.setState({outcomeList: []});
+        }
+        
       });
     axios
       .get("/api/evaluators/memberList/" + localStorage.getItem("dept_Id") + "/" + localStorage.getItem("email"))
@@ -241,7 +249,7 @@ export default class CreateAssignment extends Component {
         width="100"
     />
     }
-    else if (this.state.outcomeList < 1)
+    else if (this.state.outcomeList.length < 1)
     {
       return <p>There are no measures to make assignments for.</p>
     }
