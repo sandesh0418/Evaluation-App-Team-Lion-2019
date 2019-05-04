@@ -1,16 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Loader from 'react-loader-spinner';
 import "../../../stylesheets/createAssignment.css";
-
-//dummy data
-var dummyOutcomeList = [
-  {
-    Outcome_ID: 1,
-    Description: "",
-    measures: [{ Measure_ID: 1, Description: "" }]
-  }
-];
-var evalList = [{ email: "", firstName: "", lastName: "" }];
 
 function SelectOutcome(props) {
   return props.outcomeList.map((outcome, index) => {
@@ -99,8 +90,8 @@ export default class CreateAssignment extends Component {
     this.fileInput = React.createRef();
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      outcomeList: dummyOutcomeList,
-      evaluatorList: evalList,
+      outcomeList: null,
+      evaluatorList: null,
       selectedOutcomeIndex: 0,
       selectedMeasure: undefined,
       selectedEvaluator: "",
@@ -240,90 +231,107 @@ export default class CreateAssignment extends Component {
   }
 
   render() {
-    return (
-      <div id="regcontent">
-        <form onSubmit={this.onSubmit}>
-          <h1>Create Assignment</h1>
-          <div className="form-group">
-            <label>Select Outcome: </label>
-            <select
-              className="form-control"
-              value={this.state.selectedOutcomeIndex}
-              onChange={this.handleSelectOutcome}
-              onClick={this.handleSelectOutcome}
-            >
-              <SelectOutcome outcomeList={this.state.outcomeList} />
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Select Measure: </label>
-            <select
-              className="form-control"
-              value={this.state.selectedMeasure}
-              onChange={this.handleSelectMeasure}
-              onClick={this.handleSelectMeasure}
-            >
-              <SelectMeasure
-                onChange
-                measureList={
-                  this.state.outcomeList[this.state.selectedOutcomeIndex]
-                    .measures
-                }
+
+    if(this.state.outcomeList === null)
+    {
+      return <Loader 
+        type="Oval"
+        color="black"
+        height="100"	
+        width="100"
+    />
+    }
+    else if (this.state.outcomeList < 1)
+    {
+      return <p>There are no measures to make assignments for.</p>
+    }
+    else
+    {
+      return (
+        <div id="regcontent">
+          <form onSubmit={this.onSubmit}>
+            <h1>Create Assignment</h1>
+            <div className="form-group">
+              <label>Select Outcome: </label>
+              <select
+                className="form-control"
+                value={this.state.selectedOutcomeIndex}
+                onChange={this.handleSelectOutcome}
+                onClick={this.handleSelectOutcome}
+              >
+                <SelectOutcome outcomeList={this.state.outcomeList} />
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Select Measure: </label>
+              <select
+                className="form-control"
+                value={this.state.selectedMeasure}
+                onChange={this.handleSelectMeasure}
+                onClick={this.handleSelectMeasure}
+              >
+                <SelectMeasure
+                  onChange
+                  measureList={
+                    this.state.outcomeList[this.state.selectedOutcomeIndex]
+                      .measures
+                  }
+                />
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Select Evaluator: </label>
+              <select
+                className="form-control"
+                value={this.state.selectedEvaluator}
+                name="selectedEvaluator"
+                onChange={this.handleInputChange}
+                onClick={this.handleInputChange}
+              >
+                {this.state.evaluatorList ? <SelectEvaluator evaluatorList={this.state.evaluatorList} /> : null}
+                <option value={localStorage.getItem("email")}>Assign to yourself</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <i class="fas fa-file-upload" id="upload-sign" />
+              <label id="important_lebel">
+                Upload list of subjects as .csv file:{" "}
+              </label>
+              <input
+                type="file"
+                className="form-control-file"
+                ref={this.fileInput}
+                accept="text/csv, .csv"
               />
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Select Evaluator: </label>
-            <select
-              className="form-control"
-              value={this.state.selectedEvaluator}
-              name="selectedEvaluator"
-              onChange={this.handleInputChange}
-              onClick={this.handleInputChange}
-            >
-              <SelectEvaluator evaluatorList={this.state.evaluatorList} />
-              <option value={localStorage.getItem("email")}>Assign to yourself</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <i class="fas fa-file-upload" id="upload-sign" />
-            <label id="important_lebel">
-              Upload list of subjects as .csv file:{" "}
-            </label>
+              {this.state.showFileAlert ? (
+                <p className="text-danger">Invalid File</p>
+              ) : null}
+            </div>
+            <div className="form-group">
+              <ManualStudentEntry
+                formData={this.state.manualStudentEntry}
+                onChange={this.updateManualStudentEntry}
+              />
+            </div>
+            <div>
+              <button
+                className="btn btn-secondary mb-4"
+                id="bu_tton"
+                type="button"
+                onClick={this.addStudent}
+              >
+                Add Subject Manually
+              </button>
+            </div>
             <input
-              type="file"
-              className="form-control-file"
-              ref={this.fileInput}
-              accept="text/csv, .csv"
+              type="submit"
+              value="submit"
+              className="btn btn-primary"
+              onClick={this.onSubmit}
             />
-            {this.state.showFileAlert ? (
-              <p className="text-danger">Invalid File</p>
-            ) : null}
-          </div>
-          <div className="form-group">
-            <ManualStudentEntry
-              formData={this.state.manualStudentEntry}
-              onChange={this.updateManualStudentEntry}
-            />
-          </div>
-          <div>
-            <button
-              className="btn btn-secondary mb-4"
-              id="bu_tton"
-              type="button"
-              onClick={this.addStudent}
-            >
-              Add Subject Manually
-            </button>
-          </div>
-          <input
-            type="submit"
-            value="submit"
-            className="btn btn-primary"
-            onClick={this.onSubmit}
-          />
-        </form>
-      </div>
-    );
+          </form>
+        </div>
+      );
+    }
   }
 }

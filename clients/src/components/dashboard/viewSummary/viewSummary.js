@@ -80,25 +80,24 @@ function Statistics(props)
         colorToBe="bg-warning warning";
     }
     return <div>
-            {props.measure.totalEvaluated !== 0 ? 
-                <>
-                    <div className={colorToBe}>
-                        <span className="mr-4"  style={{color: "white"}}>Measure statistics: 
-                            {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
-                            evaluations have met the target score of {(props.measure.Value_Name ? "'" + 
-                            props.measure.Value_Name.trim() + "'" : (props.measure.Target_Score * 100) + "%")}.
-                        </span>
-                    </div>
-                    <div className="bg-info info" style={{color: "white"}}> {props.measure.totalEvaluated} subjects have been evaluated.</div>
-                </>
-                :
-                <div className="bg-dark info text-light"> <Loader 
-                type="ThreeDots"
-                
-                color="white"
-                height="12"	
-                width="12"
-             />Pending evaluations.</div>}
+            {props.measure.numberOfAssignments > 0 ?
+                (props.measure.totalEvaluated !== 0 ? 
+                    <>
+                        <div className={colorToBe}>
+                            <span className="mr-4"  style={{color: "white"}}>Measure statistics: 
+                                {((props.measure.metTarget / props.measure.totalEvaluated) * 100).toFixed(2)}% of 
+                                evaluations have met the target score of {(props.measure.Value_Name ? "'" + 
+                                props.measure.Value_Name.trim() + "'" : (props.measure.Target_Score * 100) + "%")}.
+                            </span>
+                        </div>
+                        <div className="bg-info info" style={{color: "white"}}> {props.measure.totalEvaluated} subjects have been evaluated.</div>
+                    </>
+                    :
+                    <div className="bg-dark info text-light">
+                        <Loader type="ThreeDots" color="white" height="12" width="12"/>
+                        Pending evaluations on {props.measure.numberOfAssignments} assignments.
+                    </div>)
+                : null}
             </div>
 }
 
@@ -143,7 +142,7 @@ export default class ViewSummary extends Component
         axios
             .get('/api/summaryReport/measureStatistics/' + localStorage.getItem("Cycle_Id") + "/" + localStorage.getItem("dept_Id"))
             .then(res => {
-               
+               console.log(res.data.programSummary);
                 this.setState({
                     programSummary: res.data.programSummary
                 })

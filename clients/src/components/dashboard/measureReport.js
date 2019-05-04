@@ -213,10 +213,15 @@ export default class CreateAssignment extends Component {
       return <Loader type="Oval" color="black" height="100" width="100" />;
     } else if (this.state.measure.subjectList.length === 0) {
       return (
-        <p>
-          There is no evaluation data for measure '
-          {this.state.measure.measureName}'
-        </p>
+        <>
+          <p>
+            There is no evaluation data for measure '
+            {this.state.measure.measureName}'
+          </p>
+          <div>
+            <MeasureAssignments measureId={this.props.match.params.measureId} />
+          </div>
+        </>
       );
     } else {
       var target = this.state.measure.percentToReachTarget * 100;

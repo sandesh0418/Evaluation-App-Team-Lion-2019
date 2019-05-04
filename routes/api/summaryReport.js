@@ -40,12 +40,13 @@ function buildProgramSummary(withStats, req, res, cycleId, deptId)
         "SELECT DISTINCT o.Outcome_ID as outcomeId, o.Description as outcomeDescription, o.Outcome_Name as outcomeName, " + 
             "m.Measure_ID as measureId, m.Measure_Name as measureName, m.Description as measureDescription, " +
             "m.Percent_to_reach_target as percentToReachTarget, m.Target_Score as targetScore, m.Tool_Name as toolName, " +
-            "valueName, cy.Cycle_Name " +
+            "valueName, cy.Cycle_Name, a.Assignment_ID " +
         "FROM cycle cy JOIN outcome o ON cy.Cycle_Id=o.Cycle_Id LEFT JOIN measure m ON m.Outcome_ID=o.Outcome_ID LEFT JOIN " +
             "(SELECT s.Value_Name as valueName, m.Measure_ID as measureId " + 
             "FROM measure m LEFT JOIN rubric r ON m.Tool_Name=r.Rubric_Title JOIN scales s ON s.Rubric_Id=r.Rubric_Id " +
             "WHERE m.Target_Score=s.Value_Number AND r.Cycle_Id='" + cycleId + "') as rubricScore " +
-            "ON m.Measure_ID=rubricScore.measureId JOIN cycle c ON o.Cycle_Id=c.Cycle_Id " +
+            "ON m.Measure_ID=rubricScore.measureId JOIN cycle c ON o.Cycle_Id=c.Cycle_Id LEFT JOIN assignments a ON " +
+            "m.Measure_ID=a.Measure_ID " +
         "WHERE o.Cycle_Id='" + cycleId + "' AND cy.Dept_Id='"  + deptId + "' " +
         "ORDER BY o.Outcome_Name ASC, m.Measure_Name ASC";
 
@@ -97,6 +98,7 @@ function buildProgramSummary(withStats, req, res, cycleId, deptId)
                         Target_Score: row.targetScore,
                         Value_Name: row.valueName,
                         Tool_Name: row.toolName,
+                        numberOfAssignments: (row.Assignment_ID ? 1 : 0),
                         metTarget: 0,
                         totalEvaluated: 0,
                     }
@@ -114,7 +116,15 @@ function buildProgramSummary(withStats, req, res, cycleId, deptId)
                     }
                     else
                     {
-                        programSummary.outcomes[outcomeIndex].measures.push(newMeasure);
+                        let measureIndex = programSummary.outcomes[outcomeIndex].measures.findIndex(m => m.Measure_ID === row.measureId);
+                        if (measureIndex === -1)
+                        {
+                            programSummary.outcomes[outcomeIndex].measures.push(newMeasure);
+                        }
+                        else
+                        {
+                            programSummary.outcomes[outcomeIndex].measures[measureIndex].numberOfAssignments++;
+                        }
                     }
                 }
             })
