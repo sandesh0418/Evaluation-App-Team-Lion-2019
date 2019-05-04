@@ -106,7 +106,8 @@ export default class CreateAssignment extends Component {
         "/api/assignments/outcomesAndMeasures/" + localStorage.getItem("Cycle_Id")
       )
       .then(res => {
-        if (res.data.status)
+        console.log(res.data);
+        if (res.data.status === true)
         {
           this.setState({
             outcomeList: res.data.outcomeList,
@@ -115,7 +116,9 @@ export default class CreateAssignment extends Component {
         }
         else
         {
-          this.setState({outcomeList: []});
+          this.setState({
+            outcomeList: []
+          });
         }
         
       });

@@ -121,13 +121,21 @@ router.get('/outcomesAndMeasures/:cycleId', (req, res) => {
         "ORDER BY o.Outcome_Name ASC";   
 
     connection.query(queryOutcomesWithMeasures, (error, results, fields) => {
-        if (error || results.length === 0) 
+        if (error) 
         {
-            res.status(404).json({
+            res.status(400).json({
               status:false,
               error: error,
               message:'The outcomes could not be retrieved.'
               })
+        }
+        else if (results.length === 0)
+        {
+            res.status(200).json({
+                status:false,
+                error: error,
+                message:'There are no measures.'
+            })
         }
         else
         {
