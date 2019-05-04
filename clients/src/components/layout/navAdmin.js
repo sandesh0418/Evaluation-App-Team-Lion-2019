@@ -24,41 +24,23 @@ class NavAdmin extends Component {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Link href="/dashboard">Home</Nav.Link>
-            <NavDropdown title="Program Summary">
-              <NavDropdown.Item href="/viewSummary">
-                View Summary
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/viewCurriculum">
-                Curriculum
-              </NavDropdown.Item>
+            <NavDropdown title="Cycle">
+              <NavDropdown.Item href="/cycle">Start a new Cycle</NavDropdown.Item>
+              <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Assignments">
-              <NavDropdown.Item href="/myAssignments">
-                My Assignments
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/createAssignment">
-                Create Assignment
-              </NavDropdown.Item>
+            <NavDropdown title="Program">
+              <NavDropdown.Item href="/viewSummary">View Summary</NavDropdown.Item>
+              <NavDropdown.Item href="/summaryReport">Outcome Report</NavDropdown.Item>
+              <NavDropdown.Item href="/viewCurriculum">Curriculum</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/viewEvaluator">Evaluators</Nav.Link>
-            {/* <NavDropdown title="Evaluators">
-              <NavDropdown.Item href="/addEvaluator">
-                Add Evaluator
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/viewEvaluator">
-                View Evaluator
-              </NavDropdown.Item>
-            </NavDropdown> */}
             <NavDropdown title="Rubrics">
               <NavDropdown.Item href="/rubricList">Rubric List</NavDropdown.Item>
               <NavDropdown.Item href="/Rubric">Create Rubric</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/summaryReport">Outcome Summary Report</Nav.Link>
-            <NavDropdown title="Cycle">
-              <NavDropdown.Item href="/cycle">
-                Start a new Cycle
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/cycles">View Cycles</NavDropdown.Item>
+            <NavDropdown title="Evaluations">
+            <NavDropdown.Item href="/viewEvaluator">Evaluator List</NavDropdown.Item>
+              <NavDropdown.Item href="/myAssignments">My Assignments</NavDropdown.Item>
+              <NavDropdown.Item href="/createAssignment">Create Assignment</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Messages">
               <NavDropdown.Item href="/messageBroadcast">Send Messages</NavDropdown.Item>
